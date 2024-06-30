@@ -77,13 +77,13 @@ void setPriorities(const char *pid) {
   system(command);
 }
 
-void performance_mode(void) { system("/system/bin/encore-performance"); }
+void performance_mode(void) { system("sh /system/bin/encore-performance"); }
 
-void normal_mode(void) { system("/system/bin/encore-normal"); }
+void normal_mode(void) { system("sh /system/bin/encore-normal"); }
 
 void powersave_mode(void) {
   normal_mode();
-  system("/system/bin/encore-powersave");
+  system("sh /system/bin/encore-powersave");
 }
 
 void perf_common(void) {
@@ -91,7 +91,7 @@ void perf_common(void) {
       "su -lp 2000 -c \"/system/bin/cmd notification post -S bigtext -t "
       "\\\"ENCORE\\\" \\\"Tag$(date +%s)\\\" \\\"Tweaks applied "
       "successfully\\\"\"");
-  system("/system/bin/encore-perfcommon");
+  system("sh /system/bin/encore-perfcommon");
 }
 
 void apply_mode(const int mode) {
