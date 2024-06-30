@@ -20,6 +20,12 @@ done
 
 # Qualcomm CPU Bus
 apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-llcc-lat/devfreq/soc:qcom,cpu0-cpu-llcc-lat/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-l3-lat/devfreq/soc:qcom,cpu0-cpu-l3-lat/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-llcc-lat/devfreq/soc:qcom,cpu4-cpu-llcc-lat/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-l3-lat/devfreq/soc:qcom,cpu4-cpu-l3-lat/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
+apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
 
 # MTK Power and CCI mode
 apply "1" /proc/cpufreq/cpufreq_cci_mode
@@ -40,6 +46,8 @@ elif [ -d /proc/gpufreqv2 ]; then
 	gpu_volt="$(cat /proc/gpufreqv2/gpu_working_opp_table | awk -v freq="$freq" '$0 ~ freq {gsub(/.*, volt: /, ""); gsub(/,.*/, ""); print}')"
 	echo "${gpu_freq} ${gpu_volt}" >/proc/gpufreqv2/fix_custom_freq_volt
 fi
+
+apply "performance" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 # Disable GPU Power limiter
 if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
@@ -62,6 +70,9 @@ apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/s
 
 # Drop mem cache
 echo "3" >/proc/sys/vm/drop_caches
+
+# Adreno Boost
+apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
 # Touchpanel
 tp_path="/proc/touchpanel"

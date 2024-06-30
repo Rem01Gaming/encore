@@ -92,7 +92,7 @@ void perf_common(void) {
       "su -lp 2000 -c \"/system/bin/cmd notification post -S bigtext -t "
       "\\\"ENCORE\\\" \\\"Tag$(date +%s)\\\" \\\"Tweaks applied "
       "successfully\\\"\"");
-  system("sh /system/bin/encore-perfcommon");
+  system("/system/bin/encore-perfcommon");
 }
 
 void apply_mode(const int mode) {
