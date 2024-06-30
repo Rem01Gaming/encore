@@ -26,9 +26,7 @@ apply "1" /proc/cpufreq/cpufreq_cci_mode
 apply "3" /proc/cpufreq/cpufreq_power_mode
 
 # EAS/HMP Switch
-if [[ $(cat ${data_dir}/scheduler_switch_enabled) == 1 ]]; then
-	apply "0" /sys/devices/system/cpu/eas/enable
-fi
+apply "0" /sys/devices/system/cpu/eas/enable
 
 # Disable PPM (this is fire dumpster)
 apply "0" /proc/ppm/enabled

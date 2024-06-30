@@ -4,8 +4,8 @@
 // #include <sys/stat.h>
 #include <unistd.h>
 
-#define MAX_OUTPUT_LENGTH 512
-#define MAX_COMMAND_LENGTH 128
+#define MAX_OUTPUT_LENGTH 1024
+#define MAX_COMMAND_LENGTH 512
 
 int cur_mode = -1;
 char command[MAX_COMMAND_LENGTH];
@@ -78,13 +78,13 @@ void setPriorities(const char *pid) {
   system(command);
 }
 
-void performance_mode(void) { system("encore-performance"); }
+void performance_mode(void) { system("/system/bin/encore-performance"); }
 
-void normal_mode(void) { system("encore-normal"); }
+void normal_mode(void) { system("/system/bin/encore-normal"); }
 
 void powersave_mode(void) {
   normal_mode();
-  system("encore-powersave");
+  system("/system/bin/encore-powersave");
 }
 
 void perf_common(void) {
@@ -92,7 +92,7 @@ void perf_common(void) {
       "su -lp 2000 -c \"/system/bin/cmd notification post -S bigtext -t "
       "\\\"ENCORE\\\" \\\"Tag$(date +%s)\\\" \\\"Tweaks applied "
       "successfully\\\"\"");
-  system("encore-perfcommon");
+  system("sh /system/bin/encore-perfcommon");
 }
 
 void apply_mode(const int mode) {
