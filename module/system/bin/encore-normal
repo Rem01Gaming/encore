@@ -1,0 +1,73 @@
+#!/system/bin/sh
+
+apply() {
+	chmod 644 $2
+	echo $1 >$2
+	chmod 444 $2
+}
+
+# CPU Governor
+cpu="0"
+while [ $cpu -lt $cpu_cores ]; do
+	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
+	if [ -d "$cpu_dir" ]; then
+		echo "$(cat /data/encore/default_cpu_gov)" >"${cpu_dir}/cpufreq/scaling_governor"
+	fi
+	cpu="$((cpu + 1))"
+done
+
+# Qualcomm CPU Bus
+apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
+
+# Enable back PPM
+apply "1" /proc/ppm/enabled
+
+# MTK Power and CCI mode
+apply "0" /proc/cpufreq/cpufreq_cci_mode
+apply "0" /proc/cpufreq/cpufreq_power_mode
+
+# EAS/HMP Switch
+apply "1" /sys/devices/system/cpu/eas/enable
+
+# GPU Frequency
+if [ -d /proc/gpufreq ]; then
+	echo "0" >/proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+elif [ -d /proc/gpufreqv2 ]; then
+	echo "0 0" >/proc/gpufreqv2/fix_custom_freq_volt
+fi
+
+# Disable GPU Power limiter
+if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
+	echo "ignore_batt_oc 0" >/proc/gpufreq/gpufreq_power_limited
+	echo "ignore_batt_percent 0" >/proc/gpufreq/gpufreq_power_limited
+	echo "ignore_low_batt 0" >/proc/gpufreq/gpufreq_power_limited
+	echo "ignore_thermal_protect 0" >/proc/gpufreq/gpufreq_power_limited
+	echo "ignore_pbm_limited 0" >/proc/gpufreq/gpufreq_power_limited
+fi
+
+# Disable Power Budget management for new 5.x mtk kernels
+apply "stop 0" /proc/pbm/pbm_stop
+
+# Disable battery current limiter
+apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
+
+# DRAM Frequency
+apply "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+apply "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+apply "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
+apply "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+
+# Drop mem cache
+echo "1" >/proc/sys/vm/drop_caches
+
+# Touchpanel
+tp_path="/proc/touchpanel"
+apply "0" $tp_path/game_switch_enable
+apply "1" $tp_path/oplus_tp_limit_enable
+apply "1" $tp_path/oppo_tp_limit_enable
+apply "0" $tp_path/oplus_tp_direction
+apply "0" $tp_path/oppo_tp_direction
+
+# Eara Thermal
+apply "1" /sys/kernel/eara_thermal/enable

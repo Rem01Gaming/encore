@@ -1,0 +1,57 @@
+#!/system/bin/sh
+
+apply() {
+	chmod 644 $2
+	echo $1 >$2
+	chmod 444 $2
+}
+
+# CPU tweaks
+cpu=0
+while [ $cpu -lt $cpu_cores ]; do
+	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
+	if [ -d "$cpu_dir" ]; then
+		echo 1 >${cpu_dir}/online
+		chmod 0644 "${cpu_dir}/cpufreq/scaling_governor"
+		chmod 000 "${cpu_dir}/cpufreq/cpuinfo_max_freq"
+		chmod 000 "${cpu_dir}/cpu_capacity"
+		chmod 000 "${cpu_dir}/topology/physical_package_id"
+	fi
+	cpu="$((cpu + 1))"
+done
+
+# Networking tweaks
+echo "cubic" >/proc/sys/net/ipv4/tcp_congestion_control
+echo "1" >/proc/sys/net/ipv4/tcp_low_latency
+echo "1" >/proc/sys/net/ipv4/tcp_ecn
+echo "3" >/proc/sys/net/ipv4/tcp_fastopen
+echo "1" >/proc/sys/net/ipv4/tcp_sack
+echo "0" >/proc/sys/net/ipv4/tcp_timestamps
+
+# Disable ccci debugging
+apply 0 /sys/kernel/ccci/debug
+
+# Thermal governor
+chmod 0644 /sys/class/thermal/thermal_zone0/available_policies
+if [[ "$(cat /sys/class/thermal/thermal_zone0/available_policies)" == *step_wise* ]]; then
+	for thermal in /sys/class/thermal/thermal_zone*; do
+		apply "step_wise" >${thermal}/policy
+	done
+fi
+
+# Disable printk logging
+apply "0 0 0 0" /proc/sys/kernel/printk
+apply "off" /proc/sys/kernel/printk_devkmsg
+apply "Y" /sys/module/printk/parameters/console_suspend
+apply "N" /sys/module/printk/parameters/cpu
+apply "0" /sys/kernel/printk_mode/printk_mode
+apply "Y" /sys/module/printk/parameters/ignore_loglevel
+apply "N" /sys/module/printk/parameters/pid
+apply "N" /sys/module/printk/parameters/time
+
+# Disable schedstats
+apply 0 /proc/sys/kernel/sched_schedstats
+
+# Stop tracing
+stop traced
+apply 0 /sys/kernel/tracing/tracing_on
