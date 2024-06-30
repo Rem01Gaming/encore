@@ -10,7 +10,7 @@ apply() {
 
 # CPU tweaks
 cpu="0"
-while [ $cpu -lt $cpu_cores ]; do
+while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
 		echo "performance" >"${cpu_dir}/cpufreq/scaling_governor"
