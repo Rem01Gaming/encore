@@ -70,8 +70,7 @@ void setPriorities(const char *pid) {
   snprintf(command, sizeof(command), "renice -n -20 -p %s", pid);
   system(command);
 
-  snprintf(command, sizeof(command), "ionice -c 1 -n 0 -p %s",
-           pid);
+  snprintf(command, sizeof(command), "ionice -c 1 -n 0 -p %s", pid);
   system(command);
 
   snprintf(command, sizeof(command), "chrt -f -p 98 %s", pid);
@@ -137,15 +136,12 @@ int main(void) {
              "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp' | grep -Eo "
              "\"$(cat /data/encore/gamelist.txt)\" | tail -n 1");
     gamestart = execute_command(command);
-    printf("gamestart: %s\n", gamestart);
 
     snprintf(command, sizeof(command),
              "dumpsys window | grep mScreen | grep -Eo 'false' | tail -n 1");
     screenoff = execute_command(command);
-    printf("screenoff: %s\n", screenoff);
 
     low_power = execute_command("settings get global low_power_sticky");
-    printf("low_power: %s\n", trim_newline(low_power));
 
     if (gamestart && !screenoff) {
       // Apply performance mode
@@ -159,16 +155,25 @@ int main(void) {
     }
 
     if (gamestart) {
+      printf("gamestart: %s\n", trim_newline(gamestart));
       free(gamestart);
       gamestart = NULL;
+    } else {
+      printf("gamestart: NULL\n");
     }
     if (screenoff) {
+      printf("screenoff: %s\n", trim_newline(screenoff));
       free(screenoff);
       screenoff = NULL;
+    } else {
+      printf("screenoff: NULL\n");
     }
     if (low_power) {
+      printf("low_power: %s\n", trim_newline(low_power));
       free(low_power);
       low_power = NULL;
+    } else {
+      printf("low_power: NULL\n");
     }
 
     sleep(12);
