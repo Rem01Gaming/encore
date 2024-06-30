@@ -1,9 +1,11 @@
 #!/system/bin/sh
 
 apply() {
-	chmod 644 $2
-	echo $1 >$2
-	chmod 444 $2
+	if [ -f $2 ]; then
+		chmod 644 $2
+		echo $1 >$2
+		chmod 444 $2
+	fi
 }
 
 # CPU tweaks
