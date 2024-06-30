@@ -34,12 +34,9 @@ echo "0" >/proc/sys/net/ipv4/tcp_timestamps
 apply 0 /sys/kernel/ccci/debug
 
 # Thermal governor
-chmod 0644 /sys/class/thermal/thermal_zone0/available_policies
-if [ "$(cat /sys/class/thermal/thermal_zone0/available_policies)" == *step_wise* ]; then
-	for thermal in /sys/class/thermal/thermal_zone*; do
-		apply "step_wise" >${thermal}/policy
-	done
-fi
+for thermal in /sys/class/thermal/thermal_zone*; do
+	apply "step_wise" >${thermal}/policy
+done
 
 # Disable printk logging
 apply "0 0 0 0" /proc/sys/kernel/printk
