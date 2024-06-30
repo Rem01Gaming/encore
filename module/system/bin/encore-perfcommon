@@ -2,14 +2,14 @@
 
 apply() {
 	if [ -f $2 ]; then
-		chmod 644 $2
+		chmod 644 $2 >/dev/null 2>&1
 		echo $1 >$2
-		chmod 444 $2
+		chmod 444 $2 >/dev/null 2>&1
 	fi
 }
 
 # CPU tweaks
-cpu=0
+cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
