@@ -36,7 +36,7 @@ apply 0 /sys/kernel/ccci/debug
 
 # Thermal governor
 for thermal in /sys/class/thermal/thermal_zone*; do
-	apply "step_wise" >${thermal}/policy
+	apply "step_wise" ${thermal}/policy
 done
 
 # Disable printk logging
