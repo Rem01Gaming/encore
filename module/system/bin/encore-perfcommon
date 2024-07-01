@@ -13,7 +13,7 @@ cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
-		echo 1 >${cpu_dir}/online
+		apply 1 ${cpu_dir}/online
 		chmod 0644 "${cpu_dir}/cpufreq/scaling_governor"
 		chmod 000 "${cpu_dir}/cpufreq/cpuinfo_max_freq"
 		chmod 000 "${cpu_dir}/cpu_capacity"
@@ -23,12 +23,12 @@ while [ $cpu -lt $(nproc --all) ]; do
 done
 
 # Networking tweaks
-echo "cubic" >/proc/sys/net/ipv4/tcp_congestion_control
-echo "1" >/proc/sys/net/ipv4/tcp_low_latency
-echo "1" >/proc/sys/net/ipv4/tcp_ecn
-echo "3" >/proc/sys/net/ipv4/tcp_fastopen
-echo "1" >/proc/sys/net/ipv4/tcp_sack
-echo "0" >/proc/sys/net/ipv4/tcp_timestamps
+apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
+apply "1" /proc/sys/net/ipv4/tcp_low_latency
+apply "1" /proc/sys/net/ipv4/tcp_ecn
+apply "3" /proc/sys/net/ipv4/tcp_fastopen
+apply "1" /proc/sys/net/ipv4/tcp_sack
+apply "0" /proc/sys/net/ipv4/tcp_timestamps
 
 # Disable ccci debugging
 apply 0 /sys/kernel/ccci/debug

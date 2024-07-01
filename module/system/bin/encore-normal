@@ -13,7 +13,7 @@ cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
-		echo "$(cat /data/encore/default_cpu_gov)" >"${cpu_dir}/cpufreq/scaling_governor"
+		apply "$(cat /data/encore/default_cpu_gov)" >"${cpu_dir}/cpufreq/scaling_governor"
 	fi
 	cpu="$((cpu + 1))"
 done
@@ -39,20 +39,20 @@ apply "1" /sys/devices/system/cpu/eas/enable
 
 # GPU Frequency
 if [ -d /proc/gpufreq ]; then
-	echo "0" >/proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+	apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
 elif [ -d /proc/gpufreqv2 ]; then
-	echo "0 0" >/proc/gpufreqv2/fix_custom_freq_volt
+	apply "0 0" /proc/gpufreqv2/fix_custom_freq_volt
 fi
 
 apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 # Disable GPU Power limiter
 if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
-	echo "ignore_batt_oc 0" >/proc/gpufreq/gpufreq_power_limited
-	echo "ignore_batt_percent 0" >/proc/gpufreq/gpufreq_power_limited
-	echo "ignore_low_batt 0" >/proc/gpufreq/gpufreq_power_limited
-	echo "ignore_thermal_protect 0" >/proc/gpufreq/gpufreq_power_limited
-	echo "ignore_pbm_limited 0" >/proc/gpufreq/gpufreq_power_limited
+	apply "ignore_batt_oc 0" /proc/gpufreq/gpufreq_power_limited
+	apply "ignore_batt_percent 0" /proc/gpufreq/gpufreq_power_limited
+	apply "ignore_low_batt 0" /proc/gpufreq/gpufreq_power_limited
+	apply "ignore_thermal_protect 0" /proc/gpufreq/gpufreq_power_limited
+	apply "ignore_pbm_limited 0" /proc/gpufreq/gpufreq_power_limited
 fi
 
 # Adreno Boost
@@ -72,7 +72,7 @@ apply "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/d
 apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 
 # Drop mem cache
-echo "1" >/proc/sys/vm/drop_caches
+apply "1" /proc/sys/vm/drop_caches
 
 # Touchpanel
 tp_path="/proc/touchpanel"
