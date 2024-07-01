@@ -29,6 +29,7 @@ apply "1" /proc/sys/net/ipv4/tcp_ecn
 apply "3" /proc/sys/net/ipv4/tcp_fastopen
 apply "1" /proc/sys/net/ipv4/tcp_sack
 apply "0" /proc/sys/net/ipv4/tcp_timestamps
+apply "0" /proc/sys/net/ipv4/tcp_syncookies
 
 # Disable ccci debugging
 apply 0 /sys/kernel/ccci/debug
