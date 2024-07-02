@@ -8,6 +8,55 @@ apply() {
 	fi
 }
 
+# Duration in nanoseconds of one scheduling period
+SCHED_PERIOD="$((1 * 1000 * 1000))"
+
+# How many tasks should we have at a maximum in one scheduling period
+SCHED_TASKS="10"
+
+# Sync to data in the rare case a device crashes
+sync
+
+# Scheduler Tweaks
+apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
+apply 1 /proc/sys/kernel/sched_autogroup_enabled
+apply 1 /proc/sys/kernel/sched_child_runs_first
+apply 0 /proc/sys/kernel/sched_tunable_scaling
+apply "$SCHED_PERIOD" /proc/sys/kernel/sched_latency_ns
+apply "$((SCHED_PERIOD / SCHED_TASKS))" /proc/sys/kernel/sched_min_granularity_ns
+apply "$((SCHED_PERIOD / 2))" /proc/sys/kernel/sched_wakeup_granularity_ns
+apply 5000000 /proc/sys/kernel/sched_migration_cost_ns
+apply 0 /proc/sys/kernel/sched_min_task_util_for_colocation
+apply 4 /proc/sys/kernel/sched_nr_migrate
+
+if [ -f "/sys/kernel/debug/sched_features" ]; then
+	# Consider scheduling tasks that are eager to run
+	apply NEXT_BUDDY /sys/kernel/debug/sched_features
+
+	# Some sources report large latency spikes during large migrations
+	apply NO_TTWU_QUEUE /sys/kernel/debug/sched_features
+fi
+
+if [ -d "/dev/stune/" ]; then
+	# Prefer to schedule top-app tasks on idle CPUs
+	apply 1 /dev/stune/top-app/schedtune.prefer_idle
+
+	# Mark top-app as boosted, find high-performing CPUs
+	apply 1 /dev/stune/top-app/schedtune.boost
+fi
+
+# Memory tweak
+apply 200 /proc/sys/vm/vfs_cache_pressure
+
+# I/O Tweaks
+for queue in /sys/block/*/queue; do
+	# Reduce heuristic read-ahead in exchange for I/O latency
+	apply 32 "$queue/read_ahead_kb"
+
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 32 "$queue/nr_requests"
+done
+
 # CPU tweaks
 cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
@@ -67,9 +116,6 @@ apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 apply "performance" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
 apply "performance" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
 apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
-
-# Drop mem cache
-apply "3" /proc/sys/vm/drop_caches
 
 # Adreno Boost
 apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost

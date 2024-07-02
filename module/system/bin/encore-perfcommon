@@ -8,6 +8,15 @@ apply() {
 	fi
 }
 
+# I/O Tweaks
+for queue in /sys/block/*/queue; do
+	# Do not use I/O as a source of randomness
+	apply 0 "$queue/add_random"
+
+	# Disable I/O statistics accounting
+	apply 0 "$queue/iostats"
+done
+
 # CPU tweaks
 cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
@@ -55,3 +64,9 @@ apply 0 /proc/sys/kernel/sched_schedstats
 # Stop tracing
 stop traced
 apply 0 /sys/kernel/tracing/tracing_on
+
+# Disable read-ahead for swap devices
+apply 0 /proc/sys/vm/page-cluster
+
+# Update /proc/stat less often to reduce jitter
+apply 10 /proc/sys/vm/stat_interval
