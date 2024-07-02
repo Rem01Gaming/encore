@@ -27,9 +27,9 @@ if pm list packages | grep -q bellavita.toast; then
 else
 	ui_print "- Bellavita Toast isn't installed"
 	ui_print "- Installing bellavita toast..."
-	unzip -o "$ZIPFILE" 'toast.apk' -d $MODPATH >&2
-	pm install $MODPATH/toast.apk
-	rm -f $MODPATH/toast.apk
+	unzip -o "$ZIPFILE" 'toast.apk' -d /data/local/tmp >&2
+	pm install /data/local/tmp/toast.apk
+	rm -f /data/local/tmp/toast.apk
 fi
 
 set_perm_recursive $MODPATH 0 0 0777 0777
