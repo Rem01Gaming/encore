@@ -65,4 +65,4 @@ apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/vm/page-cluster
 
 # Update /proc/stat less often to reduce jitter
-apply 10 /proc/sys/vm/stat_interval
+apply 120 /proc/sys/vm/stat_interval
