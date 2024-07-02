@@ -23,6 +23,7 @@ while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
 		apply 1 ${cpu_dir}/online
+		chmod 0644 "${cpu_dir}/cpufreq/scaling_governor"
 	fi
 	cpu="$((cpu + 1))"
 done
