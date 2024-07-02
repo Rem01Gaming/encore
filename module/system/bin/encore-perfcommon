@@ -66,7 +66,3 @@ apply 0 /proc/sys/vm/page-cluster
 
 # Update /proc/stat less often to reduce jitter
 apply 120 /proc/sys/vm/stat_interval
-
-# Decrease swappiness for better performance
-# Free RAM = wasted resources | don't complaint about free RAM
-apply 20 /proc/sys/vm/swappiness
