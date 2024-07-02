@@ -8,6 +8,8 @@ apply() {
 	fi
 }
 
+default_cpu_gov=$(cat /data/encore/default_cpu_gov)
+
 # Duration in nanoseconds of one scheduling period
 SCHED_PERIOD="$((4 * 1000 * 1000))"
 
@@ -62,7 +64,7 @@ cpu="0"
 while [ $cpu -lt $(nproc --all) ]; do
 	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
 	if [ -d "$cpu_dir" ]; then
-		apply "$(cat /data/encore/default_cpu_gov)" >"${cpu_dir}/cpufreq/scaling_governor"
+		apply $default_cpu_gov "${cpu_dir}/cpufreq/scaling_governor"
 	fi
 	cpu="$((cpu + 1))"
 done
