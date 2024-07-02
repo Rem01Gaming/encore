@@ -39,10 +39,10 @@ fi
 
 if [ -d "/dev/stune/" ]; then
 	# We are not concerned with prioritizing latency
-	write /dev/stune/top-app/schedtune.prefer_idle 0
+	apply 0 /dev/stune/top-app/schedtune.prefer_idle
 
 	# Mark top-app as boosted, find high-performing CPUs
-	write /dev/stune/top-app/schedtune.boost 1
+	apply 1 /dev/stune/top-app/schedtune.boost
 fi
 
 # Memory Tweaks
