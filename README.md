@@ -1,6 +1,6 @@
 ![ENCORE_HERO](./img/banner.jpg)
 # Encore Tweaks
-**Encore Tweaks**. A Performance Magisk module with AI features various performance tweaks. This module applies at boot and automatically apply performance scripts automatically based on dumpsys.
+**Encore Tweaks**. A Performance Magisk module with AI features and various performance tweaks. This module applies at boot and automatically apply performance scripts automatically based on dumpsys.
 
 ## Features:
 ```
