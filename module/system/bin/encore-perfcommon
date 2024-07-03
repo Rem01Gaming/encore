@@ -10,9 +10,6 @@ apply() {
 
 # I/O Tweaks
 for queue in /sys/block/*/queue; do
-	# Do not use I/O as a source of randomness
-	apply 0 "$queue/add_random"
-
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
 done
@@ -28,6 +25,13 @@ while [ $cpu -lt $(nproc --all) ]; do
 	cpu="$((cpu + 1))"
 done
 
+# Apply governor specific tunables for schedutil
+find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r governor; do
+	# Consider changing frequencies once per scheduling period
+	apply 10000 $governor/up_rate_limit_us
+	apply 20000 $governor/down_rate_limit_us
+done
+
 # Networking tweaks
 apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
 apply "1" /proc/sys/net/ipv4/tcp_low_latency
@@ -35,7 +39,6 @@ apply "1" /proc/sys/net/ipv4/tcp_ecn
 apply "3" /proc/sys/net/ipv4/tcp_fastopen
 apply "1" /proc/sys/net/ipv4/tcp_sack
 apply "0" /proc/sys/net/ipv4/tcp_timestamps
-apply "0" /proc/sys/net/ipv4/tcp_syncookies
 
 # Disable ccci debugging
 apply 0 /sys/kernel/ccci/debug
@@ -55,15 +58,41 @@ apply "Y" /sys/module/printk/parameters/ignore_loglevel
 apply "N" /sys/module/printk/parameters/pid
 apply "N" /sys/module/printk/parameters/time
 
-# Disable schedstats
-apply 0 /proc/sys/kernel/sched_schedstats
-
 # Stop tracing
 stop traced
 apply 0 /sys/kernel/tracing/tracing_on
+
+# Disable schedstats
+apply 0 /proc/sys/kernel/sched_schedstats
+
+# Disable Sched auto group
+apply 0 /proc/sys/kernel/sched_autogroup_enabled
+
+# Enable CRF
+apply 1 /proc/sys/kernel/sched_child_runs_first
+
+# Setting perf_cpu_time_max_percent to 7
+apply 7 /proc/sys/kernel/perf_cpu_time_max_percent
+
+# Improve real time latencies by reducing the scheduler migration time
+apply 32 /proc/sys/kernel/sched_nr_migrate
+
+# Tweaking scheduler to reduce latency
+apply 50000 /proc/sys/kernel/sched_migration_cost_ns
+apply 1000000 /proc/sys/kernel/sched_min_granularity_ns
+apply 1500000 /proc/sys/kernel/sched_wakeup_granularity_ns
 
 # Disable read-ahead for swap devices
 apply 0 /proc/sys/vm/page-cluster
 
 # Update /proc/stat less often to reduce jitter
 apply 120 /proc/sys/vm/stat_interval
+
+# Disable compaction_proactiveness
+apply 0 /proc/sys/vm/compaction_proactiveness
+
+# Tweak MGLRU
+apply 5000 /sys/kernel/mm/lru_gen
+
+# Disable SPI CRC
+apply 0 /sys/module/mmc_core/parameters/use_spi_crc

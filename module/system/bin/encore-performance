@@ -8,24 +8,6 @@ apply() {
 	fi
 }
 
-# Duration in nanoseconds of one scheduling period
-SCHED_PERIOD="$((1 * 1000 * 1000))"
-
-# How many tasks should we have at a maximum in one scheduling period
-SCHED_TASKS="10"
-
-# Scheduler Tweaks
-apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
-apply 1 /proc/sys/kernel/sched_autogroup_enabled
-apply 1 /proc/sys/kernel/sched_child_runs_first
-apply 0 /proc/sys/kernel/sched_tunable_scaling
-apply "$SCHED_PERIOD" /proc/sys/kernel/sched_latency_ns
-apply "$((SCHED_PERIOD / SCHED_TASKS))" /proc/sys/kernel/sched_min_granularity_ns
-apply "$((SCHED_PERIOD / 2))" /proc/sys/kernel/sched_wakeup_granularity_ns
-apply 5000000 /proc/sys/kernel/sched_migration_cost_ns
-apply 0 /proc/sys/kernel/sched_min_task_util_for_colocation
-apply 4 /proc/sys/kernel/sched_nr_migrate
-
 if [ -f "/sys/kernel/debug/sched_features" ]; then
 	# Consider scheduling tasks that are eager to run
 	apply NEXT_BUDDY /sys/kernel/debug/sched_features
