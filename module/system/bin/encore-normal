@@ -16,9 +16,6 @@ SCHED_PERIOD="$((4 * 1000 * 1000))"
 # How many tasks should we have at a maximum in one scheduling period
 SCHED_TASKS="8"
 
-# Sync to data in the rare case a device crashes
-sync
-
 # Scheduler Tweaks
 apply 5 /proc/sys/kernel/perf_cpu_time_max_percent
 apply 1 /proc/sys/kernel/sched_autogroup_enabled
