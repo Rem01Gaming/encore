@@ -1,5 +1,8 @@
 #!/system/bin/sh
 
+default_cpu_gov=$(cat /data/encore/default_cpu_gov)
+soc=$(cat /data/encore/soc_recognition)
+
 apply() {
 	if [ -f $2 ]; then
 		chmod 644 $2 >/dev/null 2>&1
@@ -7,8 +10,6 @@ apply() {
 		chmod 444 $2 >/dev/null 2>&1
 	fi
 }
-
-default_cpu_gov=$(cat /data/encore/default_cpu_gov)
 
 if [ -f "/sys/kernel/debug/sched_features" ]; then
 	# Consider scheduling tasks that are eager to run
@@ -26,17 +27,16 @@ if [ -d "/dev/stune/" ]; then
 	apply 1 /dev/stune/top-app/schedtune.boost
 fi
 
+# Oppo/Oplus/Realme Touchpanel
+tp_path="/proc/touchpanel"
+apply "0" $tp_path/game_switch_enable
+apply "1" $tp_path/oplus_tp_limit_enable
+apply "1" $tp_path/oppo_tp_limit_enable
+apply "0" $tp_path/oplus_tp_direction
+apply "0" $tp_path/oppo_tp_direction
+
 # Memory Tweaks
 apply 90 /proc/sys/vm/vfs_cache_pressure
-
-# I/O Tweaks
-for queue in /sys/block/*/queue; do
-	# Reduce heuristic read-ahead in exchange for I/O latency
-	apply 128 "$queue/read_ahead_kb"
-
-	# Reduce the maximum number of I/O requests in exchange for latency
-	apply 64 "$queue/nr_requests"
-done
 
 # CPU Governor
 cpu="0"
@@ -48,66 +48,66 @@ while [ $cpu -lt $(nproc --all) ]; do
 	cpu="$((cpu + 1))"
 done
 
-# Qualcomm CPU Bus
-apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-llcc-lat/devfreq/soc:qcom,cpu0-cpu-llcc-lat/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-l3-lat/devfreq/soc:qcom,cpu0-cpu-l3-lat/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-llcc-lat/devfreq/soc:qcom,cpu4-cpu-llcc-lat/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-l3-lat/devfreq/soc:qcom,cpu4-cpu-l3-lat/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
-apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
+# Mediatek Tweaks
+if [ $soc -eq 1 ]; then
+	# Enable back PPM
+	apply "1" /proc/ppm/enabled
 
-# Enable back PPM
-apply "1" /proc/ppm/enabled
+	# MTK Power and CCI mode
+	apply "0" /proc/cpufreq/cpufreq_cci_mode
+	apply "0" /proc/cpufreq/cpufreq_power_mode
 
-# MTK Power and CCI mode
-apply "0" /proc/cpufreq/cpufreq_cci_mode
-apply "0" /proc/cpufreq/cpufreq_power_mode
+	# EAS/HMP Switch
+	apply "1" /sys/devices/system/cpu/eas/enable
 
-# EAS/HMP Switch
-apply "1" /sys/devices/system/cpu/eas/enable
+	# GPU Frequency
+	if [ -d /proc/gpufreq ]; then
+		apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+	elif [ -d /proc/gpufreqv2 ]; then
+		apply "0 0" /proc/gpufreqv2/fix_custom_freq_volt
+	fi
 
-# GPU Frequency
-if [ -d /proc/gpufreq ]; then
-	apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
-elif [ -d /proc/gpufreqv2 ]; then
-	apply "0 0" /proc/gpufreqv2/fix_custom_freq_volt
+	# Disable GPU Power limiter
+	if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
+		apply "ignore_batt_oc 0" /proc/gpufreq/gpufreq_power_limited
+		apply "ignore_batt_percent 0" /proc/gpufreq/gpufreq_power_limited
+		apply "ignore_low_batt 0" /proc/gpufreq/gpufreq_power_limited
+		apply "ignore_thermal_protect 0" /proc/gpufreq/gpufreq_power_limited
+		apply "ignore_pbm_limited 0" /proc/gpufreq/gpufreq_power_limited
+	fi
+
+	# Disable Power Budget management for new 5.x mtk kernels
+	apply "stop 0" /proc/pbm/pbm_stop
+
+	# Disable battery current limiter
+	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
+
+	# DRAM Frequency
+	apply "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+	apply "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+	apply "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
+	apply "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+
+	# Eara Thermal
+	apply "1" /sys/kernel/eara_thermal/enable
+
+# Qualcomm Tweaks
+elif [ $soc -eq 2 ]; then
+	# Qualcomm CPU Bus
+	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-llcc-lat/devfreq/soc:qcom,cpu0-cpu-llcc-lat/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-l3-lat/devfreq/soc:qcom,cpu0-cpu-l3-lat/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-llcc-lat/devfreq/soc:qcom,cpu4-cpu-llcc-lat/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-l3-lat/devfreq/soc:qcom,cpu4-cpu-l3-lat/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
+	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
+
+	# GPU Governor
+	apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+	# Adreno Boost
+	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
+
+	# DRAM Governor
+	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 fi
-
-apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
-
-# Disable GPU Power limiter
-if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
-	apply "ignore_batt_oc 0" /proc/gpufreq/gpufreq_power_limited
-	apply "ignore_batt_percent 0" /proc/gpufreq/gpufreq_power_limited
-	apply "ignore_low_batt 0" /proc/gpufreq/gpufreq_power_limited
-	apply "ignore_thermal_protect 0" /proc/gpufreq/gpufreq_power_limited
-	apply "ignore_pbm_limited 0" /proc/gpufreq/gpufreq_power_limited
-fi
-
-# Adreno Boost
-apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
-
-# Disable Power Budget management for new 5.x mtk kernels
-apply "stop 0" /proc/pbm/pbm_stop
-
-# Disable battery current limiter
-apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
-
-# DRAM Frequency
-apply "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-apply "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-apply "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
-apply "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
-apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
-
-# Touchpanel
-tp_path="/proc/touchpanel"
-apply "0" $tp_path/game_switch_enable
-apply "1" $tp_path/oplus_tp_limit_enable
-apply "1" $tp_path/oppo_tp_limit_enable
-apply "0" $tp_path/oplus_tp_direction
-apply "0" $tp_path/oppo_tp_direction
-
-# Eara Thermal
-apply "1" /sys/kernel/eara_thermal/enable

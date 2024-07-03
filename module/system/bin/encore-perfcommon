@@ -12,6 +12,12 @@ apply() {
 for queue in /sys/block/*/queue; do
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
+
+	# Reduce heuristic read-ahead in exchange for I/O latency
+	apply 128 "$queue/read_ahead_kb"
+
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 64 "$queue/nr_requests"
 done
 
 # CPU tweaks
