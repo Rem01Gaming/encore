@@ -43,7 +43,25 @@ elif [ $soc -eq 2 ]; then
 	apply "powersave" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
 
 	# DRAM Governor
-	apply "powersave" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
+		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDR"
+	elif [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
+		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDRQOS"
+	fi
+
+	if [ $qcom_dram_path ]; then
+		freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+
+		for path in $qcom_dram_path/*/max_freq; do
+			apply $freq $path
+		done
+
+		for path in $qcom_dram_path/*/min_freq; do
+			apply $freq $path
+		done
+	else
+		apply "powersave" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	fi
 
 	# GPU Governor
 	apply "powersave" /sys/class/kgsl/kgsl-3d0/devfreq/governor

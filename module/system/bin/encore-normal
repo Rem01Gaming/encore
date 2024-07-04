@@ -109,5 +109,24 @@ elif [ $soc -eq 2 ]; then
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
 	# DRAM Governor
-	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
+		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDR"
+	elif [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
+		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDRQOS"
+	fi
+
+	if [ $qcom_dram_path ]; then
+		max_freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+
+		for path in $qcom_dram_path/*/max_freq; do
+			apply $max_freq $path
+		done
+
+		for path in $qcom_dram_path/*/min_freq; do
+			apply $min_freq $path
+		done
+	else
+		apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	fi
 fi
