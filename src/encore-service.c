@@ -126,7 +126,7 @@ void apply_mode(const int mode) {
 }
 
 int main(void) {
-  char *screenoff = NULL;
+  char *screenstate = NULL;
   char *low_power = NULL;
 
   perf_common();
@@ -138,12 +138,12 @@ int main(void) {
     gamestart = execute_command(command);
 
     snprintf(command, sizeof(command),
-             "dumpsys window | grep mScreen | grep -Eo 'false' | tail -n 1");
-    screenoff = execute_command(command);
+             "dumpsys display | grep \"mScreenState\" | awk -F'=' '{print $2}'");
+    screenstate = execute_command(command);
 
     low_power = execute_command("settings get global low_power_sticky");
 
-    if (gamestart && !screenoff) {
+    if (gamestart && strcmp(trim_newline(screenstate), "ON") == 0) {
       // Apply performance mode
       apply_mode(1);
     } else if (low_power && strcmp(trim_newline(low_power), "1") == 0) {
@@ -161,12 +161,12 @@ int main(void) {
     } else {
       printf("gamestart: NULL\n");
     }
-    if (screenoff) {
-      printf("screenoff: %s\n", trim_newline(screenoff));
-      free(screenoff);
-      screenoff = NULL;
+    if (screenstate) {
+      printf("screenstate: %s\n", trim_newline(screenstate));
+      free(screenstate);
+      screenstate = NULL;
     } else {
-      printf("screenoff: NULL\n");
+      printf("screenstate: NULL\n");
     }
     if (low_power) {
       printf("low_power: %s\n", trim_newline(low_power));
