@@ -159,6 +159,7 @@ com.netease.tom
 com.netease.wotb
 com.netease.x19
 com.netease.yhtj
+com.netflix.NGP.GTAViceCityDefinitiveEdition
 com.netmarble.sololv
 com.nexon.bluearchive
 com.nexon.kartdrift
@@ -262,6 +263,7 @@ org.sudachi.sudachi_emu.ea
 org.vita3k.emulator
 org.yuzu.yuzu_emu
 pro.archiemeng.waifu2x
+ru.nsu.ccfit.zuev.osuplus
 ro.alyn_sampmobile.game
 skyline.emu
 skynet.cputhrottlingtest
