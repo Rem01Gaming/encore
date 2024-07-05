@@ -9,3 +9,7 @@ all:
 	cd module && zip -r9 ../encore-$(shell uname -m)-$(version).zip * -x *placeholder
 	rm module/LICENSE module/gamelist.txt module/system/bin/encore-service
 	sed -i "s/versionCode=.*/versionCode=/" ./module/module.prop
+
+prettier:
+	clang-format -style=Google -i src/encore-service.c
+	shfmt -l -w . module/system/bin/*
