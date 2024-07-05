@@ -12,6 +12,7 @@ char command[MAX_COMMAND_LENGTH];
 char *gamestart = NULL;
 
 char *trim_newline(char *str) {
+  if (str == NULL) return NULL;
   char *end;
   if ((end = strchr(str, '\n')) != NULL) {
     *end = '\0';
@@ -33,14 +34,20 @@ char *execute_command(const char *command) {
 
   while (fgets(buffer, sizeof(buffer), fp) != NULL) {
     size_t buffer_length = strlen(buffer);
-    result = realloc(result, result_length + buffer_length + 1);
-    if (result == NULL) {
+    char *new_result = realloc(result, result_length + buffer_length + 1);
+    if (new_result == NULL) {
       printf("error: memory allocation error.\n");
+      free(result);
       pclose(fp);
       return NULL;
     }
+    result = new_result;
     strcpy(result + result_length, buffer);
     result_length += buffer_length;
+  }
+
+  if (result != NULL) {
+    result[result_length] = '\0';
   }
 
   if (pclose(fp) == -1) {
@@ -67,6 +74,10 @@ char *execute_command(const char *command) {
 } */
 
 void setPriorities(const char *pid) {
+  if (pid == NULL) {
+    printf("error: PID is null\n");
+    return;
+  }
   snprintf(command, sizeof(command), "renice -n -20 -p %s", pid);
   system(command);
 
@@ -94,40 +105,10 @@ void perf_common(void) {
   system("sh /system/bin/encore-perfcommon");
 }
 
-void apply_mode(const int mode) {
-  char *pid = NULL;
-
-  if (mode == 1 && cur_mode != 1) {
-    cur_mode = 1;
-    printf("Applying performance mode\n");
-    snprintf(command, sizeof(command), "pidof %s", gamestart);
-    pid = execute_command(command);
-    setPriorities(trim_newline(pid));
-    snprintf(command, sizeof(command),
-             "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-             "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
-             trim_newline(gamestart));
-    system(command);
-    performance_mode();
-  } else if (mode == 2 && cur_mode != 2) {
-    cur_mode = 2;
-    printf("Applying powersave mode\n");
-    powersave_mode();
-  } else if (mode == 0 && cur_mode != 0) {
-    cur_mode = 0;
-    printf("Applying normal mode\n");
-    normal_mode();
-  }
-
-  if (pid) {
-    free(pid);
-    pid = NULL;
-  }
-}
-
 int main(void) {
   char *screenstate = NULL;
   char *low_power = NULL;
+  char *pid = NULL;
 
   perf_common();
 
@@ -137,21 +118,48 @@ int main(void) {
              "\"$(cat /data/encore/gamelist.txt)\" | tail -n 1");
     gamestart = execute_command(command);
 
-    snprintf(command, sizeof(command),
-             "dumpsys display | grep \"mScreenState\" | awk -F'=' '{print $2}'");
+    snprintf(
+        command, sizeof(command),
+        "dumpsys display | grep \"mScreenState\" | awk -F'=' '{print $2}'");
     screenstate = execute_command(command);
 
     low_power = execute_command("settings get global low_power_sticky");
 
-    if (gamestart && strcmp(trim_newline(screenstate), "ON") == 0) {
+    if (screenstate == NULL) {
+      printf("error: screenstate is null\n");
+    } else if (gamestart && strcmp(trim_newline(screenstate), "ON") == 0) {
       // Apply performance mode
-      apply_mode(1);
+      if (cur_mode != 1) {
+        cur_mode = 1;
+        printf("Applying performance mode\n");
+        snprintf(command, sizeof(command), "pidof %s", gamestart);
+        pid = execute_command(command);
+        if (pid != NULL) {
+          setPriorities(trim_newline(pid));
+          snprintf(
+              command, sizeof(command),
+              "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
+              "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
+              trim_newline(gamestart));
+          system(command);
+          free(pid);
+        }
+        performance_mode();
+      }
     } else if (low_power && strcmp(trim_newline(low_power), "1") == 0) {
       // Apply powersave mode
-      apply_mode(2);
+      if (cur_mode != 2) {
+        cur_mode = 2;
+        printf("Applying powersave mode\n");
+        powersave_mode();
+      }
     } else {
       // Apply normal mode
-      apply_mode(0);
+      if (cur_mode != 0) {
+        cur_mode = 0;
+        printf("Applying normal mode\n");
+        normal_mode();
+      }
     }
 
     if (gamestart) {
