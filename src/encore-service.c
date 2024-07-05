@@ -132,17 +132,18 @@ int main(void) {
       if (cur_mode != 1) {
         cur_mode = 1;
         printf("Applying performance mode\n");
+        snprintf(
+            command, sizeof(command),
+            "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
+            "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
+            trim_newline(gamestart));
+        system(command);
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
         if (pid != NULL) {
           setPriorities(trim_newline(pid));
-          snprintf(
-              command, sizeof(command),
-              "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-              "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
-              trim_newline(gamestart));
-          system(command);
           free(pid);
+          pid = NULL;
         }
         performance_mode();
       }
