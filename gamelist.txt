@@ -276,6 +276,7 @@ jp.garud.ssimulator
 jp.konami.duellinks
 jp.konami.masterduel
 jp.konami.pesam
+jp.pokemon.pokemonunite
 me.mugzone.emiria
 me.pou.app
 me.tigerhix.cytoid
