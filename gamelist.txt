@@ -25,6 +25,7 @@ com.activision.callofduty.shooter
 com.activision.callofduty.warzone
 com.albiononline
 com.aligames.kuang.kybc
+com.aligames.kuang.kybc.huawei
 com.and.games505.Terraria
 com.autumn.skullgirls
 com.axlebolt.standoff2
@@ -72,6 +73,7 @@ com.gabama.monopostolite
 com.gamedevltd.wwh
 com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
+com.gameloft.android.SAMS.GloftA9SS
 com.gaijingames.wtm
 com.garena.game.codm
 com.garena.game.kgid
