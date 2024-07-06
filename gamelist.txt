@@ -292,7 +292,9 @@ pro.archiemeng.waifu2x
 ru.nsu.ccfit.zuev.osuplus
 ru.unisamp_mobile.game
 ro.alyn_sampmobile.game
+sh.ppy.osulazer
 skyline.emu
 skynet.cputhrottlingtest
 tw.sonet.allbw
+xd.sce.promotion
 xyz.aethersx2.android
