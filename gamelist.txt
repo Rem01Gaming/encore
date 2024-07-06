@@ -13,6 +13,7 @@ com.Shooter.ModernWarship
 com.Shooter.ModernWarships
 com.Sunborn.SnqxExilium
 com.TechTreeGames.TheTower
+com.Vince.AlamobileFormula
 com.WandaSoftware.TruckersofEurope3
 com.YoStar.AetherGazer
 com.YoStarEN.Arknights
