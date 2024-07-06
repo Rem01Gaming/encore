@@ -273,6 +273,7 @@ id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
 jp.garud.ssimulator
+jp.konami.duellinks
 jp.konami.masterduel
 jp.konami.pesam
 me.mugzone.emiria
