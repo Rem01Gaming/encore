@@ -62,6 +62,7 @@ com.dfjz.moba
 com.dgames.g15002002
 com.dolphinemu.dolphinemu
 com.dragonli.projectsnow.lhm
+com.drivezone.car.race.game
 com.dts.freefireadv
 com.dts.freefiremax
 com.dts.freefireth
