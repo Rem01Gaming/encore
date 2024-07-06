@@ -212,6 +212,7 @@ com.smokoko.race
 com.sofunny.Sausage
 com.soulgamechst.majsoul
 com.sprduck.garena.vn
+com.squareenix.lis
 com.stove.epic7.google
 com.supercell.brawlstars
 com.supercell.clashofclans
@@ -269,6 +270,7 @@ jp.co.craftegg.band
 jp.konami.masterduel
 jp.konami.pesam
 me.mugzone.emiria
+me.pou.app
 me.tigerhix.cytoid
 net.kdt.pojavlaunch
 net.wargaming.wot.blitz
