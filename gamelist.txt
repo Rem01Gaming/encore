@@ -71,10 +71,12 @@ com.gabama.monopostolite
 com.gamedevltd.wwh
 com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
+com.gaijingames.wtm
 com.garena.game.codm
 com.garena.game.kgid
 com.garena.game.kgtw
 com.garena.game.kgvn
+com.garena.game.lmjx
 com.gryphline.exastris.gp
 com.guyou.deadstrike
 com.halo.windf.hero
@@ -96,6 +98,7 @@ com.kurogame.aki
 com.kurogame.gplay.punishing.grayraven.en
 com.kurogame.haru
 com.kurogame.haru.bilibili
+com.kurogame.haru.hero
 com.kurogame.mingchao
 com.kurogame.wutheringwaves.global
 com.leiting.wf
@@ -112,6 +115,8 @@ com.miHoYo.bh3
 com.miHoYo.bh3global
 com.miHoYo.bh3oversea
 com.miHoYo.bh3oversea_vn
+com.miHoYo.GI.samsung
+com.miHoYo.HSoDv2JPOriginalEx
 com.miHoYo.enterprise.NGHSoD
 com.miHoYo.hkrpg
 com.miHoYo.ys
@@ -124,6 +129,7 @@ com.mojang.hostilegg
 com.mojang.minecraftpe
 com.mojang.minecraftpe.patch
 com.nanostudios.games.twenty.minutes
+com.nebulajoy.act.dmcpoc.asia
 com.nekki.shadowfight
 com.nekki.shadowfight3
 com.netease.AVALON
@@ -159,7 +165,9 @@ com.netease.tom
 com.netease.wotb
 com.netease.x19
 com.netease.yhtj
+com.netflix.NGP.GTASanAndreasDefinitiveEdition
 com.netflix.NGP.GTAViceCityDefinitiveEdition
+com.netflix.NGP.GTAIIIDefinitiveEdition
 com.netmarble.sololv
 com.nexon.bluearchive
 com.nexon.kartdrift
@@ -168,6 +176,7 @@ com.olzhass.carparking.multyplayer
 com.pearlabyss.blackdesertm.gl
 com.pinkcore.tkfm
 com.playdigious.deadcells.mobile
+com.proximabeta.dn2.global
 com.proximabeta.mf.uamo
 com.proximabeta.nikke
 com.prpr.musedash
@@ -188,6 +197,11 @@ com.riotgames.league.teamfighttacticsvn
 com.riotgames.league.wildrift
 com.roblox.client
 com.rockstargames.gtasa
+com.rockstargames.gtavc
+com.rockstargames.gta3
+com.rockstargames.gtasa.de
+com.rockstargames.gtavc.de
+com.rockstargames.gta3.de
 com.seasun.jx3
 com.sega.ColorfulStage.en
 com.sega.pjsekai
