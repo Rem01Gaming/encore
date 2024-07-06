@@ -93,6 +93,7 @@ com.je.supersus
 com.kakaogames.eversoul
 com.kakaogames.gdts
 com.kakaogames.wdfp
+com.kiloo.subwaysurf
 com.kog.grandchaseglobal
 com.komoe.kmumamusumegp
 com.kurogame.aki
