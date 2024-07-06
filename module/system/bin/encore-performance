@@ -34,6 +34,9 @@ apply "0" $tp_path/oppo_tp_limit_enable
 apply "1" $tp_path/oplus_tp_direction
 apply "1" $tp_path/oppo_tp_direction
 
+# Setting perf_cpu_time_max_percent to 3
+apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
+
 # Memory tweak
 apply 200 /proc/sys/vm/vfs_cache_pressure
 

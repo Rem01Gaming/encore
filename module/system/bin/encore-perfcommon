@@ -77,9 +77,6 @@ apply 0 /proc/sys/kernel/sched_autogroup_enabled
 # Enable CRF
 apply 1 /proc/sys/kernel/sched_child_runs_first
 
-# Setting perf_cpu_time_max_percent to 10
-apply 10 /proc/sys/kernel/perf_cpu_time_max_percent
-
 # Improve real time latencies by reducing the scheduler migration time
 apply 32 /proc/sys/kernel/sched_nr_migrate
 
