@@ -118,12 +118,15 @@ int main(void) {
              "\"$(cat /data/encore/gamelist.txt)\" | tail -n 1");
     gamestart = execute_command(command);
 
-    snprintf(
-        command, sizeof(command),
-        "dumpsys window displays | grep -Eo "mAwake=false|mAwake=true" | awk -F'=' '{print $2}'");
+    snprintf(command, sizeof(command),
+             "dumpsys window displays | grep -Eo " mAwake =
+                 false | mAwake = true " | awk -F'=' '{print $2}'");
     screenstate = execute_command(command);
 
-    low_power = execute_command("settings get global low_power_sticky");
+    low_power = execute_command(
+        "dumpsys power | grep -Eo " mSettingBatterySaverEnabledSticky =
+            true | mSettingBatterySaverEnabledSticky =
+                false " | awk -F'=' '{print $2}'");
 
     if (screenstate == NULL) {
       printf("error: screenstate is null\n");
@@ -147,7 +150,7 @@ int main(void) {
         }
         performance_mode();
       }
-    } else if (low_power && strcmp(trim_newline(low_power), "1") == 0) {
+    } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
       // Apply powersave mode
       if (cur_mode != 2) {
         cur_mode = 2;
