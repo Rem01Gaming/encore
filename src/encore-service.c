@@ -119,14 +119,14 @@ int main(void) {
     gamestart = execute_command(command);
 
     snprintf(command, sizeof(command),
-             "dumpsys window displays | grep -Eo " mAwake =
-                 false | mAwake = true " | awk -F'=' '{print $2}'");
+             "dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
+             "| awk -F'=' '{print $2}'");
     screenstate = execute_command(command);
 
     low_power = execute_command(
-        "dumpsys power | grep -Eo " mSettingBatterySaverEnabledSticky =
-            true | mSettingBatterySaverEnabledSticky =
-                false " | awk -F'=' '{print $2}'");
+        "dumpsys power | grep -Eo "
+        "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
+        "false\" | awk -F'=' '{print $2}'");
 
     if (screenstate == NULL) {
       printf("error: screenstate is null\n");
