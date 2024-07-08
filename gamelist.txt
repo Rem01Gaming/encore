@@ -46,6 +46,7 @@ com.bilibili.warmsnow
 com.bilibiligame.heglgp
 com.bingkolo.kleins.cn
 com.blizzard.diablo.immortal
+com.bluepoch.m.en.reverse1999
 com.bushiroad.d4dj
 com.bushiroad.en.bangdreamgbp
 com.bushiroad.lovelive.schoolidolfestival2
@@ -174,6 +175,7 @@ com.netease.yhtj
 com.netflix.NGP.GTASanAndreasDefinitiveEdition
 com.netflix.NGP.GTAViceCityDefinitiveEdition
 com.netflix.NGP.GTAIIIDefinitiveEdition
+com.netmarble.skiagb
 com.netmarble.sololv
 com.nexon.bluearchive
 com.nexon.kartdrift
