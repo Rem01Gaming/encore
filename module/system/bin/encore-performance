@@ -41,13 +41,8 @@ apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
 apply 200 /proc/sys/vm/vfs_cache_pressure
 
 # CPU tweaks
-cpu="0"
-while [ $cpu -lt $(nproc --all) ]; do
-	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
-	if [ -d "$cpu_dir" ]; then
-		apply "performance" "${cpu_dir}/cpufreq/scaling_governor"
-	fi
-	cpu="$((cpu + 1))"
+for path in /sys/devices/system/cpu/cpufreq/policy*; do
+	apply "performance" "$path/scaling_governor"
 done
 
 # Mediatek Tweaks

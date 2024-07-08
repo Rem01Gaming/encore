@@ -41,14 +41,9 @@ apply 20 /proc/sys/kernel/perf_cpu_time_max_percent
 # Memory Tweaks
 apply 90 /proc/sys/vm/vfs_cache_pressure
 
-# CPU Governor
-cpu="0"
-while [ $cpu -lt $(nproc --all) ]; do
-	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
-	if [ -d "$cpu_dir" ]; then
-		apply $default_cpu_gov "${cpu_dir}/cpufreq/scaling_governor"
-	fi
-	cpu="$((cpu + 1))"
+# CPU tweaks
+for path in /sys/devices/system/cpu/cpufreq/policy*; do
+	apply "$default_cpu_gov" "$path/scaling_governor"
 done
 
 # Mediatek Tweaks

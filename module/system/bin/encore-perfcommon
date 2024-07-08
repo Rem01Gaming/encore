@@ -20,17 +20,6 @@ for queue in /sys/block/*/queue; do
 	apply 64 "$queue/nr_requests"
 done
 
-# CPU tweaks
-cpu="0"
-while [ $cpu -lt $(nproc --all) ]; do
-	cpu_dir="/sys/devices/system/cpu/cpu${cpu}"
-	if [ -d "$cpu_dir" ]; then
-		apply 1 ${cpu_dir}/online
-		chmod 0644 "${cpu_dir}/cpufreq/scaling_governor"
-	fi
-	cpu="$((cpu + 1))"
-done
-
 # Apply governor specific tunables for schedutil
 find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r governor; do
 	# Consider changing frequencies once per scheduling period
