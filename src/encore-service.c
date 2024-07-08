@@ -114,7 +114,7 @@ int main(void) {
 
   while (1) {
     snprintf(command, sizeof(command),
-             "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp' | grep -Eo "
+             "sh /data/encore/AppMonitoringUtil.sh | grep -Eo "
              "\"$(cat /data/encore/gamelist.txt)\" | tail -n 1");
     gamestart = execute_command(command);
 
