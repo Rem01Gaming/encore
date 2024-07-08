@@ -21,6 +21,7 @@ case $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors) in
 *"schedplus"*) default_cpu_gov="schedplus" ;;
 *"sugov_ext"*) default_cpu_gov="sugov_ext" ;;
 *"walt"*) default_cpu_gov="walt" ;;
+*"uag"*) default_cpu_gov="uag" ;;
 *) default_cpu_gov="schedutil" ;;
 esac
 
