@@ -88,3 +88,8 @@ apply 5000 /sys/kernel/mm/lru_gen
 
 # Disable SPI CRC
 apply 0 /sys/module/mmc_core/parameters/use_spi_crc
+
+# Disable Oplus bloats
+apply 0 /sys/module/cpufreq_bouncing/parameters/enable
+apply 0 /proc/task_info/task_sched_info/task_sched_info_enable
+apply 0 /proc/oplus_scheduler/sched_assist/sched_assist_enabled
