@@ -13,3 +13,6 @@ all:
 prettier:
 	clang-format -style=Google -i src/encore-service.c
 	shfmt -l -w . module/system/bin/*
+	cat gamelist.txt | sort -V >gamelist.tmp
+	rm gamelist.txt
+	mv gamelist.tmp gamelist.txt
