@@ -86,6 +86,7 @@ com.guyou.deadstrike
 com.halo.windf.hero
 com.heavenburnsred
 com.hermes.j1game
+com.hg.cosmicshake
 com.hottapkgs.hotta
 com.hypergryph.arknights
 com.hypergryph.exastris
