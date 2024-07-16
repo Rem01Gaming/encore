@@ -57,6 +57,9 @@ apply "N" /sys/module/printk/parameters/time
 stop traced
 apply 0 /sys/kernel/tracing/tracing_on
 
+# Kill logd
+stop logd
+
 # Disable schedstats
 apply 0 /proc/sys/kernel/sched_schedstats
 
