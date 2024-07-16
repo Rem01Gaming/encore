@@ -78,23 +78,23 @@ void setPriorities(const char *pid) {
     printf("error: PID is null\n");
     return;
   }
-  snprintf(command, sizeof(command), "renice -n -20 -p %s", pid);
+  snprintf(command, sizeof(command), "su -c renice -n -20 -p %s", pid);
   system(command);
 
-  snprintf(command, sizeof(command), "ionice -c 1 -n 0 -p %s", pid);
+  snprintf(command, sizeof(command), "su -c ionice -c 1 -n 0 -p %s", pid);
   system(command);
 
   snprintf(command, sizeof(command), "chrt -f -p 98 %s", pid);
   system(command);
 }
 
-void performance_mode(void) { system("sh /system/bin/encore-performance"); }
+void performance_mode(void) { system("su -c encore-performance"); }
 
-void normal_mode(void) { system("sh /system/bin/encore-normal"); }
+void normal_mode(void) { system("su -c encore-normal"); }
 
 void powersave_mode(void) {
   normal_mode();
-  system("sh /system/bin/encore-powersave");
+  system("su -c encore-powersave");
 }
 
 void perf_common(void) {
@@ -102,7 +102,7 @@ void perf_common(void) {
       "su -lp 2000 -c \"/system/bin/cmd notification post -S bigtext -t "
       "\\\"ENCORE\\\" \\\"Tag$(date +%s)\\\" \\\"Tweaks applied "
       "successfully\\\"\"");
-  system("sh /system/bin/encore-perfcommon");
+  system("su -c encore-perfcommon");
 }
 
 int main(void) {
@@ -119,12 +119,12 @@ int main(void) {
     gamestart = execute_command(command);
 
     snprintf(command, sizeof(command),
-             "dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
+             "su -c dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
              "| awk -F'=' '{print $2}'");
     screenstate = execute_command(command);
 
     low_power = execute_command(
-        "dumpsys power | grep -Eo "
+        "su -c dumpsys power | grep -Eo "
         "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
         "false\" | awk -F'=' '{print $2}'");
 
