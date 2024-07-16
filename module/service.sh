@@ -17,15 +17,8 @@ case $chipset in
 *) soc=0 ;;
 esac
 
-case $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors) in
-*"schedplus"*) default_cpu_gov="schedplus" ;;
-*"sugov_ext"*) default_cpu_gov="sugov_ext" ;;
-*"walt"*) default_cpu_gov="walt" ;;
-*"uag"*) default_cpu_gov="uag" ;;
-*) default_cpu_gov="schedutil" ;;
-esac
-
-echo $default_cpu_gov >/data/encore/default_cpu_gov
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor >/data/encore/default_cpu_gov
 echo $soc >/data/encore/soc_recognition
 
 nice -n -20 encore-service >/dev/null 2>&1
