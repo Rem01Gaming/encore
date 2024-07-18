@@ -5,8 +5,7 @@ gitsha1 := $(shell git rev-parse --short HEAD)
 all:
 	sed -i "s/version=.*/version=$(version) (GIT@$(gitsha1))/" ./module/module.prop
 	sed -i "s/versionCode=.*/versionCode=$(version_code)/" ./module/module.prop
-	clang -Wall -Wextra -O2 -o ./module/system/bin/encore-service ./src/encore-service.c
-	strip -s ./module/system/bin/encore-service
+	clang -Wall -Wextra -s -O2 -o ./module/system/bin/encore-service ./src/encore-service.c
 	cp LICENSE ./module
 	bash ./gamelist_compile.sh
 	cd module && zip -r9 ../encore-$(shell uname -m)-$(version_code).zip * -x *placeholder
