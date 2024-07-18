@@ -34,3 +34,10 @@ else
 fi
 
 set_perm_recursive $MODPATH 0 0 0777 0777
+
+if hash nohup 2>/dev/null; then
+	ui_print "- No need to reboot, ENCORE Tweaks will"
+	ui_print "  run automatically after the installation."
+	pkill -f encore-service
+	nohup sh $MODPATH/service.sh </dev/null >/dev/null 2>&1 &
+fi
