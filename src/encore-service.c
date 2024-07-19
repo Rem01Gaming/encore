@@ -115,6 +115,7 @@ int main(void) {
 
     if (screenstate == NULL) {
       printf("error: screenstate is null\n");
+      exit(EXIT_FAILURE);
     } else if (gamestart && strcmp(trim_newline(screenstate), "true") == 0) {
       // Apply performance mode
       if (cur_mode != 1) {

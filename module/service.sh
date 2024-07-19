@@ -22,3 +22,7 @@ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor >/data/encore/default_
 echo $soc >/data/encore/soc_recognition
 
 nice -n -20 encore-service >/dev/null 2>&1
+code=$?
+if [ $code -gt 0 ] && [ ! $code -eq 143 ]; then
+	su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' \"encore-service exited abnormally, please report this to chat group. (exit code $code)"\"
+fi
