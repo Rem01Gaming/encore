@@ -22,6 +22,7 @@ unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 unzip -o "$ZIPFILE" 'service.sh' -d "$MODPATH" >&2
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
+echo 0 >/data/encore/skip_setpriority
 
 if pm list packages | grep -q bellavita.toast; then
 	ui_print "- The Bellavita Toast app is already installed."

@@ -74,19 +74,11 @@ char *execute_command(const char *command) {
 } */
 
 void setPriorities(const char *pid) {
-  if (pid == NULL) {
-    printf("error: PID is null\n");
-    return;
-  }
-  snprintf(command, sizeof(command), "su -c renice -n -20 -p %s", pid);
-  system(command);
-
-  snprintf(command, sizeof(command), "su -c ionice -c 1 -n 0 -p %s", pid);
-  system(command);
-
-  snprintf(command, sizeof(command), "chrt -f -p 98 %s", pid);
+  snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
   system(command);
 }
+
+void perf_common(void) { system("su -c encore-perfcommon"); }
 
 void performance_mode(void) { system("su -c encore-performance"); }
 
@@ -95,14 +87,6 @@ void normal_mode(void) { system("su -c encore-normal"); }
 void powersave_mode(void) {
   normal_mode();
   system("su -c encore-powersave");
-}
-
-void perf_common(void) {
-  system(
-      "su -lp 2000 -c \"/system/bin/cmd notification post -S bigtext -t "
-      "\\\"ENCORE\\\" \\\"Tag$(date +%s)\\\" \\\"Tweaks applied "
-      "successfully\\\"\"");
-  system("su -c encore-perfcommon");
 }
 
 int main(void) {
@@ -142,14 +126,17 @@ int main(void) {
             "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
             trim_newline(gamestart));
         system(command);
+        performance_mode();
+
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
         if (pid != NULL) {
           setPriorities(trim_newline(pid));
           free(pid);
           pid = NULL;
+        } else {
+          printf("error: Game PID is null, can't set priority\n");
         }
-        performance_mode();
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
       // Apply powersave mode

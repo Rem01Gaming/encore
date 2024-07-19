@@ -1,0 +1,15 @@
+#!/system/bin/sh
+
+if [ -z $1 ]; then
+	echo "error: no PID target for priority settings"
+	exit 1
+fi
+
+if [ $(cat /data/encore/skip_setpriority) -eq 1 ]; then
+	echo "notice: skipping priority settings"
+	exit 0
+fi
+
+renice -n -20 -p $1
+ionice -c 1 -n 0 -p $1
+chrt -f -p 99 $1
