@@ -27,6 +27,7 @@ com.activision.callofduty.warzone
 com.albiononline
 com.aligames.kuang.kybc
 com.aligames.kuang.kybc.huawei
+com.android.test.uibench
 com.and.games505.Terraria
 com.autumn.skullgirls
 com.axlebolt.standoff2
