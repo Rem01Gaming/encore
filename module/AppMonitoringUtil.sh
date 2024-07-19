@@ -11,5 +11,5 @@
 # Grep mFocusedApp from dumpsys
 dumpsys window displays | grep -E "mFocusedApp"
 
-# Grep mObsecuringApp from dumpsys
+# Grep mObsecuringWindow from dumpsys
 #dumpsys window windows | grep -E "mObscuringWindow"
