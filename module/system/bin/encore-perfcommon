@@ -1,5 +1,8 @@
 #!/system/bin/sh
 
+# Push Notification
+su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' 'Tweaks successfully applied.'"
+
 apply() {
 	if [ -f $2 ]; then
 		chmod 644 $2 >/dev/null 2>&1
@@ -96,6 +99,3 @@ apply 0 /sys/module/mmc_core/parameters/use_spi_crc
 apply 0 /sys/module/cpufreq_bouncing/parameters/enable
 apply 0 /proc/task_info/task_sched_info/task_sched_info_enable
 apply 0 /proc/oplus_scheduler/sched_assist/sched_assist_enabled
-
-# Post Notification
-su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' 'Tweaks successfully applied.'"
