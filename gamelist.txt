@@ -324,3 +324,4 @@ tw.sonet.allbw
 vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
+com.robtopx.geometryjump
