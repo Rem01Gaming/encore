@@ -321,5 +321,6 @@ skyline.emu
 skyline.purple
 skynet.cputhrottlingtest
 tw.sonet.allbw
+vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
