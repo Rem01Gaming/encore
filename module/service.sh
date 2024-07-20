@@ -23,6 +23,6 @@ echo $soc >/data/encore/soc_recognition
 
 nice -n -20 encore-service
 code=$?
-if [ $code -gt 0 ] && [ ! $code -eq 143 ]; then
+if [ $code -gt 0 ]; then
 	su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' \"encore-service exited abnormally, please report this to chat group. (exit code $code)"\"
 fi
