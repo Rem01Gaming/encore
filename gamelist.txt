@@ -216,6 +216,7 @@ com.riotgames.league.teamfighttactics
 com.riotgames.league.teamfighttacticsvn
 com.riotgames.league.wildrift
 com.roblox.client
+com.robtopx.geometryjump
 com.rockstargames.gta3
 com.rockstargames.gta3.de
 com.rockstargames.gtasa
@@ -324,4 +325,3 @@ tw.sonet.allbw
 vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
-com.robtopx.geometryjump

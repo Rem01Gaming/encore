@@ -6,10 +6,11 @@ LATESTARTSERVICE=true
 REPLACE="
 
 "
+
 sleep 2
 ui_print ""
 ui_print "************************************"
-ui_print "                 ENCORE Tweaks          "
+ui_print "               ENCORE Tweaks          "
 ui_print "************************************"
 ui_print "     By Telegram @Rem01Gaming     "
 ui_print "************************************"
@@ -29,10 +30,14 @@ if pm list packages | grep -q bellavita.toast; then
 else
 	ui_print "- Bellavita Toast isn't installed"
 	ui_print "- Installing bellavita toast..."
-	unzip -o "$ZIPFILE" 'toast.apk' -d /data/local/tmp >&2
-	pm install /data/local/tmp/toast.apk
-	rm -f /data/local/tmp/toast.apk
+	unzip -o "$ZIPFILE" 'toast.apk' -d $TMPDIR >&2
+	pm install $TMPDIR/toast.apk
+	rm -f $TMPDIR/toast.apk
+	if ! pm list packages | grep -q bellavita.toast; then
+		ui_print "- Can't install Bellavita Toast due to selinux restrictions"
+		ui_print "  Please install it manually after installation."
+	fi
 fi
 
 set_perm_recursive $MODPATH 0 0 0777 0777
-ui_print "- Reboot your device, NOW."
+ui_print "- Reboot is needed after installation"
