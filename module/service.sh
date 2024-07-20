@@ -7,13 +7,14 @@ done
 chipset=$(grep "Hardware" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')
 
 if [ -z "$chipset" ]; then
-	chipset=$(getprop "ro.hardware")
+	chipset=$(getprop "ro.board.platform")
 fi
 
 case $chipset in
 *mt* | *MT*) soc=1 ;;
 *sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) soc=2 ;;
 *exynos*) soc=3 ;;
+*gs*) soc=4 ;;
 *) soc=0 ;;
 esac
 
