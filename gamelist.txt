@@ -161,6 +161,7 @@ com.netease.hyxd
 com.netease.idv
 com.netease.jddsaef
 com.netease.ko
+com.netease.lagrange
 com.netease.lglr
 com.netease.ma84
 com.netease.ma100asia
