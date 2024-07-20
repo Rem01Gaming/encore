@@ -1,6 +1,8 @@
+adventure.rpg.anime.game.vng.ys6
 age.of.civilizations2.jakowski.lukasz
 brownmonster.app.game.rushrally3
 com.AlfaBravo.Combat
+com.CarXTech.street
 com.ChillyRoom.DungeonShooter
 com.EtherGaming.PocketRogues
 com.Flanne.MinutesTillDawn.roguelike.shooting.gp
@@ -28,6 +30,7 @@ com.albiononline
 com.aligames.kuang.kybc
 com.aligames.kuang.kybc.huawei
 com.android.test.uibench
+com.andromeda.androbench2
 com.and.games505.Terraria
 com.autumn.skullgirls
 com.axlebolt.standoff2
@@ -54,6 +57,7 @@ com.chillyroom.soulknightprequel
 com.citra.emu
 com.cnvcs.xiangqi
 com.criticalforceentertainment.criticalops
+com.crunchyroll.princessconnectredive
 com.denachina.g13002010
 com.dena.a12026801
 com.denchi.vtubestudio
@@ -68,9 +72,12 @@ com.dts.freefiremax
 com.dts.freefireth
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
+com.emulator.fpse64
 com.epicgames.fortnite
 com.fantablade.icey
+com.feralinteractive.gridas
 com.firsttouchgames.dls7
+com.futuremark.dmandroid.application
 com.gabama.monopostolite
 com.gaijingames.wtm
 com.gamedevltd.wwh
@@ -82,6 +89,7 @@ com.garena.game.kgid
 com.garena.game.kgtw
 com.garena.game.kgvn
 com.garena.game.lmjx
+com.gravity.romg
 com.gryphline.exastris.gp
 com.guyou.deadstrike
 com.halo.windf.hero
@@ -138,6 +146,7 @@ com.nanostudios.games.twenty.minutes
 com.nebulajoy.act.dmcpoc.asia
 com.nekki.shadowfight
 com.nekki.shadowfight3
+com.neowizgames.game.browndust2
 com.netease.AVALON
 com.netease.EVE
 com.netease.aceracer
@@ -178,11 +187,13 @@ com.netmarble.skiagb
 com.netmarble.sololv
 com.nexon.bluearchive
 com.nexon.kartdrift
+com.ngame.allstar.eu
 com.nianticlabs.monsterhunter
 com.olzhass.carparking.multyplayer
 com.pearlabyss.blackdesertm.gl
 com.pinkcore.tkfm
 com.playdigious.deadcells.mobile
+com.play.rosea
 com.proximabeta.dn2.global
 com.proximabeta.mf.aceforce2
 com.proximabeta.mf.uamo
@@ -210,6 +221,7 @@ com.rockstargames.gtasa
 com.rockstargames.gtasa.de
 com.rockstargames.gtavc
 com.rockstargames.gtavc.de
+com.rsg.myheroesen
 com.seasun.jx3
 com.sega.ColorfulStage.en
 com.sega.pjsekai
@@ -222,6 +234,8 @@ com.soulgamechst.majsoul
 com.sprduck.garena.vn
 com.squareenix.lis
 com.stove.epic7.google
+com.sunborn.neuralcloud
+com.sunborn.neuralcloud.en
 com.supercell.brawlstars
 com.supercell.clashofclans
 com.supercell.clashroyale
@@ -276,14 +290,17 @@ com.zy.wqmt.cn
 com.bandainamcoent.idolmaster_gakuen
 com.bandainamcoent.imas_millionlive_theaterdays
 com.miHoYo.bh3oversea_vn
+cyou.joiplay.joiplay
 id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
+jp.co.cygames.princessconnectredive
 jp.garud.ssimulator
 jp.konami.duellinks
 jp.konami.masterduel
 jp.konami.pesam
 jp.pokemon.pokemonunite
+lega.feisl.hhera
 me.mugzone.emiria
 me.pou.app
 me.tigerhix.cytoid
@@ -300,6 +317,7 @@ ru.nsu.ccfit.zuev.osuplus
 ru.unisamp_mobile.game
 sh.ppy.osulazer
 skyline.emu
+skyline.purple
 skynet.cputhrottlingtest
 tw.sonet.allbw
 xd.sce.promotion
