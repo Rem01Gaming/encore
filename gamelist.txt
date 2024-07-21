@@ -118,6 +118,7 @@ com.kurogame.haru.hero
 com.kurogame.mingchao
 com.kurogame.wutheringwaves.global
 com.leiting.wf
+com.lemon.lvoverseas
 com.levelinfinite.hotta.gp
 com.levelinfinite.sgameGlobal
 com.levelinfinite.sgameGlobal.midaspay
