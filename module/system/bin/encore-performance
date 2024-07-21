@@ -90,14 +90,22 @@ if [ $soc -eq 1 ]; then
 
 # Qualcomm Tweaks
 elif [ $soc -eq 2 ]; then
-	# Qualcomm CPU Bus
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-llcc-lat/devfreq/soc:qcom,cpu0-cpu-llcc-lat/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-l3-lat/devfreq/soc:qcom,cpu0-cpu-l3-lat/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-llcc-lat/devfreq/soc:qcom,cpu4-cpu-llcc-lat/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-l3-lat/devfreq/soc:qcom,cpu4-cpu-l3-lat/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
+	# Qualcomm CPU Bus and DRAM frequencies
+	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
+		apply "performance" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu*-lat; do
+		apply "performance" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
+		apply "performance" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
+		apply "performance" $path/governor
+	done
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
@@ -118,14 +126,7 @@ elif [ $soc -eq 2 ]; then
 			apply $freq $path
 		done
 	fi
-
-	# GPU Governor
-	apply "performance" /sys/class/kgsl/kgsl-3d0/devfreq/governor
-
-	# Adreno Boost
-	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
-
-	# DRAM Frequencies
+	
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
@@ -146,5 +147,9 @@ elif [ $soc -eq 2 ]; then
 		done
 	fi
 
-	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	# GPU Governor
+	apply "performance" /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+	# Adreno Boost
+	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 fi

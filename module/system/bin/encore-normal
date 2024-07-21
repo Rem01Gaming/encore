@@ -91,15 +91,23 @@ if [ $soc -eq 1 ]; then
 
 # Qualcomm Tweaks
 elif [ $soc -eq 2 ]; then
-	# Qualcomm CPU Bus
-	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-cpu-llcc-bw/devfreq/soc:qcom,cpu-cpu-llcc-bw/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-llcc-lat/devfreq/soc:qcom,cpu0-cpu-llcc-lat/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu0-cpu-l3-lat/devfreq/soc:qcom,cpu0-cpu-l3-lat/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-llcc-lat/devfreq/soc:qcom,cpu4-cpu-llcc-lat/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-cpu-l3-lat/devfreq/soc:qcom,cpu4-cpu-l3-lat/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
-	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
-
+	# Qualcomm CPU Bus and DRAM frequencies
+	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
+		apply "compute" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu*-lat; do
+		apply "mem_latency" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
+		apply "bw_hwmon" $path/governor
+	done
+	
+	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
+		apply "bw_hwmon" $path/governor
+	done
+	
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
@@ -121,14 +129,7 @@ elif [ $soc -eq 2 ]; then
 			apply $min_freq $path
 		done
 	fi
-
-	# GPU Governor
-	apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
-
-	# Adreno Boost
-	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
-
-	# DRAM Frequencies
+	
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
@@ -151,5 +152,9 @@ elif [ $soc -eq 2 ]; then
 		done
 	fi
 
-	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
+	# GPU Governor
+	apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+	# Adreno Boost
+	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 fi
