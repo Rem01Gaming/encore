@@ -94,15 +94,15 @@ elif [ $soc -eq 2 ]; then
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "performance" $path/governor
 	done
-	
+
 	for path in /sys/class/devfreq/*cpu*-lat; do
 		apply "performance" $path/governor
 	done
-	
+
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
 		apply "performance" $path/governor
 	done
-	
+
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
 		apply "performance" $path/governor
 	done
@@ -126,7 +126,7 @@ elif [ $soc -eq 2 ]; then
 			apply $freq $path
 		done
 	fi
-	
+
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
@@ -152,4 +152,15 @@ elif [ $soc -eq 2 ]; then
 
 	# Adreno Boost
 	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
+
+# Google Tensor
+elif [ $soc -eq 4 ]; then
+	# GPU Frequency
+	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
+
+	if [ -n $gpu_path ]; then
+		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		apply $freq $gpu_path/scaling_min_freq
+		apply $freq $gpu_path/scaling_max_freq
+	fi
 fi
