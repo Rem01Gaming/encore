@@ -28,11 +28,13 @@ fi
 
 # Oppo/Oplus/Realme Touchpanel
 tp_path="/proc/touchpanel"
-apply "1" $tp_path/game_switch_enable
-apply "0" $tp_path/oplus_tp_limit_enable
-apply "0" $tp_path/oppo_tp_limit_enable
-apply "1" $tp_path/oplus_tp_direction
-apply "1" $tp_path/oppo_tp_direction
+if [ -d tp_path ]; then
+	apply "1" $tp_path/game_switch_enable
+	apply "0" $tp_path/oplus_tp_limit_enable
+	apply "0" $tp_path/oppo_tp_limit_enable
+	apply "1" $tp_path/oplus_tp_direction
+	apply "1" $tp_path/oppo_tp_direction
+fi
 
 # Setting perf_cpu_time_max_percent to 3
 apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
