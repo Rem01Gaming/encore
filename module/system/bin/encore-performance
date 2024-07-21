@@ -83,6 +83,7 @@ if [ $soc -eq 1 ]; then
 	apply "0" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	apply "performance" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
+	apply "performance" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
 
 	# Eara Thermal
 	apply "0" /sys/kernel/eara_thermal/enable
@@ -98,31 +99,52 @@ elif [ $soc -eq 2 ]; then
 	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
 	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
 
+	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
+		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
+			apply $freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
+			apply $freq $path
+		done
+	fi
+
+	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
+		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
+			apply $freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
+			apply $freq $path
+		done
+	fi
+
 	# GPU Governor
 	apply "performance" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 	# Adreno Boost
 	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
-	# DRAM Governor
+	# DRAM Frequencies
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDR"
-	elif [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDRQOS"
-	fi
-
-	if [ $qcom_dram_path ]; then
-		freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-
-		for path in $qcom_dram_path/*/max_freq; do
+		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $freq $path
 		done
-
-		for path in $qcom_dram_path/*/min_freq; do
+		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $freq $path
 		done
-	else
-		apply "performance" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
-		apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 	fi
+
+	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
+		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
+			apply $freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
+			apply $freq $path
+		done
+	fi
+
+	apply "performance" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 fi

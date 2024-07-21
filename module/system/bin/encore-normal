@@ -100,31 +100,56 @@ elif [ $soc -eq 2 ]; then
 	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu7-cpu-l3-lat/devfreq/soc:qcom,cpu7-cpu-l3-lat/governor
 	apply "mem_latency" /sys/devices/platform/soc/soc:qcom,cpu4-llcc-ddr-lat/devfreq/soc:qcom,cpu4-llcc-ddr-lat/governor
 
+	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
+			apply $max_freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
+			apply $min_freq $path
+		done
+	fi
+
+	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
+			apply $max_freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
+			apply $min_freq $path
+		done
+	fi
+
 	# GPU Governor
 	apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 	# Adreno Boost
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
-	# DRAM Governor
+	# DRAM Frequencies
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDR"
-	elif [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		qcom_dram_path="/sys/devices/system/cpu/bus_dcvs/DDRQOS"
-	fi
-
-	if [ $qcom_dram_path ]; then
-		max_freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $qcom_dram_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-
-		for path in $qcom_dram_path/*/max_freq; do
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $max_freq $path
 		done
-
-		for path in $qcom_dram_path/*/min_freq; do
+		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $min_freq $path
 		done
-	else
-		apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 	fi
+
+	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
+			apply $max_freq $path
+		done
+		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
+			apply $min_freq $path
+		done
+	fi
+
+	apply "bw_hwmon" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
 fi
