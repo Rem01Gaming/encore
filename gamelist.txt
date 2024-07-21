@@ -29,6 +29,7 @@ com.activision.callofduty.warzone
 com.albiononline
 com.aligames.kuang.kybc
 com.aligames.kuang.kybc.huawei
+com.alightcreative.motion
 com.android.test.uibench
 com.andromeda.androbench2
 com.and.games505.Terraria
