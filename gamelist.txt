@@ -197,6 +197,7 @@ com.pearlabyss.blackdesertm.gl
 com.pinkcore.tkfm
 com.playdigious.deadcells.mobile
 com.play.rosea
+com.primatelabs.geekbench6
 com.proximabeta.dn2.global
 com.proximabeta.mf.aceforce2
 com.proximabeta.mf.uamo
