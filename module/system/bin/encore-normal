@@ -126,7 +126,7 @@ elif [ $soc -eq 2 ]; then
 	apply "msm-adreno-tz" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
 	# Adreno Boost
-	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
+	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
 	# DRAM Frequencies
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then

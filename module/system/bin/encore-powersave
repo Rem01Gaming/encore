@@ -45,7 +45,7 @@ elif [ $soc -eq 2 ]; then
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
-			apply $max_freq $path
+			apply $freq $path
 		done
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
 			apply $freq $path
@@ -55,18 +55,24 @@ elif [ $soc -eq 2 ]; then
 	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
-			apply $max_freq $path
+			apply $freq $path
 		done
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
 			apply $freq $path
 		done
 	fi
 
+	# GPU Governor
+	apply "powersave" /sys/class/kgsl/kgsl-3d0/devfreq/governor
+
+	# Adreno Boost
+	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
+
 	# DRAM Frequencies
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
-			apply $max_freq $path
+			apply $freq $path
 		done
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $freq $path
@@ -76,7 +82,7 @@ elif [ $soc -eq 2 ]; then
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
-			apply $max_freq $path
+			apply $freq $path
 		done
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
 			apply $freq $path
@@ -84,7 +90,4 @@ elif [ $soc -eq 2 ]; then
 	fi
 
 	apply "powersave" /sys/devices/platform/soc/soc:qcom,cpu-llcc-ddr-bw/devfreq/soc:qcom,cpu-llcc-ddr-bw/governor
-
-	# GPU Governor
-	apply "powersave" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 fi
