@@ -1,15 +1,11 @@
 #!/system/bin/sh
+# Encore AppMonitoringUtil
 
-# This script is a monitoring app for Encore Tweaks
-# Please modify according to your needs and ROM compatibility
+for game in $(echo $(ps -e | grep -Eo \"$(cat /data/encore/gamelist.txt)\")); do
+	if dumpsys activity services $game | grep -Eo "uidState: TOP"; then
+		active_game=$game
+		break
+	fi >/dev/null 2>&1
+done
 
-# Line with '#' prefix will be not executed
-
-# Grep mCurrentFocus from dumpsys
-#dumpsys window displays | grep -E "mCurrentFocus"
-
-# Grep mFocusedApp from dumpsys
-dumpsys window displays | grep -E "mFocusedApp"
-
-# Grep mObsecuringWindow from dumpsys
-#dumpsys window windows | grep -E "mObscuringWindow"
+echo -n $active_game

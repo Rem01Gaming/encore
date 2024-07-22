@@ -97,17 +97,10 @@ int main(void) {
   perf_common();
 
   while (1) {
-    snprintf(command, sizeof(command),
-             "sh /data/encore/AppMonitoringUtil.sh | grep -Eo "
-             "\"$(cat /data/encore/gamelist.txt)\" | tail -n 1");
-    gamestart = execute_command(command);
-
-    snprintf(
-        command, sizeof(command),
+    gamestart = execute_command("sh /data/encore/AppMonitoringUtil.sh");
+    screenstate = execute_command(
         "su -c dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
         "| awk -F'=' '{print $2}'");
-    screenstate = execute_command(command);
-
     low_power = execute_command(
         "su -c dumpsys power | grep -Eo "
         "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
