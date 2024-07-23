@@ -97,7 +97,8 @@ int main(void) {
   perf_common();
 
   while (1) {
-    gamestart = execute_command("sh /data/encore/AppMonitoringUtil.sh");
+    gamestart =
+        execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
     screenstate = execute_command(
         "su -c dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
         "| awk -F'=' '{print $2}'");
