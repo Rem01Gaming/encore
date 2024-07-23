@@ -10,6 +10,8 @@ apply() {
 	fi
 }
 
+apply 0 /sys/devices/system/cpu/cpu2/online
+
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# MTK CPU Power mode to low power
