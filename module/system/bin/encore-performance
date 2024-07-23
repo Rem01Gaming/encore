@@ -47,6 +47,8 @@ for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "performance" "$path/scaling_governor"
 done
 
+apply 1 /sys/devices/system/cpu/cpu2/online
+
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# MTK Power and CCI mode

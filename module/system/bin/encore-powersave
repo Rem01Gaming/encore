@@ -10,6 +10,7 @@ apply() {
 	fi
 }
 
+# Disable cpu2 to save some power
 apply 0 /sys/devices/system/cpu/cpu2/online
 
 # Mediatek Tweaks
