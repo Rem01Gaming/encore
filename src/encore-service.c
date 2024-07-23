@@ -101,7 +101,7 @@ int main(void) {
       gamestart =
           execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
     } else {
-      snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
+      snprintf(command, sizeof(command), "pidof %s >/dev/null", trim_newline(gamestart));
       if (system(command) == -1) {
         free(gamestart);
         gamestart =
