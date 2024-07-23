@@ -97,10 +97,21 @@ int main(void) {
   perf_common();
 
   while (1) {
-    gamestart =
-        execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+    if (!gamestart) {
+      gamestart =
+          execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+    } else {
+      snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
+      if (system(command) == -1) {
+        free(gamestart);
+        gamestart =
+            execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+      }
+    }
+
     screenstate = execute_command(
-        "su -c dumpsys window displays | grep -Eo \"mAwake=false|mAwake=true\" "
+        "su -c dumpsys window displays | grep -Eo "
+        "\"mAwake=false|mAwake=true\" "
         "| awk -F'=' '{print $2}'");
     low_power = execute_command(
         "su -c dumpsys power | grep -Eo "
@@ -150,8 +161,6 @@ int main(void) {
 
     if (gamestart) {
       printf("gamestart: %s\n", trim_newline(gamestart));
-      free(gamestart);
-      gamestart = NULL;
     } else {
       printf("gamestart: NULL\n");
     }
