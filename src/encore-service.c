@@ -7,9 +7,8 @@
 #define MAX_OUTPUT_LENGTH 1024
 #define MAX_COMMAND_LENGTH 512
 
-int cur_mode = -1;
 char command[MAX_COMMAND_LENGTH];
-char *gamestart = NULL;
+char path[256];
 
 char *trim_newline(char *str) {
   if (str == NULL) return NULL;
@@ -90,9 +89,11 @@ void powersave_mode(void) {
 }
 
 int main(void) {
+  char *gamestart = NULL;
   char *screenstate = NULL;
   char *low_power = NULL;
   char *pid = NULL;
+  int cur_mode = -1;
 
   perf_common();
 
@@ -101,9 +102,12 @@ int main(void) {
       gamestart =
           execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
     } else {
-      snprintf(command, sizeof(command), "pidof %s >/dev/null", trim_newline(gamestart));
-      if (system(command) == -1) {
+      snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
+      if (access(path, F_OK) == -1) {
+        free(pid);
+        pid = NULL;
         free(gamestart);
+        gamestart = NULL;
         gamestart =
             execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
       }
@@ -137,8 +141,6 @@ int main(void) {
         pid = execute_command(command);
         if (pid != NULL) {
           setPriorities(trim_newline(pid));
-          free(pid);
-          pid = NULL;
         } else {
           printf("error: Game PID is null, can't set priority\n");
         }
