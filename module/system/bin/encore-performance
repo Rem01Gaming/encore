@@ -152,6 +152,11 @@ elif [ $soc -eq 2 ]; then
 	# GPU Governor
 	apply "performance" /sys/class/kgsl/kgsl-3d0/devfreq/governor
 
+	# GPU Bus
+	for path in /sys/class/devfreq/*gpubw*; do
+		apply "performance" $path/governor
+	done
+
 	# Adreno Boost
 	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 
