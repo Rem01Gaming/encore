@@ -311,6 +311,7 @@ me.pou.app
 me.tigerhix.cytoid
 net.kdt.pojavlaunch
 net.wargaming.wot.blitz
+org.dolphinemu.dolphinemu
 org.mm.jr
 org.ppsspp.ppsspp
 org.vita3k.emulator
