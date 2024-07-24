@@ -1,4 +1,4 @@
-version := "v1.1"
+version := "v1.2"
 version_code := $(shell git rev-list HEAD --count)
 gitsha1 := $(shell git rev-parse --short HEAD)
 
