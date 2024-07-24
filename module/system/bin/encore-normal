@@ -1,6 +1,10 @@
 #!/system/bin/sh
 
-default_cpu_gov=$(cat /data/encore/default_cpu_gov)
+if [ -f /data/encore/custom_default_cpu_gov ]; then
+	default_cpu_gov=$(cat /data/encore/custom_default_cpu_gov)
+else
+	default_cpu_gov=$(cat /data/encore/default_cpu_gov)
+fi
 soc=$(cat /data/encore/soc_recognition)
 
 apply() {
