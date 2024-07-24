@@ -76,6 +76,7 @@ com.ea.gp.fifamobile
 com.emulator.fpse64
 com.epicgames.fortnite
 com.fantablade.icey
+com.farlightgames.igame.gp
 com.feralinteractive.gridas
 com.firsttouchgames.dls7
 com.futuremark.dmandroid.application
