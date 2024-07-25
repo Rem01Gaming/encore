@@ -114,9 +114,8 @@ int main(void) {
     }
 
     screenstate = execute_command(
-        "su -c dumpsys window displays | grep -Eo "
-        "\"mAwake=false|mAwake=true\" "
-        "| awk -F'=' '{print $2}'");
+        "su -c dumpsys power | grep -Eo "
+        "\"mWakefulness=Awake|mWakefulness=Asleep\" | awk -F'=' '{print $2}'");
     low_power = execute_command(
         "su -c dumpsys power | grep -Eo "
         "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
@@ -124,7 +123,7 @@ int main(void) {
 
     if (screenstate == NULL) {
       printf("error: screenstate is null\n");
-    } else if (gamestart && strcmp(trim_newline(screenstate), "true") == 0) {
+    } else if (gamestart && strcmp(trim_newline(screenstate), "Awake") == 0) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
