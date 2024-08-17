@@ -33,8 +33,7 @@ elif [ $ARCH = "arm" ]; then
 	ui_print "- Copying arm32 libs"
 	cp $TMPDIR/libs/armeabi-v7a/encore-service $MODPATH/system/bin/
 else
-	ui_print "- Unsupported ARCH: $ARCH"
-	exit 1
+	abort "- Unsupported ARCH: $ARCH"
 fi
 
 echo 0 >/data/encore/skip_setpriority
