@@ -51,6 +51,14 @@ apply 1 /sys/devices/system/cpu/cpu2/online
 
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
+	# Force CPU to highest possible OPP
+	cluster=0
+	for path in /sys/devices/system/cpu/cpufreq/policy*; do
+		apply "$cluster $(awk '{print $1}' $path/scaling_available_frequencies)" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+		((cluster++))
+	done
+	unset cluster
+
 	# MTK Power and CCI mode
 	apply "1" /proc/cpufreq/cpufreq_cci_mode
 	apply "3" /proc/cpufreq/cpufreq_power_mode

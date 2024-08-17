@@ -58,6 +58,14 @@ apply 1 /sys/devices/system/cpu/cpu2/online
 if [ $soc -eq 1 ]; then
 	# Enable back PPM
 	apply "1" /proc/ppm/enabled
+	
+	# Restore min CPU frequency
+	cluster=0
+	for path in /sys/devices/system/cpu/cpufreq/policy*; do
+		apply "$cluster $(cat $path/scaling_available_frequencies | tr ' ' '\n' | sort -n | head -n 2)" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+		((cluster++))
+	done
+	unset cluster
 
 	# MTK Power and CCI mode
 	apply "0" /proc/cpufreq/cpufreq_cci_mode
