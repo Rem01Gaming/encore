@@ -46,7 +46,7 @@ jobs:
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
 
-        zipname="encore-$version-$version_code_$gitsha1" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
+        zipName="encore-$version-$version_code_$gitsha1" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
         
     - name: Upload .zip
       uses: actions/upload-artifact@v4
