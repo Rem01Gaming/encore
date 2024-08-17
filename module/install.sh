@@ -17,6 +17,15 @@ ui_print "************************************"
 ui_print ""
 sleep 2
 
+ui_print "- Extracting module files"
+
+mkdir /data/encore
+unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+unzip -o "$ZIPFILE" 'libs/*' -d $MODPATH >&2
+unzip -o "$ZIPFILE" 'service.sh' -d "$MODPATH" >&2
+unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
+unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
+
 if [ $ARCH = "arm64" ]; then
 	ui_print "- Copying arm64 libs"
 	cp $TMPDIR/libs/arm64-v8a/encore-service $TMPDIR/system/bin/
@@ -28,12 +37,6 @@ else
 	exit 1
 fi
 
-ui_print "- Extracting module files"
-mkdir /data/encore
-unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
-unzip -o "$ZIPFILE" 'service.sh' -d "$MODPATH" >&2
-unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
-unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 echo 0 >/data/encore/skip_setpriority
 
 if pm list packages | grep -q bellavita.toast; then
