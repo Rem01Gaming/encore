@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 if [ -z $1 ]; then
-	echo "error: no PID target for priority settings"
+	echo "error: no task target for priority settings"
 	exit 1
 fi
 
@@ -10,6 +10,22 @@ if [ $(cat /data/encore/skip_setpriority) -eq 1 ]; then
 	exit 0
 fi
 
-renice -n -20 -p $1
-ionice -c 1 -n 0 -p $1
-chrt -f -p 99 $1
+pid=$(pidof $1)
+
+renice -n -20 -p $pid
+ionice -c 1 -n 0 -p $pid
+
+for temp_pid in $(pgrep -fl "$1" | awk !/bindfs/ | awk !/pgrep/ | awk '{print $1}'); do
+	for temp_tid in $(ls "/proc/$temp_pid/task/"); do
+		comm="$(read_file "/proc/$temp_pid/task/$temp_tid/comm")"
+		if echo "$comm" | grep -qiE "Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD|MIHOYO_NETWORK|Audio|tp_schedule|GVoice|FMOD mixer|FMOD stream|ff_read|Jit thread pool|HeapTaskDaemon|FinalizerDaemon|ReferenceQueueD"; then
+			taskset -p "0f" "$temp_tid"
+		elif echo "$comm" | grep -qiE "UnityMain|UnityGfxDeviceW|Apollo-Source|Apollo-File|GameThread|Thread-|GLThread|RenderThread"; then
+			taskset -p "f0" "$temp_tid"
+		elif echo "$comm" | grep -qiE "UnityPreload|ace_worker|NativeThread|Thread-|UnityMultiRende|AsyncReadManage|UnityChoreograp|Worker Thread|CoreThread|NativeThread|SDLThread|RHIThread|TaskGraphNP|MainThread-UE4"; then
+			taskset -p "ff" "$temp_tid"
+		else
+			taskset -p "ff" "$temp_tid"
+		fi
+	done
+done
