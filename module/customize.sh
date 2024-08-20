@@ -1,25 +1,5 @@
-#!/bin/sh
-SKIPMOUNT=false
-PROPFILE=false
-POSTFSDATA=false
-LATESTARTSERVICE=true
-REPLACE="
-
-"
-
-sleep 2
-ui_print ""
-ui_print "************************************"
-ui_print "               ENCORE Tweaks          "
-ui_print "************************************"
-ui_print "     By Telegram @Rem01Gaming     "
-ui_print "************************************"
-ui_print ""
-sleep 2
-
 ui_print "- Extracting module files"
-
-mkdir /data/encore
+[ -d /data/encore ] && mkdir /data/encore
 unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 unzip -o "$ZIPFILE" 'libs/*' -d $TMPDIR >&2
 unzip -o "$ZIPFILE" 'service.sh' -d "$MODPATH" >&2
@@ -33,6 +13,7 @@ elif [ $ARCH = "arm" ]; then
 	ui_print "- Copying arm32 libs"
 	cp $TMPDIR/libs/armeabi-v7a/encore-service $MODPATH/system/bin/
 else
+	rm -rf /data/encore
 	abort "- Unsupported ARCH: $ARCH"
 fi
 
