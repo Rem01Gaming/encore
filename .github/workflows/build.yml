@@ -1,4 +1,4 @@
-name: Build encore jni
+name: Build Encore JNI
 on:
   workflow_dispatch:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build jni
+    name: Build JNI
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -17,11 +17,11 @@ jobs:
       with:
         ndk-version: r27
         
-    - name: Build encore-service jni
+    - name: Build encore-service JNI
       working-directory: ./src
       run: ndk-build
       
-    - name: Upload encore-service jni
+    - name: Upload encore-service JNI
       uses: actions/upload-artifact@v4
       with:
         name: encore-service
@@ -29,13 +29,14 @@ jobs:
         
     - name: Copy binaries
       run: |
-        rm ./module/libs/armeabi-v7a/DUMMMY && rm ./module/libs/arm64-v8a/DUMMMY
+        rm ./module/libs/armeabi-v7a/DUMMMY
+        rm ./module/libs/arm64-v8a/DUMMMY
         cp ./src/libs/armeabi-v7a/encore-service ./module/libs/armeabi-v7a
         cp ./src/libs/arm64-v8a/encore-service ./module/libs/arm64-v8a
-
-    - name: Make game list
-      run: |
         cp LICENSE ./module
+
+    - name: Compile Gamelist
+      run: |
         bash ./gamelist_compile.sh
 
     - name: Copy out version
@@ -44,13 +45,12 @@ jobs:
         version="v1.2"
         version_code=$(git rev-list HEAD --count)
         gitsha1=$(git rev-parse --short HEAD)
-        
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
-
-        zipName="encore-$version-$version_code_$gitsha1" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
+        zipName="encore-$version-$version_code_$gitsha1"
+        echo "ZIP Name: $zipName" >> $GITHUB_OUTPUT
         
-    - name: Upload .zip
+    - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.copyOutVersion.outputs.zipName }}
