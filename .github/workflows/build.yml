@@ -47,8 +47,7 @@ jobs:
         gitsha1=$(git rev-parse --short HEAD)
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
-        zipName="encore-$version-$version_code_$gitsha1"
-        echo "ZIP Name: $zipName" >> $GITHUB_OUTPUT
+        zipName="encore-$version-$version_code_$gitsha1" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
         
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
