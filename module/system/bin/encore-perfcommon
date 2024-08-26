@@ -97,9 +97,6 @@ apply 120 /proc/sys/vm/stat_interval
 # Disable compaction_proactiveness
 apply 0 /proc/sys/vm/compaction_proactiveness
 
-# Tweak MGLRU
-apply 5000 /sys/kernel/mm/lru_gen/min_ttl_ms
-
 # Disable SPI CRC
 apply 0 /sys/module/mmc_core/parameters/use_spi_crc
 
