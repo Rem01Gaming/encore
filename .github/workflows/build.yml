@@ -20,34 +20,21 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: NDK Setup
       uses: nttld/setup-ndk@v1
       with:
         ndk-version: r27
-
     - name: Build encore-service JNI
       working-directory: ./src
       run: ndk-build
-
-    - name: Upload encore-service JNI
-      uses: actions/upload-artifact@v4
-      with:
-        name: encore-service
-        path: ./src/libs
-
     - name: Copy binaries
       run: |
-        rm ./module/libs/armeabi-v7a/DUMMMY
-        rm ./module/libs/arm64-v8a/DUMMMY
         cp ./src/libs/armeabi-v7a/encore-service ./module/libs/armeabi-v7a
         cp ./src/libs/arm64-v8a/encore-service ./module/libs/arm64-v8a
         cp LICENSE ./module
-
     - name: Compile Gamelist
       run: |
         bash ./gamelist_compile.sh
-
     - name: Copy out version
       id: copyOutVersion
       run: |
@@ -56,11 +43,23 @@ jobs:
         gitsha1=$(git rev-parse --short HEAD)
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
-        zipName="encore-$version-$version_code_$gitsha1" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
-
+        zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
+        zip -r9 ./$zipName ./module/* -x *placeholder
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.copyOutVersion.outputs.zipName }}
-        compression-level: 9
-        path: ./module/*
+        path: ./
+    - name: Upload to telegram
+      env:
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        COMMIT_URL: ${{ github.event.head_commit.url }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        TITLE: Encore Tweaks
+      run: |
+        if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+          export VERSION=$(git rev-list --count HEAD)
+          bash $GITHUB_WORKSPACE/.github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.copyOutVersion.outputs.zipName }}
+        fi
