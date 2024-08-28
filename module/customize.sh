@@ -1,5 +1,5 @@
 ui_print "- Extracting module files"
-[ -d /data/encore ] && mkdir /data/encore
+[ ! -d /data/encore ] && mkdir /data/encore
 unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 unzip -o "$ZIPFILE" 'libs/*' -d $TMPDIR >&2
 unzip -o "$ZIPFILE" 'service.sh' -d "$MODPATH" >&2
@@ -18,20 +18,6 @@ else
 fi
 
 echo 0 >/data/encore/skip_setpriority
-
-if pm list packages | grep -q bellavita.toast; then
-	ui_print "- The Bellavita Toast app is already installed."
-else
-	ui_print "- Bellavita Toast isn't installed"
-	ui_print "- Installing bellavita toast..."
-	unzip -o "$ZIPFILE" 'toast.apk' -d $TMPDIR >&2
-	pm install $TMPDIR/toast.apk
-	rm -f $TMPDIR/toast.apk
-	if ! pm list packages | grep -q bellavita.toast; then
-		ui_print "- Can't install Bellavita Toast due to selinux restrictions"
-		ui_print "  Please install it manually after installation."
-	fi
-fi
 
 set_perm_recursive $MODPATH 0 0 0777 0777
 ui_print "- Reboot is needed after installation"
