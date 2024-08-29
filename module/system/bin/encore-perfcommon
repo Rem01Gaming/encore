@@ -58,11 +58,7 @@ done
 apply "0 0 0 0" /proc/sys/kernel/printk
 apply "off" /proc/sys/kernel/printk_devkmsg
 apply "Y" /sys/module/printk/parameters/console_suspend
-apply "N" /sys/module/printk/parameters/cpu
 apply "0" /sys/kernel/printk_mode/printk_mode
-apply "Y" /sys/module/printk/parameters/ignore_loglevel
-apply "N" /sys/module/printk/parameters/pid
-apply "N" /sys/module/printk/parameters/time
 
 # Stop tracing
 stop traced
