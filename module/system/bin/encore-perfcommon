@@ -54,12 +54,6 @@ for thermal in /sys/class/thermal/thermal_zone*; do
 	apply "step_wise" ${thermal}/policy
 done
 
-# Disable printk logging
-apply "0 0 0 0" /proc/sys/kernel/printk
-apply "off" /proc/sys/kernel/printk_devkmsg
-apply "Y" /sys/module/printk/parameters/console_suspend
-apply "0" /sys/kernel/printk_mode/printk_mode
-
 # Stop tracing
 stop traced
 apply 0 /sys/kernel/tracing/tracing_on
