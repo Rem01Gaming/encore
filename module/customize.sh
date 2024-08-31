@@ -1,4 +1,3 @@
-ui_print "- Extracting module files"
 [ ! -d /data/encore ] && mkdir /data/encore
 unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 unzip -o "$ZIPFILE" 'libs/*' -d $TMPDIR >&2
