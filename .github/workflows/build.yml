@@ -41,7 +41,7 @@ jobs:
         npm install
         npm run tailwind
         npm run build
-        cp ./dist/* ../module/webui
+        cp ./dist/* ../module/webroot
     - name: Copy out version
       id: copyOutVersion
       run: |
