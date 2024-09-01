@@ -1,0 +1,93 @@
+#!/system/bin/sh
+
+get_module_version() {
+	grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'
+}
+
+get_service_state() {
+	if ps -e | grep encore-service >/dev/null; then
+		echo "1"
+	else
+		echo "0"
+	fi
+}
+
+get_service_pid() {
+	pidof encore-service
+	if [ $? -gt 0 ]; then
+		echo "null"
+	fi
+}
+
+get_chipset() {
+	getprop "ro.board.platform"
+}
+
+get_kernel() {
+	uname -r
+}
+
+get_skip_priority() {
+	cat /data/encore/skip_setpriority
+}
+
+set_skip_priority() {
+	echo $1 >/data/encore/skip_setpriority
+}
+
+get_default_cpugov() {
+	if [ -f /data/encore/custom_default_cpu_gov ]; then
+		cat /data/encore/custom_default_cpu_gov
+	else
+		cat /data/encore/default_cpu_gov
+	fi
+}
+
+get_available_cpugov() {
+	chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+}
+
+set_default_cpugov() {
+	echo $1 >/data/encore/custom_default_cpu_gov
+}
+
+get_kill_logd() {
+	cat /data/encore/kill_logd
+}
+
+kill_logd() {
+	echo 1 >/data/encore/kill_logd
+	kill logd
+}
+
+disable_kill_logd() {
+	echo 0 >/data/encore/kill_logd
+	start logd
+}
+
+restart_service() {
+	pkill encore-service
+	nohup encore-service >/dev/null 2>&1 &
+}
+
+save_logs() {
+	logdir="/sdcard/encore-logs"
+	[ ! -d $logdir ] && mkdir $logdir
+	cp /data/encore/last_fault $logdir
+	cat <<EOF >$logdir/devinfo
+encoreVersion=$(get_module_version)
+chipset=$(get_chipset)
+kernelVersion=$(get_kernel)
+EOF
+}
+
+get_gamelist() {
+	cat /data/encore/gamelist.txt
+}
+
+save_gamelist() {
+	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
+}
+
+eval "$1 $2"

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./output.css" rel="stylesheet">
+  <script type="module" src="webui_utils.js"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+  <header class="sticky mt-3 ml-3 top-0 z-50 backdrop-blur-md p-4">
+    <h1 class="text-2xl font-bold">Encore Tweaks</h1>
+    <span id="moduleVer" class="text-sm text-pink-400"></span>
+  </header>
+
+  <main class="pt-1 flex-grow">
+    <div class="p-6">
+      <div class="bg-gray-800 mb-4 p-4 rounded-lg flex items-start justify-between">
+        <div>
+          <span id="serviceStatus" class="text-xl font-semibold">Loading</span>
+          <span id="servicePID" class="text-gray-400 text-xs mt-2 block">One moment please...</span>
+        </div>
+        <img id="imgEncore" class="w-24 h-24">
+      </div>
+      <div class="bg-gray-800 mb-4 p-4 rounded-lg">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold mb-4">Settings</h2>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <label class="inline-flex items-center w-full cursor-pointer">
+            <p class="text-sm text-white">Skip process priority settings</p>
+            <div class="ml-auto">
+              <input type="checkbox" id="skipPrioritySwitch" class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </div>
+          </label>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <label class="inline-flex items-center w-full cursor-pointer">
+            <p class="text-sm text-white">Kill Logd</p>
+            <div class="ml-auto">
+              <input type="checkbox" id="killLogdSwitch" class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </div>
+          </label>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm text-white">Default CPU Governor</p>
+          <select id="cpuGovernor" class="bg-gray-700 text-xs text-white border-none outline-none shadow-none rounded-md p-2">
+            <option value="performance">performance</option>
+            <option value="powersave">powersave</option>
+            <option value="ondemand">ondemand</option>
+            <option value="schedutil" selected>schedutil</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm text-white">Edit Gamelist</p>
+          <button id="editGamelistButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-10 rounded-md">Edit</button>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm text-white">Save Logs</p>
+          <button id="saveLogsButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-9 rounded-md">Save</button>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-sm text-white">Restart Service</p>
+          <button id="restartServiceButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-7 rounded-md">Restart</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="gamelistModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-lg p-6 w-11/12 max-w-md">
+      <h3 class="text-lg font-semibold mb-4">Edit Gamelist</h3>
+      <textarea id="gamelistInput" class="w-full p-2 text-sm text-white bg-gray-700 border-none outline-none shadow-none rounded-md resize-none" rows="7"></textarea>
+      <div class="flex justify-end mt-4">
+        <button id="cancelButton" class="bg-gray-600 hover:bg-gray-500 text-sm text-white py-1 px-4 rounded-md mr-2">Cancel</button>
+        <button id="saveGamelistButton" class="bg-blue-600 hover:bg-blue-500 text-sm text-white py-1 px-4 rounded-md">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-gray-600 text-xs text-center mb-2 py-3 mt-auto">
+    <p>Designed by Rem01Gaming</p>
+  </footer>
+</body>
+</html>

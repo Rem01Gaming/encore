@@ -35,6 +35,13 @@ jobs:
     - name: Compile Gamelist
       run: |
         bash ./gamelist_compile.sh
+    - name: Build WebUI
+      working-directory: ./webui
+      run: |
+        npm install
+        npm run tailwind
+        npm run build
+        cp ./dist/* ../module/webui
     - name: Copy out version
       id: copyOutVersion
       run: |
@@ -44,7 +51,7 @@ jobs:
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
         zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
-        cd ./module && zip -r9 ../$zipName * -x *placeholder
+        cd ./module && zip -r9 ../$zipName * -x *placeholder *.map
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
