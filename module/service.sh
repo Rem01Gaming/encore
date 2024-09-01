@@ -27,6 +27,9 @@ chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor >/data/encore/default_cpu_gov
 echo $soc >/data/encore/soc_recognition
 
+rm -f /data/encore/last_fault
+touch /data/encore/last_fault
+
 encore-service
 code=$?
 if [ $code -gt 0 ] && [ ! $code -eq 143 ]; then

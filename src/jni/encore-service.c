@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <sys/stat.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
+#include <assert.h>
 
 #define MAX_OUTPUT_LENGTH 1024
 #define MAX_COMMAND_LENGTH 512
 
 char command[MAX_COMMAND_LENGTH];
 char path[256];
+char errMesg[MAX_COMMAND_LENGTH];
 
 char *trim_newline(char *str) {
   if (str == NULL) return NULL;
@@ -17,6 +20,23 @@ char *trim_newline(char *str) {
     *end = '\0';
   }
   return str;
+}
+
+char *timern(void) {
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    char *s = malloc(64 * sizeof(char));
+    if (s == NULL) {
+        printf("error: memory allocation failed in timern()\n");
+        return NULL;
+    }
+    size_t ret = strftime(s, 64, "%c", tm);
+    if (ret == 0) {
+        printf("error: strftime failed in timern()\n");
+        free(s);
+        return NULL;
+    }
+    return s;
 }
 
 char *execute_command(const char *command) {
@@ -56,10 +76,10 @@ char *execute_command(const char *command) {
   return result;
 }
 
-/* void write2file(const char *file_path, const char *content) {
+void append2file(const char *file_path, const char *content) {
   if (access(file_path, F_OK) != -1) {
     chmod(file_path, 0644);
-    FILE *file = fopen(file_path, "w");
+    FILE *file = fopen(file_path, "a");
     if (file != NULL) {
       fprintf(file, "%s\n", content);
       fclose(file);
@@ -68,9 +88,9 @@ char *execute_command(const char *command) {
       printf("error: can't open %s\n", file_path);
     }
   } else {
-    printf("error: %s does not exist nor not accessible\n", file_path);
+    printf("error: %s does not exist or is not accessible\n", file_path);
   }
-} */
+}
 
 void setPriorities(const char *pid) {
   snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
@@ -123,6 +143,12 @@ int main(void) {
 
     if (screenstate == NULL) {
       printf("error: screenstate is null\n");
+      char *timestamp = timern();
+      if (timestamp != NULL) {
+        snprintf(errMesg, sizeof(errMesg), "[%s] screenstate is null", timestamp);
+        append2file("/data/encore/last_fault", errMesg);
+        free(timestamp);
+      }
     } else if (gamestart && strcmp(trim_newline(screenstate), "Awake") == 0) {
       // Apply performance mode
       if (cur_mode != 1) {
@@ -142,6 +168,12 @@ int main(void) {
           setPriorities(trim_newline(pid));
         } else {
           printf("error: Game PID is null, can't set priority\n");
+          char *timestamp = timern();
+          if (timestamp != NULL) {
+            snprintf(errMesg, sizeof(errMesg), "[%s] Game PID is null, can't set priority: %s", timestamp, trim_newline(gamestart));
+            append2file("/data/encore/last_fault", errMesg);
+            free(timestamp);
+          }
         }
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
@@ -162,6 +194,8 @@ int main(void) {
 
     if (gamestart) {
       printf("gamestart: %s\n", trim_newline(gamestart));
+      free(gamestart);
+      gamestart = NULL;
     } else {
       printf("gamestart: NULL\n");
     }
@@ -185,3 +219,4 @@ int main(void) {
 
   return 0;
 }
+
