@@ -68,7 +68,7 @@ disable_kill_logd() {
 
 restart_service() {
 	pkill encore-service
-	nohup encore-service >/dev/null 2>&1 &
+	encore-service >/dev/null 2>&1 &
 }
 
 save_logs() {
