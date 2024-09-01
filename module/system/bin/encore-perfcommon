@@ -59,7 +59,9 @@ stop traced
 apply 0 /sys/kernel/tracing/tracing_on
 
 # Kill logd
-stop logd
+if [ $(cat /data/encore/kill_logd) -eq 1 ]; then
+	stop logd
+fi
 
 # Disable schedstats
 apply 0 /proc/sys/kernel/sched_schedstats

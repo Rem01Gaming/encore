@@ -17,6 +17,7 @@ else
 fi
 
 echo 0 >/data/encore/skip_setpriority
+echo 0 >/data/encore/kill_logd
 
 if pm list packages | grep -q bellavita.toast; then
 	ui_print "- The Bellavita Toast app is already installed."
