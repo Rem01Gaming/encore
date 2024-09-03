@@ -68,8 +68,7 @@ disable_kill_logd() {
 
 restart_service() {
 	pkill encore-service
-	nice -n -20 encore-service >/dev/null 2>&1 &
-	disown
+	su -c "encore-service" </dev/null >/dev/null 2>&1 &
 }
 
 save_logs() {
