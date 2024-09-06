@@ -9,6 +9,7 @@ on:
       - '.github/workflows/build.yml'
       - 'src/**'
       - 'module/**'
+      - 'webui/**'
       - 'gamelist.txt'
 
 jobs:
