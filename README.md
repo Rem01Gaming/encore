@@ -5,17 +5,17 @@
 ## Features:
 ```
 - Automatic performance script
-- GUI Settings via KernelSU's Module WebUI
+- GUI Settings via KernelSU Module WebUI
 - Three Performance mode: Performance, Normal, And Powersave
 - Reduces Jitter and Latency
 - Universal SoC Support
-- Complete CPU, CPU BUS, GPU, and DRAM Frequency scaling for Snapdragon, Mediatek, Google Tensor, Exynos, and Unisoc
-- Disables logd (if enabled in webui)
+- Complete CPU, CPU Bus, GPU, and DRAM Frequency scaling for Snapdragon, Mediatek, Google Tensor, Exynos, and Unisoc
+- Disables logd  service (if enabled in WebUI)
 - Mediatek tailored parameter settings
 - Schedulers, I/O and Network tweaks
 - Disables SPI CRC
 - Allows sched boosting on top-app tasks (Thx to tytydraco)
-- Sets highest priority for Games and most essential processes
+- Sets highest priority for Games
 - Uses Google's schedutil rate-limits from Pixel 3
 ```
 
@@ -23,19 +23,19 @@
 Encore Tweaks is fully automatic while comes to performance mode. Service will choose the mode according to this 3 rules:
 
 ### Performance Mode
-Service will continuously checking any apps or games that listed on Gamelist and If user open any of it, service will apply performance script. this included various kernel parameters, CPU, CPU Bus, GPU, and DRAM frequencies will be locked to highest possible OPP. This mode will be maintained until the user closes the game.
+Service will continuously checking any apps or games that listed on Gamelist and If user open any of it, service will apply performance mode. this included various kernel parameters, CPU, CPU Bus, GPU, and DRAM frequencies will be locked to highest possible OPP. This mode will be maintained until the user closes the game.
 
 ### Powersave Mode
-If user enables battery saver mode (except while charging), service will apply normal mode then powersave script. powersave mode will lock GPU and DRAM frequencies to lowest possible OPP for saving power. ***This mode cannot override performance mode.***
+If user enables battery saver mode (except while charging), service will apply powersave mode. powersave mode will lock CPU Bus, GPU, and DRAM frequencies to lowest possible OPP for saving power. ***This mode cannot override performance mode.***
 
 ### Normal Mode
-If any of criteria on above not satisfied, service will apply normal mode. this mode will restore any restrictions and tweaks in 2 of other modes.
+If any of criteria on above not satisfied, service will apply normal mode. this mode will remove any restrictions and tweaks on other modes.
 
 ## Notes:
 - I don't recommend comboing this module with any gayming modules except Thermal Mod.
 
 ## How to flash:
-- Just flash in magisk/kernelsu/apatch and reboot
+- Just flash in Magisk/KernelSU/APatch and reboot
 - And that's it ;)
 
 ## How to Contribute:
@@ -47,8 +47,8 @@ If any of criteria on above not satisfied, service will apply normal mode. this 
 - Then make a pull request
 
 ## Special Credits
-- tytydraco for KTweaks
-- NotZeetaa for YAKT
-- ~~RiProG for App Monitoring~~
-- @rsuntk for JNI and arm32 support
+- [tytydraco](https://github.com/tytydraco/KTweak) for KTweaks
+- [NotZeetaa](https://github.com/NotZeetaa/YAKT) for YAKT
+- ~~[RiProG](https://github.com/RiProG-id) for App Monitoring~~
+- [rsuntk](https://github.com/rsuntk) for arm32 support
 - Our contributor
