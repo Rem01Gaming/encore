@@ -162,8 +162,8 @@ int main(void) {
             "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
             trim_newline(gamestart));
         system(command);
-        setPriorities(trim_newline(gamestart));
         performance_mode();
+        setPriorities(trim_newline(gamestart));
 
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
