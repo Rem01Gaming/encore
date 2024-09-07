@@ -1,17 +1,17 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <time.h>
-#include <assert.h>
+#include <unistd.h>
 
-#define MAX_OUTPUT_LENGTH 1024
-#define MAX_COMMAND_LENGTH 512
+#define MAX_OUTPUT_LENGTH 128
+#define MAX_COMMAND_LENGTH 256
 
 char command[MAX_COMMAND_LENGTH];
-char path[256];
 char errMesg[MAX_COMMAND_LENGTH];
+char path[256];
 
 char *trim_newline(char *str) {
   if (str == NULL) return NULL;
@@ -23,20 +23,20 @@ char *trim_newline(char *str) {
 }
 
 char *timern(void) {
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
-    char *s = malloc(64 * sizeof(char));
-    if (s == NULL) {
-        printf("error: memory allocation failed in timern()\n");
-        return NULL;
-    }
-    size_t ret = strftime(s, 64, "%c", tm);
-    if (ret == 0) {
-        printf("error: strftime failed in timern()\n");
-        free(s);
-        return NULL;
-    }
-    return s;
+  time_t t = time(NULL);
+  struct tm *tm = localtime(&t);
+  char *s = malloc(64 * sizeof(char));
+  if (s == NULL) {
+    printf("error: memory allocation failed in timern()\n");
+    return NULL;
+  }
+  size_t ret = strftime(s, 64, "%c", tm);
+  if (ret == 0) {
+    printf("error: strftime failed in timern()\n");
+    free(s);
+    return NULL;
+  }
+  return s;
 }
 
 char *execute_command(const char *command) {
@@ -92,8 +92,8 @@ void append2file(const char *file_path, const char *content) {
   }
 }
 
-void setPriorities(const char *pid) {
-  snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
+void setPriorities(const char *gamestart) {
+  snprintf(command, sizeof(command), "su -c encore-setpriority %s", gamestart);
   system(command);
 }
 
@@ -121,6 +121,10 @@ int main(void) {
     if (!gamestart) {
       gamestart =
           execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+      low_power = execute_command(
+          "su -c dumpsys power | grep -Eo "
+          "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
+          "false\" | awk -F'=' '{print $2}'");
     } else {
       snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
       if (access(path, F_OK) == -1) {
@@ -136,16 +140,14 @@ int main(void) {
     screenstate = execute_command(
         "su -c dumpsys power | grep -Eo "
         "\"mWakefulness=Awake|mWakefulness=Asleep\" | awk -F'=' '{print $2}'");
-    low_power = execute_command(
-        "su -c dumpsys power | grep -Eo "
-        "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
-        "false\" | awk -F'=' '{print $2}'");
 
+    // Apply performance profiles
     if (screenstate == NULL) {
-      printf("error: screenstate is null\n");
+      printf("error: screenstate is null!\n");
       char *timestamp = timern();
       if (timestamp != NULL) {
-        snprintf(errMesg, sizeof(errMesg), "[%s] screenstate is null", timestamp);
+        snprintf(errMesg, sizeof(errMesg), "[%s] screenstate is null!",
+                 timestamp);
         append2file("/data/encore/last_fault", errMesg);
         free(timestamp);
       }
@@ -160,17 +162,17 @@ int main(void) {
             "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
             trim_newline(gamestart));
         system(command);
+        setPriorities(trim_newline(gamestart));
         performance_mode();
 
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
-        if (pid != NULL) {
-          setPriorities(trim_newline(pid));
-        } else {
-          printf("error: Game PID is null, can't set priority\n");
+        if (pid == NULL) {
+          printf("error: Game PID is null!\n");
           char *timestamp = timern();
           if (timestamp != NULL) {
-            snprintf(errMesg, sizeof(errMesg), "[%s] Game PID is null, can't set priority: %s", timestamp, trim_newline(gamestart));
+            snprintf(errMesg, sizeof(errMesg), "[%s] Game PID is null! (%s)",
+                     timestamp, trim_newline(gamestart));
             append2file("/data/encore/last_fault", errMesg);
             free(timestamp);
           }
@@ -192,10 +194,9 @@ int main(void) {
       }
     }
 
+    // Print info to console
     if (gamestart) {
       printf("gamestart: %s\n", trim_newline(gamestart));
-      free(gamestart);
-      gamestart = NULL;
     } else {
       printf("gamestart: NULL\n");
     }
@@ -214,9 +215,8 @@ int main(void) {
       printf("low_power: NULL\n");
     }
 
-    sleep(12);
+    sleep(15);
   }
 
   return 0;
 }
-

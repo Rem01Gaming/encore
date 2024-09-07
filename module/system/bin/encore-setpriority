@@ -15,6 +15,17 @@ pid=$(pidof $1)
 renice -n -20 -p $pid
 ionice -c 1 -n 0 -p $pid
 
+read_file() {
+	if [[ -f $1 ]]; then
+		if [[ ! -r $1 ]]; then
+			chmod +r "$1"
+		fi
+		cat "$1"
+	else
+		echo "File $1 not found"
+	fi
+}
+
 for temp_pid in $(pgrep -fl "$1" | awk !/bindfs/ | awk !/pgrep/ | awk '{print $1}'); do
 	for temp_tid in $(ls "/proc/$temp_pid/task/"); do
 		comm="$(read_file "/proc/$temp_pid/task/$temp_tid/comm")"
