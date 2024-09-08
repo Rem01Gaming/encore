@@ -58,14 +58,6 @@ done
 
 apply 1 /sys/devices/system/cpu/cpu1/online
 
-# I/O tweaks
-for queue in /sys/block/*/queue; do
-	for sched in mq-deadline deadline kyber bfq; do
-		apply $sched $queue/scheduler
-		[ $? -eq 0 ] && break
-	done
-done
-
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# Force CPU to highest possible OPP

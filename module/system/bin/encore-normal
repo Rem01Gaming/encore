@@ -63,11 +63,6 @@ for path in /sys/class/devfreq/mmc*; do
 	apply simple_ondemand $path/governor
 done
 
-# I/O tweaks
-for queue in /sys/block/*/queue; do
-	apply cfq $queue/scheduler
-done
-
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# Enable back PPM
