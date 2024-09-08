@@ -54,6 +54,15 @@ done
 
 apply 1 /sys/devices/system/cpu/cpu2/online
 
+# eMMC and UFS governor
+for path in /sys/class/devfreq/*.ufshc; do
+	echo simple_ondemand >$path/governor
+done
+
+for path in /sys/class/devfreq/mmc*; do
+	echo simple_ondemand >$path/governor
+done
+
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# Enable back PPM

@@ -13,6 +13,15 @@ apply() {
 # Disable cpu2 to save some power
 apply 0 /sys/devices/system/cpu/cpu2/online
 
+# eMMC and UFS governor
+for path in /sys/class/devfreq/*.ufshc; do
+	echo powersave >$path/governor
+done
+
+for path in /sys/class/devfreq/mmc*; do
+	echo powersave >$path/governor
+done
+
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# MTK CPU Power mode to low power

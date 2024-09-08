@@ -42,6 +42,15 @@ apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
 # Memory tweak
 apply 200 /proc/sys/vm/vfs_cache_pressure
 
+# eMMC and UFS governor
+for path in /sys/class/devfreq/*.ufshc; do
+	echo performance >$path/governor
+done
+
+for path in /sys/class/devfreq/mmc*; do
+	echo performance >$path/governor
+done
+
 # CPU tweaks
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "performance" "$path/scaling_governor"
