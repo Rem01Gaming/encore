@@ -92,8 +92,8 @@ void append2file(const char *file_path, const char *content) {
   }
 }
 
-void setPriorities(const char *gamestart) {
-  snprintf(command, sizeof(command), "su -c encore-setpriority %s", gamestart);
+void setPriorities(const char *pid) {
+  snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
   system(command);
 }
 
@@ -163,11 +163,12 @@ int main(void) {
             trim_newline(gamestart));
         system(command);
         performance_mode();
-        setPriorities(trim_newline(gamestart));
 
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
-        if (pid == NULL) {
+        if (pid != NULL) {
+          setPriorities(trim_newline(pid));
+        } else {
           printf("error: Game PID is null!\n");
           char *timestamp = timern();
           if (timestamp != NULL) {

@@ -10,7 +10,6 @@ if [ $(cat /data/encore/skip_setpriority) -eq 1 ]; then
 	exit 0
 fi
 
-pid=$(pidof $1)
-
-renice -n -20 -p $pid
-ionice -c 1 -n 0 -p $pid
+# renice + ionice
+renice -n -20 -p $1
+ionice -c 1 -n 0 -p $1
