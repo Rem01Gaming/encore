@@ -44,11 +44,11 @@ apply 200 /proc/sys/vm/vfs_cache_pressure
 
 # eMMC and UFS governor
 for path in /sys/class/devfreq/*.ufshc; do
-	echo performance >$path/governor
+	apply performance $path/governor
 done
 
 for path in /sys/class/devfreq/mmc*; do
-	echo performance >$path/governor
+	apply performance $path/governor
 done
 
 # CPU tweaks
@@ -57,6 +57,14 @@ for path in /sys/devices/system/cpu/cpufreq/policy*; do
 done
 
 apply 1 /sys/devices/system/cpu/cpu1/online
+
+# I/O tweaks
+for queue in /sys/block/*/queue; do
+	for sched in mq-deadline deadline kyber bfq; do
+		apply $sched $queue/scheduler
+		[ $? -eq 0 ] && break
+	done
+done
 
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then

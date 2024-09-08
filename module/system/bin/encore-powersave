@@ -15,11 +15,11 @@ apply 0 /sys/devices/system/cpu/cpu1/online
 
 # eMMC and UFS governor
 for path in /sys/class/devfreq/*.ufshc; do
-	echo powersave >$path/governor
+	apply powersave $path/governor
 done
 
 for path in /sys/class/devfreq/mmc*; do
-	echo powersave >$path/governor
+	apply powersave $path/governor
 done
 
 # Mediatek Tweaks

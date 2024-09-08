@@ -12,13 +12,6 @@ apply() {
 }
 
 # I/O Tweaks
-for dir in /sys/block/*/queue/scheduler; do
-	for sched in mq-deadline deadline kyber bfq; do
-		echo $sched >$dir
-		[ $? -eq 0 ] && break
-	done
-done
-
 for queue in /sys/block/*/queue; do
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
