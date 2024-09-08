@@ -25,7 +25,9 @@ for queue in /sys/block/*/queue; do
 	# Use low latency scheduler
 	for sched in mq-deadline deadline kyber bfq; do
 		apply $sched $queue/scheduler
-		[ $? -eq 0 ] && break
+		if cat $queue/scheduler | grep "[$sched]" >/dev/null; then
+			break
+		fi
 	done
 done
 
