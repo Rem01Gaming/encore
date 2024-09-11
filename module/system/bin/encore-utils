@@ -13,10 +13,7 @@ get_service_state() {
 }
 
 get_service_pid() {
-	pidof encore-service
-	if [ $? -gt 0 ]; then
-		echo "null"
-	fi
+	pidof -s encore-service || echo null
 }
 
 get_chipset() {
