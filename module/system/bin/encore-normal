@@ -82,10 +82,13 @@ if [ $soc -eq 1 ]; then
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreq/gpufreq_power_dump | sort -n | tail -1)
 	elif [ -d /proc/gpufreqv2 ]; then
-		apply "0 0" /proc/gpufreqv2/fix_custom_freq_volt
+		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
 	fi
+	
+	apply "0" /sys/kernel/ged/hal/custom_upbound_gpu_freq
+	apply "$min_gpufreq_index" /sys/kernel/ged/hal/custom_boost_gpu_freq
 
 	# Disable GPU Power limiter
 	if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then

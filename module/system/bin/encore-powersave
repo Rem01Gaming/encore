@@ -29,13 +29,13 @@ if [ $soc -eq 1 ]; then
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		gpu_freq="$(cat /proc/gpufreq/gpufreq_opp_dump | grep -o 'freq = [0-9]*' | sed 's/freq = //' | sort -n | head -n 1)"
-		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
+		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreq/gpufreq_power_dump | sort -n | tail -1)
 	elif [ -d /proc/gpufreqv2 ]; then
-		gpu_freq="$(cat /proc/gpufreqv2/gpu_working_opp_table | awk '{print $3}' | sed 's/,//g' | sort -n | head -n 1)"
-		gpu_volt="$(cat /proc/gpufreqv2/gpu_working_opp_table | awk -v freq="$freq" '$0 ~ freq {gsub(/.*, volt: /, ""); gsub(/,.*/, ""); print}')"
-		apply "${gpu_freq} ${gpu_volt}" /proc/gpufreqv2/fix_custom_freq_volt
+		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
 	fi
+	
+	apply "$min_gpufreq_index" /sys/kernel/ged/hal/custom_upbound_gpu_freq
+	apply "$min_gpufreq_index" /sys/kernel/ged/hal/custom_boost_gpu_freq
 
 	# DRAM frequency
 	apply "$(cat /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_opp_table | grep -o '\[[^]]*\]' | grep -oE '[+-]?[0-9]+' | sort -nr | head -n 1)" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
