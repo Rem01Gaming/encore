@@ -37,12 +37,12 @@ jobs:
       run: |
         bash ./gamelist_compile.sh
     - name: Build WebUI
-      working-directory: ./webui
+      working-directory: ./src/webui
       run: |
         npm install
         npm run tailwind
         npm run build
-        cp ./dist/* ../module/webroot
+        cp ./dist/* ../../module/webroot
     - name: Copy out version
       id: copyOutVersion
       run: |
