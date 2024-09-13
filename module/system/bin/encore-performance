@@ -75,9 +75,6 @@ if [ $soc -eq 1 ]; then
 	# EAS/HMP Switch
 	apply "0" /sys/devices/system/cpu/eas/enable
 
-	# Disable PPM (this is fire dumpster)
-	apply "0" /proc/ppm/enabled
-
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
 		gpu_freq="$(cat /proc/gpufreq/gpufreq_opp_dump | grep -o 'freq = [0-9]*' | sed 's/freq = //' | sort -nr | head -n 1)"

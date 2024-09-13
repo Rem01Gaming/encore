@@ -65,9 +65,6 @@ done
 
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
-	# Enable back PPM
-	apply "1" /proc/ppm/enabled
-
 	# Restore min CPU frequency
 	cluster=0
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
