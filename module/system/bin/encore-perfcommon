@@ -21,14 +21,6 @@ for queue in /sys/block/*/queue; do
 
 	# Reduce the maximum number of I/O requests in exchange for latency
 	apply 64 "$queue/nr_requests"
-
-	# Use low latency scheduler
-	for sched in mq-deadline deadline kyber bfq; do
-		apply $sched $queue/scheduler
-		if cat $queue/scheduler | grep "\[$sched\]" >/dev/null; then
-			break
-		fi
-	done
 done
 
 # Lower the swappiness
