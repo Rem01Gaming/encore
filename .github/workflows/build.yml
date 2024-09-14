@@ -1,4 +1,4 @@
-name: Build Encore JNI
+name: Build Encore Zip
 
 on:
   workflow_dispatch:
@@ -11,10 +11,11 @@ on:
       - 'module/**'
       - 'webui/**'
       - 'gamelist.txt'
+      - 'version'
 
 jobs:
   build:
-    name: Build JNI
+    name: Build Flashable Zip
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
