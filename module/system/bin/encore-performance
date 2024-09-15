@@ -76,8 +76,14 @@ if [ $soc -eq 1 ]; then
 	apply "0" /sys/devices/system/cpu/eas/enable
 
 	# GPU Frequency
-	apply "0" /sys/kernel/ged/hal/custom_upbound_gpu_freq
-	apply "0" /sys/kernel/ged/hal/custom_boost_gpu_freq
+	if [ -d /proc/gpufreq ]; then
+		gpu_freq="$(cat /proc/gpufreq/gpufreq_opp_dump | grep -o 'freq = [0-9]*' | sed 's/freq = //' | sort -nr | head -n 1)"
+		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
+	elif [ -d /proc/gpufreqv2 ]; then
+		gpu_freq="$(cat /proc/gpufreqv2/gpu_working_opp_table | awk '{print $3}' | sed 's/,//g' | sort -nr | head -n 1)"
+		gpu_volt="$(cat /proc/gpufreqv2/gpu_working_opp_table | awk -v freq="$freq" '$0 ~ freq {gsub(/.*, volt: /, ""); gsub(/,.*/, ""); print}')"
+		apply "${gpu_freq} ${gpu_volt}" /proc/gpufreqv2/fix_custom_freq_volt
+	fi
 
 	# Disable GPU Power limiter
 	if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
