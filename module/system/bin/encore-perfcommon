@@ -96,12 +96,3 @@ apply 0 /sys/module/mmc_core/parameters/use_spi_crc
 apply 0 /sys/module/cpufreq_bouncing/parameters/enable
 apply 0 /proc/task_info/task_sched_info/task_sched_info_enable
 apply 0 /proc/oplus_scheduler/sched_assist/sched_assist_enabled
-
-if [ -f /proc/ppm/policy_status ]; then
-	policy_file="/proc/ppm/policy_status"
-	pwr_thro_idx=$(grep 'PPM_POLICY_PWR_THRO' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
-	thermal_idx=$(grep 'PPM_POLICY_THERMAL' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
-
-	echo "$pwr_thro_idx 0" >$policy_file
-	echo "$thermal_idx 0" >$policy_file
-fi

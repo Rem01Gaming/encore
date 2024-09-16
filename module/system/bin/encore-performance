@@ -68,6 +68,16 @@ if [ $soc -eq 1 ]; then
 	done
 	unset cluster
 
+	# PPM throttle
+	if [ -f /proc/ppm/policy_status ]; then
+		policy_file="/proc/ppm/policy_status"
+		pwr_thro_idx=$(grep 'PPM_POLICY_PWR_THRO' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
+		thermal_idx=$(grep 'PPM_POLICY_THERMAL' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
+
+		echo "$pwr_thro_idx 0" >$policy_file
+		echo "$thermal_idx 0" >$policy_file
+	fi
+
 	# MTK Power and CCI mode
 	apply "1" /proc/cpufreq/cpufreq_cci_mode
 	apply "3" /proc/cpufreq/cpufreq_power_mode
