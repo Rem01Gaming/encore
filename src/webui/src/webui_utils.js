@@ -74,25 +74,39 @@ async function changeCPUGovernor(governor) {
   await exec(command);
 }
 
+async function changePerfCPUGovernor(governor) {
+  const command = 'encore-utils set_perf_cpugov ' + governor;
+  await exec(command);
+}
+
 async function populateCPUGovernors() {
   const { errno: govErrno, stdout: govStdout } = await exec('encore-utils get_available_cpugov');
   if (govErrno === 0) {
     const governors = govStdout.trim().split(/\s+/);
-    const selectElement = document.getElementById('cpuGovernor');
+    const selectElement1 = document.getElementById('cpuGovernor');
+    const selectElement2 = document.getElementById('cpuGovernor');
 
-    selectElement.innerHTML = '';
+    selectElement1.innerHTML = '';
+    selectElement2.innerHTML = '';
 
     governors.forEach(gov => {
       const option = document.createElement('option');
       option.value = gov;
       option.textContent = gov;
       selectElement.appendChild(option);
+      selectElement1.appendChild(option);
     });
 
-    const { errno: defaultErrno, stdout: defaultStdout } = await exec('encore-utils get_default_cpugov');
-    if (defaultErrno === 0) {
-      const defaultGovernor = defaultStdout.trim();
-      selectElement.value = defaultGovernor;
+    let { errno, stdout } = await exec('encore-utils get_default_cpugov');
+    if (errno === 0) {
+      const defaultGovernor = stdout.trim();
+      selectElement1.value = defaultGovernor;
+    }
+    
+    let { errno, stdout } = await exec('encore-utils get_perf_cpugov');
+    if (errno === 0) {
+      const defaultPerfGovernor = stdout.trim();
+      selectElement2.value = defaultPerfGovernor;
     }
   }
 }
@@ -145,8 +159,12 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     await toggleKillLogdSwitch(this.checked);
   });
 
+  document.getElementById('cpuGovernorPerf').addEventListener('change', async function() {
+    await changePerfCPUGovernor(this.value);
+  });
+  
   document.getElementById('cpuGovernor').addEventListener('change', async function() {
-    await changeCPUGovernor(this.value);
+    await changePerfCPUGovernor(this.value);
   });
 
   document.getElementById('editGamelistButton').addEventListener('click', function() {
