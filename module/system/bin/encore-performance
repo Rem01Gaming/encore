@@ -53,7 +53,7 @@ done
 
 # CPU tweaks
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
-	apply "performance" "$path/scaling_governor"
+	apply "$(cat /data/encore/perf_cpu_gov)" "$path/scaling_governor"
 done
 
 apply 1 /sys/devices/system/cpu/cpu1/online
