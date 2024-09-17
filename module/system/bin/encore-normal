@@ -1,5 +1,8 @@
 #!/system/bin/sh
 
+# Sync to data in the rare case a device crashes
+sync
+
 if [ -f /data/encore/custom_default_cpu_gov ]; then
 	default_cpu_gov=$(cat /data/encore/custom_default_cpu_gov)
 else
