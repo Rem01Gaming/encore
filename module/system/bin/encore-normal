@@ -100,7 +100,7 @@ if [ $soc -eq 1 ]; then
 	if [ -d /proc/gpufreq ]; then
 		apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
 	elif [ -d /proc/gpufreqv2 ]; then
-		apply "0 0" /proc/gpufreqv2/fix_custom_freq_volt
+		apply -1 /proc/gpufreqv2/fix_target_opp_index
 	fi
 
 	# Disable GPU Power limiter
