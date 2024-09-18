@@ -13,6 +13,9 @@ apply() {
 	fi
 }
 
+# Enable battery saver module
+apply Y /sys/module/battery_saver/parameters/enabled
+
 # Disable cpu1 to save some power
 apply 0 /sys/devices/system/cpu/cpu1/online
 

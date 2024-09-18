@@ -13,6 +13,9 @@ apply() {
 	fi
 }
 
+# Disable battery saver module
+apply N /sys/module/battery_saver/parameters/enabled
+
 if [ -f "/sys/kernel/debug/sched_features" ]; then
 	# Consider scheduling tasks that are eager to run
 	apply NEXT_BUDDY /sys/kernel/debug/sched_features
