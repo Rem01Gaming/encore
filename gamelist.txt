@@ -124,6 +124,7 @@ com.levelinfinite.hotta.gp
 com.levelinfinite.sgameGlobal
 com.levelinfinite.sgameGlobal.midaspay
 com.lilithgames.hgame.cn
+com.lilithgame.hgame.gp
 com.linegames.sl
 com.madfingergames.legends
 com.miHoYo.GI.samsung
