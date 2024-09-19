@@ -126,9 +126,6 @@ if [ $soc -eq 1 ]; then
 
 	# Eara Thermal
 	apply "1" /sys/kernel/eara_thermal/enable
-	
-	# Disable sched boost
-	apply 0 /sys/devices/system/cpu/sched/sched_boost
 
 # Qualcomm Tweaks
 elif [ $soc -eq 2 ]; then
