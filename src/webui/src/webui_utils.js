@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   });
   
   document.getElementById('cpuGovernor').addEventListener('change', async function() {
-    await changePerfCPUGovernor(this.value);
+    await changeCPUGovernor(this.value);
   });
 
   document.getElementById('editGamelistButton').addEventListener('click', function() {
