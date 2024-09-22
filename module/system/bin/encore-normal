@@ -19,7 +19,11 @@ apply() {
 }
 
 # Disable battery saver module
-apply N /sys/module/battery_saver/parameters/enabled
+if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
+	apply 0 /sys/module/battery_saver/parameters/enabled
+else
+	apply N /sys/module/battery_saver/parameters/enabled
+fi
 
 if [ -f "/sys/kernel/debug/sched_features" ]; then
 	# Consider scheduling tasks that are eager to run

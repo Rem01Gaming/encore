@@ -14,7 +14,11 @@ apply() {
 }
 
 # Enable battery saver module
-apply Y /sys/module/battery_saver/parameters/enabled
+if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
+	apply 1 /sys/module/battery_saver/parameters/enabled
+else
+	apply Y /sys/module/battery_saver/parameters/enabled
+fi
 
 # Disable cpu1 to save some power
 apply 0 /sys/devices/system/cpu/cpu1/online
