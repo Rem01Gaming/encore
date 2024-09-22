@@ -58,7 +58,6 @@ for thermal in /sys/class/thermal/thermal_zone*; do
 done
 
 # Stop tracing and debugging
-stop traced
 apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/kernel/perf_event_paranoid
 apply 0 /proc/sys/kernel/debug_locks
@@ -66,6 +65,7 @@ apply 0 /proc/sys/kernel/debug_locks
 # Kill logd
 if [ $(cat /data/encore/kill_logd) -eq 1 ]; then
 	stop logd
+	stop traced
 fi
 
 # Disable schedstats
