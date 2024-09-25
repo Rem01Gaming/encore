@@ -80,6 +80,7 @@ Restart fresh `encore-service`.
 ## Special Credits
 - [tytydraco](https://github.com/tytydraco/KTweak) for KTweaks
 - [NotZeetaa](https://github.com/NotZeetaa/YAKT) for YAKT
+- [hoytech](https://github.com/hoytech/vmtouch) for vmtouch
 - ~~[RiProG](https://github.com/RiProG-id) for App Monitoring~~
 - [rsuntk](https://github.com/rsuntk) for arm32 support
 - Our contributor
