@@ -29,13 +29,6 @@ jobs:
     - name: Build encore-service JNI
       working-directory: ./src
       run: ndk-build
-    - name: Copy binaries
-      run: |
-        cp -r ./src/libs ./module
-        cp LICENSE ./module
-    - name: Compile Gamelist
-      run: |
-        bash ./gamelist_compile.sh
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
@@ -43,9 +36,12 @@ jobs:
         npm run tailwind
         npm run build
         cp ./dist/* ../../module/webroot
-    - name: Copy out version
-      id: copyOutVersion
+    - name: Compile flashable zip
+      id: compileZip
       run: |
+        cp -r ./src/libs ./module
+        cp LICENSE ./module
+        bash ./gamelist_compile.sh
         version="$(cat ./version)"
         version_code=$(git rev-list HEAD --count)
         gitsha1=$(git rev-parse --short HEAD)
@@ -64,5 +60,5 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           export VERSION=$(git rev-list --count HEAD)
-          bash $GITHUB_WORKSPACE/.github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.copyOutVersion.outputs.zipName }}
+          bash $GITHUB_WORKSPACE/.github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.compileZip.outputs.zipName }}
         fi
