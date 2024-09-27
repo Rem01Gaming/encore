@@ -25,7 +25,7 @@ jobs:
     - name: NDK Setup
       uses: nttld/setup-ndk@v1
       with:
-        ndk-version: r27
+        ndk-version: r27b
     - name: Build encore-service JNI
       working-directory: ./src
       run: ndk-build
