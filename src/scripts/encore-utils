@@ -94,8 +94,8 @@ get_preload_graphiclibs() {
 set_preload_graphiclibs() {
 	echo $1 >/data/encore/preload_graphiclibs
 	case $1 in
-	1) encore-mempreload 1 1 ;;
-	2) encore-mempreload 1 2 ;;
+	1) nohup encore-mempreload 1 1 </dev/null >/dev/null 2>&1 & ;;
+	2) nohup encore-mempreload 1 0 </dev/null >/dev/null 2>&1 & ;;
 	esac
 }
 
