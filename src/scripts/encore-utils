@@ -103,7 +103,7 @@ get_preload_game() {
 	cat /data/encore/preload_game
 }
 
-set_preload_graphiclibs() {
+set_preload_game() {
 	echo $1 >/data/encore/preload_game
 }
 
