@@ -104,5 +104,5 @@ case "$1 $2" in
 "1 1") preloadGraphicLibs ;;
 "1 0") evictGraphicLibs ;;
 "2 1") [ ! -z "$3" ] && [ $(cat /data/encore/preload_game) -eq 1 ] && preloadGameStuff "$3" ;;
-"2 0") evictGameStuff ;;
+"2 0") [ $(cat /data/encore/preload_game) -eq 1 ] && evictGameStuff ;;
 esac
