@@ -3,6 +3,7 @@
 sync
 
 last_gamepreloaded="/data/encore/last_gamepreloaded"
+last_fault="/data/encore/last_fault"
 
 gameCache=(
 	"cache/vulkan_pso_cache.bin"
@@ -41,7 +42,7 @@ libsPath=(
 available_memory_check() {
 	local object_size=$(du -sk "$1" | cut -f1)
 	local available_ram=$(grep MemAvailable /proc/meminfo | cut -f2 -d':' | tr -d ' kB')
-	local required_ram=$((object_size + 800 * 1024)) # Memory free must at least 800MB + object size
+	local required_ram=$((object_size + 260 * 1024)) # Memory free must at least 260MB + object size
 	[ $available_ram -ge $required_ram ]
 }
 
@@ -54,7 +55,7 @@ preloadGraphicLibs() {
 					su -c vmtouch -f -Ld $path/$lib
 					break
 				else
-					echo "Can't preload $path/$lib, OUT OF MEMORY!"
+					echo "Can't preload $path/$lib, OUT OF MEMORY!" >>$last_fault
 				fi
 			fi
 		done
@@ -82,7 +83,7 @@ preloadGameStuff() {
 			if available_memory_check /sdcard/Android/data/$1/$cache; then
 				su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
 			else
-				echo "Can't preload $1/$cache, OUT OF MEMORY!"
+				echo "Can't preload $1/$cache, OUT OF MEMORY!" >>$last_fault
 			fi
 		fi
 	done
