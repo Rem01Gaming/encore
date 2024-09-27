@@ -7,10 +7,10 @@ unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 
 if [ $ARCH = "arm64" ]; then
 	ui_print "- Copying arm64 libs"
-	cp $TMPDIR/libs/arm64-v8a/encore-service $MODPATH/system/bin/
+	cp $TMPDIR/libs/arm64-v8a/* $MODPATH/system/bin/
 elif [ $ARCH = "arm" ]; then
 	ui_print "- Copying arm32 libs"
-	cp $TMPDIR/libs/armeabi-v7a/encore-service $MODPATH/system/bin/
+	cp $TMPDIR/libs/armeabi-v7a/* $MODPATH/system/bin/
 else
 	rm -rf /data/encore
 	abort "- Unsupported ARCH: $ARCH"
