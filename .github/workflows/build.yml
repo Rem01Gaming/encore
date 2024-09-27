@@ -58,7 +58,10 @@ jobs:
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         TITLE: Encore Tweaks
       run: |
-        if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+        if [ ! -z "${{ secrets.CHAT_ID }}" ] && [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           export VERSION=$(git rev-list --count HEAD)
           bash $GITHUB_WORKSPACE/.github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.compileZip.outputs.zipName }}
+        else
+          echo "Telegram bot token is undefined, please add it to repository secrets!"
+          exit 1
         fi
