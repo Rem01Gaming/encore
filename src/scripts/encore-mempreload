@@ -39,6 +39,11 @@ libsPath=(
 	"/vendor/lib64"
 )
 
+log() {
+	echo "$1"
+	echo "[$(date '+%a %b %d %T %Y')] $1" >>/data/encore/last_fault
+}
+
 available_memory_check() {
 	local object_size=$(du -sk "$1" | cut -f1)
 	local available_ram=$(grep MemAvailable /proc/meminfo | cut -f2 -d':' | tr -d ' kB')
@@ -55,7 +60,7 @@ preloadGraphicLibs() {
 					su -c vmtouch -f -Ld $path/$lib
 					break
 				else
-					echo "Can't preload $path/$lib, OUT OF MEMORY!" >>$last_fault
+					log "Can't preload $path/$lib, OUT OF MEMORY!" >>$last_fault
 				fi
 			fi
 		done
@@ -83,7 +88,7 @@ preloadGameStuff() {
 			if available_memory_check /sdcard/Android/data/$1/$cache; then
 				su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
 			else
-				echo "Can't preload $1/$cache, OUT OF MEMORY!" >>$last_fault
+				log "Can't preload $1/$cache, OUT OF MEMORY!" >>$last_fault
 			fi
 		fi
 	done
