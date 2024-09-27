@@ -16,6 +16,8 @@ else
 	abort "- Unsupported ARCH: $ARCH"
 fi
 
+[ ! -f /data/encore/preload_game ] && echo 0 >/data/encore/preload_game
+[ ! -f /data/encore/preload_graphiclibs ] && echo 0 >/data/encore/preload_graphiclibs
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/perf_cpu_gov ] && echo performance >/data/encore/perf_cpu_gov
 

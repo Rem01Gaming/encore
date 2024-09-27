@@ -164,6 +164,9 @@ int main(void) {
         system(command);
         performance_mode();
 
+        snprintf(command, sizeof(command), "su -c encore-mempreload 2 1 %s", trim_newline(gamestart));
+        system(command);
+
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
         if (pid != NULL) {
@@ -185,6 +188,7 @@ int main(void) {
         cur_mode = 2;
         printf("Applying powersave mode\n");
         powersave_mode();
+        system("su -c encore-mempreload 2 0");
       }
     } else {
       // Apply normal mode
@@ -192,6 +196,7 @@ int main(void) {
         cur_mode = 0;
         printf("Applying normal mode\n");
         normal_mode();
+        system("su -c encore-mempreload 2 0");
       }
     }
 

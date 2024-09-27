@@ -87,4 +87,24 @@ save_gamelist() {
 	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
 }
 
+get_preload_graphiclibs() {
+	cat /data/encore/preload_graphiclibs
+}
+
+set_preload_graphiclibs() {
+	echo $1 >/data/encore/preload_graphiclibs
+	case $1 in
+	1) encore-mempreload 1 1 ;;
+	2) encore-mempreload 1 2 ;;
+	esac
+}
+
+get_preload_game() {
+	cat /data/encore/preload_game
+}
+
+set_preload_graphiclibs() {
+	echo $1 >/data/encore/preload_game
+}
+
 eval "$1 $2"

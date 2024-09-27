@@ -35,6 +35,24 @@
           </label>
         </div>
         <div class="flex items-center justify-between mb-3">
+          <label class="inline-flex items-center w-full cursor-pointer">
+            <p class="text-sm text-white">Preload graphic libs to memory</p>
+            <div class="ml-auto">
+              <input type="checkbox" id="preloadGraphicLibsSwitch" class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </div>
+          </label>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <label class="inline-flex items-center w-full cursor-pointer">
+            <p class="text-sm text-white">Preload game assets to memory</p>
+            <div class="ml-auto">
+              <input type="checkbox" id="preloadGameAssetsSwitch" class="sr-only peer">
+              <div class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </div>
+          </label>
+        </div>
+        <div class="flex items-center justify-between mb-3">
           <p class="text-sm text-white">Default CPU Governor</p>
           <select id="cpuGovernor" class="bg-gray-700 text-xs text-white border-none outline-none shadow-none rounded-md p-2">
             <option value="schedutil" selected>schedutil</option>

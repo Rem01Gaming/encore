@@ -1,0 +1,108 @@
+#!/system/bin/sh
+
+sync
+
+last_gamepreloaded="/data/encore/last_gamepreloaded"
+
+gameCache=(
+	"cache/vulkan_pso_cache.bin"
+	"cache/UnityShaderCache"
+	"files/ProgramBinaryCache"
+)
+
+grapicLibs=(
+	"libGLESv1_CM.so"
+	"libGLESv2.so"
+	"libGLESv3.so"
+	"libvulkan.so"
+	"libskia.so"
+	"libEGL.so"
+	"libgsl.so"
+	"libRS.so"
+	"libsurfaceflinger.so"
+	"hw/vulkan.adreno.so"
+	"egl/libGLES_mali.so"
+	"egl/libEGL_powervr.so"
+	"egl/libEGL_adreno.so"
+	"egl/libGLESv1_CM_adreno.so"
+	"egl/libGLESv2_adreno.so"
+	"egl/libGLESv1_CM_powervr.so"
+	"egl/libGLESv2_powervr.so"
+	"egl/libVkLayer_ADRENO_qprofiler.so"
+)
+
+libsPath=(
+	"/system/lib"
+	"/system/lib64"
+	"/vendor/lib"
+	"/vendor/lib64"
+)
+
+available_memory_check() {
+	local object_size=$(du -sk "$1" | cut -f1)
+	local available_ram=$(grep MemAvailable /proc/meminfo | cut -f2 -d':' | tr -d ' kB')
+	local required_ram=$((object_size + 800 * 1024)) # Memory free must at least 800MB + object size
+	[ $available_ram -ge $required_ram ]
+}
+
+preloadGraphicLibs() {
+	echo 3 >/proc/sys/vm/drop_caches
+	for lib in ${grapicLibs[@]}; do
+		for path in ${libsPath[@]}; do
+			if [ -f $path/$lib ]; then
+				if available_memory_check $path/$lib; then
+					su -c vmtouch -f -Ld $path/$lib
+					break
+				else
+					echo "Can't preload $path/$lib, OUT OF MEMORY!"
+				fi
+			fi
+		done
+	done
+}
+
+evictGraphicLibs() {
+	for lib in ${grapicLibs[@]}; do
+		for path in ${libsPath[@]}; do
+			if [ -f $path/$lib ]; then
+				pkill -f "su -c vmtouch -f -Ld $path/$lib"
+				vmtouch -f -e $path/$lib
+				break
+			fi
+		done
+	done
+	echo 3 >/proc/sys/vm/drop_caches
+}
+
+preloadGameStuff() {
+	echo 3 >/proc/sys/vm/drop_caches
+	echo "$1" >$last_gamepreloaded
+	for cache in ${gameCache[@]}; do
+		if [ -f /sdcard/Android/data/$1/$cache ] || [ -d /sdcard/Android/data/$1/$cache ]; then
+			if available_memory_check /sdcard/Android/data/$1/$cache; then
+				su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
+			else
+				echo "Can't preload $1/$cache, OUT OF MEMORY!"
+			fi
+		fi
+	done
+}
+
+evictGameStuff() {
+	local game=$(cat $last_gamepreloaded)
+	for cache in ${gameCache[@]}; do
+		if [ -f /sdcard/Android/data/$game/$cache ] || [ -d /sdcard/Android/data/$game/$cache ]; then
+			pkill -f "su -c vmtouch -Ld /sdcard/Android/data/$game/$cache"
+			vmtouch -e /sdcard/Android/data/$game/$cache
+			break
+		fi
+	done
+	echo 3 >/proc/sys/vm/drop_caches
+}
+
+case "$1 $2" in
+"1 1") preloadGraphicLibs ;;
+"1 0") evictGraphicLibs ;;
+"2 1") [ ! -z "$3" ] && [ $(cat /data/encore/preload_game) -eq 1 ] && preloadGameStuff "$3" ;;
+"2 0") evictGameStuff ;;
+esac

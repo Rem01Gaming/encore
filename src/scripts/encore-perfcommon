@@ -6,6 +6,11 @@ sync
 # Push Notification
 su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' 'Tweaks successfully applied.'"
 
+# Start preload graphic libs
+if [ $(cat /data/encore/preload_graphiclibs) -eq 1 ]; then
+	encore-mempreload 1 1
+fi
+
 apply() {
 	if [ -f $2 ]; then
 		chmod 644 $2 >/dev/null 2>&1
