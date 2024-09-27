@@ -5,11 +5,6 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
-if [ $(cat /data/encore/skip_setpriority) -eq 1 ]; then
-	echo "notice: skipping priority settings"
-	exit 0
-fi
-
 # renice + ionice
 renice -n -20 -p $1
 ionice -c 1 -n 0 -p $1

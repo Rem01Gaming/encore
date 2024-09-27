@@ -47,14 +47,6 @@ async function getKillLogdSwitch() {
   }
 }
 
-async function toggleSkipPrioritySwitch(isChecked) {
-  const command = isChecked
-    ? 'encore-utils set_skip_priority 1'
-    : 'encore-utils set_skip_priority 0';
-
-  await exec(command);
-}
-
 async function toggleKillLogdSwitch(isChecked) {
   const command = isChecked
     ? 'encore-utils kill_logd'
@@ -143,7 +135,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   await getModuleVersion();
   await getServiceState();
   await getServicePID();
-  await getSkipPrioritySwitch();
   await getKillLogdSwitch();
   await populateCPUGovernors();
 
@@ -153,10 +144,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   document.getElementById('restartServiceButton').addEventListener('click', async function() {
     await restartService();
-  });
-
-  document.getElementById('skipPrioritySwitch').addEventListener('change', async function() {
-    await toggleSkipPrioritySwitch(this.checked);
   });
 
   document.getElementById('killLogdSwitch').addEventListener('change', async function() {

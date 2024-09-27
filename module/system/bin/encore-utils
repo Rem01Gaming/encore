@@ -24,14 +24,6 @@ get_kernel() {
 	uname -r
 }
 
-get_skip_priority() {
-	cat /data/encore/skip_setpriority
-}
-
-set_skip_priority() {
-	echo $1 >/data/encore/skip_setpriority
-}
-
 get_default_cpugov() {
 	if [ -f /data/encore/custom_default_cpu_gov ]; then
 		cat /data/encore/custom_default_cpu_gov

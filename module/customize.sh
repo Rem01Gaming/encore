@@ -16,7 +16,6 @@ else
 	abort "- Unsupported ARCH: $ARCH"
 fi
 
-[ ! -f /data/encore/skip_setpriority ] && echo 0 >/data/encore/skip_setpriority
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/perf_cpu_gov ] && echo performance >/data/encore/perf_cpu_gov
 
