@@ -71,7 +71,7 @@ evictGraphicLibs() {
 	for lib in ${grapicLibs[@]}; do
 		for path in ${libsPath[@]}; do
 			if [ -f $path/$lib ]; then
-				pkill -f "su -c vmtouch -f -Ld $path/$lib"
+				pkill -f "vmtouch -f -Ld $path/$lib"
 				vmtouch -f -e $path/$lib
 				break
 			fi
@@ -98,7 +98,7 @@ evictGameStuff() {
 	local game=$(cat $last_gamepreloaded)
 	for cache in ${gameCache[@]}; do
 		if [ -f /sdcard/Android/data/$game/$cache ] || [ -d /sdcard/Android/data/$game/$cache ]; then
-			pkill -f "su -c vmtouch -Ld /sdcard/Android/data/$game/$cache"
+			pkill -f "vmtouch -Ld /sdcard/Android/data/$game/$cache"
 			vmtouch -e /sdcard/Android/data/$game/$cache
 			break
 		fi
