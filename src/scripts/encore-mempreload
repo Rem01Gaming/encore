@@ -3,7 +3,6 @@
 sync
 
 last_gamepreloaded="/data/encore/last_gamepreloaded"
-last_fault="/data/encore/last_fault"
 
 gameCache=(
 	"cache/vulkan_pso_cache.bin"
@@ -58,9 +57,8 @@ preloadGraphicLibs() {
 			if [ -f $path/$lib ]; then
 				if available_memory_check $path/$lib; then
 					su -c vmtouch -f -Ld $path/$lib
-					break
 				else
-					log "Can't preload $path/$lib, OUT OF MEMORY!" >>$last_fault
+					log "Can't preload $path/$lib, OUT OF MEMORY!"
 				fi
 			fi
 		done
@@ -73,7 +71,6 @@ evictGraphicLibs() {
 			if [ -f $path/$lib ]; then
 				pkill -f "vmtouch -f -Ld $path/$lib"
 				vmtouch -f -e $path/$lib
-				break
 			fi
 		done
 	done
@@ -88,7 +85,7 @@ preloadGameStuff() {
 			if available_memory_check /sdcard/Android/data/$1/$cache; then
 				su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
 			else
-				log "Can't preload $1/$cache, OUT OF MEMORY!" >>$last_fault
+				log "Can't preload $1/$cache, OUT OF MEMORY!"
 			fi
 		fi
 	done
@@ -100,7 +97,6 @@ evictGameStuff() {
 		if [ -f /sdcard/Android/data/$game/$cache ] || [ -d /sdcard/Android/data/$game/$cache ]; then
 			pkill -f "vmtouch -Ld /sdcard/Android/data/$game/$cache"
 			vmtouch -e /sdcard/Android/data/$game/$cache
-			break
 		fi
 	done
 	echo 3 >/proc/sys/vm/drop_caches
