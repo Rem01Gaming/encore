@@ -150,7 +150,7 @@ void send_exit_signal(char code) {
   }
 }
 
-void usage() {
+void usage(void) {
   printf("\n");
   printf("vmtouch v%s - the Virtual Memory Toucher by Doug Hoyte\n", VMTOUCH_VERSION);
   printf("Portable file system cache diagnostics and control\n\n");
@@ -201,14 +201,14 @@ static void warning(const char *fmt, ...) {
   if (!o_quiet) fprintf(stderr, "vmtouch: WARNING: %s\n", buf);
 }
 
-static void reopen_all() {
+static void reopen_all(void) {
   if (freopen("/dev/null", "r", stdin) == NULL ||
       freopen("/dev/null", "w", stdout) == NULL ||
       freopen("/dev/null", "w", stdout) == NULL)
     fatal("freopen: %s", strerror(errno));
 }
 
-static int wait_for_child() {
+static int wait_for_child(void) {
   int exit_read = 0;
   char exit_value = 0;
   int wait_status;
@@ -235,7 +235,7 @@ static int wait_for_child() {
   return exit_value;
 }
 
-void go_daemon() {
+void go_daemon(void) {
   daemon_pid = fork();
   if (daemon_pid == -1)
     fatal("fork: %s", strerror(errno));
@@ -307,7 +307,7 @@ int64_t parse_size(char *inp) {
 
   val *= mult;
 
-  if (val > INT64_MAX) fatal(errstr);
+  if (val > (double)INT64_MAX) fatal(errstr);
 
   return (int64_t) val;
 }
@@ -395,7 +395,7 @@ int is_mincore_page_resident(char p) {
 }
 
 
-void increment_nofile_rlimit() {
+void increment_nofile_rlimit(void) {
   struct rlimit r;
 
   if (getrlimit(RLIMIT_NOFILE, &r))
@@ -415,7 +415,7 @@ void increment_nofile_rlimit() {
 
 
 
-double gettimeofday_as_double() {
+double gettimeofday_as_double(void) {
   struct timeval tv;
   gettimeofday(&tv, NULL);
 
@@ -557,7 +557,7 @@ void vmtouch_file(char *path) {
     goto bail;
   }
 
-  if (len_of_file > o_max_file_size) {
+  if ((size_t)len_of_file > o_max_file_size) {
     warning("file %s too large, skipping", path);
     goto bail;
   }
@@ -831,7 +831,7 @@ void vmtouch_crawl(char *path) {
       while((de = readdir(dirp)) != NULL) {
         if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) continue;
 
-        if (snprintf(npath, sizeof(npath), "%s/%s", path, de->d_name) >= sizeof(npath)) {
+        if (snprintf(npath, sizeof(npath), "%s/%s", path, de->d_name) >= (int)sizeof(npath)) {
           warning("path too long %s", path);
           goto bail;
         }
@@ -888,7 +888,7 @@ static void vmtouch_batch_crawl(const char *path) {
   fclose(f);
 }
 
-static void remove_pidfile() {
+static void remove_pidfile(void) {
   int res = 0;
 
   res = unlink(o_pidfile);
@@ -897,7 +897,7 @@ static void remove_pidfile() {
   }
 }
 
-static void write_pidfile() {
+static void write_pidfile(void) {
   FILE *f = NULL;
   size_t wrote = 0;
 
@@ -917,11 +917,12 @@ static void write_pidfile() {
   }
 }
 
-static void signal_handler_clear_pidfile(int signal_num) {
+static void signal_handler_clear_pidfile(int signo) {
+  (void)signo;
   remove_pidfile();
 }
 
-static void register_signals_for_pidfile() {
+static void register_signals_for_pidfile(void) {
   struct sigaction sa = {0};
   sa.sa_handler = signal_handler_clear_pidfile;
   if (sigaction(SIGINT, &sa, NULL) < 0 ||
@@ -930,11 +931,6 @@ static void register_signals_for_pidfile() {
     warning("unable to register signals for pidfile (%s), skipping", strerror(errno));
   }
 }
-
-
-
-
-
 
 int main(int argc, char **argv) {
   int ch, i;
