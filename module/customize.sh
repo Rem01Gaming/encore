@@ -12,22 +12,20 @@ if [ ! -f "$TMPDIR/verify.sh" ]; then
 fi
 
 source "$TMPDIR/verify.sh"
-
-mkdir $MODPATH/system/bin
 extract "$ZIPFILE" 'service.sh' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-utils' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-perfcommon' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-normal' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-powersave' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-mempreload' $MODPATH/system/bin
-extract "$ZIPFILE" 'system/bin/encore-setpriority' $MODPATH/system/bin
+extract "$ZIPFILE" 'system/bin/encore-utils' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-perfcommon' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-normal' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-powersave' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-mempreload' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore-setpriority' $MODPATH
 if [ $ARCH = "arm64" ]; then
-	extract "$ZIPFILE" 'libs/arm64-v8a/encore-service' $MODPATH/system/bin
-	extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $MODPATH/system/bin
+	extract "$ZIPFILE" 'libs/arm64-v8a/encore-service' $MODPATH
+	extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $MODPATH
 elif [ $ARCH = "arm" ]; then
-	extract "$ZIPFILE" 'libs/armeabi-v7a/encore-service' $MODPATH/system/bin
-	extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $MODPATH/system/bin
+	extract "$ZIPFILE" 'libs/armeabi-v7a/encore-service' $MODPATH
+	extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $MODPATH
 else
 	abort "- Unsupported ARCH: $ARCH"
 fi
@@ -47,7 +45,7 @@ else
 	ui_print "- Bellavita Toast isn't installed"
 	ui_print "- Installing bellavita toast..."
 	extract "$ZIPFILE" 'toast.apk' $TMPDIR
-	pm install $TMPDIR/toast.apk
+	pm install $TMPDIR/toast.apk >&2
 	rm -f $TMPDIR/toast.apk
 	if ! pm list packages | grep -q bellavita.toast; then
 		ui_print "- Can't install Bellavita Toast due to selinux restrictions"
