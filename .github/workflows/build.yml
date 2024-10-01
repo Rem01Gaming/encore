@@ -33,6 +33,11 @@ jobs:
       uses: crazy-max/ghaction-upx@v3
       with:
         install-only: true
+    - name: Compress executables
+      working-directory: ./src/libs
+      run: |
+        upx -9 ./arm64-v8a/*
+        upx -9 ./armeabi-v7a/*
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
@@ -43,8 +48,6 @@ jobs:
     - name: Compress and Compile flashable zip
       id: compileZip
       run: |
-        upx -9 ./src/libs/arm64-v8a/*
-        upx -9 ./src/libs/armeabi-v7a/*
         cp -r ./src/libs ./module
         cp -r ./src/scripts/* ./module/system/bin
         cp LICENSE ./module
@@ -55,6 +58,11 @@ jobs:
         sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
         sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
         zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/system/bin
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/libs
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/META-INF
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/service.sh
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/toast.apk
         cd ./module && zip -r9 ../$zipName * -x *placeholder *.map
     - name: Upload to telegram
       env:

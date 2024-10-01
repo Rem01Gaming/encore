@@ -1,0 +1,10 @@
+#!/bin/env bash
+
+generate_checksum() {
+	sha256sum -b $1 >"$1.sha256"
+	echo "Generated checksum for: $1"
+}
+
+find "$1" -maxdepth 1 -type f | while IFS= read -r file; do
+	generate_checksum "$file"
+done
