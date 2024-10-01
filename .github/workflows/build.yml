@@ -64,6 +64,7 @@ jobs:
         bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/META-INF
         bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/service.sh
         bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/toast.apk
+        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/module.prop
         cd ./module && zip -r9 ../$zipName * -x *placeholder *.map
     - name: Upload to telegram
       env:

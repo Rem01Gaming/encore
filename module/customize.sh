@@ -12,7 +12,12 @@ if [ ! -f "$TMPDIR/verify.sh" ]; then
 fi
 
 source "$TMPDIR/verify.sh"
+extract "$ZIPFILE" 'module.prop' $MODPATH
 extract "$ZIPFILE" 'service.sh' $MODPATH
+extract "$ZIPFILE" 'libs/arm64-v8a/encore-service' $TMPDIR
+extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $TMPDIR
+extract "$ZIPFILE" 'libs/armeabi-v7a/encore-service' $TMPDIR
+extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $TMPDIR
 extract "$ZIPFILE" 'system/bin/encore-utils' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-perfcommon' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-normal' $MODPATH
@@ -20,15 +25,21 @@ extract "$ZIPFILE" 'system/bin/encore-powersave' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-mempreload' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-setpriority' $MODPATH
+
+# Extrace executable
 if [ $ARCH = "arm64" ]; then
-	extract "$ZIPFILE" 'libs/arm64-v8a/encore-service' $MODPATH
-	extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $MODPATH
+	ui_print "- Copying arm64 libs"
+	cp $TMPDIR/libs/arm64-v8a/* $MODPATH/system/bin
 elif [ $ARCH = "arm" ]; then
-	extract "$ZIPFILE" 'libs/armeabi-v7a/encore-service' $MODPATH
-	extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $MODPATH
+	ui_print "- Copying arm libs"
+	cp $TMPDIR/libs/armeabi-v7a/* $MODPATH/system/bin
 else
 	abort "- Unsupported ARCH: $ARCH"
 fi
+
+# Extract webroot
+ui_print "- Extracting webroot"
+unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 
 # Set configs
 [ ! -d /data/encore ] && mkdir /data/encore
@@ -42,7 +53,6 @@ unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 if pm list packages | grep -q bellavita.toast; then
 	ui_print "- Bellavita Toast app is already installed"
 else
-	ui_print "- Bellavita Toast isn't installed"
 	ui_print "- Installing bellavita toast..."
 	extract "$ZIPFILE" 'toast.apk' $TMPDIR
 	pm install $TMPDIR/toast.apk >&2
