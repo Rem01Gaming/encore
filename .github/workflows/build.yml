@@ -46,7 +46,7 @@ jobs:
         npm run tailwind
         npm run build
         cp ./dist/* ../../module/webroot
-    - name: Compress and Compile flashable zip
+    - name: Compile flashable zip
       id: compileZip
       run: |
         cp -r ./src/libs ./module
