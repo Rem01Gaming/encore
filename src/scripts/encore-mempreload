@@ -10,6 +10,13 @@ gameCache=(
 	"files/ProgramBinaryCache"
 )
 
+gameLibs=(
+"libunity.so"
+"libUE4.so"
+"libminecraftpe.so"
+"libgodot_android.so"
+)
+
 grapicLibs=(
 	"libGLESv1_CM.so"
 	"libGLESv2.so"
@@ -28,7 +35,6 @@ grapicLibs=(
 	"egl/libGLESv2_adreno.so"
 	"egl/libGLESv1_CM_powervr.so"
 	"egl/libGLESv2_powervr.so"
-	"egl/libVkLayer_ADRENO_qprofiler.so"
 )
 
 libsPath=(
