@@ -10,13 +10,6 @@ gameCache=(
 	"files/ProgramBinaryCache"
 )
 
-gameLibs=(
-"libunity.so"
-"libUE4.so"
-"libminecraftpe.so"
-"libgodot_android.so"
-)
-
 grapicLibs=(
 	"libGLESv1_CM.so"
 	"libGLESv2.so"
@@ -44,28 +37,12 @@ libsPath=(
 	"/vendor/lib64"
 )
 
-log() {
-	echo "$1"
-	echo "[$(date '+%a %b %d %T %Y')] $1" >>/data/encore/last_fault
-}
-
-available_memory_check() {
-	local object_size=$(du -sk "$1" | cut -f1)
-	local available_ram=$(grep MemAvailable /proc/meminfo | cut -f2 -d':' | tr -d ' kB')
-	local required_ram=$((object_size + 260 * 1024)) # Memory free must at least 260MB + object size
-	[ $available_ram -ge $required_ram ]
-}
-
 preloadGraphicLibs() {
 	echo 3 >/proc/sys/vm/drop_caches
 	for lib in ${grapicLibs[@]}; do
 		for path in ${libsPath[@]}; do
 			if [ -f $path/$lib ]; then
-				if available_memory_check $path/$lib; then
-					su -c vmtouch -f -Ld $path/$lib
-				else
-					log "Can't preload $path/$lib, OUT OF MEMORY!"
-				fi
+				su -c vmtouch -f -Ld $path/$lib
 			fi
 		done
 	done
@@ -88,11 +65,7 @@ preloadGameStuff() {
 	echo "$1" >$last_gamepreloaded
 	for cache in ${gameCache[@]}; do
 		if [ -f /sdcard/Android/data/$1/$cache ] || [ -d /sdcard/Android/data/$1/$cache ]; then
-			if available_memory_check /sdcard/Android/data/$1/$cache; then
-				su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
-			else
-				log "Can't preload $1/$cache, OUT OF MEMORY!"
-			fi
+			su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
 		fi
 	done
 }
