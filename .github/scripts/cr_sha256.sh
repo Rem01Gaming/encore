@@ -5,6 +5,6 @@ generate_checksum() {
 	echo "Generated checksum for: $1"
 }
 
-find "$1" -maxdepth 1 -type f | while IFS= read -r file; do
+find "$1" -type f | while IFS= read -r file; do
 	generate_checksum "$file"
 done
