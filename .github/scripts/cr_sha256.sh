@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 generate_checksum() {
-	sha256sum -b $1 >"$1.sha256"
+	sha256sum $1 | awk '{print $1}' >"$1.sha256"
 	echo "Generated checksum for: $1"
 }
 
