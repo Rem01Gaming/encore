@@ -63,21 +63,29 @@ evictGraphicLibs() {
 preloadGameStuff() {
 	echo 3 >/proc/sys/vm/drop_caches
 	echo "$1" >$last_gamepreloaded
+	appDir=$(dirname $(pm path $1 | head -n 1 | cut -d: -f2))
 	for cache in ${gameCache[@]}; do
 		if [ -f /sdcard/Android/data/$1/$cache ] || [ -d /sdcard/Android/data/$1/$cache ]; then
 			su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
 		fi
 	done
+	[ -f $appDir/base.apk ] && su -c vmtouch -Ld $appDir/base.apk
+	[ -f $appDir/split_config.arm64_v8a.apk ] && su -c vmtouch -Ld $appDir/split_config.arm64_v8a.apk
+	[ -f $appDir/split_config.armeabi-v7a.apk ] && su -c vmtouch -Ld $appDir/split_config.armeabi-v7a.apk
 }
 
 evictGameStuff() {
 	local game=$(cat $last_gamepreloaded)
+	appDir=$(dirname $(pm path $game | head -n 1 | cut -d: -f2))
 	for cache in ${gameCache[@]}; do
 		if [ -f /sdcard/Android/data/$game/$cache ] || [ -d /sdcard/Android/data/$game/$cache ]; then
 			pkill -f "vmtouch -Ld /sdcard/Android/data/$game/$cache"
 			vmtouch -e /sdcard/Android/data/$game/$cache
 		fi
 	done
+	[ -f $appDir/base.apk ] && pkill -f "vmtouch -Ld $appDir/base.apk" && vmtouch -e $appDir/base.apk
+	[ -f $appDir/split_config.arm64_v8a.apk ] && pkill -f "vmtouch -Ld $appDir/split_config.arm64_v8a.apk" && vmtouch -e $appDir/split_config.arm64_v8a.apk
+	[ -f $appDir/split_config.armeabi-v7a.apk ] && pkill -f "vmtouch -Ld $appDir/split_config.armeabi-v7a.apk" && vmtouch -e $appDir/split_config.armeabi-v7a.apk
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
