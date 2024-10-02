@@ -333,3 +333,4 @@ vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
 com.tinybuildgames.helloneighbor
+com.xd.rotaeno.googleplay
