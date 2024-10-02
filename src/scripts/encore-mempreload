@@ -10,82 +10,75 @@ gameCache=(
 	"files/ProgramBinaryCache"
 )
 
-grapicLibs=(
-	"libGLESv1_CM.so"
-	"libGLESv2.so"
-	"libGLESv3.so"
-	"libvulkan.so"
-	"libskia.so"
-	"libEGL.so"
-	"libgsl.so"
-	"libRS.so"
-	"libsurfaceflinger.so"
-	"hw/vulkan.adreno.so"
-	"egl/libGLES_mali.so"
-	"egl/libEGL_powervr.so"
-	"egl/libEGL_adreno.so"
-	"egl/libGLESv1_CM_adreno.so"
-	"egl/libGLESv2_adreno.so"
-	"egl/libGLESv1_CM_powervr.so"
-	"egl/libGLESv2_powervr.so"
+itemsGameStuff=()
+
+graphicLibs64=(
+	"/system/lib64/libGLESv1_CM.so"
+	"/system/lib64/libGLESv2.so"
+	"/system/lib64/libGLESv3.so"
+	"/system/lib64/libvulkan.so"
+	"/system/lib64/libskia.so"
+	"/system/lib64/libEGL.so"
+	"/system/lib64/libgsl.so"
+	"/system/lib64/libRS.so"
+	"/system/lib64/libsurfaceflinger.so"
+	"/vendor/lib64/hw/vulkan.adreno.so"
+	"/vendor/lib64/egl/libGLES_mali.so"
+	"/vendor/lib64/egl/libEGL_powervr.so"
+	"/vendor/lib64/egl/libEGL_adreno.so"
+	"/vendor/lib64/egl/libGLESv1_CM_adreno.so"
+	"/vendor/lib64/egl/libGLESv2_adreno.so"
+	"/vendor/lib64/egl/libGLESv1_CM_powervr.so"
+	"/vendor/lib64/egl/libGLESv2_powervr.so"
 )
 
-libsPath=(
-	"/system/lib"
-	"/system/lib64"
-	"/vendor/lib"
-	"/vendor/lib64"
+graphicLibs32=(
+	"/system/lib/libGLESv1_CM.so"
+	"/system/lib/libGLESv2.so"
+	"/system/lib/libGLESv3.so"
+	"/system/lib/libvulkan.so"
+	"/system/lib/libskia.so"
+	"/system/lib/libEGL.so"
+	"/system/lib/libgsl.so"
+	"/system/lib/libRS.so"
+	"/system/lib/libsurfaceflinger.so"
+	"/vendor/lib/hw/vulkan.adreno.so"
+	"/vendor/lib/egl/libGLES_mali.so"
+	"/vendor/lib/egl/libEGL_powervr.so"
+	"/vendor/lib/egl/libEGL_adreno.so"
+	"/vendor/lib/egl/libGLESv1_CM_adreno.so"
+	"/vendor/lib/egl/libGLESv2_adreno.so"
+	"/vendor/lib/egl/libGLESv1_CM_powervr.so"
+	"/vendor/lib/egl/libGLESv2_powervr.so"
 )
 
 preloadGraphicLibs() {
 	echo 3 >/proc/sys/vm/drop_caches
-	for lib in ${grapicLibs[@]}; do
-		for path in ${libsPath[@]}; do
-			if [ -f $path/$lib ]; then
-				su -c vmtouch -f -Ld $path/$lib
-			fi
-		done
-	done
+	su -c vmtouch -Ld ${graphicLibs64[@]} ${graphicLibs32[@]}
 }
 
 evictGraphicLibs() {
-	for lib in ${grapicLibs[@]}; do
-		for path in ${libsPath[@]}; do
-			if [ -f $path/$lib ]; then
-				pkill -f "vmtouch -f -Ld $path/$lib"
-				vmtouch -f -e $path/$lib
-			fi
-		done
-	done
+	pkill -f "vmtouch -Ld ${graphicLibs64[@]} ${graphicLibs32[@]}"
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
 preloadGameStuff() {
 	echo 3 >/proc/sys/vm/drop_caches
-	echo "$1" >$last_gamepreloaded
 	appDir=$(dirname $(pm path $1 | head -n 1 | cut -d: -f2))
 	for cache in ${gameCache[@]}; do
 		if [ -f /sdcard/Android/data/$1/$cache ] || [ -d /sdcard/Android/data/$1/$cache ]; then
-			su -c vmtouch -Ld /sdcard/Android/data/$1/$cache
+			 itemsGameStuff+=("/sdcard/Android/data/$1/$cache")
 		fi
 	done
-	[ -f $appDir/base.apk ] && su -c vmtouch -Ld $appDir/base.apk
-	[ -f $appDir/split_config.arm64_v8a.apk ] && su -c vmtouch -Ld $appDir/split_config.arm64_v8a.apk
-	[ -f $appDir/split_config.armeabi-v7a.apk ] && su -c vmtouch -Ld $appDir/split_config.armeabi-v7a.apk
+	[ -f $appDir/base.apk ] && itemsGameStuff+=("$appDir/base.apk")
+	[ -f $appDir/split_config.arm64_v8a.apk ] && itemsGameStuff+=("$appDir/split_config.arm64_v8a.apk")
+	[ -f $appDir/split_config.armeabi-v7a.apk ] && itemsGameStuff+=("$appDir/split_config.armeabi-v7a.apk")
+	su -c vmtouch -Ld ${itemsGameStuff[@]}
+	echo "${itemsGameStuff[@]}" >$last_gamepreloaded
 }
 
 evictGameStuff() {
-	local game=$(cat $last_gamepreloaded)
-	appDir=$(dirname $(pm path $game | head -n 1 | cut -d: -f2))
-	for cache in ${gameCache[@]}; do
-		if [ -f /sdcard/Android/data/$game/$cache ] || [ -d /sdcard/Android/data/$game/$cache ]; then
-			pkill -f "vmtouch -Ld /sdcard/Android/data/$game/$cache"
-			vmtouch -e /sdcard/Android/data/$game/$cache
-		fi
-	done
-	[ -f $appDir/base.apk ] && pkill -f "vmtouch -Ld $appDir/base.apk" && vmtouch -e $appDir/base.apk
-	[ -f $appDir/split_config.arm64_v8a.apk ] && pkill -f "vmtouch -Ld $appDir/split_config.arm64_v8a.apk" && vmtouch -e $appDir/split_config.arm64_v8a.apk
-	[ -f $appDir/split_config.armeabi-v7a.apk ] && pkill -f "vmtouch -Ld $appDir/split_config.armeabi-v7a.apk" && vmtouch -e $appDir/split_config.armeabi-v7a.apk
+	pkill -f "vmtouch -Ld $(cat $last_gamepreloaded)"
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
