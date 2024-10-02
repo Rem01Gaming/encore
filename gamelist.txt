@@ -38,6 +38,7 @@ com.axlebolt.standoff2
 com.bandainamcoent.opbrww
 com.bandainamcoent.sao
 com.bandainamcoent.shinycolorsprism
+com.bandainamcoent.ultimateninjastorm
 com.bandainamcogames.dbzdokkanww
 com.bhvr.deadbydaylight
 com.bilibiligame.heglgp
@@ -317,6 +318,7 @@ org.dolphinemu.dolphinemu
 org.godotengine.godot4
 org.mm.jr
 org.ppsspp.ppsspp
+org.ppsspp.ppssppgold
 org.vita3k.emulator
 org.sudachi.sudachi_emu.ea
 org.yuzu.yuzu_emu
