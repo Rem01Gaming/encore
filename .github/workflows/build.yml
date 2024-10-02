@@ -30,15 +30,6 @@ jobs:
     - name: Build Encore JNI
       working-directory: ./src
       run: ndk-build
-    - name: Install UPX
-      uses: crazy-max/ghaction-upx@v3
-      with:
-        install-only: true
-    - name: Compress executables
-      working-directory: ./src/libs
-      run: |
-        upx -9 ./arm64-v8a/*
-        upx -9 ./armeabi-v7a/*
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
