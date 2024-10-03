@@ -10,6 +10,7 @@ com.FosFenes.Sonolus
 com.GameCoaster.ProtectDungeon
 com.HoYoverse.Nap
 com.HoYoverse.hkrpgoversea
+com.Psyonix.RL2D
 com.RoamingStar.BlueArchive
 com.Shooter.ModernWarship
 com.Shooter.ModernWarships
@@ -72,6 +73,9 @@ com.drivezone.car.race.game
 com.dts.freefireadv
 com.dts.freefiremax
 com.dts.freefireth
+com.dts.freefireth.huawei
+com.dxx.firenow
+com.ea.games.r3_row
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
 com.emulator.fpse64
@@ -102,6 +106,7 @@ com.hg.cosmicshake
 com.hottapkgs.hotta
 com.hypergryph.arknights
 com.hypergryph.exastris
+com.igg.android.doomsdaylastsurvivors
 com.ignm.raspberrymash.jp
 com.ilongyuan.implosion
 com.jacksparrow.jpmajiang
@@ -134,8 +139,13 @@ com.miHoYo.HSoDv2JPOriginalEx
 com.miHoYo.Nap
 com.miHoYo.Yuanshen
 com.miHoYo.bh3
+com.miHoYo.bh3oversea_vn
+com.miHoYo.bh3rdJP
 com.miHoYo.bh3global
 com.miHoYo.bh3oversea
+com.miHoYo.bh3.bilibili
+com.miHoYo.bh3.mi
+com.miHoYo.bh3.uc
 com.miHoYo.enterprise.NGHSoD
 com.miHoYo.hkrpg
 com.miHoYo.ys
@@ -215,6 +225,7 @@ com.pwrd.opmwsea
 com.pwrd.p5x
 com.pwrd.persona5x.laohu
 com.r2games.myhero.bilibili
+com.rayark.cytus2
 com.rayark.implosion
 com.rayark.sdorica
 com.rekoo.pubgm
@@ -230,6 +241,7 @@ com.rockstargames.gtasa.de
 com.rockstargames.gtavc
 com.rockstargames.gtavc.de
 com.rsg.myheroesen
+com.sandboxinteractive.albiononline
 com.seasun.jx3
 com.sega.ColorfulStage.en
 com.sega.pjsekai
@@ -239,6 +251,7 @@ com.shenlan.m.reverse1999
 com.smokoko.race
 com.sofunny.Sausage
 com.soulgamechst.majsoul
+com.spaceapegames.beatstar
 com.sprduck.garena.vn
 com.squareenix.lis
 com.stove.epic7.google
@@ -249,13 +262,18 @@ com.supercell.clashofclans
 com.supercell.clashroyale
 com.supercell.hayday
 com.supercell.squad
+com.studiowildcard.wardrumstudios.ark
+com.studiowildcard.wardrumstudios.ark.ncr
 com.sy.dldlhsdj
 com.t2ksports.nba2k20and
 com.tencent.KiHan
+com.tencent.af
 com.tencent.ig
+com.tencent.iglite
 com.tencent.jkchess
 com.tencent.lolm
 com.tencent.mf.uam
+com.tencent.msgame
 com.tencent.nfsonline
 com.tencent.tmgp.WePop
 com.tencent.tmgp.bh3
@@ -269,12 +287,15 @@ com.tencent.tmgp.gnyx
 com.tencent.tmgp.kr.codm
 com.tencent.tmgp.pubgmhd
 com.tencent.tmgp.sgame
+com.tencent.tmgp.sgamece
+com.tencent.tmgp.sskeus
 com.tencent.tmgp.speedmobile
 com.tencent.tmgp.wuxia
 com.tencent.tmgp.yys.zqb
 com.tencent.toaa
 com.tgc.sky.android
 com.the10tons.dysmantle
+com.tinybuildgames.helloneighbor
 com.tipsworks.android.pascalswager
 com.tipsworks.pascalswager
 com.tungsten.fcl
@@ -297,7 +318,6 @@ com.ztgame.yyzy
 com.zy.wqmt.cn
 com.bandainamcoent.idolmaster_gakuen
 com.bandainamcoent.imas_millionlive_theaterdays
-com.miHoYo.bh3oversea_vn
 cyou.joiplay.joiplay
 id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
@@ -334,5 +354,3 @@ tw.sonet.allbw
 vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
-com.tinybuildgames.helloneighbor
-com.xd.rotaeno.googleplay
