@@ -69,13 +69,13 @@ restart_service() {
 }
 
 save_logs() {
-	logdir="/sdcard/encore-logs"
-	[ ! -d $logdir ] && mkdir $logdir
-	cp /data/encore/last_fault $logdir
-	cat <<EOF >$logdir/devinfo
+	logfile="/sdcard/encore_log"
+	cat <<EOF >$logfile
 encoreVersion=$(get_module_version)
 chipset=$(get_chipset)
 kernelVersion=$(get_kernel)
+
+cat /data/encore/last_fault
 EOF
 }
 
@@ -85,26 +85,6 @@ get_gamelist() {
 
 save_gamelist() {
 	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
-}
-
-get_preload_graphiclibs() {
-	cat /data/encore/preload_graphiclibs
-}
-
-set_preload_graphiclibs() {
-	echo $1 >/data/encore/preload_graphiclibs
-	case $1 in
-	1) nohup encore-mempreload 1 1 </dev/null >/dev/null 2>&1 & ;;
-	2) nohup encore-mempreload 1 0 </dev/null >/dev/null 2>&1 & ;;
-	esac
-}
-
-get_preload_game() {
-	cat /data/encore/preload_game
-}
-
-set_preload_game() {
-	echo $1 >/data/encore/preload_game
 }
 
 eval "$1 $2"

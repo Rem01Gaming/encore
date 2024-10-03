@@ -101,7 +101,7 @@ async function populateCPUGovernors() {
 
 async function saveLogs() {
   await exec('encore-utils save_logs');
-  toast('Logs have been saved on /sdcard/encore-logs');
+  toast('Logs have been saved on /sdcard/encore_log');
 }
 
 async function openGamelistModal() {
