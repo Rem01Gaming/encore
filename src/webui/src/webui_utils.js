@@ -39,42 +39,10 @@ async function getKillLogdSwitch() {
   }
 }
 
-async function getPreloadGraphicLibsSwitch() {
-  const { errno, stdout } = await exec('encore-utils get_preload_graphiclibs');
-  if (errno === 0) {
-    const switchElement = document.getElementById('preloadGraphicLibsSwitch');
-    switchElement.checked = stdout.trim() === '1';
-  }
-}
-
-async function getPreloadGameAssestSwitch() {
-  const { errno, stdout } = await exec('encore-utils get_preload_game');
-  if (errno === 0) {
-    const switchElement = document.getElementById('preloadGameAssetsSwitch');
-    switchElement.checked = stdout.trim() === '1';
-  }
-}
-
 async function toggleKillLogdSwitch(isChecked) {
   const command = isChecked
     ? 'encore-utils kill_logd'
     : 'encore-utils disable_kill_logd';
-
-  await exec(command);
-}
-
-async function togglePreloadGraphicLibs(isChecked) {
-  const command = isChecked
-    ? 'encore-utils set_preload_graphiclibs 1'
-    : 'encore-utils set_preload_graphiclibs 0';
-
-  await exec(command);
-}
-
-async function togglePreloadGameAssets(isChecked) {
-  const command = isChecked
-    ? 'encore-utils set_preload_game 1'
-    : 'encore-utils set_preload_game 0';
 
   await exec(command);
 }
@@ -159,8 +127,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   await getModuleVersion();
   await getServiceState();
   await getServicePID();
-  await getPreloadGraphicLibsSwitch();
-  await getPreloadGameAssestSwitch();
   await getKillLogdSwitch();
   await populateCPUGovernors();
 
@@ -174,14 +140,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   document.getElementById('killLogdSwitch').addEventListener('change', async function() {
     await toggleKillLogdSwitch(this.checked);
-  });
-  
-  document.getElementById('preloadGraphicLibsSwitch').addEventListener('change', async function() {
-    await togglePreloadGraphicLibs(this.checked);
-  });
-  
-  document.getElementById('preloadGameAssetsSwitch').addEventListener('change', async function() {
-    await togglePreloadGameAssets(this.checked);
   });
 
   document.getElementById('cpuGovernorPerf').addEventListener('change', async function() {
