@@ -68,23 +68,27 @@ restart_service() {
 	su -c "encore-service" </dev/null >/dev/null 2>&1 &
 }
 
-save_logs() {
-	logfile="/sdcard/encore_log"
-	cat <<EOF >$logfile
-encoreVersion=$(get_module_version)
-chipset=$(get_chipset)
-kernelVersion=$(get_kernel)
-
-cat /data/encore/last_fault
-EOF
-}
-
 get_gamelist() {
 	cat /data/encore/gamelist.txt
 }
 
 save_gamelist() {
 	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
+}
+
+save_logs() {
+	logfile="/sdcard/encore_log"
+	cat <<EOF >$logfile
+*****************************************************
+Encore Tweaks fault event
+
+Version: $(get_module_version)
+Chipset: $(get_chipset)
+Kernel Version: $(get_kernel)
+*****************************************************
+
+$(cat /data/encore/last_fault)
+EOF
 }
 
 eval "$1 $2"
