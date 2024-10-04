@@ -56,11 +56,15 @@ get_kill_logd() {
 kill_logd() {
 	echo 1 >/data/encore/kill_logd
 	kill logd
+	stop traced
+	stop statsd
 }
 
 disable_kill_logd() {
 	echo 0 >/data/encore/kill_logd
 	start logd
+	start traced
+	start statsd
 }
 
 restart_service() {
@@ -86,7 +90,6 @@ Version: $(get_module_version)
 Chipset: $(get_chipset)
 Kernel Version: $(get_kernel)
 *****************************************************
-
 $(cat /data/encore/last_fault)
 EOF
 }

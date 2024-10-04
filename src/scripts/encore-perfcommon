@@ -68,6 +68,7 @@ apply 0 /proc/sys/kernel/debug_locks
 if [ $(cat /data/encore/kill_logd) -eq 1 ]; then
 	stop logd
 	stop traced
+	stop statsd
 fi
 
 # Disable schedstats
