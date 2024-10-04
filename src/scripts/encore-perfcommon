@@ -63,6 +63,7 @@ done
 apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/kernel/perf_event_paranoid
 apply 0 /proc/sys/kernel/debug_locks
+apply off /proc/sys/kernel/printk_devkmsg
 
 # Kill logd
 if [ $(cat /data/encore/kill_logd) -eq 1 ]; then
