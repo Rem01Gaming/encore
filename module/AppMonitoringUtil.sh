@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Encore AppMonitoringUtil
 
-pids=($(dumpsys window visible-apps | grep -oE "Session{*.*.}" | awk -F'[ :]+' '{print $2}'))
-for pid in ${pids[@]}; do
-	cat /proc/$pid/cmdline | tr '\0' ' ' | grep -Eo $(cat /data/encore/gamelist.txt)
+for pid in $(dumpsys window | grep "Session Session{" | awk '{print $3}' | awk -F':' '{print $1}'); do
+	cmdline=$(cat /proc/$pid/cmdline | tr '\0' ' ') # Replace null bytes with spaces
+	echo "$cmdline" | grep -Eo $(cat /data/encore/gamelist.txt)
 done
