@@ -50,6 +50,9 @@ fi
 for queue in /sys/block/*/queue; do
 	# Most games nowadays have big assets that requires more throughput
 	apply 256 "$queue/read_ahead_kb"
+
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 64 "$queue/nr_requests"
 done
 
 # Setting perf_cpu_time_max_percent to 3

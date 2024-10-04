@@ -32,6 +32,15 @@ for path in /sys/class/devfreq/mmc*; do
 	apply powersave $path/governor
 done
 
+# I/O Tweaks
+for queue in /sys/block/*/queue; do
+	# Reduce heuristic read-ahead in exchange for I/O latency
+	apply 64 "$queue/read_ahead_kb"
+
+	# Increase maximum requests to reduce processing power
+	apply 512 "$queue/nr_requests"
+done
+
 # Mediatek Tweaks
 if [ $soc -eq 1 ]; then
 	# MTK CPU Power mode to low power
