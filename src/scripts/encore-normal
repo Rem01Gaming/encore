@@ -61,7 +61,7 @@ done
 apply 20 /proc/sys/kernel/perf_cpu_time_max_percent
 
 # Memory Tweaks
-apply 90 /proc/sys/vm/vfs_cache_pressure
+apply 120 /proc/sys/vm/vfs_cache_pressure
 
 # CPU tweaks
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
