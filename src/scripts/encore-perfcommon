@@ -4,12 +4,7 @@
 sync
 
 # Push Notification
-su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' 'Tweaks successfully applied.'"
-
-# Start preload graphic libs
-if [ $(cat /data/encore/preload_graphiclibs) -eq 1 ]; then
-	encore-mempreload 1 1
-fi
+su -lp 2000 -c "cmd notification post -S bigtext -t 'ENCORE Tweaks' 'Tag$(date +%s)' 'Tweaks successfully applied.'" &
 
 apply() {
 	if [ -f $2 ]; then
@@ -26,7 +21,7 @@ for queue in /sys/block/*/queue; do
 
 	# Reduce the maximum number of I/O requests in exchange for latency
 	apply 64 "$queue/nr_requests"
-done
+done &
 
 # Lower the swappiness
 MemTotal=$(cat /proc/meminfo | grep MemTotal)
@@ -41,7 +36,7 @@ find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r gover
 	# Consider changing frequencies once per scheduling period
 	apply 10000 $governor/up_rate_limit_us
 	apply 20000 $governor/down_rate_limit_us
-done
+done &
 
 # Networking tweaks
 apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
@@ -57,7 +52,7 @@ apply 0 /sys/kernel/ccci/debug
 # Thermal governor
 for thermal in /sys/class/thermal/thermal_zone*; do
 	apply "step_wise" ${thermal}/policy
-done
+done &
 
 # Stop tracing and debugging
 apply 0 /sys/kernel/tracing/tracing_on
@@ -105,3 +100,6 @@ apply 0 /sys/module/mmc_core/parameters/use_spi_crc
 apply 0 /sys/module/cpufreq_bouncing/parameters/enable
 apply 0 /proc/task_info/task_sched_info/task_sched_info_enable
 apply 0 /proc/oplus_scheduler/sched_assist/sched_assist_enabled
+
+wait
+exit 0
