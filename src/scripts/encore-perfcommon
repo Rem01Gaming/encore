@@ -23,6 +23,9 @@ apply() {
 for queue in /sys/block/*/queue; do
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
+
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 64 "$queue/nr_requests"
 done
 
 # Lower the swappiness

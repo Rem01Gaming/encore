@@ -55,9 +55,6 @@ fi
 for queue in /sys/block/*/queue; do
 	# Fallback to latency friendly
 	apply 128 "$queue/read_ahead_kb"
-
-	# Fairly tune the maximum number of I/O requests
-	apply 256 "$queue/nr_requests"
 done
 
 # Setting perf_cpu_time_max_percent to 20
