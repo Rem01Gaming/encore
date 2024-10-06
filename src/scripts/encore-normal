@@ -229,7 +229,7 @@ elif [ $soc -eq 3 ]; then
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply always_on $mali_sysfs/power_policy
+	apply coarse_demand $mali_sysfs/power_policy
 
 # Unisoc
 elif [ $soc -eq 4 ]; then
