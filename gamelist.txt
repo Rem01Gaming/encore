@@ -131,6 +131,7 @@ com.levelinfinite.sgameGlobal
 com.levelinfinite.sgameGlobal.midaspay
 com.lilithgames.hgame.cn
 com.lilithgame.hgame.gp
+com.linecorp.LGGRTHN
 com.linegames.sl
 com.madfingergames.legends
 com.miHoYo.GI.samsung
