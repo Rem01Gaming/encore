@@ -228,6 +228,9 @@ elif [ $soc -eq 3 ]; then
 		apply $max_freq $gpu_path/gpu_max_clock
 	fi
 
+	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
+	apply always_on $mali_sysfs/power_policy
+
 # Unisoc
 elif [ $soc -eq 4 ]; then
 	# GPU Frequency
