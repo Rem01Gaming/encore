@@ -18,6 +18,7 @@ com.Sunborn.SnqxExilium
 com.TechTreeGames.TheTower
 com.Vince.AlamobileFormula
 com.WandaSoftware.TruckersofEurope3
+com.Wispwood.ArrowQuest
 com.YoStarEN.Arknights
 com.YoStarEN.MahjongSoul
 com.YoStarJP.MajSoul
