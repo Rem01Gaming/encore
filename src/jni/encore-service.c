@@ -92,6 +92,16 @@ void append2file(const char *file_path, const char *content) {
   }
 }
 
+void log_error(const char *message) {
+  char *timestamp = timern();
+  if (timestamp != NULL) {
+    char errMesg[256];
+    snprintf(errMesg, sizeof(errMesg), "[%s] %s", timestamp, message);
+    append2file("/data/encore/last_fault", errMesg);
+    free(timestamp);
+  }
+}
+
 void setPriorities(const char *pid) {
   snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
   system(command);
@@ -118,6 +128,8 @@ int main(void) {
   perf_common();
 
   while (1) {
+    /* Run app monitoring ONLY if we aren't on performance profile, prevent
+     * massive overhead while gaming */
     if (!gamestart) {
       gamestart =
           execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
@@ -139,7 +151,7 @@ int main(void) {
 
     screenstate = execute_command(
         "su -c dumpsys power | grep -Eo "
-        "\"mWakefulness=Awake|mWakefulness=Asleep\" | awk -F'=' '{print $2}'");
+        "'mWakefulness=Awake|mWakefulness=Asleep' | awk -F'=' '{print $2}'");
 
     /* In rare cases, some device fails to give mWakefulness info. */
     if (screenstate == NULL) {
@@ -151,13 +163,7 @@ int main(void) {
     // Handle null screenstate
     if (screenstate == NULL) {
       printf("error: screenstate is null!\n");
-      char *timestamp = timern();
-      if (timestamp != NULL) {
-        snprintf(errMesg, sizeof(errMesg), "[%s] screenstate is null!",
-                 timestamp);
-        append2file("/data/encore/last_fault", errMesg);
-        free(timestamp);
-      }
+      log_error("screenstate is null!");
     } else if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 ||
                              strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
@@ -178,13 +184,7 @@ int main(void) {
           setPriorities(trim_newline(pid));
         } else {
           printf("error: Game PID is null!\n");
-          char *timestamp = timern();
-          if (timestamp != NULL) {
-            snprintf(errMesg, sizeof(errMesg), "[%s] Game PID is null! (%s)",
-                     timestamp, trim_newline(gamestart));
-            append2file("/data/encore/last_fault", errMesg);
-            free(timestamp);
-          }
+          log_error("Game PID is null!");
         }
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
