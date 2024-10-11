@@ -22,7 +22,6 @@ extract "$ZIPFILE" 'system/bin/encore-perfcommon' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-normal' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-powersave' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-setpriority' $MODPATH
 
 # Extract executables
 if [ $ARCH = "arm64" ]; then

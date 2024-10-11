@@ -1,8 +1,9 @@
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -103,8 +104,22 @@ void log_error(const char *message) {
 }
 
 void setPriorities(const char *pid) {
-  snprintf(command, sizeof(command), "su -c encore-setpriority %s", pid);
-  system(command);
+  int prio = -20;    // Niceness
+  int io_class = 1;  // I/O class
+  int io_prio = 0;   // I/O priority
+
+  pid_t process_id = atoi(pid);
+
+  if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
+    printf("Failed to set nice priority");
+    log_error("Failed to set nice priority");
+  }
+
+  if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) ==
+      -1) {
+    printf("Failed to set IO priority");
+    log_error("Failed to set IO priority");
+  }
 }
 
 void perf_common(void) { system("su -c encore-perfcommon"); }
@@ -153,7 +168,7 @@ int main(void) {
         "su -c dumpsys power | grep -Eo "
         "'mWakefulness=Awake|mWakefulness=Asleep' | awk -F'=' '{print $2}'");
 
-    /* In rare cases, some device fails to give mWakefulness info. */
+    /* In some cases, some device fails to give mWakefulness info. */
     if (screenstate == NULL) {
       screenstate = execute_command(
           "su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' "
