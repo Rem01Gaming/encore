@@ -141,7 +141,14 @@ int main(void) {
         "su -c dumpsys power | grep -Eo "
         "\"mWakefulness=Awake|mWakefulness=Asleep\" | awk -F'=' '{print $2}'");
 
-    // Apply performance profiles
+    /* In rare cases, some device fails to give mWakefulness info. */
+    if (screenstate == NULL) {
+      screenstate = execute_command(
+          "su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' "
+          "| awk -F'=' '{print $2}'");
+    }
+
+    // Handle null screenstate
     if (screenstate == NULL) {
       printf("error: screenstate is null!\n");
       char *timestamp = timern();
@@ -151,7 +158,8 @@ int main(void) {
         append2file("/data/encore/last_fault", errMesg);
         free(timestamp);
       }
-    } else if (gamestart && strcmp(trim_newline(screenstate), "Awake") == 0) {
+    } else if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 ||
+                             strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
