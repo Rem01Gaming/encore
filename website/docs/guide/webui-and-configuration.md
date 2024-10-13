@@ -11,7 +11,7 @@ Encore Tweaks exposes some settings and utilities inside [Module WebUI](https://
 :::
 
 ## Kill Logd
-As name suggests, this will kill logd service which is logging system in Android. enabling this will help reduce performance overhead.
+As name suggests, this will stop logd service which is logging system in Android. enabling this will help reduce performance overhead.
 
 ::: warning
 Do NOT enable this if you're going to test ROMs and Apps, this will literally silence your Android logging system !
@@ -27,7 +27,7 @@ CPU Governor that will used in Performance profile.
 Edit game and other performance intensive apps that will trigger Performance profile.
 
 ## Save Logs
-Save `encore-service` logs into internal storage, more precisely <code>/sdcard/encore_logs</code>.
+Save `encore-service` logs into internal storage, more precisely <code>/sdcard/encore_log</code>.
 
 ## Restart Service
 Restart fresh `encore-service`.

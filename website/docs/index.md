@@ -1,7 +1,7 @@
 ---
 layout: home
 title: "Encore Tweaks"
-description: "A Performance Magisk module, fully automatic with App Monitoring and various performance tweaks."
+description: "Special performance script for your device"
 
 
 hero:
@@ -9,7 +9,7 @@ hero:
   text: Special performance module for your device
   tagline: ""
   image:
-    src: /encore1.webp
+    src: /logo.webp
     alt: Encore Tweaks
   actions:
     - theme: brand

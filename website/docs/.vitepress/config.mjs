@@ -9,6 +9,20 @@ export default defineConfig({
   sitemap: {
     hostname: 'https://rem01gaming.github.io/encore/'
   },
+  
+  head: [
+    ['link', { rel: "icon", href: "/favicon.ico"}],
+    ['link', { rel: "canonical", href: "https://rem01gaming.github.io"}],
+    ['meta', { property: "og:type", content: "website"}],
+    ['meta', { property: "og:url", content: "https://rem01gaming.github.io/encore/"}],
+    ['meta', { property: "og:image", content: "/ogp.png"}],
+    ['meta', { property: "og:site_name", content: "Encore Tweaks"}],
+    ['meta', { property: "og:description", content: "Special performance script for your device"}],
+    ['meta', { property: "twitter:card", content: "summary_large_image"}],
+    ['meta', { property: "twitter:image", content: "/ogp.png"}],
+    ['meta', { property: "twitter:title", content: "Encore Tweaks"}],
+    ['meta', { property: "twitter:description", content: "Special performance script for your device"}]
+  ],
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -22,9 +36,9 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Download Encore Tweaks',
+        text: 'Download',
         items: [
-          { text: 'Telegram Channel', link: 'https://t.me/rem01schannel' },
+          { text: 'Changelog', link: '/changelog' },
           { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
         ]
       }
@@ -37,6 +51,20 @@ export default defineConfig({
           { text: 'What is Encore Tweaks?', link: '/guide/what-is-encore-tweaks' },
           { text: 'Module WebUI and Configuration', link: '/guide/webui-and-configuration' },
           { text: 'FAQ', link: '/guide/faq' }
+        ]
+      },
+      {
+        text: 'Download',
+        items: [
+          { text: 'Changelog', link: '/changelog' },
+          { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
+        ]
+      },
+      {
+        text: 'Support my project',
+        items: [
+          { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
+          { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
         ]
       }
     ],
