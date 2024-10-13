@@ -12,7 +12,7 @@ export default defineConfig({
   
   head: [
     ['link', { rel: "icon", href: "/favicon.ico"}],
-    ['link', { rel: "canonical", href: "https://rem01gaming.github.io"}],
+    ['link', { rel: "canonical", href: "https://rem01gaming.github.io/encore/"}],
     ['meta', { property: "og:type", content: "website"}],
     ['meta', { property: "og:url", content: "https://rem01gaming.github.io/encore/"}],
     ['meta', { property: "og:image", content: "/ogp.png"}],
