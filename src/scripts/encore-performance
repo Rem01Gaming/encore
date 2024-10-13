@@ -63,7 +63,9 @@ done &
 # CPU tweaks
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "$(cat /data/encore/perf_cpu_gov)" "$path/scaling_governor"
-	apply "cpu$(awk '{print $1}' $path/affected_cpus) $(cat $path/cpuinfo_max_freq)" /sys/devices/virtual/thermal/thermal_message/cpu_limits
+	cpu_maxfreq="$(cat $path/cpuinfo_max_freq)"
+	apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
+	apply "$cpu_maxfreq" $path/scaling_max_freq
 done &
 apply 1 /sys/devices/system/cpu/cpu1/online
 
