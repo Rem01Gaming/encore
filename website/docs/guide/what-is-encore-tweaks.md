@@ -4,10 +4,10 @@ description: "Brief introduction  about Encore Tweaks"
 ---
 
 # What is Encore Tweaks?
-Encore Tweaks is a performance Magisk module designed to maximize device performance while playing games but keeping battery life on normal usage.
+Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage.
 
 ## Features
-The main feature of Encore Tweaks is it is **Fully Automatic**. Rather than manually selecting which performance profile you want using cli, app or other gui, Encore Tweaks automatically applies performance profile based on what app that user open.
+The main feature of Encore Tweaks is it is **Fully Automatic**. Rather than manually selecting which performance profile you want using cli, app or other gui, Encore Tweaks automatically applies performance profile based on what app that user open without any user settings.
 
 And also, Encore Tweaks provides wide support for vast majority of popular SoCs like Snapdragon, Mediatek, Exynos, Google Tensor, and even Unisoc with tailored tweaks for each one.
 
@@ -16,6 +16,8 @@ Encore Tweaks is fully automatic while comes to performance profile, well you ma
 
 ### Performance Profile
 Service will continuously checking any apps or games that listed on Gamelist and If user open any of it, service will apply performance mode. this included various kernel parameters, CPU, CPU Bus, GPU, and DRAM frequencies will be locked to highest possible OPP. This profile will be maintained until the user close the game.
+
+this profile will also set game and performance-intensive app to highest possible priority for CPU and I/O resources among other running processes to ensure performance, minimize jitter and latency.
 
 ### Powersave Profile
 If user enables battery saver mode (except while charging), service will apply powersave mode. powersave mode will lock CPU Bus, GPU, and DRAM frequencies to lowest possible OPP for saving power.
@@ -28,7 +30,7 @@ Powersave profile cannot override Performance profile.
 If any of criteria on above not satisfied, service will apply normal mode. this mode will remove any restrictions and tweaks on other profiles.
 
 ## How to install Encore Tweaks
-- Download the module from our [Telegram channel](https://t.me/rem01schannel)
+- Download the module from [here](/download)
 - Flash in Magisk/KernelSU/APatch and reboot
 - And that's it ;)
 

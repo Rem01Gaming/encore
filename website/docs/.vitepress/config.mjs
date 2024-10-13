@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Encore Tweaks",
-  description: "Special performance script for your device",
+  description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage",
   base: '/encore/',
 
   sitemap: {
@@ -11,17 +11,19 @@ export default defineConfig({
   },
   
   head: [
-    ['link', { rel: "icon", href: "/favicon.ico"}],
+    ['link', { rel: "icon", type: "image/png", href: "/encore/favicon.png", size: "64x64"}],
+    ['link', { rel: "icon", type: "image/png", href: "/encore/android-crhome.png", size: "192x192"}],
+    ['link', { rel: "apple-touch-icon", type: "image/png", href: "/encore/apple-touch-icon.png", size: "180x180"}],
     ['link', { rel: "canonical", href: "https://rem01gaming.github.io/encore/"}],
     ['meta', { property: "og:type", content: "website"}],
     ['meta', { property: "og:url", content: "https://rem01gaming.github.io/encore/"}],
-    ['meta', { property: "og:image", content: "/ogp.png"}],
+    ['meta', { property: "og:image", content: "/encore/ogp.png"}],
     ['meta', { property: "og:site_name", content: "Encore Tweaks"}],
-    ['meta', { property: "og:description", content: "Special performance script for your device"}],
+    ['meta', { property: "og:description", content: "Special performance module for your device"}],
     ['meta', { property: "twitter:card", content: "summary_large_image"}],
-    ['meta', { property: "twitter:image", content: "/ogp.png"}],
+    ['meta', { property: "twitter:image", content: "/encore/ogp.png"}],
     ['meta', { property: "twitter:title", content: "Encore Tweaks"}],
-    ['meta', { property: "twitter:description", content: "Special performance script for your device"}]
+    ['meta', { property: "twitter:description", content: "Special performance module for your device"}]
   ],
 
   themeConfig: {
@@ -38,7 +40,7 @@ export default defineConfig({
       {
         text: 'Download',
         items: [
-          { text: 'Changelog', link: '/changelog' },
+          { text: 'Changelog', link: '/download' },
           { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
         ]
       }
@@ -56,7 +58,7 @@ export default defineConfig({
       {
         text: 'Download',
         items: [
-          { text: 'Changelog', link: '/changelog' },
+          { text: 'Changelog', link: '/download' },
           { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
         ]
       },
