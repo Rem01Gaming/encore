@@ -69,6 +69,7 @@ done &
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "$default_cpu_gov" "$path/scaling_governor"
 done &
+chmod 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 apply 1 /sys/devices/system/cpu/cpu1/online
 
 # I/O Tweaks
