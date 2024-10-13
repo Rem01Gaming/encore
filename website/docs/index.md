@@ -1,7 +1,7 @@
 ---
 layout: home
 title: "Encore Tweaks"
-description: "Special performance script for your device"
+description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"
 
 
 hero:

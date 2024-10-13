@@ -1,6 +1,6 @@
 ---
 title: "What is Encore Tweak"
-description: "Brief introduction  about Encore Tweaks"
+description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"
 ---
 
 # What is Encore Tweaks?
