@@ -308,6 +308,7 @@ com.valvesoftware.source
 com.vng.mlbbvn
 com.vng.pubgmobile
 com.vng.speedvn
+com.wondergames.warpath.gp
 com.xd.TLglobal
 com.xd.rotaeno.googleplay
 com.xd.rotaeno.tapcn
