@@ -155,6 +155,7 @@ com.miHoYo.zenless
 com.minidragon.idlefantasy
 com.miraclegames.farlight84
 com.mobilelegends.hwag
+com.mobilelegends.taptest
 com.mobile.legends
 com.mojang.hostilegg
 com.mojang.minecraftpe
