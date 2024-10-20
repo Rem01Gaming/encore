@@ -4,26 +4,25 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Encore Tweaks",
   description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage",
-  base: '/encore/',
 
   sitemap: {
-    hostname: 'https://rem01gaming.github.io/encore/'
+    hostname: 'https://encore.rem01gaming.dev'
   },
   
   head: [
-    ['link', { rel: "icon", type: "image/png", href: "/encore/favicon.png", size: "64x64"}],
-    ['link', { rel: "icon", type: "image/png", href: "/encore/android-crhome.png", size: "192x192"}],
-    ['link', { rel: "apple-touch-icon", type: "image/png", href: "/encore/apple-touch-icon.png", size: "180x180"}],
-    ['link', { rel: "canonical", href: "https://rem01gaming.github.io/encore/"}],
+    ['link', { rel: "icon", type: "image/png", href: "favicon.png", size: "64x64"}],
+    ['link', { rel: "icon", type: "image/png", href: "android-crhome.png", size: "192x192"}],
+    ['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", size: "180x180"}],
+    ['link', { rel: "canonical", href: "https://encore.rem01gaming.dev"}],
     ['meta', { property: "og:type", content: "website"}],
     ['meta', { property: "og:title", content: "Encore Tweaks: Special performance module for your device"}],
     ['meta', { property: "og:locale", content: "en_US"}],
-    ['meta', { property: "og:url", content: "https://rem01gaming.github.io/encore/"}],
-    ['meta', { property: "og:image", content: "/encore/ogp.png"}],
+    ['meta', { property: "og:url", content: "https://encore.rem01gaming.dev"}],
+    ['meta', { property: "og:image", content: "ogp.png"}],
     ['meta', { property: "og:site_name", content: "Encore Tweaks"}],
     ['meta', { property: "og:description", content: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"}],
     ['meta', { property: "twitter:card", content: "summary_large_image"}],
-    ['meta', { property: "twitter:image", content: "/encore/ogp.png"}],
+    ['meta', { property: "twitter:image", content: "ogp.png"}],
     ['meta', { property: "twitter:title", content: "Encore Tweaks: Special performance module for your device"}],
     ['meta', { property: "twitter:description", content: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"}]
   ],
