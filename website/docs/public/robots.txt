@@ -1,0 +1,6 @@
+# Hi! are you a robot?
+
+User-agent: *
+Allow: *
+
+Sitemap: https://encore.rem01gaming.dev/sitemap.xml
