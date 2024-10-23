@@ -17,6 +17,7 @@ export default defineConfig({
     ['meta', { name: "hostname", content: "encore.rem01gaming.dev"}],
     ['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}],
     ['meta', { name: "author", content: "Rem01Gaming"}],
+    ['meta', { name: "keywords", content: "Encore Tweaks, performance module, Magisk, Android, Module magisk, gaming performance, Rem01Gaming, open source" }],
     ['meta', { property: "og:type", content: "website"}],
     ['meta', { property: "og:title", content: "Encore Tweaks: Special performance module for your device"}],
     ['meta', { property: "og:locale", content: "en_US"}],

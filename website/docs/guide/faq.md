@@ -8,6 +8,12 @@ description: "Frequently asked questions on Encore Tweaks"
 ## Does Encore Tweaks support my device?
 Encore Tweaks is optimized for Mediatek, Snapdragon, Google Tensor, Exynos, and Unisoc devices now. even if your device doesn't use neither of chipset I mentioned before you still can use Encore Tweaks.
 
+## Does Encore Tweaks require busybox module?
+No.
+
+## Some games randomly started boosting even I'm not open the game
+Force stop the games and don't allow them to run on background.
+
 ## How can I open Encore's WebUI?
 Click "open" in module card on KernelSU or APatch manager, if you're using Magisk you won't able to use WebUI natively, use [this app](https://t.me/rem01schannel/636) if you wanted to use WebUI in Magisk.
 
