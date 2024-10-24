@@ -13,10 +13,13 @@ hero:
     alt: Encore Tweaks
   actions:
     - theme: brand
-      text: Get Started
+      text: What is Encore Tweaks?
       link: /guide/what-is-encore-tweaks
     - theme: alt
-      text: View on GitHub
+      text: Download
+      link: /download
+    - theme: alt
+      text: GitHub
       link: https://github.com/Rem01Gaming/encore
 
 features:
