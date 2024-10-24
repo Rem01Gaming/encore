@@ -156,8 +156,8 @@ elif [ $soc -eq 2 ]; then
 	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
 			apply $max_freq $path
 		done &
@@ -167,8 +167,8 @@ elif [ $soc -eq 2 ]; then
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
 			apply $max_freq $path
 		done &
@@ -178,8 +178,8 @@ elif [ $soc -eq 2 ]; then
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $max_freq $path
 		done &
@@ -189,8 +189,8 @@ elif [ $soc -eq 2 ]; then
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
 			apply $max_freq $path
 		done &
