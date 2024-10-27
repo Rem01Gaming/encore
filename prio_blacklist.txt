@@ -1,0 +1,2 @@
+com.sega.ColorfulStage.en
+jp.co.craftegg.band

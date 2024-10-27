@@ -46,6 +46,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
+unzip -o "$ZIPFILE" 'prio_blacklist.txt' -d "/data/encore" >&2
 unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/perf_cpu_gov ] && echo performance >/data/encore/perf_cpu_gov
@@ -74,7 +75,7 @@ if [ -z "$chipset" ]; then
 fi
 
 case "$chipset" in
-*mt* | *MT*) soc=1 && ui_print "- Implementing tailored tweaks for Mediatek" ;;
+*mt* | *MT*) soc=1 && ui_print "- Implementing tailored tweaks for MediaTek" ;;
 *sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) soc=2 && ui_print "- Implementing tailored tweaks for Snapdragon" ;;
 *exynos*) soc=3 && ui_print "- Implementing tailored tweaks for Exynos" ;;
 *Unisoc* | *unisoc*) soc=4 && ui_print "- Implementing tailored tweak for Unisoc" ;;

@@ -196,7 +196,12 @@ int main(void) {
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
         if (pid != NULL) {
-          setPriorities(trim_newline(pid));
+          snprintf(command, sizeof(command), "grep -s %s /data/encore/prio_blacklist.txt", trim_newline(gamestart));
+          if (system(command) != 0) {
+            setPriorities(trim_newline(pid));
+          } else {
+            printf("notice: skipping %s from priority settings", trim_newline(gamestart));
+          }
         } else {
           printf("error: Game PID is null!\n");
           log_error("Game PID is null!");
