@@ -45,7 +45,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
-unzip -o "$ZIPFILE" 'logo.png' -d "/data/encore" >&2
+unzip -o "$ZIPFILE" 'encore_logo.png' -d "/data/local/tmp" >&2
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
