@@ -1,41 +1,44 @@
 import { defineConfig } from 'vitepress'
-import fs from 'fs';
-import path from 'path';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Encore Tweaks",
-  description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage",
+  description: "The Encore Tweaks Magisk Module is here to boost your device gaming performance but keep battery life on normal usage",
   ignoreDeadLinks: true,
 
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
   },
-  
-  head: [
-    ['link', { rel: "icon", type: "image/png", href: "favicon.png", size: "64x64"}],
-    ['link', { rel: "icon", type: "image/png", href: "android-crhome.png", size: "192x192"}],
-    ['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", size: "180x180"}],
-    ['link', { rel: "canonical", href: "https://encore.rem01gaming.dev"}],
-    ['meta', { name: "hostname", content: "encore.rem01gaming.dev"}],
-    ['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}],
-    ['meta', { name: "author", content: "Rem01Gaming"}],
-    ['meta', { name: "keywords", content: "Encore Tweaks, performance module, Magisk, Android, Module magisk, gaming performance, Rem01Gaming, open source" }],
-    ['meta', { property: "og:type", content: "website"}],
-    ['meta', { property: "og:title", content: "Encore Tweaks: Special performance module for your device"}],
-    ['meta', { property: "og:locale", content: "en_US"}],
-    ['meta', { property: "og:url", content: "https://encore.rem01gaming.dev"}],
-    ['meta', { property: "og:image", content: "/ogp.png"}],
-    ['meta', { property: "og:site_name", content: "Encore Tweaks"}],
-    ['meta', { property: "og:description", content: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"}],
-    ['meta', { property: "twitter:card", content: "summary_large_image"}],
-    ['meta', { property: "twitter:image", content: "/ogp.png"}],
-    ['meta', { property: "twitter:title", content: "Encore Tweaks: Special performance module for your device"}],
-    ['meta', { property: "twitter:description", content: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage"}]
-  ],
+
+  transformPageData(pageData) {
+    const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '.html')
+    
+    pageData.frontmatter.head ??= []
+    
+    pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "favicon.png", sizes: "64x64"}])
+    pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "android-chrome.png", sizes: "192x192"}])
+    pageData.frontmatter.head.push(['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", sizes: "180x180"}])
+    pageData.frontmatter.head.push(['link', { rel: "canonical", href: canonicalUrl }])
+    pageData.frontmatter.head.push(['meta', { name: "hostname", content: "encore.rem01gaming.dev"}])
+    pageData.frontmatter.head.push(['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}])
+    pageData.frontmatter.head.push(['meta', { name: "author", content: "Rem01Gaming"}])
+    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Encore Tweak, Magisk Module, performance module, Magisk, Gaming, Android, Module magisk, gaming performance" }])
+    pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
+    pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.title }])
+    pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
+    pageData.frontmatter.head.push(['meta', { property: "og:url", content: canonicalUrl }])
+    pageData.frontmatter.head.push(['meta', { property: "og:image", content: "/ogp.png"}])
+    pageData.frontmatter.head.push(['meta', { property: "og:site_name", content: "Encore Tweaks"}])
+    pageData.frontmatter.head.push(['meta', { property: "og:description", content: pageData.description }])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:card", content: "summary_large_image"}])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: "/ogp.png"}])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.title }])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
+  },
 
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Guide', link: '/guide/what-is-encore-tweaks' },
       {
@@ -86,7 +89,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Rem01Gaming', ariaLabel: 'GitHub' },
-      { icon: 'youtube', link: 'https://youtube.com/@rem01gaming', ariaLabel: 'Youtube Channel' }
+      { icon: 'youtube', link: 'https://youtube.com/@rem01gaming', ariaLabel: 'YouTube Channel' }
     ]
   }
 })
