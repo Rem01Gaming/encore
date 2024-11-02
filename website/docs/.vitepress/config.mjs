@@ -39,7 +39,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-encore-tweaks' },
       {
-        text: 'Support my projects',
+        text: 'Donate',
         items: [
           { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
