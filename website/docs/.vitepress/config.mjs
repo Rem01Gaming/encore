@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitepress'
+import fs from 'fs';
+import path from 'path';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -68,7 +70,7 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Support my project',
+        text: 'Donate',
         items: [
           { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
