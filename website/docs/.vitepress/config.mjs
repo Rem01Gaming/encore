@@ -6,6 +6,7 @@ import path from 'path';
 export default defineConfig({
   title: "Encore Tweaks",
   description: "Encore Tweaks is a free and open source performance Magisk module designed to boost device performance while playing games but keeping battery life on normal usage",
+  ignoreDeadLinks: true,
 
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
