@@ -14,6 +14,7 @@ export default defineConfig({
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '.html')
+    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.png`;
     
     pageData.frontmatter.head ??= []
     
@@ -29,11 +30,11 @@ export default defineConfig({
     pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
     pageData.frontmatter.head.push(['meta', { property: "og:url", content: canonicalUrl }])
-    pageData.frontmatter.head.push(['meta', { property: "og:image", content: pageData.frontmatter.ogp || "/ogp/default.png" }])
+    pageData.frontmatter.head.push(['meta', { property: "og:image", content: ogImage }])
     pageData.frontmatter.head.push(['meta', { property: "og:site_name", content: "Encore Tweaks"}])
     pageData.frontmatter.head.push(['meta', { property: "og:description", content: pageData.description }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:card", content: "summary_large_image"}])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: pageData.frontmatter.ogp || "/ogp/default.png" }])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: ogImage }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
   },
