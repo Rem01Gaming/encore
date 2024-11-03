@@ -1,35 +1,38 @@
 ---
-title: "How to configure"
-description: "How to configure Encore Tweaks through Module WebUI"
+title: "WebUI Configuration Guide"
+description: "Learn how to configure Encore Tweaks settings via Module WebUI for optimized performance on Android devices."
 ---
 
 # Module WebUI and Configuration
-Encore Tweaks exposes some settings and utilities inside [Module WebUI](https://kernelsu.org/guide/module-webui.html), a KernelSU feature that allows modules to write HTML + CSS + JavaScript pages through any web technology and displaying UI interfaces and interacting with users.
 
-While KernelSU and APatch can use WebUI natively on their manager, Magisk doesn't implement webroot on their manager and you need to use [this app](https://t.me/rem01schannel/636) to order to use WebUI in Magisk.
+The Encore Tweaks module provides a range of settings accessible through [Module WebUI](https://kernelsu.org/guide/module-webui.html), a KernelSU feature that lets modules build interactive HTML, CSS, and JavaScript interfaces. Through this WebUI, users can conveniently configure Encore Tweaks and adjust performance options.
 
-::: details Encore's WebUI Preview
-![Encore Tweaks Module WebUI](/Screenshot_20241011-095035_KernelSU.png)
+While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [this app](https://t.me/rem01schannel/636).
+
+::: details Preview of Encore Tweaks WebUI
+![Encore Tweaks WebUI](/Screenshot_20241011-095035_KernelSU.png)
 :::
 
-## Kill Logd
-As name suggests, this will stop logd service which is logging system in Android. enabling this will help reduce performance overhead.
+## Configuration Options
+
+### Kill `logd` Service
+This option stops the `logd` service, which handles Android system logs. Disabling it reduces performance overhead by silencing logs.
 
 ::: warning
-Do NOT enable this if you're going to test ROMs and Apps, this will literally silence your Android logging system !
+Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging.
 :::
 
-## Default CPU Governor
-CPU Governor that will used in Normal and Powersave profile.
+### Default CPU Governor
+Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
 
-## Performance profile CPU Gov
-CPU Governor that will used in Performance profile.
+### Performance Profile CPU Governor
+Choose the CPU governor specifically for the "Performance" profile, which is optimized for high-demand tasks and gaming.
 
-## Edit Gamelist
-Edit game and other performance intensive apps that will trigger Performance profile.
+### Edit Gamelist
+Edit the list of games and other performance-intensive applications. When these apps are active, Encore Tweaks will automatically apply the "Performance" profile.
 
-## Save Logs
-Save `encore-service` logs into internal storage, more precisely `/sdcard/encore_log`.
+### Save Logs
+Enable this to save `encore-service` logs to internal storage at `/sdcard/encore_log`. This log can help with troubleshooting.
 
-## Restart Service
-Restart fresh `encore-service`.
+### Restart Service
+Restarts the `encore-service` to apply changes immediately or refresh the service if it encounters issues.

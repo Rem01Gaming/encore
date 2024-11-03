@@ -1,6 +1,6 @@
 ---
-title: "Encore Tweaks Magisk Module: Special performance module for your device"
-description: "The Encore Tweaks Magisk Module is here to boost your device gaming performance but keeping battery life on normal usage"
+title: "Special performance module for your device"
+description: "The Encore Tweaks Magisk Module is here to boost your device gaming performance but also keeping battery life on normal usage"
 layout: home
 
 hero:
@@ -36,4 +36,4 @@ features:
     details: Encore Tweaks it's the first kind of perfomance module that implemented Module WebUI, a convenient way to edit configs and do some basic operations.
   - icon: 👨‍💻
     title: Open Source
-    details: Encore Tweaks Open Source under GPL3 License and maintained by experienced kernel developer, unlike other modules with poorly written or heavily obfuscated code.
+    details: Encore Tweaks is Open source released under GPL3 License and maintained by experienced kernel developer, unlike other modules with poorly written or heavily obfuscated code.
