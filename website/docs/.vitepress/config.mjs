@@ -26,7 +26,7 @@ export default defineConfig({
     pageData.frontmatter.head.push(['meta', { name: "author", content: "Rem01Gaming"}])
     pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Encore Tweak, Magisk Module, performance module, Magisk, Gaming, Android, Module magisk, gaming performance" }])
     pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
-    pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.title }])
+    pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
     pageData.frontmatter.head.push(['meta', { property: "og:url", content: canonicalUrl }])
     pageData.frontmatter.head.push(['meta', { property: "og:image", content: pageData.frontmatter.ogp || "/ogp/default.png" }])
@@ -34,7 +34,7 @@ export default defineConfig({
     pageData.frontmatter.head.push(['meta', { property: "og:description", content: pageData.description }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:card", content: "summary_large_image"}])
     pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: pageData.frontmatter.ogp || "/ogp/default.png" }])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.title }])
+    pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
   },
 

@@ -1,6 +1,6 @@
 ---
 title: "Download"
-description: "Encore Tweaks Has been Updated To Version 1.8"
+description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
 # Encore Tweaks v1.8
