@@ -31,8 +31,7 @@ for path in /sys/class/devfreq/mmc*; do
 	apply powersave $path/governor
 done &
 
-# Mediatek Tweaks
-if [ $soc -eq 1 ]; then
+mediatek_tweak() {
 	# MTK CPU Power mode to low power
 	apply "1" /proc/cpufreq/cpufreq_power_mode
 
@@ -50,9 +49,9 @@ if [ $soc -eq 1 ]; then
 	apply "$(cat /sys/kernel/helio-dvfsrc/dvfsrc_opp_table | grep -o '\[[^]]*\]' | grep -oE '[+-]?[0-9]+' | sort -nr | head -n 1)" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	apply "powersave" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
 	apply "powersave" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+}
 
-# Qualcomm Tweaks
-elif [ $soc -eq 2 ]; then
+snapdragon_tweak() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "powersave" $path/governor
@@ -126,9 +125,9 @@ elif [ $soc -eq 2 ]; then
 
 	# Adreno Boost
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
+}
 
-# Exynos
-elif [ $soc -eq 3 ]; then
+exynos_tweak() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 
@@ -137,9 +136,9 @@ elif [ $soc -eq 3 ]; then
 		apply $freq $gpu_path/gpu_min_clock
 		apply $freq $gpu_path/gpu_max_clock
 	fi
+}
 
-# Unisoc
-elif [ $soc -eq 4 ]; then
+unisoc_tweak() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
 
@@ -148,9 +147,9 @@ elif [ $soc -eq 4 ]; then
 		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
 	fi
+}
 
-# Google Tensor
-elif [ $soc -eq 5 ]; then
+tensor_tweak() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
@@ -159,7 +158,14 @@ elif [ $soc -eq 5 ]; then
 		apply $freq $gpu_path/scaling_min_freq
 		apply $freq $gpu_path/scaling_max_freq
 	fi
-fi
+}
 
-wait
+case "$soc" in
+1) mediatek_tweak ;;
+2) snapdragon_tweak ;;
+3) exynos_tweak ;;
+4) unisoc_tweak ;;
+5) tensor_tweak ;;
+esac
+
 exit 0
