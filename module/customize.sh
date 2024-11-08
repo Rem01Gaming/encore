@@ -33,7 +33,7 @@ elif [ $ARCH = "arm" ]; then
 else
 	ui_print "*********************************************************"
 	ui_print "! Unsupported ARCH: $ARCH"
-	ui_print "! Encore Tweaks only supports arm chipsets"
+	ui_print "! Encore Tweaks only supports ARM Chipsets"
 	abort "*********************************************************"
 fi
 rm -rf $TMPDIR/libs
@@ -47,7 +47,6 @@ ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
 unzip -o "$ZIPFILE" 'encore_logo.png' -d "/data/local/tmp" >&2
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
-unzip -o "$ZIPFILE" 'AppMonitoringUtil.sh' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/perf_cpu_gov ] && echo performance >/data/encore/perf_cpu_gov
 

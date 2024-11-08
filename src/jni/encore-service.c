@@ -11,7 +11,6 @@
 #define MAX_COMMAND_LENGTH 256
 
 char command[MAX_COMMAND_LENGTH];
-char logMesg[300];
 char path[256];
 
 char *trim_newline(char *str) {
@@ -96,6 +95,7 @@ void append2file(const char *file_path, const char *content) {
 void log_encore(const char *message, ...) {
   char *timestamp = timern();
   if (timestamp != NULL) {
+    char logMesg[300];
     va_list args;
     va_start(args, message);
     vsnprintf(logMesg, sizeof(logMesg), message, args);
@@ -117,14 +117,13 @@ void setPriorities(const char *pid) {
   pid_t process_id = atoi(pid);
 
   if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
-    printf("Failed to set nice priority");
-    log_encore("Failed to set nice priority");
+    printf("Failed to set nice priority for %s", pid);
+    log_encore("error: failed to set nice priority for %s", pid);
   }
 
-  if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) ==
-      -1) {
-    printf("Failed to set IO priority");
-    log_encore("Failed to set IO priority");
+  if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1) {
+    printf("error: failed to set IO priority for %s", pid);
+    log_encore("error: ailed to set IO priority for %s", pid);
   }
 }
 
@@ -149,7 +148,7 @@ int main(void) {
      * massive overhead while gaming */
     if (!gamestart) {
       gamestart =
-          execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+          execute_command("dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat /data/encore/gamelist.txt)");
       low_power = execute_command(
           "su -c dumpsys power | grep -Eo "
           "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
@@ -162,7 +161,7 @@ int main(void) {
         free(gamestart);
         gamestart = NULL;
         gamestart =
-            execute_command("sh /data/encore/AppMonitoringUtil.sh | head -n 1");
+            execute_command("dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat /data/encore/gamelist.txt)");
       }
     }
 
