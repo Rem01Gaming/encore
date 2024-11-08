@@ -84,13 +84,13 @@ save_logs() {
 	logfile="/sdcard/encore_log"
 	cat <<EOF >$logfile
 *****************************************************
-Encore Tweaks fault event
+Encore Tweaks Log
 
 Version: $(get_module_version)
 Chipset: $(get_chipset)
 Kernel Version: $(get_kernel)
 *****************************************************
-$(cat /data/encore/last_fault)
+$(cat /data/encore/encore_log)
 EOF
 }
 

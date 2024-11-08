@@ -11,7 +11,7 @@
 #define MAX_COMMAND_LENGTH 256
 
 char command[MAX_COMMAND_LENGTH];
-char errMesg[MAX_COMMAND_LENGTH];
+char logMesg[300];
 char path[256];
 
 char *trim_newline(char *str) {
@@ -93,12 +93,18 @@ void append2file(const char *file_path, const char *content) {
   }
 }
 
-void log_error(const char *message) {
+void log_encore(const char *message, ...) {
   char *timestamp = timern();
   if (timestamp != NULL) {
-    char errMesg[256];
-    snprintf(errMesg, sizeof(errMesg), "[%s] %s", timestamp, message);
-    append2file("/data/encore/last_fault", errMesg);
+    va_list args;
+    va_start(args, message);
+    vsnprintf(logMesg, sizeof(logMesg), message, args);
+    va_end(args);
+
+    char logEncore[512];
+    snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
+    append2file("/data/encore/encore_log", logEncore);
+
     free(timestamp);
   }
 }
@@ -112,17 +118,15 @@ void setPriorities(const char *pid) {
 
   if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
     printf("Failed to set nice priority");
-    log_error("Failed to set nice priority");
+    log_encore("Failed to set nice priority");
   }
 
   if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) ==
       -1) {
     printf("Failed to set IO priority");
-    log_error("Failed to set IO priority");
+    log_encore("Failed to set IO priority");
   }
 }
-
-void perf_common(void) { system("su -c encore-perfcommon"); }
 
 void performance_mode(void) { system("su -c encore-performance"); }
 
@@ -139,8 +143,6 @@ int main(void) {
   char *low_power = NULL;
   char *pid = NULL;
   int cur_mode = -1;
-
-  perf_common();
 
   while (1) {
     /* Run app monitoring ONLY if we aren't on performance profile, prevent
@@ -178,13 +180,14 @@ int main(void) {
     // Handle null screenstate
     if (screenstate == NULL) {
       printf("error: screenstate is null!\n");
-      log_error("screenstate is null!");
+      log_encore("error: screenstate is null!");
     } else if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 ||
                              strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
-        printf("Applying performance mode\n");
+        printf("Applying performance profile for %s", trim_newline(gamestart));
+        log_encore("info: applying performance profile for %s", trim_newline(gamestart));
         snprintf(
             command, sizeof(command),
             "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
@@ -198,22 +201,24 @@ int main(void) {
         if (pid != NULL) {
           setPriorities(trim_newline(pid));
         } else {
-          printf("error: Game PID is null!\n");
-          log_error("Game PID is null!");
+          printf("error: could not fetch pid of %s\n", trim_newline(pid));
+          log_encore("error: could not fetch pid of %s\n", trim_newline(pid));
         }
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
       // Apply powersave mode
       if (cur_mode != 2) {
         cur_mode = 2;
-        printf("Applying powersave mode\n");
+        printf("Applying powersave profile\n");
+        log_encore("info: applying powersave profile");
         powersave_mode();
       }
     } else {
       // Apply normal mode
       if (cur_mode != 0) {
         cur_mode = 0;
-        printf("Applying normal mode\n");
+        printf("Applying normal profile\n");
+        log_encore("info: applying normal profile");
         normal_mode();
       }
     }

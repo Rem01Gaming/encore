@@ -6,9 +6,10 @@ done
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor >/data/encore/default_cpu_gov
 
-rm -f /data/encore/last_fault
-touch /data/encore/last_fault
+rm -f /data/encore/encore_log
+touch /data/encore/encore_log
 
+encore-perfcommon
 encore-service
 code=$?
 if [ $code -gt 0 ] && [ ! $code -eq 143 ]; then
