@@ -58,7 +58,7 @@ if ! pm list packages | grep -q bellavita.toast; then
 	rm -f $TMPDIR/toast.apk
 	if ! pm list packages | grep -q bellavita.toast; then
 		ui_print "- Can't install Bellavita Toast due to selinux restrictions"
-		ui_print "  Please install it manually after installation."
+		ui_print "  Please install the app manually after installation."
 	fi
 fi
 

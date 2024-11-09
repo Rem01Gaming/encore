@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/resource.h>
-#include <sys/stat.h>
 #include <sys/syscall.h>
 #include <time.h>
 #include <unistd.h>
@@ -39,56 +38,17 @@ char *timern(void) {
   return s;
 }
 
-char *execute_command(const char *command) {
-  FILE *fp;
-  char buffer[MAX_OUTPUT_LENGTH];
-  char *result = NULL;
-  size_t result_length = 0;
-
-  fp = popen(command, "r");
-  if (fp == NULL) {
-    printf("error: can't exec command %s\n", command);
-    return NULL;
-  }
-
-  while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-    size_t buffer_length = strlen(buffer);
-    char *new_result = realloc(result, result_length + buffer_length + 1);
-    if (new_result == NULL) {
-      printf("error: memory allocation error.\n");
-      free(result);
-      pclose(fp);
-      return NULL;
-    }
-    result = new_result;
-    strcpy(result + result_length, buffer);
-    result_length += buffer_length;
-  }
-
-  if (result != NULL) {
-    result[result_length] = '\0';
-  }
-
-  if (pclose(fp) == -1) {
-    printf("error: closing command stream.\n");
-  }
-
-  return result;
-}
-
 void append2file(const char *file_path, const char *content) {
   if (access(file_path, F_OK) != -1) {
-    chmod(file_path, 0644);
     FILE *file = fopen(file_path, "a");
     if (file != NULL) {
       fprintf(file, "%s\n", content);
       fclose(file);
-      chmod(file_path, 0444);
     } else {
       printf("error: can't open %s\n", file_path);
     }
   } else {
-    printf("error: %s does not exist or is not accessible\n", file_path);
+    printf("error: %s does not exist or inaccessible\n", file_path);
   }
 }
 
@@ -109,6 +69,44 @@ void log_encore(const char *message, ...) {
   }
 }
 
+char *execute_command(const char *command) {
+  FILE *fp;
+  char buffer[MAX_OUTPUT_LENGTH];
+  char *result = NULL;
+  size_t result_length = 0;
+
+  fp = popen(command, "r");
+  if (fp == NULL) {
+    printf("error: can't exec command '%s'\n", command);
+    log_encore("error: can't exec command '%s'\n", command);
+    return NULL;
+  }
+
+  while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+    size_t buffer_length = strlen(buffer);
+    char *new_result = realloc(result, result_length + buffer_length + 1);
+    if (new_result == NULL) {
+      printf("error: memory allocation error in execute_command()\n");
+      free(result);
+      pclose(fp);
+      return NULL;
+    }
+    result = new_result;
+    strcpy(result + result_length, buffer);
+    result_length += buffer_length;
+  }
+
+  if (result != NULL) {
+    result[result_length] = '\0';
+  }
+
+  if (pclose(fp) == -1) {
+    printf("error: closing command stream in execute_command()");
+  }
+
+  return result;
+}
+
 void setPriorities(const char *pid) {
   int prio = -20;    // Niceness
   int io_class = 1;  // I/O class
@@ -117,15 +115,17 @@ void setPriorities(const char *pid) {
   pid_t process_id = atoi(pid);
 
   if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
-    printf("Failed to set nice priority for %s", pid);
+    printf("error: failed to set nice priority for %s", pid);
     log_encore("error: failed to set nice priority for %s", pid);
   }
 
   if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1) {
     printf("error: failed to set IO priority for %s", pid);
-    log_encore("error: ailed to set IO priority for %s", pid);
+    log_encore("error: failed to set IO priority for %s", pid);
   }
 }
+
+void perf_common(void) { system("su -c encore-perfcommon"); }
 
 void performance_mode(void) { system("su -c encore-performance"); }
 
@@ -142,6 +142,8 @@ int main(void) {
   char *low_power = NULL;
   char *pid = NULL;
   int cur_mode = -1;
+  
+  perf_common();
 
   while (1) {
     /* Run app monitoring ONLY if we aren't on performance profile, prevent
@@ -169,7 +171,7 @@ int main(void) {
         "su -c dumpsys power | grep -Eo "
         "'mWakefulness=Awake|mWakefulness=Asleep' | awk -F'=' '{print $2}'");
 
-    /* In some cases, some device fails to give mWakefulness info. */
+    // In some cases, some device fails to give mWakefulness info.
     if (screenstate == NULL) {
       screenstate = execute_command(
           "su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' "
@@ -185,7 +187,7 @@ int main(void) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
-        printf("Applying performance profile for %s", trim_newline(gamestart));
+        printf("info: applying performance profile for %s", trim_newline(gamestart));
         log_encore("info: applying performance profile for %s", trim_newline(gamestart));
         snprintf(
             command, sizeof(command),
@@ -208,7 +210,7 @@ int main(void) {
       // Apply powersave mode
       if (cur_mode != 2) {
         cur_mode = 2;
-        printf("Applying powersave profile\n");
+        printf("info: applying powersave profile\n");
         log_encore("info: applying powersave profile");
         powersave_mode();
       }
@@ -216,7 +218,7 @@ int main(void) {
       // Apply normal mode
       if (cur_mode != 0) {
         cur_mode = 0;
-        printf("Applying normal profile\n");
+        printf("info: applying normal profile\n");
         log_encore("info: applying normal profile");
         normal_mode();
       }
