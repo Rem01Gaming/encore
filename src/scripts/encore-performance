@@ -13,11 +13,19 @@ apply() {
 	fi
 }
 
+change_permission() {
+	if [ -f $2 ]; then
+		chmod $1 $2
+	fi
+}
+
 # Disable battery saver module
-if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
-	apply 0 /sys/module/battery_saver/parameters/enabled
-else
-	apply N /sys/module/battery_saver/parameters/enabled
+if [ -f /sys/module/battery_saver/parameters/enabled ]; then
+	if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
+		apply 0 /sys/module/battery_saver/parameters/enabled
+	else
+		apply N /sys/module/battery_saver/parameters/enabled
+	fi
 fi
 
 if [ -f "/sys/kernel/debug/sched_features" ]; then
@@ -67,6 +75,7 @@ for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
 	apply "$cpu_maxfreq" $path/scaling_max_freq
 done &
+change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 apply 1 /sys/devices/system/cpu/cpu1/online
 
 # I/O Tweaks
@@ -251,4 +260,5 @@ case "$soc" in
 5) tensor_tweak ;;
 esac
 
+wait
 exit 0
