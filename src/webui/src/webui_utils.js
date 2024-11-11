@@ -123,6 +123,10 @@ async function saveGamelist() {
   toast('Gamelist saved successfully.');
 }
 
+async function openWebsite() {
+  await exec('encore-utils open_website');
+}
+
 document.addEventListener('DOMContentLoaded', async (event) => {
   await getModuleVersion();
   await getServiceState();

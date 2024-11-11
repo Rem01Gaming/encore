@@ -92,6 +92,10 @@ save_gamelist() {
 	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
 }
 
+open_website() {
+	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/"
+}
+
 save_logs() {
 	logfile="/sdcard/encore_log"
 	cat <<EOF >$logfile
