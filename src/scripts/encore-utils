@@ -54,17 +54,29 @@ get_kill_logd() {
 }
 
 kill_logd() {
-	echo 1 >/data/encore/kill_logd
-	kill logd
-	stop traced
-	stop statsd
+	list_logger="
+logd
+traced
+statsd
+tcpdump
+cnss_diag
+subsystem_ramdump
+charge_logger
+wlan_logging
+"
+
+	for svc in $list_logger; do
+		if [ "$(cat /data/encore/kill_logd)" -eq 1 ]; then
+			stop $svc 2>/dev/null
+		else
+			start $svc 2>/dev/null
+		fi
+	done
 }
 
-disable_kill_logd() {
-	echo 0 >/data/encore/kill_logd
-	start logd
-	start traced
-	start statsd
+set_kill_logd() {
+	echo $1 >/data/encore/kill_logd
+	kill_logd
 }
 
 restart_service() {
@@ -90,6 +102,7 @@ Version: $(get_module_version)
 Chipset: $(get_chipset)
 Kernel Version: $(get_kernel)
 *****************************************************
+
 $(cat /data/encore/encore_log)
 EOF
 }
