@@ -166,4 +166,8 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     await saveGamelist();
     document.getElementById('gamelistModal').classList.add('hidden');
   });
+
+  document.getElementById('imgEncore').addEventListener('click', async function() {
+    await openWebsite();
+  });
 });
