@@ -15,8 +15,8 @@ While KernelSU and APatch integrate WebUI natively in their managers, Magisk doe
 
 ## Configuration Options
 
-### Kill `logd` Service
-This option stops the `logd` service, which handles Android system logs. Disabling it reduces performance overhead by silencing logs.
+### Kill Logger
+This option will stops the logger services and silence logs. Enable this option to reduces performance overhead.
 
 ::: warning
 Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging.
@@ -25,7 +25,7 @@ Do NOT enable this option if you're testing ROMs or apps, as it will completely 
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
 
-### Performance Profile CPU Governor
+### Gameplay CPU Governor
 Choose the CPU governor specifically for the "Performance" profile, which is optimized for high-demand tasks and gaming.
 
 ### Edit Gamelist
