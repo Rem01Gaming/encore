@@ -12,6 +12,13 @@
 char command[MAX_COMMAND_LENGTH];
 char path[256];
 
+/***********************************************************************************
+ * Function Name      : trim_newline
+ * Inputs             : str (char *) - string to trim newline from
+ * Outputs            : str (char *) - string without newline
+ * Returns            : char * - pointer to the modified string
+ * Description        : Trims a newline character at the end of a string if present.
+ ***********************************************************************************/
 char *trim_newline(char *str) {
   if (str == NULL) return NULL;
   char *end;
@@ -21,6 +28,15 @@ char *trim_newline(char *str) {
   return str;
 }
 
+/***********************************************************************************
+ * Function Name      : timern
+ * Inputs             : None
+ * Outputs            : Formatted timestamp
+ * Returns            : char * - pointer to a dynamically allocated string
+ *                      with the formatted time.
+ * Description        : Generates a timestamp with the format
+ *                      [Day Mon DD HH:MM:SS YYYY].
+ ***********************************************************************************/
 char *timern(void) {
   time_t t = time(NULL);
   struct tm *tm = localtime(&t);
@@ -38,6 +54,15 @@ char *timern(void) {
   return s;
 }
 
+/***********************************************************************************
+ * Function Name      : append2file
+ * Inputs             : file_path (const char *) - path to the file
+ *                      content (const char *) - content to append
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Appends the provided content to the specified file.
+ *                      if the file does not exist, an error message is printed.
+ ***********************************************************************************/
 void append2file(const char *file_path, const char *content) {
   if (access(file_path, F_OK) != -1) {
     FILE *file = fopen(file_path, "a");
@@ -52,6 +77,15 @@ void append2file(const char *file_path, const char *content) {
   }
 }
 
+/***********************************************************************************
+ * Function Name      : log_encore
+ * Inputs             : message (const char *) - message to log
+ *                      ... (variadic arguments) - additional arguments for message
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Logs a formatted message with a timestamp to a log file
+ *                      ("/data/encore/encore_log").
+ ***********************************************************************************/
 void log_encore(const char *message, ...) {
   char *timestamp = timern();
   if (timestamp != NULL) {
@@ -69,6 +103,14 @@ void log_encore(const char *message, ...) {
   }
 }
 
+/***********************************************************************************
+ * Function Name      : execute_command
+ * Inputs             : command (const char *) - shell command to execute
+ * Outputs            : None
+ * Returns            : char * - pointer to the dynamically allocated output of
+ *                      the command execution
+ * Description        : Executes a shell command and captures its output.
+ ***********************************************************************************/
 char *execute_command(const char *command) {
   FILE *fp;
   char buffer[MAX_OUTPUT_LENGTH];
@@ -107,6 +149,14 @@ char *execute_command(const char *command) {
   return result;
 }
 
+/***********************************************************************************
+ * Function Name      : setPriorities
+ * Inputs             : pid (const char *) - process ID as a string
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Sets the CPU nice priority and I/O priority of a given
+ *                      process.
+ ***********************************************************************************/
 void setPriorities(const char *pid) {
   int prio = -20;    // Niceness
   int io_class = 1;  // I/O class
@@ -119,18 +169,48 @@ void setPriorities(const char *pid) {
     log_encore("error: failed to set nice priority for %s", pid);
   }
 
-  if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1) {
+  if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) ==
+      -1) {
     printf("error: failed to set IO priority for %s", pid);
     log_encore("error: failed to set IO priority for %s", pid);
   }
 }
 
+/***********************************************************************************
+ * Function Name      : perf_common
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Executes a command to apply common performance settings.
+ ***********************************************************************************/
 void perf_common(void) { system("su -c encore-perfcommon"); }
 
+/***********************************************************************************
+ * Function Name      : performance_mode
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Executes a command to switch to performance mode.
+ ***********************************************************************************/
 void performance_mode(void) { system("su -c encore-performance"); }
 
+/***********************************************************************************
+ * Function Name      : normal_mode
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Executes a command to switch to normal mode.
+ ***********************************************************************************/
 void normal_mode(void) { system("su -c encore-normal"); }
 
+/***********************************************************************************
+ * Function Name      : powersave_mode
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Executes commands to switch to powersave mode by first applying
+ *                      normal settings and then powersave-specific settings.
+ ***********************************************************************************/
 void powersave_mode(void) {
   normal_mode();
   system("su -c encore-powersave");
@@ -142,15 +222,16 @@ int main(void) {
   char *low_power = NULL;
   char *pid = NULL;
   int cur_mode = -1;
-  
+
   perf_common();
 
   while (1) {
     /* Run app monitoring ONLY if we aren't on performance profile, prevent
      * massive overhead while gaming */
     if (!gamestart) {
-      gamestart =
-          execute_command("dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat /data/encore/gamelist.txt)");
+      gamestart = execute_command(
+          "dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat "
+          "/data/encore/gamelist.txt)");
       low_power = execute_command(
           "su -c dumpsys power | grep -Eo "
           "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
@@ -162,8 +243,9 @@ int main(void) {
         pid = NULL;
         free(gamestart);
         gamestart = NULL;
-        gamestart =
-            execute_command("dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat /data/encore/gamelist.txt)");
+        gamestart = execute_command(
+            "dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo "
+            "$(cat /data/encore/gamelist.txt)");
       }
     }
 
@@ -178,6 +260,11 @@ int main(void) {
           "| awk -F'=' '{print $2}'");
     }
 
+    /*
+     * Any performance script should run only once every profile changes
+     * sorry for the nested code btw
+     */
+
     // Handle null screenstate
     if (screenstate == NULL) {
       printf("error: screenstate is null!\n");
@@ -187,13 +274,16 @@ int main(void) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
-        printf("info: applying performance profile for %s", trim_newline(gamestart));
-        log_encore("info: applying performance profile for %s", trim_newline(gamestart));
+        printf("info: applying performance profile for %s",
+               trim_newline(gamestart));
+        log_encore("info: applying performance profile for %s",
+                   trim_newline(gamestart));
+        
         snprintf(
-            command, sizeof(command),
-            "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-            "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
-            trim_newline(gamestart));
+          command, sizeof(command),
+          "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
+          "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
+          trim_newline(gamestart));
         system(command);
         performance_mode();
 
@@ -204,6 +294,7 @@ int main(void) {
         } else {
           printf("error: could not fetch pid of %s\n", trim_newline(pid));
           log_encore("error: could not fetch pid of %s\n", trim_newline(pid));
+          cur_mode = 1;
         }
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
