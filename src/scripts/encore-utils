@@ -111,4 +111,4 @@ $(cat /data/encore/encore_log)
 EOF
 }
 
-eval "$1 $2"
+$@
