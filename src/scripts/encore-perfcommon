@@ -4,7 +4,7 @@
 sync
 
 # Push Notification
-su -lp 2000 -c "cmd notification post -S bigtext -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'Tag$(date +%s)' 'Tweaks successfully applied'" &
+su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'encore$(date +%s)' 'Tweaks successfully applied'" &
 
 apply() {
 	if [ -f $2 ]; then
