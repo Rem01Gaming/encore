@@ -7,10 +7,10 @@
 #include <unistd.h>
 
 #define MAX_OUTPUT_LENGTH 128
-#define MAX_COMMAND_LENGTH 256
+#define MAX_COMMAND_LENGTH 172
 
 char command[MAX_COMMAND_LENGTH];
-char path[256];
+char path[64];
 
 /***********************************************************************************
  * Function Name      : trim_newline
@@ -20,13 +20,13 @@ char path[256];
  * Description        : Trims a newline character at the end of a string if
  *                      present.
  ***********************************************************************************/
-char *trim_newline(char *str) {
-  if (str == NULL) return NULL;
+char *trim_newline(char *string) {
+  if (string == NULL) return NULL;
   char *end;
-  if ((end = strchr(str, '\n')) != NULL) {
+  if ((end = strchr(string, '\n')) != NULL) {
     *end = '\0';
   }
-  return str;
+  return string;
 }
 
 /***********************************************************************************
@@ -41,18 +41,18 @@ char *trim_newline(char *str) {
 char *timern(void) {
   time_t t = time(NULL);
   struct tm *tm = localtime(&t);
-  char *s = malloc(64 * sizeof(char));
-  if (s == NULL) {
+  char *timestamp = malloc(64 * sizeof(char));
+  if (timestamp == NULL) {
     printf("error: memory allocation failed in timern()\n");
     return NULL;
   }
-  size_t ret = strftime(s, 64, "%c", tm);
+  size_t ret = strftime(timestamp, 64, "%c", tm);
   if (ret == 0) {
     printf("error: strftime failed in timern()\n");
-    free(s);
+    free(timestamp);
     return NULL;
   }
-  return s;
+  return timestamp;
 }
 
 /***********************************************************************************
@@ -84,19 +84,19 @@ void append2file(const char *file_path, const char *content) {
  *                      ... (variadic arguments) - additional arguments for message
  * Outputs            : None
  * Returns            : None
- * Description        : Logs a formatted message with a timestamp
+ * Description        : print and logs a formatted message with a timestamp
  *                      to a log file ("/data/encore/encore_log").
  ***********************************************************************************/
 void log_encore(const char *message, ...) {
   char *timestamp = timern();
   if (timestamp != NULL) {
-    char logMesg[300];
+    char logMesg[MAX_OUTPUT_LENGTH];
     va_list args;
     va_start(args, message);
     vsnprintf(logMesg, sizeof(logMesg), message, args);
     va_end(args);
 
-    char logEncore[512];
+    char logEncore[MAX_OUTPUT_LENGTH];
     snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
     printf("%s\n", logEncore);
     append2file("/data/encore/encore_log", logEncore);
@@ -151,14 +151,14 @@ char *execute_command(const char *command) {
 }
 
 /***********************************************************************************
- * Function Name      : setPriorities
+ * Function Name      : set_priority
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
  * Returns            : None
  * Description        : Sets the CPU nice priority and I/O priority of a given
  *                      process.
  ***********************************************************************************/
-void setPriorities(const char *pid) {
+void set_priority(const char *pid) {
   int prio = -20;    // Niceness
   int io_class = 1;  // I/O class
   int io_prio = 0;   // I/O priority
@@ -232,7 +232,7 @@ void powersave_mode(void) {
  ***********************************************************************************/
 char *get_gamestart(void) {
   return execute_command(
-      "dumpsys window visible-apps | grep -oP '(?<=package=).* ' | grep -Eo "
+      "dumpsys window visible-apps | grep 'package=.* ' | grep -Eo "
       "$(cat /data/encore/gamelist.txt)");
 }
 
@@ -276,7 +276,7 @@ char *get_low_power_state(void) {
 }
 
 /***********************************************************************************
- * Function Name      : boost_game
+ * Function Name      : notify_game
  * Inputs             : const char* gamestart (name of the game package to boost)
  * Outputs            : None
  * Returns            : None
@@ -286,27 +286,25 @@ char *get_low_power_state(void) {
  *                      the bellavita.toast MainActivity.
  *                      Useful for providing user feedback.
  ***********************************************************************************/
-void boost_game(const char *gamestart) {
+void notify_game(const char *gamestart) {
   snprintf(command, sizeof(command),
            "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-           "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
+           "\"Boosting game %s\" -n bellavita.toast/.MainActivity >/dev/null",
            gamestart);
   system(command);
 }
 
 int main(void) {
-  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
-  short int cur_mode = -1;
+  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, cur_mode = -1;
 
   perf_common();
 
   while (1) {
     // Run app monitoring if not on performance profile
-    if (!gamestart) {
+    if (gamestart == NULL) {
       gamestart = get_gamestart();
       low_power = get_low_power_state();
     } else {
-      char path[64];
       snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
       if (access(path, F_OK) == -1) {
         free(pid);
@@ -319,7 +317,7 @@ int main(void) {
     screenstate = get_screenstate();
 
     if (screenstate == NULL) {
-      log_encore("error: screenstate is null!");
+      log_encore("error: failed to get current screenstate, service won't work properly!");
     } else if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 ||
                              strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
@@ -327,13 +325,13 @@ int main(void) {
         cur_mode = 1;
         log_encore("info: applying performance profile for %s",
                    trim_newline(gamestart));
-        boost_game(trim_newline(gamestart));
+        notify_game(trim_newline(gamestart));
         performance_mode();
 
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
         if (pid != NULL) {
-          setPriorities(trim_newline(pid));
+          set_priority(trim_newline(pid));
         } else {
           log_encore("error: could not fetch pid of %s",
                      trim_newline(gamestart));
