@@ -17,7 +17,8 @@ char path[256];
  * Inputs             : str (char *) - string to trim newline from
  * Outputs            : str (char *) - string without newline
  * Returns            : char * - pointer to the modified string
- * Description        : Trims a newline character at the end of a string if present.
+ * Description        : Trims a newline character at the end of a string if
+ *                      present.
  ***********************************************************************************/
 char *trim_newline(char *str) {
   if (str == NULL) return NULL;
@@ -83,8 +84,8 @@ void append2file(const char *file_path, const char *content) {
  *                      ... (variadic arguments) - additional arguments for message
  * Outputs            : None
  * Returns            : None
- * Description        : Logs a formatted message with a timestamp to a log file
- *                      ("/data/encore/encore_log").
+ * Description        : Logs a formatted message with a timestamp
+ *                      to a log file ("/data/encore/encore_log").
  ***********************************************************************************/
 void log_encore(const char *message, ...) {
   char *timestamp = timern();
@@ -97,6 +98,7 @@ void log_encore(const char *message, ...) {
 
     char logEncore[512];
     snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
+    printf("%s\n", logEncore);
     append2file("/data/encore/encore_log", logEncore);
 
     free(timestamp);
@@ -119,8 +121,7 @@ char *execute_command(const char *command) {
 
   fp = popen(command, "r");
   if (fp == NULL) {
-    printf("error: can't exec command '%s'\n", command);
-    log_encore("error: can't exec command '%s'\n", command);
+    log_encore("error: can't exec command '%s'", command);
     return NULL;
   }
 
@@ -151,7 +152,7 @@ char *execute_command(const char *command) {
 
 /***********************************************************************************
  * Function Name      : setPriorities
- * Inputs             : pid (const char *) - process ID as a string
+ * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
  * Returns            : None
  * Description        : Sets the CPU nice priority and I/O priority of a given
@@ -165,13 +166,11 @@ void setPriorities(const char *pid) {
   pid_t process_id = atoi(pid);
 
   if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
-    printf("error: failed to set nice priority for %s", pid);
     log_encore("error: failed to set nice priority for %s", pid);
   }
 
   if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) ==
       -1) {
-    printf("error: failed to set IO priority for %s", pid);
     log_encore("error: failed to set IO priority for %s", pid);
   }
 }
@@ -183,7 +182,10 @@ void setPriorities(const char *pid) {
  * Returns            : None
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
-void perf_common(void) { system("su -c encore-perfcommon"); }
+void perf_common(void) {
+  log_encore("info: service started, applying perfcommon...");
+  system("su -c encore-perfcommon");
+}
 
 /***********************************************************************************
  * Function Name      : performance_mode
@@ -208,83 +210,124 @@ void normal_mode(void) { system("su -c encore-normal"); }
  * Inputs             : None
  * Outputs            : None
  * Returns            : None
- * Description        : Executes commands to switch to powersave mode by first applying
- *                      normal settings and then powersave-specific settings.
+ * Description        : Executes commands to switch to powersave mode by first
+ *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
 void powersave_mode(void) {
   normal_mode();
   system("su -c encore-powersave");
 }
 
+/***********************************************************************************
+ * Function Name      : get_gamestart
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : char* (dynamically allocated string with the game package name)
+ * Description        : Searches for the currently visible application that matches 
+ *                      any package name listed in /data/encore/gamelist.txt.
+ *                      This helps identify if a specific game is running in the foreground.
+ *                      Uses dumpsys to retrieve visible apps and filters by packages 
+ *                      listed in gamelist.txt.
+ * Note               : Caller is responsible for freeing the returned string.
+ ***********************************************************************************/
+char *get_gamestart(void) {
+  return execute_command(
+      "dumpsys window visible-apps | grep -oP '(?<=package=).* ' | grep -Eo "
+      "$(cat /data/encore/gamelist.txt)");
+}
+
+/***********************************************************************************
+ * Function Name      : get_screenstate
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : char* ("Awake" or "Asleep" based on screen state)
+ * Description        : Retrieves the current screen wakefulness state (Awake or Asleep).
+ *                      If not available, falls back to checking if the device is awake 
+ *                      through an alternative dumpsys window command.
+ * Note               : Caller is responsible for freeing the returned string.
+ ***********************************************************************************/
+char *get_screenstate(void) {
+  char *state = execute_command(
+      "su -c dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
+      "| awk -F'=' '{print $2}'");
+  if (state == NULL) {
+    state = execute_command(
+        "su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
+        "awk -F'=' '{print $2}'");
+  }
+  return state;
+}
+
+/***********************************************************************************
+ * Function Name      : get_low_power_state
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : char* ("true" if Battery Saver is enabled, "false" otherwise)
+ * Description        : Checks if the device's Battery Saver mode is enabled by using 
+ *                      dumpsys power and filtering for the battery saver status.
+ *                      Useful for determining low-power states.
+ * Note               : Caller is responsible for freeing the returned string.
+ ***********************************************************************************/
+char *get_low_power_state(void) {
+  return execute_command(
+      "su -c dumpsys power | grep -Eo "
+      "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
+      "awk -F'=' '{print $2}'");
+}
+
+/***********************************************************************************
+ * Function Name      : boost_game
+ * Inputs             : const char* gamestart (name of the game package to boost)
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Sends a command to start a toast notification indicating that 
+ *                      the specified game is being boosted.
+ *                      Uses the `am start` command to trigger a toast via 
+ *                      the bellavita.toast MainActivity.
+ *                      Useful for providing user feedback.
+ ***********************************************************************************/
+void boost_game(const char *gamestart) {
+  snprintf(command, sizeof(command),
+           "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
+           "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
+           gamestart);
+  system(command);
+}
+
 int main(void) {
-  char *gamestart = NULL;
-  char *screenstate = NULL;
-  char *low_power = NULL;
-  char *pid = NULL;
-  int cur_mode = -1;
+  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
+  short int cur_mode = -1;
 
   perf_common();
 
   while (1) {
-    /* Run app monitoring ONLY if we aren't on performance profile, prevent
-     * massive overhead while gaming */
+    // Run app monitoring if not on performance profile
     if (!gamestart) {
-      gamestart = execute_command(
-          "dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo $(cat "
-          "/data/encore/gamelist.txt)");
-      low_power = execute_command(
-          "su -c dumpsys power | grep -Eo "
-          "\"mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled="
-          "false\" | awk -F'=' '{print $2}'");
+      gamestart = get_gamestart();
+      low_power = get_low_power_state();
     } else {
+      char path[64];
       snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
       if (access(path, F_OK) == -1) {
         free(pid);
         pid = NULL;
         free(gamestart);
-        gamestart = NULL;
-        gamestart = execute_command(
-            "dumpsys window displays | grep -E 'mCurrentFocus' | grep -Eo "
-            "$(cat /data/encore/gamelist.txt)");
+        gamestart = get_gamestart();
       }
     }
 
-    screenstate = execute_command(
-        "su -c dumpsys power | grep -Eo "
-        "'mWakefulness=Awake|mWakefulness=Asleep' | awk -F'=' '{print $2}'");
+    screenstate = get_screenstate();
 
-    // In some cases, some device fails to give mWakefulness info.
     if (screenstate == NULL) {
-      screenstate = execute_command(
-          "su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' "
-          "| awk -F'=' '{print $2}'");
-    }
-
-    /*
-     * Any performance script should run only once every profile changes
-     * sorry for the nested code btw
-     */
-
-    // Handle null screenstate
-    if (screenstate == NULL) {
-      printf("error: screenstate is null!\n");
       log_encore("error: screenstate is null!");
     } else if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 ||
                              strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
       if (cur_mode != 1) {
         cur_mode = 1;
-        printf("info: applying performance profile for %s",
-               trim_newline(gamestart));
         log_encore("info: applying performance profile for %s",
                    trim_newline(gamestart));
-        
-        snprintf(
-          command, sizeof(command),
-          "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-          "\"Boosting game %s\" -n bellavita.toast/.MainActivity",
-          trim_newline(gamestart));
-        system(command);
+        boost_game(trim_newline(gamestart));
         performance_mode();
 
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
@@ -292,16 +335,14 @@ int main(void) {
         if (pid != NULL) {
           setPriorities(trim_newline(pid));
         } else {
-          printf("error: could not fetch pid of %s\n", trim_newline(pid));
-          log_encore("error: could not fetch pid of %s\n", trim_newline(pid));
-          cur_mode = 1;
+          log_encore("error: could not fetch pid of %s",
+                     trim_newline(gamestart));
         }
       }
     } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
       // Apply powersave mode
       if (cur_mode != 2) {
         cur_mode = 2;
-        printf("info: applying powersave profile\n");
         log_encore("info: applying powersave profile");
         powersave_mode();
       }
@@ -309,31 +350,23 @@ int main(void) {
       // Apply normal mode
       if (cur_mode != 0) {
         cur_mode = 0;
-        printf("info: applying normal profile\n");
         log_encore("info: applying normal profile");
         normal_mode();
       }
     }
 
-    // Print info to console
-    if (gamestart) {
-      printf("gamestart: %s\n", trim_newline(gamestart));
-    } else {
-      printf("gamestart: NULL\n");
-    }
-    if (screenstate) {
-      printf("screenstate: %s\n", trim_newline(screenstate));
-      free(screenstate);
-      screenstate = NULL;
-    } else {
-      printf("screenstate: NULL\n");
-    }
+    /* Print info to console
+    printf("gamestart: %s\n", gamestart ? trim_newline(gamestart) : "NULL");
+    printf("screenstate: %s\n",
+           screenstate ? trim_newline(screenstate) : "NULL");
+    printf("low_power: %s\n", low_power ? trim_newline(low_power) : "NULL"); */
+
+    free(screenstate);
+    screenstate = NULL;
+
     if (low_power) {
-      printf("low_power: %s\n", trim_newline(low_power));
       free(low_power);
       low_power = NULL;
-    } else {
-      printf("low_power: NULL\n");
     }
 
     sleep(15);
