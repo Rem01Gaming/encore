@@ -164,6 +164,7 @@ void set_priority(const char *pid) {
   int io_prio = 0;   // I/O priority
 
   pid_t process_id = atoi(pid);
+  log_encore("info: priority settings for PID %s", pid);
 
   if (setpriority(PRIO_PROCESS, process_id, prio) == -1) {
     log_encore("error: failed to set nice priority for %s", pid);
@@ -294,8 +295,35 @@ void notify_game(const char *gamestart) {
   system(command);
 }
 
+/***********************************************************************************
+ * Function Name      : handle_mlbb
+ * Inputs             : const char *gamestart - Game package name
+ * Outputs            : None
+ * Returns            : int - 2 if MLBB is running in foreground
+ *                            1 if MLBB is running in background
+ *                            0 if gamestart is not MLBB
+ *                           -1 if gamestart is NULL
+ * Description        : Checks if "com.mobile.legends" IS actually running
+ *                      on foreground, not in the background.
+ ***********************************************************************************/
+int handle_mlbb(const char *gamestart) {
+  if (gamestart == NULL) {
+    return -1;
+  }
+
+  if (strcmp(gamestart, "com.mobile.legends") != 0) {
+    return 0;
+  }
+
+  if (system("pidof com.mobile.legends:UnityKillsMe >/dev/null") == 0) {
+    return 2;
+  }
+
+  return 1;
+}
+
 int main(void) {
-  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, cur_mode = -1;
+  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
 
   perf_common();
 
@@ -315,6 +343,7 @@ int main(void) {
     }
 
     screenstate = get_screenstate();
+    mlbb_is_running = handle_mlbb(trim_newline(gamestart));
 
     if (screenstate == NULL) {
       log_encore("error: failed to get current screenstate, service won't work properly!");
@@ -322,18 +351,26 @@ int main(void) {
                              strcmp(trim_newline(screenstate), "true") == 0)) {
       // Apply performance mode
       if (cur_mode != 1) {
-        cur_mode = 1;
-        log_encore("info: applying performance profile for %s",
-                   trim_newline(gamestart));
-        notify_game(trim_newline(gamestart));
-        performance_mode();
-
         snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
         pid = execute_command(command);
-        if (pid != NULL) {
+
+        // Handle weird behavior of MLBB
+        if (mlbb_is_running == 2) {
+          pid = execute_command("pidof com.mobile.legends:UnityKillsMe");
+          log_encore("info: MLBB detected, boosting UnityKillsMe thread");
+        } else if (mlbb_is_running == 1) {
+          log_encore("info: MLBB detected but UnityKillsMe thread is not running");
+        }
+
+        if (pid != NULL && mlbb_is_running != 1) {
+          cur_mode = 1;
+          log_encore("info: applying performance profile for %s",
+                     trim_newline(gamestart));
+          notify_game(trim_newline(gamestart));
+          performance_mode();
           set_priority(trim_newline(pid));
         } else {
-          log_encore("error: could not fetch pid of %s",
+          log_encore("error: could not fetch pid of %s, can't start performance profile",
                      trim_newline(gamestart));
         }
       }
