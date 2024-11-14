@@ -19,7 +19,7 @@ While KernelSU and APatch integrate WebUI natively in their managers, Magisk doe
 This option will stops the logger services and silence logs. Enable this option to reduces performance overhead.
 
 ::: warning
-Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging.
+This option may breaks functionality on some apps that depends on `logd` service such as Shizuku.
 :::
 
 ### Default CPU Governor
