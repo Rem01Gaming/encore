@@ -75,9 +75,9 @@ done
 apply 1 /sys/devices/system/cpu/cpu1/online
 
 # I/O Tweaks
-for queue in /sys/block/*/queue; do
+for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
 	# Most games nowadays have big assets that requires more throughput
-	apply 256 "$queue/read_ahead_kb"
+	apply 312 "$queue/read_ahead_kb"
 done &
 
 mediatek_tweak() {

@@ -80,7 +80,7 @@ done
 apply 1 /sys/devices/system/cpu/cpu1/online
 
 # I/O Tweaks
-for queue in /sys/block/*/queue; do
+for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
 	# Fallback to latency friendly
 	apply 128 "$queue/read_ahead_kb"
 done &
