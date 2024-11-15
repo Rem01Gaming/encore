@@ -71,11 +71,7 @@ done &
 # CPU tweaks
 for path in /sys/devices/system/cpu/cpufreq/policy*; do
 	apply "$(cat /data/encore/perf_cpu_gov)" "$path/scaling_governor"
-	cpu_maxfreq="$(cat $path/cpuinfo_max_freq)"
-	apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
-	apply "$cpu_maxfreq" $path/scaling_max_freq
-done &
-change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
+done
 apply 1 /sys/devices/system/cpu/cpu1/online
 
 # I/O Tweaks
@@ -86,12 +82,24 @@ done &
 
 mediatek_tweak() {
 	# Force CPU to highest possible OPP
-	cluster=0
-	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		apply "$cluster $(awk '{print $1}' $path/scaling_available_frequencies)" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-		((cluster++))
-	done
-	unset cluster
+	if [ -d /proc/ppm ]; then
+		cluster=0
+		for path in /sys/devices/system/cpu/cpufreq/policy*; do
+			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+			((cluster++))
+		done
+	else
+		change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
+		for path in /sys/devices/system/cpu*/cpufreq; do
+			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+			apply "$cpu_maxfreq" $path/scaling_max_freq
+			apply "$cpu_maxfreq" $path/scaling_min_freq
+			apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
+		done
+		change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
+	fi
 
 	# PPM throttle
 	if [ -f /proc/ppm/policy_status ]; then
@@ -99,8 +107,8 @@ mediatek_tweak() {
 		pwr_thro_idx=$(grep 'PPM_POLICY_PWR_THRO' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
 		thermal_idx=$(grep 'PPM_POLICY_THERMAL' $policy_file | sed 's/.*\[\(.*\)\].*/\1/')
 
-		echo "$pwr_thro_idx 0" >$policy_file
-		echo "$thermal_idx 0" >$policy_file
+		apply "$pwr_thro_idx 0" $policy_file
+		apply "$thermal_idx 0" $policy_file
 	fi
 
 	# MTK Power and CCI mode
