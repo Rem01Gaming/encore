@@ -97,7 +97,7 @@ mediatek_tweak() {
 			((cluster++))
 		done
 	else
-		for path in /sys/devices/system/cpu*/cpufreq; do
+		for path in /sys/devices/system/cpu/*/cpufreq; do
 			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
 			cpu_minfreq=$(cat $path/cpuinfo_min_freq)
 			apply "$cpu_maxfreq" $path/scaling_max_freq
