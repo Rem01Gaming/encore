@@ -99,6 +99,7 @@ com.gabama.monopostolite
 com.gaijingames.wtm
 com.gameark.ggplay.lonsea
 com.gamedevltd.wwh
+com.gakpopuler.gamekecil
 com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
 com.gameloft.android.SAMS.GloftA9SS
