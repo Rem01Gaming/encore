@@ -82,16 +82,16 @@ if [ -d /proc/ppm ]; then
 		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 		((cluster++))
 	done
-else
-	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
-	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-		apply "$cpu_maxfreq" $path/scaling_max_freq
-		apply "$cpu_maxfreq" $path/scaling_min_freq
-		apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
-	done
-	change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 fi
+
+change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
+for path in /sys/devices/system/cpu/*/cpufreq; do
+	cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+	apply "$cpu_maxfreq" $path/scaling_max_freq
+	apply "$cpu_maxfreq" $path/scaling_min_freq
+	apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
+done
+change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 # I/O Tweaks
 for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do

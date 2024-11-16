@@ -88,15 +88,15 @@ if [ -d /proc/ppm ]; then
 		apply "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 		((cluster++))
 	done
-else
-	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-		cpu_minfreq=$(cat $path/cpuinfo_min_freq)
-		apply "$cpu_maxfreq" $path/scaling_max_freq
-		apply "$cpu_minfreq" $path/scaling_min_freq
-	done
-	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 fi
+
+for path in /sys/devices/system/cpu/*/cpufreq; do
+	cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+	cpu_minfreq=$(cat $path/cpuinfo_min_freq)
+	apply "$cpu_maxfreq" $path/scaling_max_freq
+	apply "$cpu_minfreq" $path/scaling_min_freq
+done
+change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 # I/O Tweaks
 for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
