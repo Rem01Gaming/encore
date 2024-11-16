@@ -10,6 +10,7 @@ com.FosFenes.Sonolus
 com.GameCoaster.ProtectDungeon
 com.HoYoverse.Nap
 com.HoYoverse.hkrpgoversea
+com.PigeonGames.Phigros
 com.Psyonix.RL2D
 com.RoamingStar.BlueArchive
 com.Shooter.ModernWarship
@@ -20,6 +21,7 @@ com.Vince.AlamobileFormula
 com.WandaSoftware.TruckersofEurope3
 com.Wispwood.ArrowQuest
 com.YoStarEN.Arknights
+com.YoStarEN.HBR
 com.YoStarEN.MahjongSoul
 com.YoStarJP.MajSoul
 com.YoStar.AetherGazer
@@ -35,11 +37,13 @@ com.alightcreative.motion
 com.android.test.uibench
 com.andromeda.androbench2
 com.and.games505.Terraria
+com.archosaur.sea.dr.gp
 com.autumn.skullgirls
 com.axlebolt.standoff2
 com.bandainamcoent.opbrww
 com.bandainamcoent.sao
 com.bandainamcoent.shinycolorsprism
+com.bandainamcoent.tensuramrkww
 com.bandainamcoent.ultimateninjastorm
 com.bandainamcogames.dbzdokkanww
 com.bhvr.deadbydaylight
@@ -80,7 +84,9 @@ com.ea.games.r3_row
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
 com.emulator.fpse64
+com.eyougame.msen
 com.epicgames.fortnite
+com.epsxe.ePSXe
 com.fantablade.icey
 com.farlightgames.igame.gp
 com.feralinteractive.gridas
@@ -88,6 +94,7 @@ com.firsttouchgames.dls7
 com.futuremark.dmandroid.application
 com.gabama.monopostolite
 com.gaijingames.wtm
+com.gameark.ggplay.lonsea
 com.gamedevltd.wwh
 com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
@@ -98,6 +105,7 @@ com.garena.game.kgtw
 com.garena.game.kgvn
 com.garena.game.lmjx
 com.gravity.romg
+com.gravity.roo.sea
 com.gryphline.exastris.gp
 com.guyou.deadstrike
 com.halo.windf.hero
@@ -126,15 +134,19 @@ com.kurogame.haru.hero
 com.kurogame.mingchao
 com.kurogame.wutheringwaves.global
 com.leiting.wf
+com.lemcnsun.soultide.android
 com.lemon.lvoverseas
 com.levelinfinite.hotta.gp
 com.levelinfinite.sgameGlobal
 com.levelinfinite.sgameGlobal.midaspay
 com.lilithgames.hgame.cn
 com.lilithgame.hgame.gp
+com.lilithgame.roc.gp
 com.linecorp.LGGRTHN
 com.linegames.sl
+com.lrgame.dldl.sea
 com.madfingergames.legends
+com.maleo.bussimulatorid
 com.miHoYo.GI.samsung
 com.miHoYo.GenshinImpact
 com.miHoYo.HSoDv2JPOriginalEx
@@ -161,6 +173,8 @@ com.mojang.hostilegg
 com.mojang.minecraftpe
 com.mojang.minecraftpe.patch
 com.nanostudios.games.twenty.minutes
+com.ncsoft.lineagen
+com.npixel.GranSagaGB
 com.nebulajoy.act.dmcpoc.asia
 com.nekki.shadowfight
 com.nekki.shadowfight3
@@ -204,8 +218,10 @@ com.netflix.NGP.GTASanAndreasDefinitiveEdition
 com.netflix.NGP.GTAViceCityDefinitiveEdition
 com.netmarble.skiagb
 com.netmarble.sololv
+com.netmarble.tog
 com.nexon.bluearchive
 com.nexon.kartdrift
+com.noctuagames.android.ashechoes
 com.ngame.allstar.eu
 com.nianticlabs.monsterhunter
 com.olzhass.carparking.multyplayer
@@ -216,6 +232,7 @@ com.play.rosea
 com.primatelabs.geekbench6
 com.proximabeta.dn2.global
 com.proximabeta.mf.aceforce2
+com.proximabeta.mf.liteuamo
 com.proximabeta.mf.uamo
 com.proximabeta.nikke
 com.prpr.musedash
@@ -228,10 +245,13 @@ com.pwrd.opmwsea
 com.pwrd.p5x
 com.pwrd.persona5x.laohu
 com.r2games.myhero.bilibili
+com.rayark.deemo2
+com.rayark.deemoreborn
 com.rayark.cytus2
 com.rayark.implosion
 com.rayark.sdorica
 com.rekoo.pubgm
+com.rinzz.projectmuse
 com.riotgames.league.teamfighttactics
 com.riotgames.league.teamfighttacticsvn
 com.riotgames.league.wildrift
@@ -258,6 +278,7 @@ com.spaceapegames.beatstar
 com.sprduck.garena.vn
 com.squareenix.lis
 com.stove.epic7.google
+com.sugarfun.gp.sea.lzgwy
 com.sunborn.neuralcloud
 com.sunborn.neuralcloud.en
 com.supercell.brawlstars
@@ -265,12 +286,14 @@ com.supercell.clashofclans
 com.supercell.clashroyale
 com.supercell.hayday
 com.supercell.squad
+com.studiobside.CounterSide
 com.studiowildcard.wardrumstudios.ark
 com.studiowildcard.wardrumstudios.ark.ncr
 com.sy.dldlhsdj
 com.t2ksports.nba2k20and
 com.tencent.KiHan
 com.tencent.af
+com.tencent.baiyeint
 com.tencent.ig
 com.tencent.iglite
 com.tencent.jkchess
@@ -316,6 +339,7 @@ com.xd.rotaeno.tapcn
 com.xd.terraria
 com.xindong.torchlight
 com.yongshi.tenojo
+com.yoozoo.jgame.us
 com.zlongame.mhmnz
 com.ztgame.bob
 com.ztgame.yyzy
@@ -328,6 +352,7 @@ jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
 jp.co.cygames.princessconnectredive
 jp.garud.ssimulator
+jp.goodsmile.touhoulostwordglobal_android
 jp.konami.duellinks
 jp.konami.masterduel
 jp.konami.pesam
@@ -336,6 +361,7 @@ lega.feisl.hhera
 me.mugzone.emiria
 me.pou.app
 me.tigerhix.cytoid
+moe.low.arc
 net.kdt.pojavlaunch
 net.wargaming.wot.blitz
 org.dolphinemu.dolphinemu
