@@ -292,6 +292,7 @@ com.studiobside.CounterSide
 com.studiowildcard.wardrumstudios.ark
 com.studiowildcard.wardrumstudios.ark.ncr
 com.sy.dldlhsdj
+com.sybogames.subway.surfers.game
 com.t2ksports.nba2k20and
 com.tencent.KiHan
 com.tencent.af
