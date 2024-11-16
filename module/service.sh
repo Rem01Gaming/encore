@@ -4,7 +4,9 @@ while [ -z "$(getprop sys.boot_completed)" ]; do
 done
 
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor >/data/encore/default_cpu_gov
+default_gov="$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+echo $default_gov >/data/encore/default_cpu_gov
+[ ! -f /data/encore/powersave_cpu_gov ] && echo $default_gov >/data/encore/powersave_cpu_gov
 
 rm -f /data/encore/encore_log
 touch /data/encore/encore_log
