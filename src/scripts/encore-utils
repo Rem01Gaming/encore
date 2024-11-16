@@ -53,6 +53,10 @@ set_perf_cpugov() {
 	echo $1 >/data/encore/perf_cpu_gov
 }
 
+set_powersave_cpugov() {
+	echo $1 >/data/encore/powersave_cpu_gov
+}
+
 get_kill_logd() {
 	cat /data/encore/kill_logd
 }
