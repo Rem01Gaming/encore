@@ -84,6 +84,7 @@ com.dxx.firenow
 com.ea.games.r3_row
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
+com.ea.gp.nfsm
 com.emulator.fpse64
 com.eyougame.msen
 com.epicgames.fortnite
