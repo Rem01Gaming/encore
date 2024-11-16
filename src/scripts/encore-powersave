@@ -33,6 +33,11 @@ for path in /sys/class/devfreq/mmc*; do
 	apply powersave $path/governor
 done &
 
+# CPU governor
+for path in /sys/devices/system/cpu/cpufreq/policy*; do
+	apply "$(cat /data/encore/powersave_cpu_gov)" "$path/scaling_governor"
+done &
+
 mediatek_tweak() {
 	# MTK CPU Power mode to low power
 	apply "1" /proc/cpufreq/cpufreq_power_mode
