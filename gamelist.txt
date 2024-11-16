@@ -11,6 +11,7 @@ com.GameCoaster.ProtectDungeon
 com.HoYoverse.Nap
 com.HoYoverse.hkrpgoversea
 com.PigeonGames.Phigros
+com.ProjectMoon.LimbusCompany
 com.Psyonix.RL2D
 com.RoamingStar.BlueArchive
 com.Shooter.ModernWarship
@@ -90,6 +91,7 @@ com.epsxe.ePSXe
 com.fantablade.icey
 com.farlightgames.igame.gp
 com.feralinteractive.gridas
+com.firewick.p42.bilibili
 com.firsttouchgames.dls7
 com.futuremark.dmandroid.application
 com.gabama.monopostolite

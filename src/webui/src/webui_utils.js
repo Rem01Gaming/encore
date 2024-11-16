@@ -43,7 +43,7 @@ async function toggleKillLogdSwitch(isChecked) {
   if (isChecked) {
     const command = 'encore-utils set_kill_logd 1';
   } else {
-    toast('Reboot to take effect');
+    toast('Reboot your device to take effect');
     const command = 'encore-utils set_kill_logd 0';
   }
   await exec(command);
@@ -60,11 +60,6 @@ async function changeCPUGovernor(governor) {
   await exec(command);
 }
 
-async function changePerfCPUGovernor(governor) {
-  const command = 'encore-utils set_perf_cpugov ' + governor;
-  await exec(command);
-}
-
 async function changePowersaveCPUGovernor(governor) {
   const command = 'encore-utils set_powersave_cpugov ' + governor;
   await exec(command);
@@ -75,12 +70,10 @@ async function populateCPUGovernors() {
   if (govErrno === 0) {
     const governors = govStdout.trim().split(/\s+/);
     const selectElement1 = document.getElementById('cpuGovernor');
-    const selectElement2 = document.getElementById('cpuGovernorPerf');
-    const selectElement3 = document.getElementById('cpuGovernorPowersave');
+    const selectElement2 = document.getElementById('cpuGovernorPowersave');
 
     selectElement1.innerHTML = '';
     selectElement2.innerHTML = '';
-    selectElement3.innerHTML = '';
 
     governors.forEach(gov => {
       const option1 = document.createElement('option');
@@ -92,11 +85,6 @@ async function populateCPUGovernors() {
       option2.value = gov;
       option2.textContent = gov;
       selectElement2.appendChild(option2);
-
-      const option3 = document.createElement('option');
-      option3.value = gov;
-      option3.textContent = gov;
-      selectElement3.appendChild(option3);
     });
 
     const { errno: defaultErrno, stdout: defaultStdout } = await exec('encore-utils get_default_cpugov');
@@ -105,16 +93,10 @@ async function populateCPUGovernors() {
       selectElement1.value = defaultGovernor;
     }
 
-    const { errno: perfErrno, stdout: perfStdout } = await exec('encore-utils get_perf_cpugov');
-    if (perfErrno === 0) {
-      const defaultPerfGovernor = perfStdout.trim();
-      selectElement2.value = defaultPerfGovernor;
-    }
-
     const { errno: powersaveErrno, stdout: powersaveStdout } = await exec('encore-utils get_powersave_cpugov');
     if (powersaveErrno === 0) {
       const defaultPowersaveGovernor = powersaveStdout.trim();
-      selectElement3.value = defaultPowersaveGovernor;
+      selectElement2.value = defaultPowersaveGovernor;
     }
   }
 }
@@ -164,10 +146,6 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   document.getElementById('killLogdSwitch').addEventListener('change', async function() {
     await toggleKillLogdSwitch(this.checked);
-  });
-
-  document.getElementById('cpuGovernorPerf').addEventListener('change', async function() {
-    await changePerfCPUGovernor(this.value);
   });
 
   document.getElementById('cpuGovernorPowersave').addEventListener('change', async function() {
