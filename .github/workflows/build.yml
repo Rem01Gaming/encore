@@ -39,25 +39,7 @@ jobs:
         cp ./dist/* ../../module/webroot
     - name: Compile flashable zip
       id: compileZip
-      run: |
-        cp -r ./website/docs/public/android-crhome.png ./module/encore_logo.png
-        cp -r ./src/libs ./module
-        cp -r ./src/scripts/* ./module/system/bin
-        cp LICENSE ./module
-        bash ./gamelist_compile.sh
-        version="$(cat ./version)"
-        version_code=$(git rev-list HEAD --count)
-        gitsha1=$(git rev-parse --short HEAD)
-        sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
-        sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
-        zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >> $GITHUB_OUTPUT
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/system/bin
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/libs
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/META-INF
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/service.sh
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/toast.apk
-        bash $GITHUB_WORKSPACE/.github/scripts/cr_sha256.sh ./module/module.prop
-        cd ./module && zip -r9 ../$zipName * -x *placeholder* *.map
+      run: bash .github/scripts/compile_zip.sh
     - name: Upload to telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -69,8 +51,8 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.CHAT_ID }}" ] && [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           export VERSION=$(git rev-list --count HEAD)
-          bash $GITHUB_WORKSPACE/.github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.compileZip.outputs.zipName }}
+          bash .github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.compileZip.outputs.zipName }}
         else
-          echo "Telegram bot token is undefined, please add it to repository secrets!"
+          echo "Telegram bot token or chatid is undefined, please add it to repository secrets!"
           exit 1
         fi

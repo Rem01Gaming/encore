@@ -9,9 +9,9 @@ if [ ! -f "$TMPDIR/verify.sh" ]; then
 	ui_print "! Unable to extract verify.sh!"
 	ui_print "! This zip may be corrupted, please try downloading again"
 	abort "*********************************************************"
-else
-	source "$TMPDIR/verify.sh"
 fi
+
+source "$TMPDIR/verify.sh"
 
 # Extract module files
 ui_print "- Extracting module files"
@@ -45,7 +45,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
-unzip -o "$ZIPFILE" 'encore_logo.png' -d "/data/local/tmp" >&2
+extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 
