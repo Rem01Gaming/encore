@@ -40,7 +40,7 @@ zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" 
 
 # Generate sha256sum for integrity checkup
 for file in ${need_integrity[@]}; do
-	bash .github/scripts/gen_sha256sum.sh
+	bash .github/scripts/gen_sha256sum.sh "$file"
 done
 
 # Zip the file
