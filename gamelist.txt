@@ -91,6 +91,7 @@ com.dxx.firenow
 com.ea.games.r3_row
 com.ea.game.pvz2_rfl
 com.ea.game.pvz2_row
+com.ea.game.pvzfree_row
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
 com.ea.gp.nfsm
