@@ -21,6 +21,9 @@ for queue in /sys/block/*/queue; do
 
 	# Reduce the maximum number of I/O requests in exchange for latency
 	apply 64 "$queue/nr_requests"
+
+	# Don't use I/O as random spice
+	apply 0 "$queue/add_random"
 done &
 
 # Lower the swappiness
