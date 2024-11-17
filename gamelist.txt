@@ -89,6 +89,7 @@ com.dts.freefireth
 com.dts.freefireth.huawei
 com.dxx.firenow
 com.ea.games.r3_row
+com.ea.game.pvz2_row
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
 com.ea.gp.nfsm
@@ -249,6 +250,7 @@ com.pinkcore.tkfm
 com.playdigious.deadcells.mobile
 com.playmini.miniworld
 com.play.rosea
+com.popcap.pvz
 com.primatelabs.geekbench6
 com.proximabeta.dn2.global
 com.proximabeta.mf.aceforce2
