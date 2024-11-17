@@ -241,6 +241,7 @@ com.netmarble.skiagb
 com.netmarble.sololv
 com.netmarble.tog
 com.nexon.bluearchive
+com.neowiz.game.idolypride.en
 com.nexon.kartdrift
 com.noctuagames.android.ashechoes
 com.ngame.allstar.eu
@@ -374,6 +375,7 @@ com.ztgame.bob
 com.ztgame.yyzy
 com.zy.wqmt.cn
 cyou.joiplay.joiplay
+game.qualiarts.idolypride
 id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
