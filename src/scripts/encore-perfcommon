@@ -42,7 +42,12 @@ find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r gover
 done &
 
 # Networking tweaks
-apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
+if grep -q bbr2 /proc/sys/net/ipv4/tcp_available_congestion_control; then
+	apply "bbr2" /proc/sys/net/ipv4/tcp_congestion_control
+else
+	apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
+fi
+
 apply "1" /proc/sys/net/ipv4/tcp_low_latency
 apply "1" /proc/sys/net/ipv4/tcp_ecn
 apply "3" /proc/sys/net/ipv4/tcp_fastopen
