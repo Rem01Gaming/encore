@@ -307,6 +307,7 @@ com.stove.epic7.google
 com.sugarfun.gp.sea.lzgwy
 com.sunborn.neuralcloud
 com.sunborn.neuralcloud.en
+com.superb.rhv
 com.supercell.brawlstars
 com.supercell.clashofclans
 com.supercell.clashroyale
