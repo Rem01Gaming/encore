@@ -1,5 +1,6 @@
 adventure.rpg.anime.game.vng.ys6
 age.of.civilizations2.jakowski.lukasz
+air.com.ubisoft.brawl.halla.platform.fighting.action.pvp
 brownmonster.app.game.rushrally3
 com.AlfaBravo.Combat
 com.CarXTech.street
@@ -35,12 +36,15 @@ com.albiononline
 com.aligames.kuang.kybc
 com.aligames.kuang.kybc.huawei
 com.alightcreative.motion
+com.asobimo.toramonline
 com.android.test.uibench
 com.andromeda.androbench2
 com.and.games505.Terraria
 com.archosaur.sea.dr.gp
 com.autumn.skullgirls
 com.axlebolt.standoff2
+com.bandainamcoent.idolmaster_gakuen
+com.bandainamcoent.imas_millionlive_theaterdays
 com.bandainamcoent.opbrww
 com.bandainamcoent.sao
 com.bandainamcoent.shinycolorsprism
@@ -65,6 +69,7 @@ com.carxtech.sr
 com.chillyroom.soulknightprequel
 com.citra.emu
 com.cnvcs.xiangqi
+com.com2us.starseedgl.android.google.global.normal
 com.criticalforceentertainment.criticalops
 com.crunchyroll.princessconnectredive
 com.denachina.g13002010
@@ -73,6 +78,7 @@ com.denchi.vtubestudio
 com.devsisters.ck
 com.dfjz.moba
 com.dgames.g15002002
+com.dois.greedgame
 com.dolphinemu.dolphinemu
 com.dragonli.projectsnow.lhm
 com.drivezone.car.race.game
@@ -88,18 +94,20 @@ com.ea.gp.nfsm
 com.emulator.fpse64
 com.eyougame.msen
 com.epicgames.fortnite
+com.epicgames.portal
 com.epsxe.ePSXe
 com.fantablade.icey
 com.farlightgames.igame.gp
 com.feralinteractive.gridas
 com.firewick.p42.bilibili
 com.firsttouchgames.dls7
+com.fizzd.connectedworlds
 com.futuremark.dmandroid.application
 com.gabama.monopostolite
 com.gaijingames.wtm
+com.gakpopuler.gamekecil
 com.gameark.ggplay.lonsea
 com.gamedevltd.wwh
-com.gakpopuler.gamekecil
 com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
 com.gameloft.android.SAMS.GloftA9SS
@@ -108,6 +116,7 @@ com.garena.game.kgid
 com.garena.game.kgtw
 com.garena.game.kgvn
 com.garena.game.lmjx
+com.garena.game.nfsm
 com.gravity.romg
 com.gravity.roo.sea
 com.gryphline.exastris.gp
@@ -115,6 +124,7 @@ com.guyou.deadstrike
 com.halo.windf.hero
 com.heavenburnsred
 com.hermes.j1game
+com.herogame.gplay.magicminecraft.mmorpg
 com.hg.cosmicshake
 com.hottapkgs.hotta
 com.hypergryph.arknights
@@ -123,6 +133,7 @@ com.igg.android.doomsdaylastsurvivors
 com.ignm.raspberrymash.jp
 com.ilongyuan.implosion
 com.jacksparrow.jpmajiang
+com.japan.datealive.gp
 com.je.supersus
 com.kakaogames.eversoul
 com.kakaogames.gdts
@@ -171,6 +182,7 @@ com.miHoYo.zenless
 com.minidragon.idlefantasy
 com.miraclegames.farlight84
 com.mobilelegends.hwag
+com.mobilelegends.mi
 com.mobilelegends.taptest
 com.mobile.legends
 com.mojang.hostilegg
@@ -199,6 +211,7 @@ com.netease.jddsaef
 com.netease.ko
 com.netease.lagrange
 com.netease.lglr
+com.netease.lztgglobal
 com.netease.ma84
 com.netease.ma100asia
 com.netease.moba
@@ -230,8 +243,10 @@ com.ngame.allstar.eu
 com.nianticlabs.monsterhunter
 com.olzhass.carparking.multyplayer
 com.pearlabyss.blackdesertm.gl
+com.pearlabyss.blackdesertm
 com.pinkcore.tkfm
 com.playdigious.deadcells.mobile
+com.playmini.miniworld
 com.play.rosea
 com.primatelabs.geekbench6
 com.proximabeta.dn2.global
@@ -257,6 +272,7 @@ com.rayark.sdorica
 com.rekoo.pubgm
 com.rinzz.projectmuse
 com.riotgames.league.teamfighttactics
+com.riotgames.league.teamfighttacticstw
 com.riotgames.league.teamfighttacticsvn
 com.riotgames.league.wildrift
 com.roblox.client
@@ -269,6 +285,7 @@ com.rockstargames.gtavc
 com.rockstargames.gtavc.de
 com.rsg.myheroesen
 com.sandboxinteractive.albiononline
+com.sandboxol.blockymods
 com.seasun.jx3
 com.sega.ColorfulStage.en
 com.sega.pjsekai
@@ -337,6 +354,7 @@ com.valvesoftware.source
 com.vng.mlbbvn
 com.vng.pubgmobile
 com.vng.speedvn
+com.winlator
 com.wondergames.warpath.gp
 com.xd.TLglobal
 com.xd.rotaeno.googleplay
@@ -349,13 +367,12 @@ com.zlongame.mhmnz
 com.ztgame.bob
 com.ztgame.yyzy
 com.zy.wqmt.cn
-com.bandainamcoent.idolmaster_gakuen
-com.bandainamcoent.imas_millionlive_theaterdays
 cyou.joiplay.joiplay
 id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
 jp.co.cygames.princessconnectredive
+jp.co.koeitecmo.ReslerianaGL
 jp.garud.ssimulator
 jp.goodsmile.touhoulostwordglobal_android
 jp.konami.duellinks
@@ -375,6 +392,7 @@ org.mm.jr
 org.ppsspp.ppsspp
 org.ppsspp.ppssppgold
 org.vita3k.emulator
+org.openttd.sdl
 org.sudachi.sudachi_emu.ea
 org.yuzu.yuzu_emu
 pro.archiemeng.waifu2x
@@ -386,6 +404,7 @@ skyline.emu
 skyline.purple
 skynet.cputhrottlingtest
 tw.sonet.allbw
+uk.co.powdertoy.tpt
 vng.games.revelation.mobile
 xd.sce.promotion
 xyz.aethersx2.android
