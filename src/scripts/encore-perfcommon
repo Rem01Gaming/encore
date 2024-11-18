@@ -66,6 +66,7 @@ done &
 apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/kernel/perf_event_paranoid
 apply 0 /proc/sys/kernel/debug_locks
+getprop | grep -q realme || apply off /proc/sys/kernel/printk_devkmsg
 
 # Kill logd
 encore-utils kill_logd
