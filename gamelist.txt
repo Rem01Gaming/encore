@@ -103,6 +103,7 @@ com.epsxe.ePSXe
 com.fantablade.icey
 com.farlightgames.igame.gp
 com.feralinteractive.gridas
+com.feralinteractive.gridautosport_edition_android
 com.firewick.p42.bilibili
 com.firsttouchgames.dls7
 com.fizzd.connectedworlds
