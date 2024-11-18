@@ -57,7 +57,7 @@ apply "0" /proc/sys/net/ipv4/tcp_timestamps
 # Disable ccci debugging
 apply 0 /sys/kernel/ccci/debug
 
-# Thermal governor/policy
+# Thermal governor
 for thermal in /sys/class/thermal/thermal_zone*; do
 	apply "step_wise" ${thermal}/policy
 done &
@@ -66,7 +66,7 @@ done &
 apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/kernel/perf_event_paranoid
 apply 0 /proc/sys/kernel/debug_locks
-getprop | grep -q realme || apply off /proc/sys/kernel/printk_devkmsg
+apply off /proc/sys/kernel/printk_devkmsg
 
 # Kill logd
 encore-utils kill_logd
