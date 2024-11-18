@@ -15,7 +15,7 @@ apply() {
 }
 
 # I/O Tweaks
-for queue in /sys/block/*/queue; do
+for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
 
