@@ -84,7 +84,7 @@ export default defineConfig({
     ],
     
     footer: {
-      message: 'Released under the GPL3 License.',
+      message: 'Released under the Apaches License 2.0.',
       copyright: 'Copyright © 2024-present Rem01Gaming'
     },
 
