@@ -8,7 +8,7 @@ ogp: /ogp/new_ogp.webp
 
 ## Changelog
 - Fix random game boosting by **Mobile Legends: Bang Bang** (again)
-- *Fix CPU frequency lock on Mediatek G99 and Dimensity series and possibly other chipset*
+- **Fix CPU frequency lock on Mediatek G99 and Dimensity series and possibly other chipset**
 - Introduce unity fix
 - Add option to change Powersave CPU Governor on WebUI
 - Disable OnePlus opchain
