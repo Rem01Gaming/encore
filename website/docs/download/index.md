@@ -1,7 +1,7 @@
 ---
 title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
-ogp: /ogp/new_ogp.webp
+ogp: /ogp/ogp_new.webp
 ---
 
 # Encore Tweaks v2.1
