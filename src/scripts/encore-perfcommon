@@ -26,14 +26,6 @@ for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/qu
 	apply 0 "$queue/add_random"
 done &
 
-# Lower the swappiness
-MemTotal=$(cat /proc/meminfo | grep MemTotal)
-MemTotal=${MemTotal:16:8}
-
-if [ $MemTotal -gt 7038920 ]; then
-	apply "10" /proc/sys/vm/swappiness
-fi
-
 # Apply governor specific tunables for schedutil
 find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r governor; do
 	# Consider changing frequencies once per scheduling period
