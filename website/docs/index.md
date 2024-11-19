@@ -36,4 +36,4 @@ features:
     details: As the first performance module with a WebUI, Encore Tweaks makes it easy to configure settings and manage operations conveniently.
   - icon: 👨‍💻
     title: Open Source and Transparent
-    details: Released under the GPL-3.0 License, Encore Tweaks is fully open-source, developed by an experienced kernel developer, and free from obfuscated or poorly written code.
+    details: Released under the Apache 2.0 License, Encore Tweaks is open-source and developed by an experienced kernel developer, and free from obfuscated or poorly written code.
