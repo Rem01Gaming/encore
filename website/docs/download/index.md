@@ -21,8 +21,8 @@ ogp: /ogp/ogp_new.webp
 - License change to Apache License 2.0
 
 ## Download
-- [Download](https://shrinkme.ink/RvcKlDc)
-- [Download (Alternative link)](https://sfl.gl/WC1h8RyG)
+- [Download](https://shrinkme.ink/s7yL5W)
+- [Download (Alternative link)](https://sfl.gl/auCiIWF6)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
