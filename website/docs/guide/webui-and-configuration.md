@@ -10,7 +10,7 @@ The Encore Tweaks module provides a range of settings accessible through [Module
 While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [this app](https://t.me/rem01schannel/636).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20241011-095035_KernelSU.png)
+![Encore Tweaks WebUI](/Screenshot_20241119-085357_KernelSU.png)
 :::
 
 ## Configuration Options
@@ -19,14 +19,14 @@ While KernelSU and APatch integrate WebUI natively in their managers, Magisk doe
 This option will stops the logger services and silence logs. Enable this option to reduces performance overhead.
 
 ::: warning
-Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging.
+Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging. Software that depends on `logd` service will not working properly!
 :::
 
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
 
-### Gameplay CPU Governor
-Choose the CPU governor specifically for the "Performance" profile, which is optimized for high-demand tasks and gaming.
+### Powersave CPU Governor
+Choose the CPU governor specifically for the "Powersave" profile, which is optimized for battery life, by default this option will follow default CPU governor.
 
 ### Edit Gamelist
 Edit the list of games and other performance-intensive applications. When these apps are active, Encore Tweaks will automatically apply the "Performance" profile.
