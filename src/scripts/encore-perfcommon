@@ -66,6 +66,7 @@ done &
 apply 0 /sys/kernel/tracing/tracing_on
 apply 0 /proc/sys/kernel/perf_event_paranoid
 apply 0 /proc/sys/kernel/debug_locks
+apply 0 /proc/sys/kernel/perf_cpu_time_max_percent
 apply off /proc/sys/kernel/printk_devkmsg
 
 # Kill logd

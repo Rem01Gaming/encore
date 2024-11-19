@@ -54,9 +54,6 @@ if [ -d tp_path ]; then
 	apply "1" $tp_path/oppo_tp_direction
 fi
 
-# Setting perf_cpu_time_max_percent to 3
-apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
-
 # Memory tweak
 apply 80 /proc/sys/vm/vfs_cache_pressure
 
