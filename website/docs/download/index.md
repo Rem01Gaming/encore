@@ -4,7 +4,7 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 ogp: /ogp/ogp_new.webp
 ---
 
-# Encore Tweaks v2.1
+# Encore Tweaks 2.1
 
 ## Changelog
 - Fix random game boosting by **Mobile Legends: Bang Bang** (again)
@@ -12,7 +12,7 @@ ogp: /ogp/ogp_new.webp
 - Introduce unity fix
 - Add option to change Powersave CPU Governor on WebUI
 - Disable OnePlus opchain
-- Update Gamelist (*400+ Games listed*)
+- Update Gamelist (**400+ Games listed**)
 - Use bbr2 TCP congestion if available
 - Specifically target internal and external storage partition for I/O Tweak
 - Increase I/O Read Ahead to 312KB on Performance profile for more throughput
