@@ -1,6 +1,6 @@
 ---
-title: "Encore Tweaks Magisk Module: Special performance module for your device"
-description: "The Encore Tweaks Magisk Module is here to boost your device gaming performance but also keeping battery life on normal usage"
+title: "Encore Tweaks"
+description: "A powerful performance module featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU."
 layout: home
 
 hero:

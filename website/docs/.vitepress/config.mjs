@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Encore Tweaks",
-  description: "The Encore Tweaks Magisk Module is here to boost your device gaming performances but also keep battery life on normal usage",
+  description: "A powerful performance magisk module featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU.",
   ignoreDeadLinks: true,
 
   sitemap: {
@@ -24,7 +24,6 @@ export default defineConfig({
     pageData.frontmatter.head.push(['link', { rel: "canonical", href: canonicalUrl }])
     pageData.frontmatter.head.push(['meta', { name: "hostname", content: "encore.rem01gaming.dev"}])
     pageData.frontmatter.head.push(['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}])
-    pageData.frontmatter.head.push(['meta', { name: "author", content: "Rem01Gaming"}])
     pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Encore Tweak, Magisk Module, performance module, Magisk, Gaming, Android, Module magisk, gaming performance" }])
     pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
     pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
@@ -37,6 +36,21 @@ export default defineConfig({
     pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: ogImage }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
+
+    // Add structured data for the home page only
+    if (pageData.relativePath === 'index.md') {
+      pageData.frontmatter.head.push([
+        'script',
+        { type: "application/ld+json" },
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Encore Tweaks",
+          "alternateName": "Encore Tweak",
+          "url": "https://encore.rem01gaming.dev/"
+        })
+      ]);
+    }
   },
 
   themeConfig: {
