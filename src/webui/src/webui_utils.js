@@ -40,12 +40,10 @@ async function getKillLogdSwitch() {
 }
 
 async function toggleKillLogdSwitch(isChecked) {
-  if (isChecked) {
-    const command = 'encore-utils set_kill_logd 1';
-  } else {
-    toast('Reboot your device to take effect');
-    const command = 'encore-utils set_kill_logd 0';
-  }
+  const command = isChecked
+    ? 'encore-utils set_kill_logd 1'
+    : 'encore-utils set_kill_logd 0';
+  toast('Reboot your device to take effect');
   await exec(command);
 }
 
