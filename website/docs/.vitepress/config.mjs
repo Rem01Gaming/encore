@@ -13,7 +13,7 @@ export default defineConfig({
   transformPageData(pageData) {
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
-      .replace(/\.md$/, '.html')
+      .replace(/\.md$/, '')
     const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.png`;
     
     pageData.frontmatter.head ??= []
