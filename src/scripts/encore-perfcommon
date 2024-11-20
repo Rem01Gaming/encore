@@ -26,13 +26,6 @@ for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/qu
 	apply 0 "$queue/add_random"
 done &
 
-# Apply governor specific tunables for schedutil
-find /sys/devices/system/cpu/ -name schedutil -type d | while IFS= read -r governor; do
-	# Consider changing frequencies once per scheduling period
-	apply 10000 $governor/up_rate_limit_us
-	apply 20000 $governor/down_rate_limit_us
-done &
-
 # Networking tweaks
 if grep -q bbr2 /proc/sys/net/ipv4/tcp_available_congestion_control; then
 	apply "bbr2" /proc/sys/net/ipv4/tcp_congestion_control
