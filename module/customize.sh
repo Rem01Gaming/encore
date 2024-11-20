@@ -49,6 +49,26 @@ extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 
+# KSU WebUI for Magisk user
+if [ "$BOOTMODE" ] && [ "$MAGISK_VER_CODE" ]; then
+	extract "$ZIPFILE" 'action.sh' $MODPATH
+
+	if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
+		ui_print "- Magisk detected, Installing KSU WebUI for Magisk"
+		extract "$ZIPFILE" 'webui.apk' $TMPDIR
+		pm install $TMPDIR/webui.apk >&2
+		rm -f $TMPDIR/webui.apk
+
+		if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
+			ui_print "- Can't install KSU WebUI due to selinux restrictions"
+			ui_print "  Please install the app manually after installation."
+		else
+			ui_print "- Please open and grant root permission for KSU WebUI"
+			ui_print "  after this installation."
+		fi
+	fi
+fi
+
 # Bellavita Toast
 if ! pm list packages | grep -q bellavita.toast; then
 	ui_print "- Installing bellavita Toast"

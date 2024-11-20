@@ -8,13 +8,18 @@ fi
 # Make sure we're on right directory
 cd $GITHUB_WORKSPACE
 
+# Download WebUI App
+wget https://github.com/5ec1cff/KsuWebUIStandalone/releases/download/v1.0/KsuWebUI-1.0-34-release.apk -O module/webui.apk
+
 # Put critical files and folders here
 need_integrity=(
 	"./module/system/bin"
 	"./module/libs"
 	"./module/META-INF"
 	"./module/service.sh"
+	"./module/action.sh"
 	"./module/toast.apk"
+	"./module/webui.apk"
 	"./module/module.prop"
 	"./module/encore_logo.png"
 )
