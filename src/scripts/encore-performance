@@ -92,8 +92,11 @@ change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 # I/O Tweaks
 for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
-	# Most games nowadays have big assets that requires more throughput
-	apply 312 "$queue/read_ahead_kb"
+	# Reduce heuristic read-ahead in exchange for I/O latency
+	apply 32 "$queue/read_ahead_kb"
+
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 32 "$queue/nr_requests"
 done &
 
 mediatek_tweak() {
