@@ -50,7 +50,7 @@ unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 
 # KSU WebUI for Magisk user
-if [ "$BOOTMODE" ] && [ "$MAGISK_VER_CODE" ]; then
+if [ "$(which magisk)" ]; then
 	extract "$ZIPFILE" 'action.sh' $MODPATH
 
 	if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
