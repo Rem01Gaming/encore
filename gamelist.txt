@@ -381,6 +381,7 @@ id.rj01117883.liomeko
 jp.co.bandainamcoent.BNEI0242
 jp.co.craftegg.band
 jp.co.cygames.princessconnectredive
+jp.co.cygames.umamusume
 jp.co.koeitecmo.ReslerianaGL
 jp.garud.ssimulator
 jp.goodsmile.touhoulostwordglobal_android
