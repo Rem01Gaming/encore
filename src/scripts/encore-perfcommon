@@ -62,9 +62,6 @@ apply 1 /proc/sys/kernel/sched_child_runs_first
 # Improve real time latencies by reducing the scheduler migration time
 apply 32 /proc/sys/kernel/sched_nr_migrate
 
-# Preliminary requirement for the following values
-apply 0 /proc/sys/kernel/sched_tunable_scaling
-
 # Tweaking scheduler to reduce latency
 apply 50000 /proc/sys/kernel/sched_migration_cost_ns
 apply 1000000 /proc/sys/kernel/sched_min_granularity_ns
