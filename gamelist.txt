@@ -296,6 +296,7 @@ com.sandboxol.blockymods
 com.seasun.jx3
 com.sega.ColorfulStage.en
 com.sega.pjsekai
+com.sgra.dragon
 com.shangyoo.neon
 com.shatteredpixel.shatteredpixeldungeon
 com.shenlan.m.reverse1999
