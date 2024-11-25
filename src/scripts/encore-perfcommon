@@ -19,7 +19,10 @@ for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/qu
 	# Disable I/O statistics accounting
 	apply 0 "$queue/iostats"
 
-	# Don't use I/O as source of randomness
+	# Reduce the maximum number of I/O requests in exchange for latency
+	apply 64 "$queue/nr_requests"
+
+	# Don't use I/O as random spice
 	apply 0 "$queue/add_random"
 done &
 
@@ -35,7 +38,6 @@ apply "1" /proc/sys/net/ipv4/tcp_ecn
 apply "3" /proc/sys/net/ipv4/tcp_fastopen
 apply "1" /proc/sys/net/ipv4/tcp_sack
 apply "0" /proc/sys/net/ipv4/tcp_timestamps
-apply "0" /proc/sys/net/ipv4/tcp_syncookies
 
 # Disable ccci debugging
 apply 0 /sys/kernel/ccci/debug
@@ -61,9 +63,6 @@ apply 1 /proc/sys/kernel/sched_child_runs_first
 
 # Improve real time latencies by reducing the scheduler migration time
 apply 32 /proc/sys/kernel/sched_nr_migrate
-
-# Preliminary requirement for the following values
-apply 0 /proc/sys/kernel/sched_tunable_scaling
 
 # Tweaking scheduler to reduce latency
 apply 50000 /proc/sys/kernel/sched_migration_cost_ns
