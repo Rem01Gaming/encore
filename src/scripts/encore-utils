@@ -5,7 +5,7 @@ get_module_version() {
 }
 
 get_service_state() {
-	if ps -e | grep encore-service >/dev/null; then
+	if ps -e | grep encored >/dev/null; then
 		echo "1"
 	else
 		echo "0"
@@ -13,7 +13,7 @@ get_service_state() {
 }
 
 get_service_pid() {
-	pidof -s encore-service || echo null
+	pidof -s encored || echo null
 }
 
 get_chipset() {
@@ -88,8 +88,8 @@ set_kill_logd() {
 }
 
 restart_service() {
-	pkill encore-service
-	su -c "encore-service" </dev/null >/dev/null 2>&1 &
+	pkill encored
+	su -c "encored" </dev/null >/dev/null 2>&1 &
 }
 
 get_gamelist() {

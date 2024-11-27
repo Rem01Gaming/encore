@@ -25,10 +25,10 @@ extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH
 
 # Extract executables
 if [ $ARCH = "arm64" ]; then
-	extract "$ZIPFILE" 'libs/arm64-v8a/encore-service' $TMPDIR
+	extract "$ZIPFILE" 'libs/arm64-v8a/encored' $TMPDIR
 	cp $TMPDIR/libs/arm64-v8a/* $MODPATH/system/bin
 elif [ $ARCH = "arm" ]; then
-	extract "$ZIPFILE" 'libs/armeabi-v7a/encore-service' $TMPDIR
+	extract "$ZIPFILE" 'libs/armeabi-v7a/encored' $TMPDIR
 	cp $TMPDIR/libs/armeabi-v7a/* $MODPATH/system/bin
 else
 	ui_print "*********************************************************"

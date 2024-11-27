@@ -3,6 +3,8 @@
 #include <string.h>
 #include <sys/resource.h>
 #include <sys/syscall.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -184,7 +186,7 @@ void set_priority(const char *pid) {
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
 void perf_common(void) {
-  log_encore("info: service started, applying perfcommon...");
+  log_encore("info: daemon started, applying perfcommon...");
   system("su -c encore-perfcommon");
 }
 
@@ -322,9 +324,50 @@ int handle_mlbb(const char *gamestart) {
   return 1;
 }
 
-int main(void) {
-  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
+int daemonize(void) {
+  pid_t pid, sid;
 
+  pid = fork();
+  if (pid < 0) {
+    printf("error: daemonize() failed to fork\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if (pid > 0) {
+    exit(EXIT_SUCCESS);
+  }
+
+  sid = setsid();
+  if (sid < 0) {
+    printf("error: daemonize() failed to create new session\n");
+    exit(EXIT_FAILURE);
+  }
+
+  FILE *null_file = fopen("/dev/null", "r+");
+  if (null_file) {
+    dup2(fileno(null_file), STDIN_FILENO);
+    dup2(fileno(null_file), STDOUT_FILENO);
+    dup2(fileno(null_file), STDERR_FILENO);
+    fclose(null_file);
+  } else {
+    printf("error: daemonize() failed to redirect standard file descriptors\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if (chdir("/") < 0) {
+    printf("error: daemonize() failed to change working directory\n");
+    exit(EXIT_FAILURE);
+  }
+
+  umask(0);
+
+  return 0;
+}
+
+int main(void) {
+  daemonize();
+
+  char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
   perf_common();
 
   while (1) {
