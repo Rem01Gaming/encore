@@ -33,7 +33,6 @@ gitsha1=$(git rev-parse --short HEAD)
 bash ./gamelist_compile.sh
 
 # Copy module files
-cp -r ./website/docs/public/android-crhome.png ./module/encore_logo.png
 cp -r ./src/libs ./module
 cp -r ./src/scripts/* ./module/system/bin
 cp LICENSE ./module
