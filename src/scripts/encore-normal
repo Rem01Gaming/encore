@@ -97,7 +97,7 @@ change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 # I/O Tweaks
 for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
-	# Fallback to latency friendly
+	# Reduce heuristic read-ahead in exchange for I/O latency
 	apply 128 "$queue/read_ahead_kb"
 done &
 
