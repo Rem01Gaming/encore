@@ -16,4 +16,5 @@ rm -f /data/encore/encore_log
 touch /data/encore/encore_log
 
 # Start Encore Daemon
+touch /dev/encore_mode
 encored
