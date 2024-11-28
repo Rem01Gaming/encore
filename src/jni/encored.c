@@ -226,7 +226,7 @@ void set_priority(const char *pid) {
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
 void perf_common(void) {
-  change_selfname(encored:perfcommon);
+  change_selfname("encored:perfcommon");
   system("su -c encore_profiler");
 }
 
@@ -238,7 +238,7 @@ void perf_common(void) {
  * Description        : Executes a command to switch to performance mode.
  ***********************************************************************************/
 void performance_mode(void) {
-  change_selfname(encored:performance);
+  change_selfname("encored:performance");
   system("su -c encore_profiler");
 }
 
@@ -250,7 +250,7 @@ void performance_mode(void) {
  * Description        : Executes a command to switch to normal mode.
  ***********************************************************************************/
 void normal_mode(void) {
-  change_selfname(encored:normal);
+  change_selfname("encored:normal");
   system("su -c encore_profiler");
 }
 
@@ -263,7 +263,7 @@ void normal_mode(void) {
  *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
 void powersave_mode(void) {
-  change_selfname(encored:powersave);
+  change_selfname("encored:powersave");
   system("su -c encore_profiler");
 }
 
