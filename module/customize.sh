@@ -17,11 +17,8 @@ source "$TMPDIR/verify.sh"
 ui_print "- Extracting module files"
 extract "$ZIPFILE" 'module.prop' $MODPATH
 extract "$ZIPFILE" 'service.sh' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-utils' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-perfcommon' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-normal' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-powersave' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore-performance' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
+extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
 
 # Extract executables
 if [ $ARCH = "arm64" ]; then
@@ -115,5 +112,11 @@ fi
 echo $soc >/data/encore/soc_recognition
 
 ui_print ""
-ui_print "- A long, long time ago... Cosmos told Encore about a fun spot!"
-ui_print "- Come on! Let's go check it out ~"
+case "$((RANDOM % 6 + 1))" in
+1) ui_print "- Wooly's Fairy Tale" ;;
+2) ui_print "- Sheep-counting Lullaby" ;;
+3) ui_print "- Fog? The Black Shores!" ;;
+4) ui_print "- Adventure? Let's go!" ;;
+5) ui_print "- Hero Takes the Stage!" ;;
+6) ui_print "- Woolies Save the World!" ;;
+esac

@@ -10,6 +10,7 @@
 
 #define MAX_OUTPUT_LENGTH 128
 #define MAX_COMMAND_LENGTH 172
+#define MAX_COMM_NAME_LEN 15
 
 char command[MAX_COMMAND_LENGTH];
 char path[64];
@@ -78,6 +79,45 @@ void append2file(const char *file_path, const char *content) {
   } else {
     printf("error: %s does not exist or inaccessible\n", file_path);
   }
+}
+
+/***********************************************************************************
+ * Function Name      : change_selfname
+ * Inputs             : const char *new_selfname - The new comm name to set. Must 
+ *                      be at most 15 characters (excluding null terminator).
+ * Outputs            : None
+ * Returns            : int (0 on success, -1 on failure)
+ * Description        : Changes the comm name of the current process, as displayed in
+ *                      /proc/self/comm. The comm name is often used to identify the
+ *                      process in certain system tools.
+ * Note               : This does not affect argv[0] or the name shown by commands 
+ *                      like `ps`. Permissions to write to /proc/self/comm are required.
+ ***********************************************************************************/
+int change_selfname(const char *new_selfname) {
+    if (new_selfname == NULL) {
+        fprintf(stderr, "Error: comm name cannot be NULL\n");
+        return -1;
+    }
+    
+    if (strlen(new_selfname) > MAX_COMM_NAME_LEN) {
+        fprintf(stderr, "Error: comm name must be at most %d characters\n", MAX_COMM_NAME_LEN);
+        return -1;
+    }
+
+    FILE *comm_file = fopen("/proc/self/comm", "w");
+    if (comm_file == NULL) {
+        perror("Failed to open /proc/self/comm");
+        return -1;
+    }
+
+    if (fprintf(comm_file, "%s", new_selfname) < 0) {
+        perror("Failed to write to /proc/self/comm");
+        fclose(comm_file);
+        return -1;
+    }
+
+    fclose(comm_file);
+    return 0;
 }
 
 /***********************************************************************************
@@ -186,8 +226,8 @@ void set_priority(const char *pid) {
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
 void perf_common(void) {
-  log_encore("info: daemon started, applying perfcommon...");
-  system("su -c encore-perfcommon");
+  change_selfname(encored:perfcommon);
+  system("su -c encore_profiler");
 }
 
 /***********************************************************************************
@@ -197,7 +237,10 @@ void perf_common(void) {
  * Returns            : None
  * Description        : Executes a command to switch to performance mode.
  ***********************************************************************************/
-void performance_mode(void) { system("su -c encore-performance"); }
+void performance_mode(void) {
+  change_selfname(encored:performance);
+  system("su -c encore_profiler");
+}
 
 /***********************************************************************************
  * Function Name      : normal_mode
@@ -206,7 +249,10 @@ void performance_mode(void) { system("su -c encore-performance"); }
  * Returns            : None
  * Description        : Executes a command to switch to normal mode.
  ***********************************************************************************/
-void normal_mode(void) { system("su -c encore-normal"); }
+void normal_mode(void) {
+  change_selfname(encored:normal);
+  system("su -c encore_profiler");
+}
 
 /***********************************************************************************
  * Function Name      : powersave_mode
@@ -217,8 +263,8 @@ void normal_mode(void) { system("su -c encore-normal"); }
  *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
 void powersave_mode(void) {
-  normal_mode();
-  system("su -c encore-powersave");
+  change_selfname(encored:powersave);
+  system("su -c encore_profiler");
 }
 
 /***********************************************************************************
@@ -324,12 +370,24 @@ int handle_mlbb(const char *gamestart) {
   return 1;
 }
 
+/***********************************************************************************
+ * Function Name      : daemonize
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : int (0 on success, -1 on failure)
+ * Description        : Converts the current process into a daemon. This involves:
+ *                      - Forking the process and terminating the parent.
+ *                      - Creating a new session and detaching from any controlling terminal.
+ *                      - Redirecting standard input, output, and error to /dev/null.
+ *                      - Changing the working directory to the root directory.
+ *                      - Setting the file creation mask to 0.
+ ***********************************************************************************/
 int daemonize(void) {
   pid_t pid, sid;
 
   pid = fork();
   if (pid < 0) {
-    printf("error: daemonize() failed to fork\n");
+    log_encore("error: daemonize() failed to fork\n");
     exit(EXIT_FAILURE);
   }
 
@@ -339,7 +397,7 @@ int daemonize(void) {
 
   sid = setsid();
   if (sid < 0) {
-    printf("error: daemonize() failed to create new session\n");
+    log_encore("error: daemonize() failed to create new session\n");
     exit(EXIT_FAILURE);
   }
 
@@ -350,12 +408,12 @@ int daemonize(void) {
     dup2(fileno(null_file), STDERR_FILENO);
     fclose(null_file);
   } else {
-    printf("error: daemonize() failed to redirect standard file descriptors\n");
+    log_encore("error: daemonize() failed to redirect standard file descriptors\n");
     exit(EXIT_FAILURE);
   }
 
   if (chdir("/") < 0) {
-    printf("error: daemonize() failed to change working directory\n");
+    log_encore("error: daemonize() failed to change working directory\n");
     exit(EXIT_FAILURE);
   }
 
@@ -368,6 +426,7 @@ int main(void) {
   daemonize();
 
   char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
+  log_encore("info: daemon started, applying perfcommon...");
   perf_common();
 
   while (1) {

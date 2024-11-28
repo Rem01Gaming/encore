@@ -1,5 +1,7 @@
 #!/system/bin/sh
 
+[ -z $DEV_ENV ] && set +x
+
 get_module_version() {
 	grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'
 }
@@ -101,12 +103,16 @@ save_gamelist() {
 }
 
 open_website() {
-	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/"
+	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null
+}
+
+warn_drm_failed() {
+	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null
+	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'" >/dev/null
 }
 
 save_logs() {
-	logfile="/sdcard/encore_log"
-	cat <<EOF >$logfile
+	cat <<EOF >/sdcard/encore_log
 *****************************************************
 Encore Tweaks Log
 
@@ -119,4 +125,9 @@ $(cat /data/encore/encore_log)
 EOF
 }
 
+get_profile() {
+	cat /proc/$(get_service_pid)/comm | awk -F':' '{print $2}'
+}
+
+[ -d /data/adb/modules/encore ] || warn_drm_failed
 $@
