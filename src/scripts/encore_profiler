@@ -24,11 +24,10 @@ warn_drm_failed() {
 }
 
 [ -z $DEV_ENV ] && set +x
-if ! which encore_utility 2>/dev/null; then
-	echo 'exec: "encore_utility": executable file not found in $PATH'
+if ! which encore_utility; then
 	warn_drm_failed
 	exit 1
-fi
+fi >/dev/null 2>&1
 
 ###################################
 # Device-specific performance profile

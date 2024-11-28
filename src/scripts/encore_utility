@@ -126,7 +126,7 @@ EOF
 }
 
 get_profile() {
-	cat /proc/$(get_service_pid)/comm | awk -F':' '{print $2}'
+	cat /dev/encore_mode
 }
 
 [ -d /data/adb/modules/encore ] || warn_drm_failed

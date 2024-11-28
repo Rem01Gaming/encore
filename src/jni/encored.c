@@ -82,42 +82,26 @@ void append2file(const char *file_path, const char *content) {
 }
 
 /***********************************************************************************
- * Function Name      : change_selfname
- * Inputs             : const char *new_selfname - The new comm name to set. Must 
- *                      be at most 15 characters (excluding null terminator).
+ * Function Name      : write2file
+ * Inputs             : file_path (const char *) - path to the file
+ *                      content (const char *) - content to write
  * Outputs            : None
- * Returns            : int (0 on success, -1 on failure)
- * Description        : Changes the comm name of the current process, as displayed in
- *                      /proc/self/comm. The comm name is often used to identify the
- *                      process in certain system tools.
- * Note               : This does not affect argv[0] or the name shown by commands 
- *                      like `ps`. Permissions to write to /proc/self/comm are required.
+ * Returns            : None
+ * Description        : Write the provided content to the specified file.
+ *                      if the file does not exist, an error message is printed.
  ***********************************************************************************/
-int change_selfname(const char *new_selfname) {
-    if (new_selfname == NULL) {
-        fprintf(stderr, "Error: comm name cannot be NULL\n");
-        return -1;
+void write2file(const char *file_path, const char *content) {
+  if (access(file_path, F_OK) != -1) {
+    FILE *file = fopen(file_path, "w");
+    if (file != NULL) {
+      fprintf(file, "%s\n", content);
+      fclose(file);
+    } else {
+      printf("error: can't open %s\n", file_path);
     }
-    
-    if (strlen(new_selfname) > MAX_COMM_NAME_LEN) {
-        fprintf(stderr, "Error: comm name must be at most %d characters\n", MAX_COMM_NAME_LEN);
-        return -1;
-    }
-
-    FILE *comm_file = fopen("/proc/self/comm", "w");
-    if (comm_file == NULL) {
-        perror("Failed to open /proc/self/comm");
-        return -1;
-    }
-
-    if (fprintf(comm_file, "%s", new_selfname) < 0) {
-        perror("Failed to write to /proc/self/comm");
-        fclose(comm_file);
-        return -1;
-    }
-
-    fclose(comm_file);
-    return 0;
+  } else {
+    printf("error: %s does not exist or inaccessible\n", file_path);
+  }
 }
 
 /***********************************************************************************
@@ -226,7 +210,7 @@ void set_priority(const char *pid) {
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
 void perf_common(void) {
-  change_selfname("encored:perfcommon");
+  write2file("/dev/encore_mode", "perfcommon");
   system("su -c encore_profiler");
 }
 
@@ -238,7 +222,7 @@ void perf_common(void) {
  * Description        : Executes a command to switch to performance mode.
  ***********************************************************************************/
 void performance_mode(void) {
-  change_selfname("encored:performance");
+  write2file("/dev/encore_mode", "performance");
   system("su -c encore_profiler");
 }
 
@@ -250,7 +234,7 @@ void performance_mode(void) {
  * Description        : Executes a command to switch to normal mode.
  ***********************************************************************************/
 void normal_mode(void) {
-  change_selfname("encored:normal");
+  write2file("/dev/encore_mode", "normal");
   system("su -c encore_profiler");
 }
 
@@ -263,7 +247,7 @@ void normal_mode(void) {
  *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
 void powersave_mode(void) {
-  change_selfname("encored:powersave");
+  write2file("/dev/encore_mode", "powersave");
   system("su -c encore_profiler");
 }
 
