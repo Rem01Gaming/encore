@@ -363,8 +363,8 @@ int handle_mlbb(const char *gamestart) {
  * Description        : Forward user to official website if DRM check failed.
  ***********************************************************************************/
 void drm_failed_warning(void) {
-  system(/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null);
-  system(su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'" >/dev/null);
+  system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
+  system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
   log_encore("error: DRM Check failed, exiting.");
   exit(EXIT_FAILURE);
 }
@@ -427,7 +427,7 @@ int main(void) {
     drm_failed_warning();
   }
 
-  snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM)
+  snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
   if (system(command) != 0) {
     drm_failed_warning();
   }
