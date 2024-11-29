@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+#include "module_drm.h"
 
 #define MAX_OUTPUT_LENGTH 128
 #define MAX_COMMAND_LENGTH 172
@@ -355,6 +356,20 @@ int handle_mlbb(const char *gamestart) {
 }
 
 /***********************************************************************************
+ * Function Name      : drm_failed_warning
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Forward user to official website if DRM check failed.
+ ***********************************************************************************/
+void drm_failed_warning(void) {
+  system(/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null);
+  system(su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'" >/dev/null);
+  log_encore("error: DRM Check failed, exiting.");
+  exit(EXIT_FAILURE);
+}
+
+/***********************************************************************************
  * Function Name      : daemonize
  * Inputs             : None
  * Outputs            : None
@@ -371,7 +386,7 @@ int daemonize(void) {
 
   pid = fork();
   if (pid < 0) {
-    log_encore("error: daemonize() failed to fork\n");
+    log_encore("error: daemonize() failed to fork");
     exit(EXIT_FAILURE);
   }
 
@@ -381,7 +396,7 @@ int daemonize(void) {
 
   sid = setsid();
   if (sid < 0) {
-    log_encore("error: daemonize() failed to create new session\n");
+    log_encore("error: daemonize() failed to create new session");
     exit(EXIT_FAILURE);
   }
 
@@ -392,12 +407,12 @@ int daemonize(void) {
     dup2(fileno(null_file), STDERR_FILENO);
     fclose(null_file);
   } else {
-    log_encore("error: daemonize() failed to redirect standard file descriptors\n");
+    log_encore("error: daemonize() failed to redirect standard file descriptors");
     exit(EXIT_FAILURE);
   }
 
   if (chdir("/") < 0) {
-    log_encore("error: daemonize() failed to change working directory\n");
+    log_encore("error: daemonize() failed to change working directory");
     exit(EXIT_FAILURE);
   }
 
@@ -407,6 +422,17 @@ int daemonize(void) {
 }
 
 int main(void) {
+  // DRM Check
+  if (access("/data/adb/modules/encore/module.prop", F_OK) == -1) {
+    drm_failed_warning();
+  }
+
+  snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM)
+  if (system(command) != 0) {
+    drm_failed_warning();
+  }
+
+  // Daemonize service
   daemonize();
 
   char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;

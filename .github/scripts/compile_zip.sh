@@ -38,8 +38,6 @@ cp -r ./src/scripts/* ./module/system/bin
 cp LICENSE ./module
 
 # Parse version info to module prop
-sed -i "s/version=.*/version=$version (GIT@$gitsha1)/" ./module/module.prop
-sed -i "s/versionCode=.*/versionCode=$version_code/" ./module/module.prop
 zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >>$GITHUB_OUTPUT
 
 # Generate sha256sum for integrity checkup

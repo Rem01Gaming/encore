@@ -23,13 +23,18 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+    - name: Parse version to module.prop
+      working-directory: ./
+      run: bash .github/scripts/parse_version.sh
     - name: NDK Setup
       uses: nttld/setup-ndk@v1
       with:
         ndk-version: r27b
     - name: Build Encore JNI
       working-directory: ./src
-      run: ndk-build
+      run: |
+        echo "#define MODULE_CHECKSUM \"$(sha256sum ../module/encore_logo.png | awk '{print $1}')\"" >jni/module_drm.h
+        ndk-build
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
