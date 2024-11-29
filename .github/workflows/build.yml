@@ -33,7 +33,7 @@ jobs:
     - name: Build Encore JNI
       working-directory: ./src
       run: |
-        echo "#define MODULE_CHECKSUM \"$(sha256sum ../module/encore_logo.png | awk '{print $1}')\"" >jni/module_drm.h
+        echo "#define MODULE_CHECKSUM \"$(sha256sum ../module/module.prop | awk '{print $1}')\"" >jni/module_drm.h
         ndk-build
     - name: Build WebUI
       working-directory: ./src/webui
