@@ -369,58 +369,6 @@ void drm_failed_warning(void) {
   exit(EXIT_FAILURE);
 }
 
-/***********************************************************************************
- * Function Name      : daemonize
- * Inputs             : None
- * Outputs            : None
- * Returns            : int (0 on success, -1 on failure)
- * Description        : Converts the current process into a daemon. This involves:
- *                      - Forking the process and terminating the parent.
- *                      - Creating a new session and detaching from any controlling terminal.
- *                      - Redirecting standard input, output, and error to /dev/null.
- *                      - Changing the working directory to the root directory.
- *                      - Setting the file creation mask to 0.
- ***********************************************************************************/
-int daemonize(void) {
-  pid_t pid, sid;
-
-  pid = fork();
-  if (pid < 0) {
-    log_encore("error: daemonize() failed to fork");
-    exit(EXIT_FAILURE);
-  }
-
-  if (pid > 0) {
-    exit(EXIT_SUCCESS);
-  }
-
-  sid = setsid();
-  if (sid < 0) {
-    log_encore("error: daemonize() failed to create new session");
-    exit(EXIT_FAILURE);
-  }
-
-  FILE *null_file = fopen("/dev/null", "r+");
-  if (null_file) {
-    dup2(fileno(null_file), STDIN_FILENO);
-    dup2(fileno(null_file), STDOUT_FILENO);
-    dup2(fileno(null_file), STDERR_FILENO);
-    fclose(null_file);
-  } else {
-    log_encore("error: daemonize() failed to redirect standard file descriptors");
-    exit(EXIT_FAILURE);
-  }
-
-  if (chdir("/") < 0) {
-    log_encore("error: daemonize() failed to change working directory");
-    exit(EXIT_FAILURE);
-  }
-
-  umask(0);
-
-  return 0;
-}
-
 int main(void) {
   // DRM Check
   if (access("/data/adb/modules/encore/module.prop", F_OK) == -1) {
@@ -433,7 +381,10 @@ int main(void) {
   }
 
   // Daemonize service
-  daemonize();
+  if (daemon(0, 0)) {
+    log_encore("error: Can't daemonize service");
+    exit(EXIT_FAILURE);
+  }
 
   char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
   log_encore("info: daemon started, applying perfcommon...");
