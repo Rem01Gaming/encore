@@ -178,6 +178,34 @@ char *execute_command(const char *command) {
 }
 
 /***********************************************************************************
+ * Function Name      : drm_check
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Check if module is Genuine and/or not modified by third party,
+ *                      if modification detected, stop operation and forward user to
+ *                      official website.
+ ***********************************************************************************/
+void drm_check(void) {
+  // Check moduleid and service file name
+  if (access("/data/adb/modules/encore/system/bin/encored", F_OK) == -1) {
+    system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
+    system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
+    log_encore("error: DRM Check failed, exiting.");
+    exit(EXIT_FAILURE);
+  }
+
+  // Check module.prop checksum
+  snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
+  if (system(command) != 0) {
+    system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
+    system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
+    log_encore("error: DRM Check failed, exiting.");
+    exit(EXIT_FAILURE);
+  }
+}
+
+/***********************************************************************************
  * Function Name      : set_priority
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
@@ -223,6 +251,7 @@ void perf_common(void) {
  * Description        : Executes a command to switch to performance mode.
  ***********************************************************************************/
 void performance_mode(void) {
+  drm_check();
   write2file("/dev/encore_mode", "performance");
   system("su -c encore_profiler");
 }
@@ -235,6 +264,7 @@ void performance_mode(void) {
  * Description        : Executes a command to switch to normal mode.
  ***********************************************************************************/
 void normal_mode(void) {
+  drm_check();
   write2file("/dev/encore_mode", "normal");
   system("su -c encore_profiler");
 }
@@ -248,6 +278,7 @@ void normal_mode(void) {
  *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
 void powersave_mode(void) {
+  drm_check();
   write2file("/dev/encore_mode", "powersave");
   system("su -c encore_profiler");
 }
@@ -355,30 +386,9 @@ int handle_mlbb(const char *gamestart) {
   return 1;
 }
 
-/***********************************************************************************
- * Function Name      : drm_failed_warning
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Forward user to official website if DRM check failed.
- ***********************************************************************************/
-void drm_failed_warning(void) {
-  system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
-  system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
-  log_encore("error: DRM Check failed, exiting.");
-  exit(EXIT_FAILURE);
-}
-
 int main(void) {
   // DRM Check
-  if (access("/data/adb/modules/encore/module.prop", F_OK) == -1) {
-    drm_failed_warning();
-  }
-
-  snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
-  if (system(command) != 0) {
-    drm_failed_warning();
-  }
+  drm_check();
 
   // Daemonize service
   if (daemon(0, 0)) {
