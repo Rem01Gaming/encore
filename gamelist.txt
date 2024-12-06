@@ -366,6 +366,7 @@ com.vng.speedvn
 com.winlator
 com.wondergames.warpath.gp
 com.xd.TLglobal
+com.xd.muffin.gp.global
 com.xd.rotaeno.googleplay
 com.xd.rotaeno.tapcn
 com.xd.terraria
