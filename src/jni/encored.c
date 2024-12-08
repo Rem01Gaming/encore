@@ -1,4 +1,4 @@
-#include "module_drm.h"
+//#include "module_drm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +11,8 @@
 
 #define MAX_OUTPUT_LENGTH 128
 #define MAX_COMMAND_LENGTH 172
+
+#define MODULE_CHECKSUM "2b1592dfde158dae0cbfbbcb9b9de4b6d98853fb8d8792c613292481242df435"
 
 char command[MAX_COMMAND_LENGTH];
 char path[64];
@@ -180,6 +182,21 @@ char* execute_command(const char* command) {
 }
 
 /***********************************************************************************
+ * Function Name      : drm_fail
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Handle daemon exit and DRM message from drm_check function
+ ***********************************************************************************/
+void drm_fail(void) {
+    system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
+    system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
+           "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
+    log_encore("error: DRM Check failed, exiting.");
+    exit(EXIT_FAILURE);
+}
+
+/***********************************************************************************
  * Function Name      : drm_check
  * Inputs             : None
  * Outputs            : None
@@ -191,21 +208,21 @@ char* execute_command(const char* command) {
 void drm_check(void) {
     // Check moduleid and service executable name
     if (access("/data/adb/modules/encore/system/bin/encored", F_OK) == -1) {
-        system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
-        system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
-               "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
-        log_encore("error: DRM Check failed, exiting.");
-        exit(EXIT_FAILURE);
+        drm_fail();
+    }
+
+    if (access("/data/adb/modules/encore/system/bin/encore_profiler", F_OK) == -1) {
+        drm_fail();
+    }
+
+    if (access("/data/adb/modules/encore/system/bin/encore_utility", F_OK) == -1) {
+        drm_fail();
     }
 
     // Check module.prop checksum
     snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
     if (system(command) != 0) {
-        system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
-        system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
-               "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
-        log_encore("error: DRM Check failed, exiting.");
-        exit(EXIT_FAILURE);
+        drm_fail();
     }
 }
 
@@ -397,8 +414,8 @@ int main(void) {
     while (1) {
         if (gamestart == NULL) {
             // Only fetch gamestart and low_power state when user not in-game, prevent overhead.
-            gamestart = get_gamestart();
-            low_power = get_low_power_state();
+            gamestart = trim_newline(get_gamestart());
+            low_power = trim_newline(get_low_power_state());
         } else {
             // Check if PID of the game still running
             snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
@@ -406,11 +423,11 @@ int main(void) {
                 free(pid);
                 pid = NULL;
                 free(gamestart);
-                gamestart = get_gamestart();
+                gamestart = trim_newline(get_gamestart());
             }
         }
 
-        screenstate = get_screenstate();
+        screenstate = trim_newline(get_screenstate());
         mlbb_is_running = handle_mlbb(trim_newline(gamestart));
 
         // Handle in case screenstate is empty
