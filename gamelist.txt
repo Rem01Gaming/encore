@@ -19,6 +19,7 @@ com.RoamingStar.BlueArchive
 com.Shooter.ModernWarship
 com.Shooter.ModernWarships
 com.Sunborn.SnqxExilium
+com.Sunborn.SnqxExilium.Glo
 com.TechTreeGames.TheTower
 com.Vince.AlamobileFormula
 com.WandaSoftware.TruckersofEurope3
@@ -190,6 +191,7 @@ com.mobilelegends.hwag
 com.mobilelegends.mi
 com.mobilelegends.taptest
 com.mobile.legends
+com.mobilechess.gp
 com.mojang.hostilegg
 com.mojang.minecraftpe
 com.mojang.minecraftpe.patch
@@ -242,12 +244,14 @@ com.netmarble.skiagb
 com.netmarble.sololv
 com.netmarble.tog
 com.nexon.bluearchive
+com.nexon.konosuba
 com.neowiz.game.idolypride.en
 com.nexon.kartdrift
 com.noctuagames.android.ashechoes
 com.ngame.allstar.eu
 com.nianticlabs.monsterhunter
 com.olzhass.carparking.multyplayer
+com.papegames.nn4.en
 com.pearlabyss.blackdesertm.gl
 com.pearlabyss.blackdesertm
 com.pinkcore.tkfm
@@ -294,12 +298,14 @@ com.rsg.myheroesen
 com.sandboxinteractive.albiononline
 com.sandboxol.blockymods
 com.seasun.jx3
+com.seasun.snowbreak.google
 com.sega.ColorfulStage.en
 com.sega.pjsekai
 com.sgra.dragon
 com.shangyoo.neon
 com.shatteredpixel.shatteredpixeldungeon
 com.shenlan.m.reverse1999
+com.silverstarstudio.angellegion
 com.smokoko.race
 com.sofunny.Sausage
 com.soulgamechst.majsoul
@@ -308,6 +314,7 @@ com.sprduck.garena.vn
 com.squareenix.lis
 com.stove.epic7.google
 com.sugarfun.gp.sea.lzgwy
+com.sunborn.girlsfrontline.en
 com.sunborn.neuralcloud
 com.sunborn.neuralcloud.en
 com.superb.rhv
@@ -369,9 +376,11 @@ com.xd.TLglobal
 com.xd.muffin.gp.global
 com.xd.rotaeno.googleplay
 com.xd.rotaeno.tapcn
+com.xd.ssrpgen
 com.xd.terraria
 com.xindong.torchlight
 com.yongshi.tenojo
+com.yoozoo.jgame.global
 com.yoozoo.jgame.us
 com.zlongame.mhmnz
 com.ztgame.bob
