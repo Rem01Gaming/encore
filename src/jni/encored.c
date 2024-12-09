@@ -13,7 +13,7 @@
 #define LOG_FILE "/data/encore/encore_log"
 #define MAX_OUTPUT_LENGTH 150
 
-char command[200];
+char command[160];
 char path[64];
 
 /***********************************************************************************
@@ -385,21 +385,19 @@ char* pidof(const char* name) {
 }
 
 /***********************************************************************************
- * Function Name      : notify_game
- * Inputs             : const char* gamestart (name of the game package to boost)
+ * Function Name      : notify_toast
+ * Inputs             : message (char *) - Message to display
  * Outputs            : None
  * Returns            : None
- * Description        : Sends a command to start a toast notification indicating that
- *                      the specified game is being boosted.
- *                      Uses the `am start` command to trigger a toast via
- *                      the bellavita.toast MainActivity.
- *                      Useful for providing user feedback.
+ * Description        : Sends a command to start a toast notification with
+ *                      your message. Uses the `am start` command to trigger
+ *                      a toast via the bellavita.toast MainActivity.
  ***********************************************************************************/
-void notify_game(const char* gamestart) {
+void notify_toast(const char* message) {
     snprintf(command, sizeof(command),
              "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-             "\"Boosting game %s\" -n bellavita.toast/.MainActivity >/dev/null",
-             gamestart);
+             "\"%s\" -n bellavita.toast/.MainActivity >/dev/null",
+             message);
     system(command);
 }
 
@@ -501,7 +499,7 @@ int main(void) {
 
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
-            notify_game(gamestart);
+            notify_toast("Applying performance profile...");
             performance_mode();
             set_priority(pid);
         } else if (low_power && strcmp(low_power, "true") == 0) {
@@ -511,6 +509,7 @@ int main(void) {
 
             cur_mode = 2;
             log_encore("info: applying powersave profile");
+            notify_toast("Applying powersave profile...");
             powersave_mode();
         } else {
             // Bail out if we already on normal profile
@@ -519,6 +518,7 @@ int main(void) {
 
             cur_mode = 0;
             log_encore("info: applying normal profile");
+            notify_toast("Applying normal profile...");
             normal_mode();
         }
     }
