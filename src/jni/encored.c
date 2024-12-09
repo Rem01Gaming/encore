@@ -1,4 +1,5 @@
-//#include "module_drm.h"
+#include "module_drm.h"
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,12 +10,10 @@
 #include <time.h>
 #include <unistd.h>
 
-#define MAX_OUTPUT_LENGTH 128
-#define MAX_COMMAND_LENGTH 172
+#define LOG_FILE "/data/encore/encore_log"
+#define MAX_OUTPUT_LENGTH 150
 
-#define MODULE_CHECKSUM "2b1592dfde158dae0cbfbbcb9b9de4b6d98853fb8d8792c613292481242df435"
-
-char command[MAX_COMMAND_LENGTH];
+char command[200];
 char path[64];
 
 /***********************************************************************************
@@ -69,8 +68,7 @@ char* timern(void) {
  * Outputs            : None
  * Returns            : int - 0 if write successful
  *                           -1 if file does not exist or inaccessible
- * Description        : Appends the provided content to the specified file.
- *                      if the file does not exist, an error message is printed.
+ * Description        : Appends the provided content to the specified file..
  ***********************************************************************************/
 int append2file(const char* file_path, const char* content) {
     if (access(file_path, F_OK) == -1)
@@ -94,7 +92,6 @@ int append2file(const char* file_path, const char* content) {
  * Returns            : int - 0 if write successful
  *                           -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
- *                      if the file does not exist, an error message is printed.
  ***********************************************************************************/
 int write2file(const char* file_path, const char* content) {
     if (access(file_path, F_OK) == -1)
@@ -117,7 +114,7 @@ int write2file(const char* file_path, const char* content) {
  * Outputs            : None
  * Returns            : None
  * Description        : print and logs a formatted message with a timestamp
- *                      to a log file ("/data/encore/encore_log").
+ *                      to a log file.
  ***********************************************************************************/
 void log_encore(const char* message, ...) {
     char* timestamp = timern();
@@ -130,12 +127,29 @@ void log_encore(const char* message, ...) {
 
         char logEncore[MAX_OUTPUT_LENGTH];
         snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
-        printf("%s\n", logEncore);
-        if (append2file("/data/encore/encore_log", logEncore) == -1)
+        if (append2file(LOG_FILE, logEncore) == -1)
             printf("[%s] error: encore_log file is inaccessible!\n", timestamp);
 
         free(timestamp);
     }
+}
+
+/***********************************************************************************
+ * Function Name      : signal_handler
+ * Inputs             : int signal - exit signal
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Handle SIGTERM and SIGINT signal.
+ ***********************************************************************************/
+void signal_handler(int signal) {
+    if (signal == SIGTERM) {
+        log_encore("error: received SIGTERM.");
+    } else if (signal == SIGINT) {
+        log_encore("error: received SIGINT.");
+    }
+
+    // Exit gracefully
+    exit(EXIT_SUCCESS);
 }
 
 /***********************************************************************************
@@ -154,7 +168,7 @@ char* execute_command(const char* command) {
 
     fp = popen(command, "r");
     if (fp == NULL) {
-        log_encore("error: can't exec command '%s'", command);
+        log_encore("error: unable to exec command '%s'", command);
         return NULL;
     }
 
@@ -162,7 +176,7 @@ char* execute_command(const char* command) {
         size_t buffer_length = strlen(buffer);
         char* new_result = realloc(result, result_length + buffer_length + 1);
         if (new_result == NULL) {
-            printf("error: memory allocation error in execute_command()\n");
+            log_encore("error: memory allocation error in execute_command()");
             free(result);
             pclose(fp);
             return NULL;
@@ -176,7 +190,7 @@ char* execute_command(const char* command) {
         result[result_length] = '\0';
 
     if (pclose(fp) == -1)
-        printf("error: closing command stream in execute_command()");
+        log_encore("error: closing command stream in execute_command()");
 
     return result;
 }
@@ -243,10 +257,10 @@ void set_priority(const char* pid) {
     log_encore("info: priority settings for PID %s", pid);
 
     if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
-        log_encore("error: failed to set nice priority for %s", pid);
+        log_encore("error: unable to set nice priority for %s", pid);
 
     if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
-        log_encore("error: failed to set IO priority for %s", pid);
+        log_encore("error: unable to set IO priority for %s", pid);
 }
 
 /***********************************************************************************
@@ -314,8 +328,9 @@ void powersave_mode(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 char* get_gamestart(void) {
-    return execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo "
-                           "$(cat /data/encore/gamelist.txt)");
+    char* gamestart = execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo "
+                                      "$(cat /data/encore/gamelist.txt)");
+    return trim_newline(gamestart);
 }
 
 /***********************************************************************************
@@ -335,7 +350,7 @@ char* get_screenstate(void) {
         state = execute_command("su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
                                 "awk -F'=' '{print $2}'");
     }
-    return state;
+    return trim_newline(state);
 }
 
 /***********************************************************************************
@@ -349,9 +364,24 @@ char* get_screenstate(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 char* get_low_power_state(void) {
-    return execute_command("su -c dumpsys power | grep -Eo "
-                           "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
-                           "awk -F'=' '{print $2}'");
+    char* low_power = execute_command("su -c dumpsys power | grep -Eo "
+                                      "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
+                                      "awk -F'=' '{print $2}'");
+    return trim_newline(low_power);
+}
+
+/***********************************************************************************
+ * Function Name      : pidof
+ * Inputs             : name (char *) - Name of process
+ * Outputs            : pid (char *) - PID of process
+ * Returns            : PID of process
+ * Description        : Fetch PID of a program
+ * Note               : Caller is responsible for freeing the returned string.
+ ***********************************************************************************/
+char* pidof(const char* name) {
+    snprintf(command, sizeof(command), "pidof %s", name);
+    char* pid = execute_command(command);
+    return trim_newline(pid);
 }
 
 /***********************************************************************************
@@ -403,88 +433,94 @@ int main(void) {
 
     // Daemonize service
     if (daemon(0, 0)) {
-        log_encore("error: Can't daemonize service");
+        log_encore("error: unable to daemonize service");
         exit(EXIT_FAILURE);
     }
 
+    // Register signal handlers
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
-    log_encore("info: daemon started, applying perfcommon...");
+    log_encore("info: daemon started");
     perf_common();
 
     while (1) {
-        if (gamestart == NULL) {
-            // Only fetch gamestart and low_power state when user not in-game, prevent overhead.
-            gamestart = trim_newline(get_gamestart());
-            low_power = trim_newline(get_low_power_state());
-        } else {
-            // Check if PID of the game still running
-            snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
-            if (access(path, F_OK) == -1) {
-                free(pid);
-                pid = NULL;
-                free(gamestart);
-                gamestart = trim_newline(get_gamestart());
-            }
-        }
-
-        screenstate = trim_newline(get_screenstate());
-        mlbb_is_running = handle_mlbb(trim_newline(gamestart));
-
-        // Handle in case screenstate is empty
-        if (screenstate == NULL) {
-            log_encore("error: failed to get current screenstate, service won't work properly!");
-            sleep(30);
-            continue;
-        }
-
-        if (gamestart && (strcmp(trim_newline(screenstate), "Awake") == 0 || strcmp(trim_newline(screenstate), "true") == 0) &&
-            mlbb_is_running != 1) {
-            // Apply performance mode
-            if (cur_mode != 1) {
-                snprintf(command, sizeof(command), "pidof %s", trim_newline(gamestart));
-                pid = execute_command(command);
-
-                // Handle weird behavior of MLBB
-                if (mlbb_is_running == 2) {
-                    pid = execute_command("pidof com.mobile.legends:UnityKillsMe");
-                    log_encore("info: boosting com.mobile.legends:UnityKillsMe thread");
-                }
-
-                if (pid != NULL) {
-                    cur_mode = 1;
-                    log_encore("info: applying performance profile for %s", trim_newline(gamestart));
-                    notify_game(trim_newline(gamestart));
-                    performance_mode();
-                    set_priority(trim_newline(pid));
-                } else {
-                    log_encore("error: could not fetch pid of %s, can't start performance profile", trim_newline(gamestart));
-                }
-            }
-        } else if (low_power && strcmp(trim_newline(low_power), "true") == 0) {
-            // Apply powersave mode
-            if (cur_mode != 2) {
-                cur_mode = 2;
-                log_encore("info: applying powersave profile");
-                powersave_mode();
-            }
-        } else {
-            // Apply normal mode
-            if (cur_mode != 0) {
-                cur_mode = 0;
-                log_encore("info: applying normal profile");
-                normal_mode();
-            }
-        }
-
         free(screenstate);
-        screenstate = NULL;
-
         if (low_power) {
             free(low_power);
             low_power = NULL;
         }
 
         sleep(15);
+
+        if (gamestart == NULL) {
+            // Only fetch gamestart and low_power state when user not in-game
+            // prevent overhead from dumpsys commands.
+            gamestart = get_gamestart();
+            low_power = get_low_power_state();
+        } else {
+            // Check if the game is still running
+            snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
+            if (access(path, F_OK) == -1) {
+                free(pid);
+                pid = NULL;
+                free(gamestart);
+                gamestart = get_gamestart();
+            }
+        }
+
+        screenstate = get_screenstate();
+        mlbb_is_running = handle_mlbb(gamestart);
+
+        // Handle in case screenstate is empty
+        if (screenstate == NULL) {
+            log_encore("error: unable to get current screenstate, service won't work properly!");
+            sleep(30);
+            continue;
+        }
+
+        if (gamestart && (strcmp(screenstate, "Awake") == 0 || strcmp(screenstate, "true") == 0) && mlbb_is_running != 1) {
+            // Bail out if we already on performance profile
+            if (cur_mode == 1)
+                continue;
+
+            // Get PID and check if the game is "real" running program
+            pid = pidof(gamestart);
+            if (pid == NULL) {
+                log_encore("error: unable to fetch PID of %s", gamestart);
+                continue;
+            }
+
+            // Handle weird behavior of MLBB
+            if (mlbb_is_running == 2) {
+                free(gamestart);
+                gamestart = "com.mobile.legends:UnityKillsMe";
+                pid = pidof("com.mobile.legends:UnityKillsMe");
+            }
+
+            cur_mode = 1;
+            log_encore("info: applying performance profile for %s", gamestart);
+            notify_game(gamestart);
+            performance_mode();
+            set_priority(pid);
+        } else if (low_power && strcmp(low_power, "true") == 0) {
+            // Bail out if we already on powersave profile
+            if (cur_mode == 2)
+                continue;
+
+            cur_mode = 2;
+            log_encore("info: applying powersave profile");
+            powersave_mode();
+        } else {
+            // Bail out if we already on normal profile
+            if (cur_mode == 0)
+                continue;
+
+            cur_mode = 0;
+            log_encore("info: applying normal profile");
+            normal_mode();
+        }
     }
 
     return 0;
