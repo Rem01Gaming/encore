@@ -273,7 +273,7 @@ void set_priority(const char* pid) {
  * Returns            : None
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
-void perf_common(void) {
+static inline void perf_common(void) {
     write2file("/dev/encore_mode", "perfcommon");
     system("su -c encore_profiler");
 }
@@ -285,7 +285,7 @@ void perf_common(void) {
  * Returns            : None
  * Description        : Executes a command to switch to performance mode.
  ***********************************************************************************/
-void performance_mode(void) {
+static inline void performance_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "performance");
     system("su -c encore_profiler");
@@ -298,7 +298,7 @@ void performance_mode(void) {
  * Returns            : None
  * Description        : Executes a command to switch to normal mode.
  ***********************************************************************************/
-void normal_mode(void) {
+static inline void normal_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "normal");
     system("su -c encore_profiler");
@@ -312,7 +312,7 @@ void normal_mode(void) {
  * Description        : Executes commands to switch to powersave mode by first
  *                      applying normal settings and then powersave-specific settings.
  ***********************************************************************************/
-void powersave_mode(void) {
+static inline void powersave_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "powersave");
     system("su -c encore_profiler");
