@@ -433,7 +433,7 @@ int main(void) {
     drm_check();
 
     // Daemonize service
-    if (daemon(0, 0)) {
+    if (daemon(0, 0) != 0) {
         log_encore("error: unable to daemonize service");
         exit(EXIT_FAILURE);
     }
