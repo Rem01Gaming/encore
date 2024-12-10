@@ -468,6 +468,7 @@ int main(void) {
                 pid = NULL;
                 free(gamestart);
                 gamestart = get_gamestart();
+                low_power = get_low_power_state();
             }
         }
 
