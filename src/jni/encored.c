@@ -207,7 +207,6 @@ void drm_fail(void) {
     system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
            "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
     log_encore("error: DRM Check failed, exiting.");
-    exit(EXIT_FAILURE);
 }
 
 /***********************************************************************************
@@ -223,20 +222,24 @@ void drm_check(void) {
     // Check moduleid and service executable name
     if (access("/data/adb/modules/encore/system/bin/encored", F_OK) == -1) {
         drm_fail();
+        exit(EXIT_FAILURE);
     }
 
     if (access("/data/adb/modules/encore/system/bin/encore_profiler", F_OK) == -1) {
         drm_fail();
+        exit(EXIT_FAILURE);
     }
 
     if (access("/data/adb/modules/encore/system/bin/encore_utility", F_OK) == -1) {
         drm_fail();
+        exit(EXIT_FAILURE);
     }
 
     // Check module.prop checksum
     snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
     if (system(command) != 0) {
         drm_fail();
+        exit(EXIT_FAILURE);
     }
 }
 
