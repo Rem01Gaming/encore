@@ -12,8 +12,8 @@
 #define LOG_FILE "/data/encore/encore_log"
 #define MAX_OUTPUT_LENGTH 150
 
-char command[160];
-char path[64];
+char command[300];
+char path[180];
 
 /***********************************************************************************
  * Function Name      : trim_newline
@@ -195,6 +195,36 @@ char* execute_command(const char* command) {
 }
 
 /***********************************************************************************
+ * Function Name      : systemv
+ * Inputs             : format (const char *) - shell command to execute
+ *                      variadic arguments - other arguments
+ * Outputs            : None
+ * Returns            : int - 0 if execution success
+ *                           -1 if execution failed
+ * Description        : Executes a shell command using system().
+ ***********************************************************************************/
+int systemv(const char* format, ...) {
+    if (format == NULL)
+        return -1;
+
+    // Initialize variadic arguments
+    va_list args;
+    va_start(args, format);
+
+    // Format the string
+    int ret = vsnprintf(command, sizeof(command), format, args);
+    va_end(args);
+
+    if (ret < 0 || ret >= sizeof(command)) {
+        log_encore("error: command is too long or formatting error in systemv()");
+        return -1;
+    }
+
+    // Execute the command using system()
+    return system(command);
+}
+
+/***********************************************************************************
  * Function Name      : drm_fail
  * Inputs             : None
  * Outputs            : None
@@ -254,6 +284,30 @@ static inline void set_priority(const char* pid) {
     log_encore("info: priority settings for PID %s", pid);
     if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
+}
+
+/***********************************************************************************
+ * Function Name      : preload_game
+ * Inputs             : gamestart (const char *) - Package name of the game
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Lock game shader cache into memory using vmtouch.
+ ***********************************************************************************/
+static inline void preload_game(const char* gamestart) {
+    // Preload Vulkan PSO
+    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/cache/vulkan_pso_cache.bin", gamestart);
+    if (access(path, F_OK) != -1)
+        systemv("su -c vmtouch -ld %s", path);
+
+    // Preload Unity shader
+    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/cache/UnityShaderCache", gamestart);
+    if (access(path, F_OK) != -1)
+        systemv("su -c vmtouch -ld %s", path);
+
+    // Preload Unreal cache
+    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/files/ProgramBinaryCache", gamestart);
+    if (access(path, F_OK) != -1)
+        systemv("su -c vmtouch -ld %s", path);
 }
 
 /***********************************************************************************
@@ -389,11 +443,8 @@ static inline char* pidof(const char* name) {
  *                      a toast via the bellavita.toast MainActivity.
  ***********************************************************************************/
 static inline void notify_toast(const char* message) {
-    snprintf(command, sizeof(command),
-             "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
-             "\"%s\" -n bellavita.toast/.MainActivity >/dev/null",
-             message);
-    system(command);
+    systemv("/system/bin/am start -a android.intent.action.MAIN -e toasttext \"%s\" -n bellavita.toast/.MainActivity >/dev/null",
+            message);
 }
 
 /***********************************************************************************
@@ -461,6 +512,7 @@ int main(void) {
                 free(gamestart);
                 gamestart = get_gamestart();
                 low_power = get_low_power_state();
+                system("su -c pkill vmtouch");
             }
         }
 
@@ -487,17 +539,15 @@ int main(void) {
             }
 
             // Handle weird behavior of MLBB
-            if (mlbb_is_running == 2) {
-                free(gamestart);
-                gamestart = "com.mobile.legends:UnityKillsMe";
+            if (mlbb_is_running == 2)
                 pid = pidof("com.mobile.legends:UnityKillsMe");
-            }
 
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
             notify_toast("Applying performance profile...");
             performance_mode();
             set_priority(pid);
+            preload_game(gamestart);
         } else if (low_power && (strcmp(screenstate, "true") == 0 || strcmp(screenstate, "1") == 0)) {
             // Bail out if we already on powersave profile
             if (cur_mode == 2)

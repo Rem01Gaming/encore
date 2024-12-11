@@ -23,9 +23,11 @@ extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
 # Extract executables
 if [ $ARCH = "arm64" ]; then
 	extract "$ZIPFILE" 'libs/arm64-v8a/encored' $TMPDIR
+	extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $TMPDIR
 	cp $TMPDIR/libs/arm64-v8a/* $MODPATH/system/bin
 elif [ $ARCH = "arm" ]; then
 	extract "$ZIPFILE" 'libs/armeabi-v7a/encored' $TMPDIR
+	extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $TMPDIR
 	cp $TMPDIR/libs/armeabi-v7a/* $MODPATH/system/bin
 else
 	ui_print "*********************************************************"
