@@ -273,7 +273,7 @@ static inline void perf_common(void) {
  * Inputs             : None
  * Outputs            : None
  * Returns            : None
- * Description        : Executes a command to switch to performance mode.
+ * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
 static inline void performance_mode(void) {
     drm_check();
@@ -286,7 +286,7 @@ static inline void performance_mode(void) {
  * Inputs             : None
  * Outputs            : None
  * Returns            : None
- * Description        : Executes a command to switch to normal mode.
+ * Description        : Executes a command to switch to normal profile.
  ***********************************************************************************/
 static inline void normal_mode(void) {
     drm_check();
@@ -299,8 +299,7 @@ static inline void normal_mode(void) {
  * Inputs             : None
  * Outputs            : None
  * Returns            : None
- * Description        : Executes commands to switch to powersave mode by first
- *                      applying normal settings and then powersave-specific settings.
+ * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
 static inline void powersave_mode(void) {
     drm_check();
