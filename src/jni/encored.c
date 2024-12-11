@@ -320,7 +320,7 @@ static inline void powersave_mode(void) {
  *                      listed in gamelist.txt.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* get_gamestart(void) {
+static inline char* get_gamestart(void) {
     char* gamestart = execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo "
                                       "$(cat /data/encore/gamelist.txt)");
     return trim_newline(gamestart);
@@ -336,7 +336,7 @@ char* get_gamestart(void) {
  *                      through an alternative dumpsys window command.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* get_screenstate(void) {
+static inline char* get_screenstate(void) {
     char* state = execute_command("su -c dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                   "| awk -F'=' '{print $2}'");
     if (state == NULL) {
@@ -350,16 +350,19 @@ char* get_screenstate(void) {
  * Function Name      : get_low_power_state
  * Inputs             : None
  * Outputs            : None
- * Returns            : char* ("true" if Battery Saver is enabled, "false" otherwise)
+ * Returns            : char* ("true" or "1" if Battery Saver is enabled, "false" otherwise)
  * Description        : Checks if the device's Battery Saver mode is enabled by using
  *                      dumpsys power and filtering for the battery saver status.
  *                      Useful for determining low-power states.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* get_low_power_state(void) {
+static inline char* get_low_power_state(void) {
     char* low_power = execute_command("su -c dumpsys power | grep -Eo "
                                       "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
                                       "awk -F'=' '{print $2}'");
+    if (low_power == NULL)
+        low_power = execute_command("su -c settings get global low_power");
+
     return trim_newline(low_power);
 }
 
@@ -371,7 +374,7 @@ char* get_low_power_state(void) {
  * Description        : Fetch PID of a program
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* pidof(const char* name) {
+static inline char* pidof(const char* name) {
     snprintf(command, sizeof(command), "pidof %s", name);
     char* pid = execute_command(command);
     return trim_newline(pid);
@@ -405,7 +408,7 @@ static inline void notify_toast(const char* message) {
  * Description        : Checks if "com.mobile.legends" IS actually running
  *                      on foreground, not in the background.
  ***********************************************************************************/
-int handle_mlbb(const char* gamestart) {
+static inline int handle_mlbb(const char* gamestart) {
     if (gamestart == NULL)
         return -1;
 
@@ -496,7 +499,7 @@ int main(void) {
             notify_toast("Applying performance profile...");
             performance_mode();
             set_priority(pid);
-        } else if (low_power && strcmp(low_power, "true") == 0) {
+        } else if (low_power && (strcmp(screenstate, "true") == 0 || strcmp(screenstate, "1") == 0)) {
             // Bail out if we already on powersave profile
             if (cur_mode == 2)
                 continue;
