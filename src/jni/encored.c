@@ -5,7 +5,6 @@
 #include <string.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
@@ -24,7 +23,7 @@ char path[64];
  * Description        : Trims a newline character at the end of a string if
  *                      present.
  ***********************************************************************************/
-char* trim_newline(char* string) {
+static inline char* trim_newline(char* string) {
     if (string == NULL)
         return NULL;
 
@@ -202,7 +201,7 @@ char* execute_command(const char* command) {
  * Returns            : None
  * Description        : Handle daemon exit and DRM message from drm_check function
  ***********************************************************************************/
-void drm_fail(void) {
+static inline void drm_fail(void) {
     system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
     system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
            "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
@@ -248,22 +247,13 @@ void drm_check(void) {
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
  * Returns            : None
- * Description        : Sets the CPU nice priority and I/O priority of a given
- *                      process.
+ * Description        : Sets the CPU nice priority of a given process.
  ***********************************************************************************/
-void set_priority(const char* pid) {
-    int prio = -20;   // Niceness
-    int io_class = 1; // I/O class
-    int io_prio = 0;  // I/O priority
-
+static inline void set_priority(const char* pid) {
     pid_t process_id = atoi(pid);
     log_encore("info: priority settings for PID %s", pid);
-
-    if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
+    if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
-
-    if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
-        log_encore("error: unable to set IO priority for %s", pid);
 }
 
 /***********************************************************************************
@@ -396,7 +386,7 @@ char* pidof(const char* name) {
  *                      your message. Uses the `am start` command to trigger
  *                      a toast via the bellavita.toast MainActivity.
  ***********************************************************************************/
-void notify_toast(const char* message) {
+static inline void notify_toast(const char* message) {
     snprintf(command, sizeof(command),
              "/system/bin/am start -a android.intent.action.MAIN -e toasttext "
              "\"%s\" -n bellavita.toast/.MainActivity >/dev/null",
@@ -462,7 +452,7 @@ int main(void) {
             low_power = get_low_power_state();
         } else {
             // Check if the game is still running
-            snprintf(path, sizeof(path), "/proc/%s", trim_newline(pid));
+            snprintf(path, sizeof(path), "/proc/%s", pid);
             if (access(path, F_OK) == -1) {
                 free(pid);
                 pid = NULL;
