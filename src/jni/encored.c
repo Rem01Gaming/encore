@@ -207,20 +207,11 @@ int systemv(const char* format, ...) {
     if (format == NULL)
         return -1;
 
-    // Initialize variadic arguments
     va_list args;
     va_start(args, format);
-
-    // Format the string
-    int ret = vsnprintf(command, sizeof(command), format, args);
+    vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    if (ret < 0 || ret >= sizeof(command)) {
-        log_encore("error: command is too long or formatting error in systemv()");
-        return -1;
-    }
-
-    // Execute the command using system()
     return system(command);
 }
 
