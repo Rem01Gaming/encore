@@ -138,6 +138,7 @@ com.hypergryph.exastris
 com.igg.android.doomsdaylastsurvivors
 com.ignm.raspberrymash.jp
 com.ilongyuan.implosion
+com.infoldgames.infinitynikkien
 com.jacksparrow.jpmajiang
 com.japan.datealive.gp
 com.je.supersus
