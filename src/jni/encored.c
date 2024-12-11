@@ -12,8 +12,8 @@
 #define LOG_FILE "/data/encore/encore_log"
 #define MAX_OUTPUT_LENGTH 150
 
-char command[300];
-char path[180];
+char command[1024];
+char path[256];
 
 /***********************************************************************************
  * Function Name      : trim_newline
