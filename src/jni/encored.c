@@ -539,7 +539,7 @@ int main(void) {
             performance_mode();
             set_priority(pid);
             preload_game(gamestart);
-        } else if (low_power && (strcmp(screenstate, "true") == 0 || strcmp(screenstate, "1") == 0)) {
+        } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
             // Bail out if we already on powersave profile
             if (cur_mode == 2)
                 continue;
