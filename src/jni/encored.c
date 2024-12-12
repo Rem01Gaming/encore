@@ -285,20 +285,9 @@ static inline void set_priority(const char* pid) {
  * Description        : Lock game shader cache into memory using vmtouch.
  ***********************************************************************************/
 static inline void preload_game(const char* gamestart) {
-    // Preload Vulkan PSO
-    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/cache/vulkan_pso_cache.bin", gamestart);
-    if (access(path, F_OK) != -1)
-        systemv("su -c vmtouch -ld %s", path);
-
-    // Preload Unity shader
-    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/cache/UnityShaderCache", gamestart);
-    if (access(path, F_OK) != -1)
-        systemv("su -c vmtouch -ld %s", path);
-
-    // Preload Unreal cache
-    snprintf(path, sizeof(path), "/sdcard/Android/data/%s/files/ProgramBinaryCache", gamestart);
-    if (access(path, F_OK) != -1)
-        systemv("su -c vmtouch -ld %s", path);
+    systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
+            "/sdcard/Android/data/%s/files/ProgramBinaryCache",
+            gamestart, gamestart, gamestart);
 }
 
 /***********************************************************************************
