@@ -11,6 +11,7 @@
 
 #define LOG_FILE "/data/encore/encore_log"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
+#define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
@@ -226,6 +227,33 @@ static inline int systemv(const char* format, ...) {
 }
 
 /***********************************************************************************
+ * Function Name      : notify
+ * Inputs             : message (char *) - Message to display
+ * Outputs            : None
+ * Returns            : int - 0 if success
+ *                           -1 if failed
+ * Description        : Sends a message to regular notification.
+ ***********************************************************************************/
+static inline int notify(const char* message) {
+    return systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
+}
+
+/***********************************************************************************
+ * Function Name      : notify_toast
+ * Inputs             : message (char *) - Message to display
+ * Outputs            : None
+ * Returns            : int - 0 if success
+ *                           -1 if failed
+ * Description        : Sends a command to start a toast notification with
+ *                      your message. Uses the `am start` command to trigger
+ *                      a toast via the bellavita.toast MainActivity.
+ ***********************************************************************************/
+static inline int notify_toast(const char* message) {
+    return systemv(
+        "/system/bin/am start -a android.intent.action.MAIN -e toasttext \"%s\" -n bellavita.toast/.MainActivity >/dev/null", message);
+}
+
+/***********************************************************************************
  * Function Name      : drm_fail
  * Inputs             : None
  * Outputs            : None
@@ -234,8 +262,7 @@ static inline int systemv(const char* format, ...) {
  ***********************************************************************************/
 static inline void drm_fail(void) {
     system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
-    system("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install "
-           "Encore Tweaks from official website encore.rem01gaming.dev.'\" >/dev/null");
+    notify("DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.");
     log_encore("error: DRM Check failed, exiting.");
 }
 
@@ -423,20 +450,6 @@ static inline char* pidof(const char* name) {
 }
 
 /***********************************************************************************
- * Function Name      : notify_toast
- * Inputs             : message (char *) - Message to display
- * Outputs            : None
- * Returns            : None
- * Description        : Sends a command to start a toast notification with
- *                      your message. Uses the `am start` command to trigger
- *                      a toast via the bellavita.toast MainActivity.
- ***********************************************************************************/
-static inline void notify_toast(const char* message) {
-    systemv("/system/bin/am start -a android.intent.action.MAIN -e toasttext \"%s\" -n bellavita.toast/.MainActivity >/dev/null",
-            message);
-}
-
-/***********************************************************************************
  * Function Name      : handle_mlbb
  * Inputs             : const char *gamestart - Game package name
  * Outputs            : None
@@ -461,6 +474,12 @@ static inline int handle_mlbb(const char* gamestart) {
 }
 
 int main(void) {
+    // Handle case when module gets updated
+    if (access(MODULE_UPDATE, F_OK) == 0) {
+        notify("Please reboot your device to complete module update.");
+        exit(EXIT_SUCCESS);
+    }
+
     // DRM Check
     drm_check();
 
@@ -514,6 +533,12 @@ int main(void) {
             log_encore("error: unable to get current screenstate, service won't work properly!");
             sleep(30);
             continue;
+        }
+
+        // Handle case when module gets updated
+        if (access(MODULE_UPDATE, F_OK) == 0) {
+            notify("Please reboot your device to complete module update.");
+            exit(EXIT_SUCCESS);
         }
 
         if (gamestart && (strcmp(screenstate, "Awake") == 0 || strcmp(screenstate, "true") == 0) && mlbb_is_running != 1) {
