@@ -40,8 +40,7 @@ esac
 
 extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
 extract "$ZIPFILE" "libs/$ARCH_TMP/vmtouch" "$TMPDIR"
-cp "$TMPDIR/libs/$ARCH_TMP/*" "$MODPATH/system/bin"
-
+cp $TMPDIR/libs/$ARCH_TMP/* "$MODPATH/system/bin"
 rm -rf "$TMPDIR/libs"
 
 # Extract webroot
