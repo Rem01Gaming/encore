@@ -6,57 +6,12 @@ get_module_version() {
 	grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'
 }
 
-get_service_state() {
-	if ps -e | grep encored >/dev/null; then
-		echo "1"
-	else
-		echo "0"
-	fi
-}
-
-get_service_pid() {
-	pidof -s encored || echo null
-}
-
 get_chipset() {
 	getprop "ro.board.platform"
 }
 
 get_kernel() {
 	uname -r
-}
-
-get_default_cpugov() {
-	if [ -f /data/encore/custom_default_cpu_gov ]; then
-		cat /data/encore/custom_default_cpu_gov
-	else
-		cat /data/encore/default_cpu_gov
-	fi
-}
-
-get_perf_cpugov() {
-	cat /data/encore/perf_cpu_gov
-}
-
-get_powersave_cpugov() {
-	cat /data/encore/powersave_cpu_gov
-}
-
-get_available_cpugov() {
-	chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
-	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
-}
-
-set_default_cpugov() {
-	echo $1 >/data/encore/custom_default_cpu_gov
-}
-
-set_perf_cpugov() {
-	echo $1 >/data/encore/perf_cpu_gov
-}
-
-set_powersave_cpugov() {
-	echo $1 >/data/encore/powersave_cpu_gov
 }
 
 get_kill_logd() {
@@ -82,28 +37,6 @@ wlan_logging
 			start $svc 2>/dev/null
 		fi
 	done
-}
-
-set_kill_logd() {
-	echo $1 >/data/encore/kill_logd
-	kill_logd
-}
-
-restart_service() {
-	pkill encored
-	su -c "encored" </dev/null >/dev/null 2>&1 &
-}
-
-get_gamelist() {
-	cat /data/encore/gamelist.txt
-}
-
-save_gamelist() {
-	echo "$1" | tr '/' '|' >/data/encore/gamelist.txt
-}
-
-open_website() {
-	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null
 }
 
 warn_drm_failed() {

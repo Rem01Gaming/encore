@@ -3,14 +3,14 @@ import encoreHappy from './assets/encore1.webp';
 import encoreSleeping from './assets/encore2.webp';
 
 async function getModuleVersion() {
-  const { errno, stdout } = await exec('encore_utility get_module_version');
+  const { errno, stdout } = await exec('grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'');
   if (errno === 0) {
     document.getElementById('moduleVer').textContent = stdout.trim();
   }
 }
 
 async function getServiceState() {
-  const { errno, stdout } = await exec('encore_utility get_service_state');
+  const { errno, stdout } = await exec('[ ! -z $(sudo pidof encored) ] && echo 1 || echo 0');
   if (errno === 0) {
     const serviceStatusElement = document.getElementById('serviceStatus');
     const image = document.getElementById('imgEncore');
@@ -25,14 +25,14 @@ async function getServiceState() {
 }
 
 async function getServicePID() {
-  const { errno, stdout } = await exec('encore_utility get_service_pid');
+  const { errno, stdout } = await exec('pidof -s encored || echo null');
   if (errno === 0) {
     document.getElementById('servicePID').textContent = "Service PID: " + stdout.trim();
   }
 }
 
 async function getKillLogdSwitch() {
-  const { errno, stdout } = await exec('encore_utility get_kill_logd');
+  const { errno, stdout } = await exec('cat /data/encore/kill_logd');
   if (errno === 0) {
     const switchElement = document.getElementById('killLogdSwitch');
     switchElement.checked = stdout.trim() === '1';
@@ -41,30 +41,30 @@ async function getKillLogdSwitch() {
 
 async function toggleKillLogdSwitch(isChecked) {
   const command = isChecked
-    ? 'encore_utility set_kill_logd 1'
-    : 'encore_utility set_kill_logd 0';
+    ? 'echo 1 >/data/encore/kill_logd'
+    : 'echo 0 >/data/encore/kill_logd';
   toast('Reboot your device to take effect');
   await exec(command);
 }
 
 async function restartService() {
-  await exec('encore_utility restart_service');
+  await exec('pkill encored && su -c /system/bin/encored');
   await getServiceState();
   await getServicePID();
 }
 
 async function changeCPUGovernor(governor) {
-  const command = 'encore_utility set_default_cpugov ' + governor;
+  const command = 'echo ' + governor + ' >/data/encore/custom_default_cpu_gov';
   await exec(command);
 }
 
 async function changePowersaveCPUGovernor(governor) {
-  const command = 'encore_utility set_powersave_cpugov ' + governor;
+  const command = 'echo ' + governor + ' >/data/encore/powersave_cpu_gov';
   await exec(command);
 }
 
 async function populateCPUGovernors() {
-  const { errno: govErrno, stdout: govStdout } = await exec('encore_utility get_available_cpugov');
+  const { errno: govErrno, stdout: govStdout } = await exec('chmod 644 scaling_available_governors && cat scaling_available_governors', { cwd: '/sys/devices/system/cpu/cpu0/cpufreq' });
   if (govErrno === 0) {
     const governors = govStdout.trim().split(/\s+/);
     const selectElement1 = document.getElementById('cpuGovernor');
@@ -85,13 +85,13 @@ async function populateCPUGovernors() {
       selectElement2.appendChild(option2);
     });
 
-    const { errno: defaultErrno, stdout: defaultStdout } = await exec('encore_utility get_default_cpugov');
+    const { errno: defaultErrno, stdout: defaultStdout } = await exec('[ -f custom_default_cpu_gov ] && cat custom_default_cpu_gov || cat default_cpu_gov', { cwd: '/data/encore' });
     if (defaultErrno === 0) {
       const defaultGovernor = defaultStdout.trim();
       selectElement1.value = defaultGovernor;
     }
 
-    const { errno: powersaveErrno, stdout: powersaveStdout } = await exec('encore_utility get_powersave_cpugov');
+    const { errno: powersaveErrno, stdout: powersaveStdout } = await exec('cat /data/encore/powersave_cpu_gov');
     if (powersaveErrno === 0) {
       const defaultPowersaveGovernor = powersaveStdout.trim();
       selectElement2.value = defaultPowersaveGovernor;
@@ -108,7 +108,7 @@ async function openGamelistModal() {
   const modal = document.getElementById('gamelistModal');
   const input = document.getElementById('gamelistInput');
 
-  const { errno, stdout } = await exec('encore_utility get_gamelist');
+  const { errno, stdout } = await exec('cat /data/encore/gamelist.txt');
   if (errno === 0) {
     input.value = stdout.trim().replace(/\|/g, '\n');
   }
@@ -119,12 +119,12 @@ async function openGamelistModal() {
 async function saveGamelist() {
   const input = document.getElementById('gamelistInput');
   const gamelist = input.value.trim().replace(/\n+/g, '/');
-  await exec(`encore_utility save_gamelist "${gamelist}"`);
+  await exec(`echo "${gamelist}" | tr '/' '|' >/data/encore/gamelist.txt`);
   toast('Gamelist saved successfully.');
 }
 
 async function openWebsite() {
-  await exec('encore_utility open_website');
+  await exec('/system/bin/am start -a android.intent.action.VIEW -d https://encore.rem01gaming.dev/');
 }
 
 document.addEventListener('DOMContentLoaded', async (event) => {
