@@ -358,7 +358,7 @@ static inline void preload_game(const char* gamestart) {
         return;
 
     log_encore("info: preload %s assets", gamestart);
-    systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
+    systemv("vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
             "/sdcard/Android/data/%s/files/ProgramBinaryCache",
             gamestart, gamestart, gamestart);
 }
@@ -372,7 +372,7 @@ static inline void preload_game(const char* gamestart) {
  ***********************************************************************************/
 static inline void perf_common(void) {
     write2file("/dev/encore_mode", "perfcommon");
-    system("su -c encore_profiler");
+    system("encore_profiler");
 }
 
 /***********************************************************************************
@@ -385,7 +385,7 @@ static inline void perf_common(void) {
 static inline void performance_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "performance");
-    system("su -c encore_profiler");
+    system("encore_profiler");
 }
 
 /***********************************************************************************
@@ -398,7 +398,7 @@ static inline void performance_mode(void) {
 static inline void normal_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "normal");
-    system("su -c encore_profiler");
+    system("encore_profiler");
 }
 
 /***********************************************************************************
@@ -411,7 +411,7 @@ static inline void normal_mode(void) {
 static inline void powersave_mode(void) {
     drm_check();
     write2file("/dev/encore_mode", "powersave");
-    system("su -c encore_profiler");
+    system("encore_profiler");
 }
 
 /***********************************************************************************
@@ -443,10 +443,10 @@ static inline char* get_gamestart(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_screenstate(void) {
-    char* state = execute_command("su -c dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
+    char* state = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                   "| awk -F'=' '{print $2}'");
     if (state == NULL) {
-        state = execute_command("su -c dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
+        state = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
                                 "awk -F'=' '{print $2}'");
     }
     return trim_newline(state);
@@ -463,11 +463,11 @@ static inline char* get_screenstate(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_low_power_state(void) {
-    char* low_power = execute_command("su -c dumpsys power | grep -Eo "
+    char* low_power = execute_command("dumpsys power | grep -Eo "
                                       "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
                                       "awk -F'=' '{print $2}'");
     if (low_power == NULL)
-        low_power = execute_command("su -c settings get global low_power");
+        low_power = execute_command("settings get global low_power");
 
     return trim_newline(low_power);
 }
