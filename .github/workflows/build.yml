@@ -32,9 +32,7 @@ jobs:
         ndk-version: r27c
     - name: Build Encore JNI
       working-directory: ./src
-      run: |
-        echo "#define MODULE_CHECKSUM \"$(sha256sum ../module/module.prop | awk '{print $1}')\"" >jni/module_drm.h
-        ndk-build
+      run: ndk-build
     - name: Build WebUI
       working-directory: ./src/webui
       run: |

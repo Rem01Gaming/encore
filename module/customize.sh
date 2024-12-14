@@ -1,16 +1,24 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 
-# Flashable integrity checkup
-ui_print "- Extracting verify.sh"
-unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
-if [ ! -f "$TMPDIR/verify.sh" ]; then
+abort_unsupported_arch() {
+	ui_print "*********************************************************"
+	ui_print "! Unsupported ARCH: $ARCH"
+	ui_print "! Encore Tweaks does not support your CPU architecture"
+	abort "*********************************************************"
+}
+
+abort_corrupted() {
 	ui_print "*********************************************************"
 	ui_print "! Unable to extract verify.sh!"
 	ui_print "! This zip may be corrupted, please try downloading again"
 	abort "*********************************************************"
-fi
+}
 
+# Flashable integrity checkup
+ui_print "- Extracting verify.sh"
+unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
+[ ! -f "$TMPDIR/verify.sh" ] && abort_corrupted
 source "$TMPDIR/verify.sh"
 
 # Extract module files
@@ -21,21 +29,20 @@ extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
 
 # Extract executables
-if [ $ARCH = "arm64" ]; then
-	extract "$ZIPFILE" 'libs/arm64-v8a/encored' $TMPDIR
-	extract "$ZIPFILE" 'libs/arm64-v8a/vmtouch' $TMPDIR
-	cp $TMPDIR/libs/arm64-v8a/* $MODPATH/system/bin
-elif [ $ARCH = "arm" ]; then
-	extract "$ZIPFILE" 'libs/armeabi-v7a/encored' $TMPDIR
-	extract "$ZIPFILE" 'libs/armeabi-v7a/vmtouch' $TMPDIR
-	cp $TMPDIR/libs/armeabi-v7a/* $MODPATH/system/bin
-else
-	ui_print "*********************************************************"
-	ui_print "! Unsupported ARCH: $ARCH"
-	ui_print "! Encore Tweaks only supports ARM Chipsets"
-	abort "*********************************************************"
-fi
-rm -rf $TMPDIR/libs
+case $ARCH in
+"arm64") ARCH_TMP="arm64-v8a" ;;
+"arm") ARCH_TMP="armeabi-v7a" ;;
+"x64") ARCH_TMP="x86_64" ;;
+"x86") ARCH_TMP="x86" ;;
+"riscv64") ARCH_TMP="riscv64" ;;
+*) abort_unsupported_arch ;;
+esac
+
+extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
+extract "$ZIPFILE" "libs/$ARCH_TMP/vmtouch" "$TMPDIR"
+cp "$TMPDIR/libs/$ARCH_TMP/*" "$MODPATH/system/bin"
+
+rm -rf "$TMPDIR/libs"
 
 # Extract webroot
 ui_print "- Extracting webroot"
@@ -44,11 +51,11 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
+[ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
-[ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 
-# KSU WebUI for Magisk user
+# Install KSU WebUI for Magisk user
 if [ "$(which magisk)" ]; then
 	extract "$ZIPFILE" 'action.sh' $MODPATH
 
@@ -68,7 +75,7 @@ if [ "$(which magisk)" ]; then
 	fi
 fi
 
-# Bellavita Toast
+# Install Bellavita Toast
 if ! pm list packages | grep -q bellavita.toast; then
 	ui_print "- Installing bellavita Toast"
 	extract "$ZIPFILE" 'toast.apk' $TMPDIR
@@ -86,10 +93,7 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 
 # Determine Chipset
 chipset=$(grep "Hardware" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')
-
-if [ -z "$chipset" ]; then
-	chipset="$(getprop ro.board.platform) $(getprop ro.hardware)"
-fi
+[ -z "$chipset" ] && chipset="$(getprop ro.board.platform) $(getprop ro.hardware)"
 
 case "$chipset" in
 *mt* | *MT*) soc=1 && ui_print "- Implementing tailored tweaks for Mediatek" ;;
@@ -107,13 +111,9 @@ case "$chipset" in
 	;;
 esac
 
-if [ $soc -eq 0 ]; then
-	ui_print "- Unknown SoC manufacturer, skipping some tweaks implementation"
-fi
-
+[ $soc -eq 0 ] && ui_print "- Unknown SoC manufacturer, skipping some tweaks implementation"
 echo $soc >/data/encore/soc_recognition
 
-ui_print ""
 case "$((RANDOM % 6 + 1))" in
 1) ui_print "- Wooly's Fairy Tale" ;;
 2) ui_print "- Sheep-counting Lullaby" ;;
