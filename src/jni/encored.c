@@ -10,10 +10,10 @@
 #include <unistd.h>
 
 #define LOG_FILE "/data/encore/encore_log"
+#define MODULE_PROP "/data/adb/modules/encore/module.prop"
+#define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
-
-char command[1024];
-char path[256];
+#define MAX_PATH_LENGTH 256
 
 /***********************************************************************************
  * Function Name      : trim_newline
@@ -140,7 +140,7 @@ void log_encore(const char* message, ...) {
  * Returns            : None
  * Description        : Handle SIGTERM and SIGINT signal.
  ***********************************************************************************/
-void signal_handler(int signal) {
+static inline void signal_handler(int signal) {
     if (signal == SIGTERM) {
         log_encore("error: received SIGTERM.");
     } else if (signal == SIGINT) {
@@ -159,7 +159,16 @@ void signal_handler(int signal) {
  *                      the command execution
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
-char* execute_command(const char* command) {
+char* execute_command(const char* format, ...) {
+	if (format == NULL)
+        return NULL;
+
+	char command[MAX_COMMAND_LENGTH];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(command, sizeof(command), format, args);
+    va_end(args);
+
     FILE* fp;
     char buffer[MAX_OUTPUT_LENGTH];
     char* result = NULL;
@@ -203,10 +212,11 @@ char* execute_command(const char* command) {
  *                           -1 if execution failed
  * Description        : Executes a shell command using system().
  ***********************************************************************************/
-int systemv(const char* format, ...) {
+static inline int systemv(const char* format, ...) {
     if (format == NULL)
         return -1;
 
+    char command[MAX_OUTPUT_LENGTH];
     va_list args;
     va_start(args, format);
     vsnprintf(command, sizeof(command), format, args);
@@ -255,9 +265,7 @@ void drm_check(void) {
         exit(EXIT_FAILURE);
     }
 
-    // Check module.prop checksum
-    snprintf(command, sizeof(command), "sha256sum /data/adb/modules/encore/module.prop | grep -q %s", MODULE_CHECKSUM);
-    if (system(command) != 0) {
+    if (systemv("sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
         drm_fail();
         exit(EXIT_FAILURE);
     }
@@ -408,8 +416,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    snprintf(command, sizeof(command), "pidof %s", name);
-    char* pid = execute_command(command);
+    char* pid = execute_command("pidof %s", name);
     return trim_newline(pid);
 }
 
@@ -465,7 +472,7 @@ int main(void) {
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1;
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1, path[MAX_PATH_LENGTH];
     log_encore("info: daemon started");
     perf_common();
 
