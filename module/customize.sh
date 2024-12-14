@@ -51,6 +51,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
+[ ! -f /data/encore/game_preload ] && echo 0 >/data/encore/game_preload
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
 

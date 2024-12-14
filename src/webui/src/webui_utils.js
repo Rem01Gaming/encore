@@ -39,11 +39,26 @@ async function getKillLogdSwitch() {
   }
 }
 
+async function getGamePreloadSwitch() {
+  const { errno, stdout } = await exec('cat /data/encore/game_preload');
+  if (errno === 0) {
+    const switchElement = document.getElementById('gamePreloadSwitch');
+    switchElement.checked = stdout.trim() === '1';
+  }
+}
+
 async function toggleKillLogdSwitch(isChecked) {
   const command = isChecked
     ? 'echo 1 >/data/encore/kill_logd'
     : 'echo 0 >/data/encore/kill_logd';
   toast('Reboot your device to take effect');
+  await exec(command);
+}
+
+async function toggleGamePreloadSwitch(isChecked) {
+  const command = isChecked
+    ? 'echo 1 >/data/encore/game_preload'
+    : 'echo 0 >/data/encore/game_preload';
   await exec(command);
 }
 
@@ -132,6 +147,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   await getServiceState();
   await getServicePID();
   await getKillLogdSwitch();
+  await getGamePreloadSwitch();
   await populateCPUGovernors();
 
   document.getElementById('saveLogsButton').addEventListener('click', async function() {
@@ -144,6 +160,10 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   document.getElementById('killLogdSwitch').addEventListener('change', async function() {
     await toggleKillLogdSwitch(this.checked);
+  });
+
+  document.getElementById('gamePreloadSwitch').addEventListener('change', async function() {
+    await toggleGamePreloadSwitch(this.checked);
   });
 
   document.getElementById('cpuGovernorPowersave').addEventListener('change', async function() {

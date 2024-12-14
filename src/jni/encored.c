@@ -160,10 +160,10 @@ static inline void signal_handler(int signal) {
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
 char* execute_command(const char* format, ...) {
-	if (format == NULL)
+    if (format == NULL)
         return NULL;
 
-	char command[MAX_COMMAND_LENGTH];
+    char command[MAX_COMMAND_LENGTH];
     va_list args;
     va_start(args, format);
     vsnprintf(command, sizeof(command), format, args);
@@ -293,9 +293,11 @@ static inline void set_priority(const char* pid) {
  * Description        : Lock game shader cache into memory using vmtouch.
  ***********************************************************************************/
 static inline void preload_game(const char* gamestart) {
-    systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
-            "/sdcard/Android/data/%s/files/ProgramBinaryCache",
-            gamestart, gamestart, gamestart);
+    if (system("cat /data/encore/game_preload | grep -q 1") != -1) {
+        systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
+                "/sdcard/Android/data/%s/files/ProgramBinaryCache",
+                gamestart, gamestart, gamestart);
+    }
 }
 
 /***********************************************************************************
@@ -472,7 +474,8 @@ int main(void) {
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
 
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1, path[MAX_PATH_LENGTH];
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
+         path[MAX_PATH_LENGTH];
     log_encore("info: daemon started");
     perf_common();
 
