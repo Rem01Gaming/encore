@@ -12,24 +12,19 @@ async function getModuleVersion() {
 }
 
 async function getServiceState() {
-  const { errno, stdout } = await exec('[ ! -z $(sudo pidof encored) ] && echo 1 || echo 0');
+  const { errno, stdout } = await exec('pidof encored || echo 0');
   if (errno === 0) {
     const serviceStatusElement = document.getElementById('serviceStatus');
     const image = document.getElementById('imgEncore');
-    if (stdout.trim() === '1') {
+    if (stdout.trim() != '0') {
        serviceStatusElement.textContent = "Working ✨";
+       document.getElementById('servicePID').textContent = "Service PID: " + stdout.trim();
        image.src = encoreHappy;
     } else {
        serviceStatusElement.textContent = "Stopped 💤";
+       document.getElementById('servicePID').textContent = "Service PID: null";
        image.src = encoreSleeping;
     }
-  }
-}
-
-async function getServicePID() {
-  const { errno, stdout } = await exec('pidof -s encored || echo null');
-  if (errno === 0) {
-    document.getElementById('servicePID').textContent = "Service PID: " + stdout.trim();
   }
 }
 
@@ -147,7 +142,6 @@ async function openWebsite() {
 document.addEventListener('DOMContentLoaded', async (event) => {
   await getModuleVersion();
   await getServiceState();
-  await getServicePID();
   await getKillLogdSwitch();
   await getGamePreloadSwitch();
   await populateCPUGovernors();
