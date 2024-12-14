@@ -3,7 +3,9 @@ import encoreHappy from './assets/encore1.webp';
 import encoreSleeping from './assets/encore2.webp';
 
 async function getModuleVersion() {
-  const { errno, stdout } = await exec('grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'');
+  const { errno, stdout } = await exec(
+    `grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'`
+  );
   if (errno === 0) {
     document.getElementById('moduleVer').textContent = stdout.trim();
   }
