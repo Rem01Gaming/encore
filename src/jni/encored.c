@@ -9,9 +9,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#define ENCORE_MODE "/dev/encore_mode"
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
-#define ENCORE_MODE "/dev/encore_mode"
+#define GAME_PRELOAD "/data/encore/game_preload"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define MAX_COMMAND_LENGTH 1024
@@ -35,40 +36,6 @@ static inline char* trim_newline(char* string) {
         *end = '\0';
 
     return string;
-}
-
-/***********************************************************************************
- * Function Name      : file2bool
- * Inputs             : const char *filename - file
- * Outputs            : None
- * Returns            : int - 1 if file contain 1 (true)
- *                            0 if file contain 0 (false)
- *                           -1 if reading file failed
- * Description        : Checks if the specified file contains boolean as 1/0.
- ***********************************************************************************/
-static inline int file2bool(const char* filename) {
-    FILE* file = fopen(filename, "r");
-    if (file == NULL)
-        return -1;
-
-    int value;
-    if (fscanf(file, "%d", &value) != 1) {
-        fclose(file);
-        return -1;
-    }
-
-    fclose(file);
-
-    switch (value) {
-    case 1:
-        return 1;
-
-    case 0:
-        return 0;
-
-    default:
-        return -1;
-    }
 }
 
 /***********************************************************************************
@@ -356,13 +323,12 @@ static inline void set_priority(const char* pid) {
  * Description        : Lock game shader cache into memory using vmtouch.
  ***********************************************************************************/
 static inline void preload_game(const char* gamestart) {
-    if (file2bool("/data/encore/game_preload") == 1)
-        return;
-
-    log_encore("info: preload %s assets", gamestart);
-    systemv("vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
-            "/sdcard/Android/data/%s/files/ProgramBinaryCache",
-            gamestart, gamestart, gamestart);
+    if (systemv("grep -q 1 %s", GAME_PRELOAD) != -1) {
+    	log_encore("info: preload %s assets", gamestart);
+        systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
+                "/sdcard/Android/data/%s/files/ProgramBinaryCache",
+                gamestart, gamestart, gamestart);
+    }
 }
 
 /***********************************************************************************
