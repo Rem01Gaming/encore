@@ -295,6 +295,7 @@ void drm_check(void) {
         exit(EXIT_FAILURE);
     }
 
+    // Check module.prop checksum
     if (systemv("sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
         drm_fail();
         exit(EXIT_FAILURE);
@@ -524,7 +525,7 @@ int main(void) {
                 free(gamestart);
                 gamestart = get_gamestart();
                 low_power = get_low_power_state();
-                system("su -c pkill vmtouch");
+                system("pkill vmtouch");
             }
         }
 
