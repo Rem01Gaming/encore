@@ -796,8 +796,9 @@ powersave_profile() {
 	done &
 
 	# CPU governor
+	powersave_cpu_gov="$(cat /data/encore/powersave_cpu_gov)"
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		apply "$(cat /data/encore/powersave_cpu_gov)" "$path/scaling_governor"
+		apply "$powersave_cpu_gov" "$path/scaling_governor"
 	done &
 
 	case "$(cat /data/encore/soc_recognition)" in
@@ -827,4 +828,5 @@ case "$(encore_utility get_profile)" in
 "perfcommon") perfcommon ;;
 esac
 
+wait
 exit 0
