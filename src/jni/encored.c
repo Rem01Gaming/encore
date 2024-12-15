@@ -11,6 +11,7 @@
 
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
+#define ENCORE_MODE "/dev/encore_mode"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define MAX_COMMAND_LENGTH 1024
@@ -372,7 +373,7 @@ static inline void preload_game(const char* gamestart) {
  * Description        : Executes a command to apply common performance settings.
  ***********************************************************************************/
 static inline void perf_common(void) {
-    write2file("/dev/encore_mode", "perfcommon");
+    write2file(ENCORE_MODE, "perfcommon");
     system("encore_profiler");
 }
 
@@ -385,7 +386,7 @@ static inline void perf_common(void) {
  ***********************************************************************************/
 static inline void performance_mode(void) {
     drm_check();
-    write2file("/dev/encore_mode", "performance");
+    write2file(ENCORE_MODE, "performance");
     system("encore_profiler");
 }
 
@@ -398,7 +399,7 @@ static inline void performance_mode(void) {
  ***********************************************************************************/
 static inline void normal_mode(void) {
     drm_check();
-    write2file("/dev/encore_mode", "normal");
+    write2file(ENCORE_MODE, "normal");
     system("encore_profiler");
 }
 
@@ -411,7 +412,7 @@ static inline void normal_mode(void) {
  ***********************************************************************************/
 static inline void powersave_mode(void) {
     drm_check();
-    write2file("/dev/encore_mode", "powersave");
+    write2file(ENCORE_MODE, "powersave");
     system("encore_profiler");
 }
 
