@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 #define LOG_FILE "/data/encore/encore_log"
+#define GAMELIST "/data/encore/gamelist.txt"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define MAX_COMMAND_LENGTH 1024
@@ -423,12 +424,11 @@ static inline void powersave_mode(void) {
  *                      any package name listed in /data/encore/gamelist.txt.
  *                      This helps identify if a specific game is running in the foreground.
  *                      Uses dumpsys to retrieve visible apps and filters by packages
- *                      listed in gamelist.txt.
+ *                      listed in Gamelist.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_gamestart(void) {
-    char* gamestart = execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo "
-                                      "$(cat /data/encore/gamelist.txt)");
+    char* gamestart = execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo -f %s", GAMELIST);
     return trim_newline(gamestart);
 }
 
