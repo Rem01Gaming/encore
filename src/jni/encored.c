@@ -309,7 +309,7 @@ static inline void set_priority(const char* pid) {
  ***********************************************************************************/
 static inline void preload_game(const char* gamestart) {
     if (systemv("grep -q 1 %s", GAME_PRELOAD) != -1) {
-    	log_encore("info: preload %s assets", gamestart);
+        log_encore("info: preload %s assets", gamestart);
         systemv("vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
                 "/sdcard/Android/data/%s/files/ProgramBinaryCache",
                 gamestart, gamestart, gamestart);
@@ -328,8 +328,8 @@ static inline void preload_game(const char* gamestart) {
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
-	drm_check();
-	return systemv("encore_profiler %d", profile);
+    drm_check();
+    return systemv("encore_profiler %d", profile);
 }
 
 /***********************************************************************************
@@ -380,12 +380,12 @@ static inline char* get_screenstate(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_low_power_state(void) {
-    char* low_power = execute_command("dumpsys power | grep -Eo "
-                                      "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
-                                      "awk -F'=' '{print $2}'");
-    if (low_power == NULL)
-        low_power = execute_command("settings get global low_power");
-
+    char* low_power = execute_command("settings get global low_power");
+    if (low_power == NULL) {
+        low_power = execute_command("dumpsys power | grep -Eo "
+                                    "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
+                                    "awk -F'=' '{print $2}'");
+    }
     return trim_newline(low_power);
 }
 
@@ -479,7 +479,7 @@ int main(void) {
         }
 
         screenstate = get_screenstate();
-        
+
         if (gamestart != NULL)
             mlbb_is_running = handle_mlbb(gamestart);
 
