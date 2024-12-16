@@ -73,7 +73,7 @@ char* timern(void) {
  *                           -1 if file does not exist or inaccessible
  * Description        : Appends the provided content to the specified file..
  ***********************************************************************************/
-int append2file(const char* file_path, const char* content) {
+static inline int append2file(const char* file_path, const char* content) {
     if (access(file_path, F_OK) == -1)
         return -1;
 
@@ -96,7 +96,7 @@ int append2file(const char* file_path, const char* content) {
  *                           -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  ***********************************************************************************/
-int write2file(const char* file_path, const char* content) {
+static inline int write2file(const char* file_path, const char* content) {
     if (access(file_path, F_OK) == -1)
         return -1;
 
