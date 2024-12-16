@@ -14,6 +14,7 @@
 #define GAME_PRELOAD "/data/encore/game_preload"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
+#define GAME_STRESS "com.mobile.legends:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
@@ -309,7 +310,7 @@ static inline void set_priority(const char* pid) {
 static inline void preload_game(const char* gamestart) {
     if (systemv("grep -q 1 %s", GAME_PRELOAD) != -1) {
     	log_encore("info: preload %s assets", gamestart);
-        systemv("su -c vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
+        systemv("vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
                 "/sdcard/Android/data/%s/files/ProgramBinaryCache",
                 gamestart, gamestart, gamestart);
     }
@@ -419,7 +420,7 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    if (system("pidof com.mobile.legends:UnityKillsMe >/dev/null") == 0)
+    if (systemv("pidof %s >/dev/null", GAME_STRESS) == 0)
         return 2;
 
     return 1;
@@ -507,7 +508,7 @@ int main(void) {
 
             // Handle weird behavior of MLBB
             if (mlbb_is_running == 2)
-                pid = pidof("com.mobile.legends:UnityKillsMe");
+                pid = pidof(GAME_STRESS);
 
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
