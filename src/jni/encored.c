@@ -479,7 +479,9 @@ int main(void) {
         }
 
         screenstate = get_screenstate();
-        mlbb_is_running = handle_mlbb(gamestart);
+        
+        if (gamestart != NULL)
+            mlbb_is_running = handle_mlbb(gamestart);
 
         // Handle in case screenstate is empty
         if (screenstate == NULL) {
