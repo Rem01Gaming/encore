@@ -280,7 +280,7 @@ void drm_check(void) {
     }
 
     // Check module.prop checksum
-    if (systemv("sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
+    if (systemv("busybox sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
         drm_fail();
         exit(EXIT_FAILURE);
     }
@@ -398,7 +398,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    char* pid = execute_command("pidof %s", name);
+    char* pid = execute_command("busybox pidof %s", name);
     return trim_newline(pid);
 }
 
@@ -420,7 +420,7 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    if (systemv("pidof %s >/dev/null", GAME_STRESS) == 0)
+    if (systemv("busybox pidof %s >/dev/null", GAME_STRESS) == 0)
         return 2;
 
     return 1;
@@ -474,7 +474,7 @@ int main(void) {
                 free(gamestart);
                 gamestart = get_gamestart();
                 low_power = get_low_power_state();
-                system("pkill vmtouch");
+                system("busybox pkill vmtouch");
             }
         }
 
