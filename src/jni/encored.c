@@ -64,43 +64,27 @@ char* timern(void) {
 }
 
 /***********************************************************************************
- * Function Name      : append2file
- * Inputs             : file_path (const char *) - path to the file
- *                      content (const char *) - content to append
- * Outputs            : None
- * Returns            : int - 0 if write successful
- *                           -1 if file does not exist or inaccessible
- * Description        : Appends the provided content to the specified file..
- ***********************************************************************************/
-static inline int append2file(const char* file_path, const char* content) {
-    if (access(file_path, F_OK) == -1)
-        return -1;
-
-    FILE* file = fopen(file_path, "a");
-
-    if (file == NULL)
-        return -1;
-
-    fprintf(file, "%s\n", content);
-    fclose(file);
-    return 0;
-}
-
-/***********************************************************************************
  * Function Name      : write2file
  * Inputs             : file_path (const char *) - path to the file
  *                      content (const char *) - content to write
+ *                      mode (const int) - 1 for append and 0 for write
  * Outputs            : None
  * Returns            : int - 0 if write successful
  *                           -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  ***********************************************************************************/
-static inline int write2file(const char* file_path, const char* content) {
+static inline int write2file(const char* file_path, const char* content, const int mode) {
     if (access(file_path, F_OK) == -1)
         return -1;
 
-    FILE* file = fopen(file_path, "w");
+    const char* write_mode;
+    if (mode == 1) {
+        write_mode = "a"; // Append mode
+    } else {
+        write_mode = "w"; // Write mode
+    }
 
+    FILE* file = fopen(file_path, write_mode);
     if (file == NULL)
         return -1;
 
@@ -129,7 +113,7 @@ void log_encore(const char* message, ...) {
 
         char logEncore[MAX_OUTPUT_LENGTH];
         snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
-        if (append2file(LOG_FILE, logEncore) == -1)
+        if (write2file(LOG_FILE, logEncore, 1) == -1)
             printf("[%s] error: encore_log file is inaccessible!\n", timestamp);
 
         free(timestamp);
