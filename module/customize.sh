@@ -53,7 +53,7 @@ ui_print "- Encore Tweaks configuration setup"
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/game_preload ] && echo 0 >/data/encore/game_preload
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
-unzip -o "$ZIPFILE" 'gamelist.txt' -d "/data/encore" >&2
+extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 
 # Install KSU WebUI for Magisk user
 if [ "$(which magisk)" ]; then
@@ -64,14 +64,13 @@ if [ "$(which magisk)" ]; then
 		extract "$ZIPFILE" 'webui.apk' $TMPDIR
 		pm install $TMPDIR/webui.apk >&2
 		rm -f $TMPDIR/webui.apk
+	fi
 
-		if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
-			ui_print "- Can't install KSU WebUI due to selinux restrictions"
-			ui_print "  Please install the app manually after installation."
-		else
-			ui_print "- Please open and grant root permission for KSU WebUI"
-			ui_print "  after this installation."
-		fi
+	if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
+		ui_print "! Can't install KSU WebUI due to selinux restrictions"
+		ui_print "! Please install the app manually after installation."
+	else
+		ui_print "- Please grant root permission for KSU WebUI"
 	fi
 fi
 
@@ -81,10 +80,11 @@ if ! pm list packages | grep -q bellavita.toast; then
 	extract "$ZIPFILE" 'toast.apk' $TMPDIR
 	pm install $TMPDIR/toast.apk >&2
 	rm -f $TMPDIR/toast.apk
-	if ! pm list packages | grep -q bellavita.toast; then
-		ui_print "- Can't install Bellavita Toast due to selinux restrictions"
-		ui_print "  Please install the app manually after installation."
-	fi
+fi
+
+if ! pm list packages | grep -q bellavita.toast; then
+	ui_print "! Can't install Bellavita Toast due to selinux restrictions"
+	ui_print "! Please install the app manually after installation."
 fi
 
 # Permission settings
@@ -96,25 +96,23 @@ chipset=$(grep "Hardware" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]
 [ -z "$chipset" ] && chipset="$(getprop ro.board.platform) $(getprop ro.hardware)"
 
 case "$chipset" in
-*mt* | *MT*) soc=1 && ui_print "- Implementing tailored tweaks for Mediatek" ;;
-*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) soc=2 && ui_print "- Implementing tailored tweaks for Snapdragon" ;;
-*exynos*) soc=3 && ui_print "- Implementing tailored tweaks for Exynos" ;;
-*Unisoc* | *unisoc*) soc=4 && ui_print "- Implementing tailored tweak for Unisoc" ;;
-*gs*) soc=5 && ui_print "- Implementing tailored tweaking for Google Tensor" ;;
-*Intel* | *intel*) soc=6 && ui_print "- Implementing tailored tweak for Intel" ;;
-*)
-	if [ -f /sys/devices/soc0/machine ] && [ ! -d /sys/kernel/gpu ]; then
-		soc=2
-		ui_print "- Implementing tailored tweaks for Snapdragon"
-	else
-		soc=0
-	fi
-	;;
+*mt* | *MT*) soc=1 && ui_print "- Implementing tweaks for Mediatek" ;;
+*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) soc=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
+*exynos*) soc=3 && ui_print "- Implementing tweaks for Exynos" ;;
+*Unisoc* | *unisoc*) soc=4 && ui_print "- Implementing tweaks for Unisoc" ;;
+*gs*) soc=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
+*Intel* | *intel*) soc=6 && ui_print "- Implementing tweaks for Intel" ;;
+*) soc=0 ;;
 esac
 
-[ $soc -eq 0 ] && ui_print "- Unknown SoC manufacturer, skipping some tweaks implementation"
+if [ $soc -eq 0 ] && [ -f /sys/devices/soc0/machine ] && [ ! -d /sys/kernel/gpu ]; then
+	soc=2 && ui_print "- Implementing tweaks for Snapdragon"
+fi
+
+[ $soc -eq 0 ] && ui_print "! Unknown SoC manufacturer, skipping some tweaks"
 echo $soc >/data/encore/soc_recognition
 
+# Easter Egg
 case "$((RANDOM % 6 + 1))" in
 1) ui_print "- Wooly's Fairy Tale" ;;
 2) ui_print "- Sheep-counting Lullaby" ;;

@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 if [ -z $GITHUB_WORKSPACE ]; then
-	echo "This script should only run on GitHub action!"
+	echo "This script should only run on GitHub action!" >&2
 	exit 1
 fi
 
@@ -13,28 +13,29 @@ wget https://github.com/5ec1cff/KsuWebUIStandalone/releases/download/v1.0/KsuWeb
 
 # Put critical files and folders here
 need_integrity=(
-	"./module/system/bin"
-	"./module/libs"
-	"./module/META-INF"
-	"./module/service.sh"
-	"./module/action.sh"
-	"./module/toast.apk"
-	"./module/webui.apk"
-	"./module/module.prop"
-	"./module/encore_logo.png"
+	"module/system/bin"
+	"module/libs"
+	"module/META-INF"
+	"module/service.sh"
+	"module/action.sh"
+	"module/toast.apk"
+	"module/webui.apk"
+	"module/module.prop"
+	"module/encore_logo.png"
+	"module/gamelist.txt"
 )
 
 # Version info
-version="$(cat ./version)"
+version="$(cat version)"
 version_code=$(git rev-list HEAD --count)
 gitsha1=$(git rev-parse --short HEAD)
 
 # Compile Gamelist
-bash ./gamelist_compile.sh
+bash gamelist_compile.sh
 
 # Copy module files
-cp -r ./src/libs ./module
-cp -r ./src/scripts/* ./module/system/bin
+cp -r ./src/libs module
+cp -r ./src/scripts/* module/system/bin
 cp LICENSE ./module
 
 # Parse version info to module prop
