@@ -101,6 +101,7 @@ case "$chipset" in
 *exynos*) soc=3 && ui_print "- Implementing tailored tweaks for Exynos" ;;
 *Unisoc* | *unisoc*) soc=4 && ui_print "- Implementing tailored tweak for Unisoc" ;;
 *gs*) soc=5 && ui_print "- Implementing tailored tweaking for Google Tensor" ;;
+*Intel* | *intel*) soc=6 && ui_print "- Implementing tailored tweak for Intel" ;;
 *)
 	if [ -f /sys/devices/soc0/machine ] && [ ! -d /sys/kernel/gpu ]; then
 		soc=2
