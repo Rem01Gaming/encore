@@ -821,11 +821,11 @@ powersave_profile() {
 # Sync to data in the rare case a device crashes
 sync
 
-case "$(encore_utility get_profile)" in
-"performance") performance_profile ;;
-"powersave") powersave_profile ;;
-"normal") normal_profile ;;
-"perfcommon") perfcommon ;;
+case "$1" in
+0) perfcommon ;;
+1) performance_profile ;;
+2) normal_profile ;;
+3) powersave_profile ;;
 esac
 
 wait

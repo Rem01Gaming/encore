@@ -9,7 +9,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#define ENCORE_MODE "/dev/encore_mode"
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
 #define GAME_PRELOAD "/data/encore/game_preload"
@@ -333,54 +332,19 @@ static inline void preload_game(const char* gamestart) {
 }
 
 /***********************************************************************************
- * Function Name      : perf_common
- * Inputs             : None
+ * Function Name      : run_profiler
+ * Inputs             : int - 0 for perfcommon
+ *                            1 for performance
+ *                            2 for normal
+ *                            3 for powersave
  * Outputs            : None
- * Returns            : None
- * Description        : Executes a command to apply common performance settings.
- ***********************************************************************************/
-static inline void perf_common(void) {
-    write2file(ENCORE_MODE, "perfcommon");
-    system("encore_profiler");
-}
-
-/***********************************************************************************
- * Function Name      : performance_mode
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
+ * Returns            : int - 0 if execution success
+ *                           -1 if execution failed
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
-static inline void performance_mode(void) {
-    drm_check();
-    write2file(ENCORE_MODE, "performance");
-    system("encore_profiler");
-}
-
-/***********************************************************************************
- * Function Name      : normal_mode
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Executes a command to switch to normal profile.
- ***********************************************************************************/
-static inline void normal_mode(void) {
-    drm_check();
-    write2file(ENCORE_MODE, "normal");
-    system("encore_profiler");
-}
-
-/***********************************************************************************
- * Function Name      : powersave_mode
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Executes a command to switch to performance profile.
- ***********************************************************************************/
-static inline void powersave_mode(void) {
-    drm_check();
-    write2file(ENCORE_MODE, "powersave");
-    system("encore_profiler");
+static inline int run_profiler(const int profile) {
+	drm_check();
+	return systemv("encore_profiler %d", profile);
 }
 
 /***********************************************************************************
@@ -500,7 +464,7 @@ int main(void) {
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
          path[MAX_PATH_LENGTH];
     log_encore("info: daemon started");
-    perf_common();
+    run_profiler(0);
 
     while (1) {
         free(screenstate);
@@ -564,7 +528,7 @@ int main(void) {
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
             notify_toast("Applying performance profile...");
-            performance_mode();
+            run_profiler(1);
             set_priority(pid);
             preload_game(gamestart);
         } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
@@ -575,7 +539,7 @@ int main(void) {
             cur_mode = 2;
             log_encore("info: applying powersave profile");
             notify_toast("Applying powersave profile...");
-            powersave_mode();
+            run_profiler(3);
         } else {
             // Bail out if we already on normal profile
             if (cur_mode == 0)
@@ -584,7 +548,7 @@ int main(void) {
             cur_mode = 0;
             log_encore("info: applying normal profile");
             notify_toast("Applying normal profile...");
-            normal_mode();
+            run_profiler(2);
         }
     }
 
