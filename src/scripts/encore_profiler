@@ -536,7 +536,7 @@ perfcommon() {
 	apply "0" /proc/sys/net/ipv4/tcp_timestamps
 
 	# Stop tracing and debugging
-	if [ "$(encore_utility get_kill_logd)" -eq 1 ]; then
+	if [ "$(cat /data/encore/kill_logd)" -eq 1 ]; then
 		apply 0 /sys/kernel/ccci/debug
 		apply 0 /sys/kernel/tracing/tracing_on
 		apply 0 /proc/sys/kernel/perf_event_paranoid

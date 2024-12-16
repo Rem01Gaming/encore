@@ -14,10 +14,6 @@ get_kernel() {
 	uname -r
 }
 
-get_kill_logd() {
-	cat /data/encore/kill_logd
-}
-
 kill_logd() {
 	list_logger="
 logd
@@ -49,17 +45,16 @@ save_logs() {
 *****************************************************
 Encore Tweaks Log
 
-Version: $(get_module_version)
-Chipset: $(get_chipset)
-Kernel Version: $(get_kernel)
+Module Version: $(grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}')
+Chipset: $(getprop "ro.board.platform") ($(cat /data/encore/soc_recognition))
+ABI: $(getprop ro.product.cpu.abi)
+Fingerprint: $(getprop ro.build.fingerprint)
+Android: $(getprop ro.build.version.release)
+Kernel: $(uname -r)
 *****************************************************
 
 $(cat /data/encore/encore_log)
 EOF
-}
-
-get_profile() {
-	cat /dev/encore_mode
 }
 
 [ -d /data/adb/modules/encore ] || warn_drm_failed
