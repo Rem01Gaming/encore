@@ -7,6 +7,7 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 
 ## Changelog
 - Introduce Game Preload feature with vmtouch 
+- Add action button to open WebUI (Magisk only)
 - Daemonize service
 - Service code refactor for performance
 - Fix daemon error "unable to fetch PID"
