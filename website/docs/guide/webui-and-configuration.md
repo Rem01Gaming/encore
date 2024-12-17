@@ -22,9 +22,6 @@ This option will stops the logger services and silence logs. Enable this option 
 Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging. Software that depends on `logd` service will not working properly!
 :::
 
-### Game Preload
-When this option enabled, Encore Tweaks will tries to lock some critical game files into memory to improve game performance. however this option can potentially add CPU overhead and fill the RAM.
-
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
 

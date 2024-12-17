@@ -17,11 +17,10 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 - Notify user on every profile changes
 - Handle case when 'default_gov' is performance
 - Other misc optimization and changes
-- Harden integrity checkup
 
 ## Download
-- [Download](https://shrinkme.ink/h62hpWLV)
-- [Download (Alternative link)](https://sfl.gl/g5D66eq)
+- [Download](https://shrinkme.ink/FpUg0)
+- [Download (Alternative link)](https://sfl.gl/8D0r)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
