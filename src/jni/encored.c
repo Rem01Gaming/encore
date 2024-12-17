@@ -1,4 +1,3 @@
-#include "module_drm.h"
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -241,42 +240,6 @@ static inline int notify_toast(const char* message) {
 }
 
 /***********************************************************************************
- * Function Name      : drm_fail
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Handle daemon exit and DRM message from drm_check function
- ***********************************************************************************/
-static inline void drm_fail(void) {
-    systemv("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
-    notify("DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.");
-    log_encore("error: DRM Check failed, exiting.");
-}
-
-/***********************************************************************************
- * Function Name      : drm_check
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Check if module is Genuine and/or not modified by third party,
- *                      if modification detected, stop operation and forward user to
- *                      official website.
- ***********************************************************************************/
-void drm_check(void) {
-    // Check moduleid and service executable name
-    if (access("/data/adb/modules/encore/system/bin/encored", F_OK) == -1) {
-        drm_fail();
-        exit(EXIT_FAILURE);
-    }
-
-    /* Check module.prop checksum
-    if (systemv("sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
-        drm_fail();
-        exit(EXIT_FAILURE);
-    }*/
-}
-
-/***********************************************************************************
  * Function Name      : set_priority
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
@@ -301,9 +264,8 @@ static inline void set_priority(const char* pid) {
  *                           -1 if execution failed
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
-static inline void run_profiler(const int profile) {
-    drm_check();
-    systemv("encore_profiler %d", profile);
+static inline int run_profiler(const int profile) {
+    return systemv("encore_profiler %d", profile);
 }
 
 /***********************************************************************************
@@ -406,9 +368,6 @@ int main(void) {
         notify("Please reboot your device to complete module update.");
         exit(EXIT_SUCCESS);
     }
-
-    // DRM Check
-    drm_check();
 
     // Daemonize service
     if (daemon(0, 0) != 0) {
