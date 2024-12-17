@@ -11,9 +11,8 @@
 
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
-#define GAME_PRELOAD "/data/encore/game_preload"
-#define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
+#define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
@@ -210,6 +209,7 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
+    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
     return system(command);
 }
 
@@ -269,18 +269,8 @@ void drm_check(void) {
         exit(EXIT_FAILURE);
     }
 
-    if (access("/data/adb/modules/encore/system/bin/encore_profiler", F_OK) == -1) {
-        drm_fail();
-        exit(EXIT_FAILURE);
-    }
-
-    if (access("/data/adb/modules/encore/system/bin/encore_utility", F_OK) == -1) {
-        drm_fail();
-        exit(EXIT_FAILURE);
-    }
-
     // Check module.prop checksum
-    if (systemv("busybox sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
+    if (systemv("sha256sum %s | grep -q %s", MODULE_PROP, MODULE_CHECKSUM) != 0) {
         drm_fail();
         exit(EXIT_FAILURE);
     }
@@ -301,22 +291,6 @@ static inline void set_priority(const char* pid) {
 }
 
 /***********************************************************************************
- * Function Name      : preload_game
- * Inputs             : gamestart (const char *) - Package name of the game
- * Outputs            : None
- * Returns            : None
- * Description        : Lock game shader cache into memory using vmtouch.
- ***********************************************************************************/
-static inline void preload_game(const char* gamestart) {
-    if (systemv("grep -q 1 %s", GAME_PRELOAD) != -1) {
-        log_encore("info: preload %s assets", gamestart);
-        systemv("vmtouch -ld /sdcard/Android/data/%s/cache/vulkan_pso_cache.bin /sdcard/Android/data/%s/cache/UnityShaderCache "
-                "/sdcard/Android/data/%s/files/ProgramBinaryCache",
-                gamestart, gamestart, gamestart);
-    }
-}
-
-/***********************************************************************************
  * Function Name      : run_profiler
  * Inputs             : int - 0 for perfcommon
  *                            1 for performance
@@ -327,9 +301,9 @@ static inline void preload_game(const char* gamestart) {
  *                           -1 if execution failed
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
-static inline int run_profiler(const int profile) {
+static inline void run_profiler(const int profile) {
     drm_check();
-    return systemv("encore_profiler %d", profile);
+    systemv("encore_profiler %d", profile);
 }
 
 /***********************************************************************************
@@ -398,7 +372,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    char* pid = execute_command("busybox pidof %s", name);
+    char* pid = execute_command("pidof %s", name);
     return trim_newline(pid);
 }
 
@@ -420,7 +394,7 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    if (systemv("busybox pidof %s >/dev/null", GAME_STRESS) == 0)
+    if (systemv("pidof %s >/dev/null", GAME_STRESS) == 0)
         return 2;
 
     return 1;
@@ -432,9 +406,6 @@ int main(void) {
         notify("Please reboot your device to complete module update.");
         exit(EXIT_SUCCESS);
     }
-
-    // Set PATH
-    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
 
     // DRM Check
     drm_check();
@@ -477,7 +448,6 @@ int main(void) {
                 free(gamestart);
                 gamestart = get_gamestart();
                 low_power = get_low_power_state();
-                systemv("busybox pkill vmtouch");
             }
         }
 
@@ -520,7 +490,6 @@ int main(void) {
             notify_toast("Applying performance profile...");
             run_profiler(1);
             set_priority(pid);
-            preload_game(gamestart);
         } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
             // Bail out if we already on powersave profile
             if (cur_mode == 2)
