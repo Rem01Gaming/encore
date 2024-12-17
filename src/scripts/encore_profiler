@@ -543,10 +543,10 @@ perfcommon() {
 		apply 0 /proc/sys/kernel/debug_locks
 		apply 0 /proc/sys/kernel/perf_cpu_time_max_percent
 		apply off /proc/sys/kernel/printk_devkmsg
+		stop logd
+		stop traced
+		stop statsd
 	fi
-
-	# Kill logd
-	encore_utility kill_logd
 
 	# Disable schedstats
 	apply 0 /proc/sys/kernel/sched_schedstats
