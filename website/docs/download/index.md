@@ -11,9 +11,13 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 - Service code refactor for performance
 - Fix daemon error "unable to fetch PID"
 - Fix service cannot fetch low_power state
-- Update Gamelist (**400+ Games listed**)
+- Update Gamelist (**430+ Games listed**)
 - Tweak I/O parameter for low latency workloads
+- Add support for X86 and RISCV CPUs
+- Notify user on every profile changes
+- Handle case when 'default_gov' is performance
 - Other misc optimization and changes
+- Harden integrity checkup
 
 ## Download
 - [Download](https://shrinkme.ink/iDO1zYa)
