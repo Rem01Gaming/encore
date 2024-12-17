@@ -10,7 +10,7 @@ The Encore Tweaks module provides a range of settings accessible through [Module
 While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [this app](https://t.me/rem01schannel/636).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20241119-085357_KernelSU.png)
+![Encore Tweaks WebUI](/Screenshot_20241217-084918_KernelSU.png)
 :::
 
 ## Configuration Options
@@ -22,6 +22,9 @@ This option will stops the logger services and silence logs. Enable this option 
 Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging. Software that depends on `logd` service will not working properly!
 :::
 
+### Game Preload
+When this option enabled, Encore Tweaks will tries to lock some critical game files into memory to improve game performance. however this option can potentially add CPU overhead and fill the RAM.
+
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
 
@@ -32,7 +35,7 @@ Choose the CPU governor specifically for the "Powersave" profile, which is optim
 Edit the list of games and other performance-intensive applications. When these apps are active, Encore Tweaks will automatically apply the "Performance" profile.
 
 ### Save Logs
-Enable this to save `encore-service` logs to internal storage at `/sdcard/encore_log`. This log can help with troubleshooting.
+Enable this to save Encore daemon logs to internal storage at `/sdcard/encore_log`. This log can help with troubleshooting.
 
 ### Restart Service
-Restarts the `encore-service` to apply changes immediately or refresh the service if it encounters issues.
+Restarts the Encore daemon to apply changes immediately or refresh the service if it encounters issues.

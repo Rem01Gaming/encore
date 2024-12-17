@@ -14,7 +14,7 @@ export default defineConfig({
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '')
-    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.png`;
+    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.webp`;
     
     pageData.frontmatter.head ??= []
     
@@ -24,7 +24,7 @@ export default defineConfig({
     pageData.frontmatter.head.push(['link', { rel: "canonical", href: canonicalUrl }])
     pageData.frontmatter.head.push(['meta', { name: "hostname", content: "encore.rem01gaming.dev"}])
     pageData.frontmatter.head.push(['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}])
-    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Encore Tweak, Magisk Module, performance module, Magisk, Gaming, Android, Module magisk, gaming performance" }])
+    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance" }])
     pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
     pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
