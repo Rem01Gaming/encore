@@ -210,6 +210,7 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
+    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
     return system(command);
 }
 
@@ -248,7 +249,7 @@ static inline int notify_toast(const char* message) {
  * Description        : Handle daemon exit and DRM message from drm_check function
  ***********************************************************************************/
 static inline void drm_fail(void) {
-    system("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
+    systemv("/system/bin/am start -a android.intent.action.VIEW -d \"https://encore.rem01gaming.dev/\" >/dev/null");
     notify("DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.");
     log_encore("error: DRM Check failed, exiting.");
 }
@@ -474,7 +475,7 @@ int main(void) {
                 free(gamestart);
                 gamestart = get_gamestart();
                 low_power = get_low_power_state();
-                system("busybox pkill vmtouch");
+                systemv("busybox pkill vmtouch");
             }
         }
 
