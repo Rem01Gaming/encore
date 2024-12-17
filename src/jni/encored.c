@@ -210,7 +210,6 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
     return system(command);
 }
 
@@ -433,6 +432,9 @@ int main(void) {
         notify("Please reboot your device to complete module update.");
         exit(EXIT_SUCCESS);
     }
+
+    // Set PATH
+    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
 
     // DRM Check
     drm_check();
