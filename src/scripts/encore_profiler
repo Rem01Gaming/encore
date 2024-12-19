@@ -18,12 +18,6 @@ change_permission() {
 	fi
 }
 
-warn_drm_failed() {
-	/system/bin/am start -a android.intent.action.VIEW -d "https://encore.rem01gaming.dev/" >/dev/null
-	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'DRM Check failed, please re-install Encore Tweaks from official website encore.rem01gaming.dev.'" >/dev/null
-	exit 1
-}
-
 ###################################
 # Device-specific performance profile
 ###################################
@@ -813,10 +807,6 @@ powersave_profile() {
 ###################################
 # Main Function
 ###################################
-
-[ -f /data/adb/modules/encore/system/bin/encored ] || warn_drm_failed
-[ -f /data/adb/modules/encore/system/bin/encore_profiler ] || warn_drm_failed
-[ -f /data/adb/modules/encore/system/bin/encore_utility ] || warn_drm_failed
 
 # Sync to data in the rare case a device crashes
 sync
