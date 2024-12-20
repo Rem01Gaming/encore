@@ -50,8 +50,8 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
+[ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
-extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 
 # Install KSU WebUI for Magisk user
 if [ "$(which magisk)" ]; then
