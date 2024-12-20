@@ -11,7 +11,6 @@
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
-#define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
