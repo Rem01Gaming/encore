@@ -559,13 +559,6 @@ perfcommon() {
 	apply 1000000 /proc/sys/kernel/sched_min_granularity_ns
 	apply 1500000 /proc/sys/kernel/sched_wakeup_granularity_ns
 
-	# Enable Simultaneous Multithreading (SMT)
-	# https://android.googlesource.com/kernel/common/+/bcmdhd-3.10/Documentation/cgroups/cpusets.txt
-	apply 1 /dev/cpuset/sched_relax_domain_level
-	for dir in /dev/cpuset/*; do
-		apply 1 $dir/sched_relax_domain_level
-	done
-
 	# Disable read-ahead for swap devices
 	apply 0 /proc/sys/vm/page-cluster
 
