@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/resource.h>
+#include <sys/syscall.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
@@ -243,13 +244,22 @@ static inline int notify_toast(const char* message) {
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
  * Returns            : None
- * Description        : Sets the CPU nice priority of a given process.
+ * Description        : Sets the CPU nice priority and I/O priority of a given
+ *                      process.
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
+    int prio = -20;   // Niceness
+    int io_class = 1; // I/O class
+    int io_prio = 0;  // I/O priority
+
     pid_t process_id = atoi(pid);
     log_encore("info: priority settings for PID %s", pid);
-    if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
+
+    if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
+        
+    if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
+        log_encore("error: unable to set IO priority for %s", pid);
 }
 
 /***********************************************************************************
