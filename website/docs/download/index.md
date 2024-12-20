@@ -28,7 +28,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
-- [Version 2.1](/download/version/2.0)
+- [Version 2.1](/download/version/2.1)
 - [Version 2.0](/download/version/2.0)
 - [Version 1.8](/download/version/1.8)
 - [Version 1.7](/download/version/1.7)
