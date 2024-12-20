@@ -256,6 +256,7 @@ com.papegames.nn4.en
 com.pearlabyss.blackdesertm.gl
 com.pearlabyss.blackdesertm
 com.pinkcore.tkfm
+com.plarium.raidlegends
 com.playdigious.deadcells.mobile
 com.playmini.miniworld
 com.play.rosea
