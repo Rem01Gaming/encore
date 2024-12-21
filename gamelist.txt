@@ -364,6 +364,7 @@ com.the10tons.dysmantle
 com.tinybuildgames.helloneighbor
 com.tipsworks.android.pascalswager
 com.tipsworks.pascalswager
+com.tumuyan.ncnn.realsr
 com.tungsten.fcl
 com.ubisoft.rainbowsixmobile.r6.fps.pvp.shooter
 com.unity.mmd
