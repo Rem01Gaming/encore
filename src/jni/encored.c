@@ -124,7 +124,7 @@ void log_encore(const char* message, ...) {
  * Inputs             : int signal - exit signal
  * Outputs            : None
  * Returns            : None
- * Description        : Handle SIGTERM and SIGINT signal.
+ * Description        : Handle exit signal.
  ***********************************************************************************/
 static inline void signal_handler(const int signal) {
     switch (signal) {
@@ -136,6 +136,7 @@ static inline void signal_handler(const int signal) {
         break;
     case SIGSEGV:
         log_encore("error: Segmentation Fault, please report to maintainer!");
+        exit(SIGSEGV);
         break;
     }
 
@@ -255,12 +256,12 @@ static inline int notify_toast(const char* message) {
  *                      process.
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
-    int prio = -20;   // Niceness
-    int io_class = 1; // I/O class
-    int io_prio = 0;  // I/O priority
+    const int prio = -20;   // Niceness
+    const int io_class = 1; // I/O class
+    const int io_prio = 0;  // I/O priority
 
     pid_t process_id = atoi(pid);
-    log_encore("info: priority settings for PID %s", pid);
+    log_encore("info: applying priority settings for PID %s", pid);
 
     if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
