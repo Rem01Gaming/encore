@@ -74,58 +74,58 @@ snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "performance" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
 		apply "performance" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
 		apply "performance" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
 		apply "performance" $path/governor
-	done
+	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	# GPU Frequency
@@ -140,7 +140,7 @@ snapdragon_performance() {
 	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
 		apply "performance" $path/governor
-	done
+	done &
 
 	# Adreno Boost
 	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
@@ -240,29 +240,29 @@ snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "compute" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
 		apply "mem_latency" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
 		apply "bw_hwmon" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
 		apply "bw_hwmon" $path/governor
-	done
+	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
 			apply $max_freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
 			apply $min_freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
@@ -270,10 +270,10 @@ snapdragon_normal() {
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
 			apply $max_freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
 			apply $min_freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
@@ -281,10 +281,10 @@ snapdragon_normal() {
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $max_freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $min_freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
@@ -292,10 +292,10 @@ snapdragon_normal() {
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
 			apply $max_freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
 			apply $min_freq $path
-		done
+		done &
 	fi
 
 	# GPU Frequency
@@ -311,7 +311,7 @@ snapdragon_normal() {
 	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
 		apply "bw_vbif" $path/governor
-	done
+	done &
 
 	# Adreno Boost
 	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
@@ -388,58 +388,58 @@ snapdragon_powersave() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "powersave" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
 		apply "powersave" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
 		apply "powersave" $path/governor
-	done
+	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
 		apply "powersave" $path/governor
-	done
+	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
 		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
 			apply $freq $path
-		done
+		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
 			apply $freq $path
-		done
+		done &
 	fi
 
 	# GPU Frequency
@@ -454,7 +454,7 @@ snapdragon_powersave() {
 	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
 		apply "powersave" $path/governor
-	done
+	done &
 
 	# Adreno Boost
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
@@ -514,7 +514,7 @@ perfcommon() {
 
 		# Don't use I/O as random spice
 		apply 0 "$queue/add_random"
-	done
+	done &
 
 	# Networking tweaks
 	if grep -q bbr2 /proc/sys/net/ipv4/tcp_available_congestion_control; then
@@ -636,15 +636,15 @@ performance_profile() {
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
 		apply performance $path/governor
-	done
+	done &
 	for path in /sys/class/devfreq/mmc*; do
 		apply performance $path/governor
-	done
+	done &
 
 	# Force CPU to highest possible OPP
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
 		apply performance "$path/scaling_governor"
-	done
+	done &
 	apply 1 /sys/devices/system/cpu/cpu1/online
 
 	if [ -d /proc/ppm ]; then
@@ -670,7 +670,7 @@ performance_profile() {
 	for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
 		# Reduce heuristic read-ahead in exchange for I/O latency
 		apply 32 "$queue/read_ahead_kb"
-	done
+	done &
 
 	case "$(cat /data/encore/soc_recognition)" in
 	1) mediatek_performance ;;
@@ -731,15 +731,15 @@ normal_profile() {
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
 		apply simple_ondemand $path/governor
-	done
+	done &
 	for path in /sys/class/devfreq/mmc*; do
 		apply simple_ondemand $path/governor
-	done
+	done &
 
 	# Restore min CPU frequency
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
 		apply "$default_cpu_gov" "$path/scaling_governor"
-	done
+	done &
 	apply 1 /sys/devices/system/cpu/cpu1/online
 
 	if [ -d /proc/ppm ]; then
@@ -765,7 +765,7 @@ normal_profile() {
 	for queue in /sys/block/mmcblk0/queue /sys/block/mmcblk1/queue /sys/block/sd*/queue; do
 		# Reduce heuristic read-ahead in exchange for I/O latency
 		apply 128 "$queue/read_ahead_kb"
-	done
+	done &
 
 	case "$(cat /data/encore/soc_recognition)" in
 	1) mediatek_normal ;;
@@ -794,16 +794,16 @@ powersave_profile() {
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
 		apply powersave $path/governor
-	done
+	done &
 	for path in /sys/class/devfreq/mmc*; do
 		apply powersave $path/governor
-	done
+	done &
 
 	# CPU governor
 	powersave_cpu_gov="$(cat /data/encore/powersave_cpu_gov)"
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
 		apply "$powersave_cpu_gov" "$path/scaling_governor"
-	done
+	done &
 
 	case "$(cat /data/encore/soc_recognition)" in
 	1) mediatek_powersave ;;
@@ -828,4 +828,5 @@ case "$1" in
 3) powersave_profile ;;
 esac
 
+wait
 exit 0
