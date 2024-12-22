@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Wait until boot completed
 while [ -z "$(getprop sys.boot_completed)" ]; do
 	sleep 40

@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/resource.h>
-#include <sys/syscall.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
@@ -126,11 +126,17 @@ void log_encore(const char* message, ...) {
  * Returns            : None
  * Description        : Handle SIGTERM and SIGINT signal.
  ***********************************************************************************/
-static inline void signal_handler(int signal) {
-    if (signal == SIGTERM) {
-        log_encore("error: received SIGTERM.");
-    } else if (signal == SIGINT) {
-        log_encore("error: received SIGINT.");
+static inline void signal_handler(const int signal) {
+    switch (signal) {
+    case SIGTERM:
+        log_encore("notice: received SIGTERM.");
+        break;
+    case SIGINT:
+        log_encore("notice: received SIGINT.");
+        break;
+    case SIGSEGV:
+        log_encore("error: Segmentation Fault, please report to maintainer!");
+        break;
     }
 
     // Exit gracefully
@@ -208,7 +214,8 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
+    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/"
+           "sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
     return system(command);
 }
 
@@ -257,7 +264,7 @@ static inline void set_priority(const char* pid) {
 
     if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
-        
+
     if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
         log_encore("error: unable to set IO priority for %s", pid);
 }
@@ -387,6 +394,7 @@ int main(void) {
     // Register signal handlers
     signal(SIGINT, signal_handler);
     signal(SIGTERM, signal_handler);
+    signal(SIGSEGV, signal_handler);
 
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
          path[MAX_PATH_LENGTH];
