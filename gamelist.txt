@@ -157,7 +157,6 @@ com.kurogame.mingchao
 com.kurogame.wutheringwaves.global
 com.leiting.wf
 com.lemcnsun.soultide.android
-com.lemon.lvoverseas
 com.levelinfinite.hotta.gp
 com.levelinfinite.sgameGlobal
 com.levelinfinite.sgameGlobal.midaspay
