@@ -592,6 +592,11 @@ perfcommon() {
 
 	# Let Encore control anything without FPSGO
 	apply 0 /sys/kernel/fpsgo/common/fpsgo_enable
+
+	# Set thermal governor to step_wise
+	for dir in /sys/class/thermal/thermal_zone*; do
+		apply "step_wise" $dir/policy
+	done
 }
 
 performance_profile() {
