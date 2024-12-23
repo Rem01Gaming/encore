@@ -453,15 +453,11 @@ int main(void) {
                 continue;
 
             // Get PID and check if the game is "real" running program
-            pid = pidof(gamestart);
+            pid = (mlbb_is_running > 2) ? &mlbb_is_running : pidof(gamestart);
             if (pid == NULL) {
                 log_encore("error: unable to fetch PID of %s", gamestart);
                 continue;
             }
-
-            // Handle weird behavior of MLBB
-            if (mlbb_is_running > 2)
-                pid = &mlbb_is_running;
 
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
