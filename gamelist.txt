@@ -247,6 +247,7 @@ com.nexon.bluearchive
 com.nexon.konosuba
 com.neowiz.game.idolypride.en
 com.nexon.kartdrift
+com.noctua.android.crazyones
 com.noctuagames.android.ashechoes
 com.ngame.allstar.eu
 com.nianticlabs.monsterhunter
