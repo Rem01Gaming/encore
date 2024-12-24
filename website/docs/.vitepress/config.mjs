@@ -63,13 +63,7 @@ export default defineConfig({
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
         ]
       },
-      {
-        text: 'Download',
-        items: [
-          { text: 'Changelog', link: '/download' },
-          { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
-        ]
-      }
+      { text: 'Download', link: '/download' }
     ],
 
     sidebar: [
@@ -82,19 +76,13 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Download',
-        items: [
-          { text: 'Changelog', link: '/download' },
-          { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
-        ]
-      },
-      {
         text: 'Donate',
         items: [
           { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
         ]
-      }
+      },
+      { text: 'Download', link: '/download' }
     ],
     
     footer: {
