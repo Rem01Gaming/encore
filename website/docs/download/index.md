@@ -3,24 +3,20 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 2.2
+# Encore Tweaks 2.3
 
 ## Changelog
-- Add action script to open WebUI (Magisk only)
-- Daemonize service
-- Service code refactor for performance
-- Fix daemon error "unable to fetch PID"
-- Fix service cannot fetch low_power state
-- Update Gamelist (**430+ Games listed**)
-- Tweak I/O parameter for low latency workloads
-- Add support for X86 and RISCV CPUs
-- Notify user on every profile changes
-- Handle case when 'default_gov' is performance
+- Incorporated fixes on version 2.2
+- Simplify fetch PID logic
+- Fix possible syntax error on I/O tweaks
+- MediaTek: Simplify PPM policies settings logic
+- MediaTek: Disable more logging service (via kill logger feature)
+- MediaTek: Let Encore control anything without FPSGO
 - Other misc optimization and changes
 
 ## Download
-- [Download](https://shrinkme.ink/FpUg0)
-- [Download (Alternative link)](https://sfl.gl/8D0r)
+- [Download](https://shrinkme.ink/ZtHHUXhT)
+- [Download (Alternative link)](https://sfl.gl/Frbul1z)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -28,6 +24,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 2.2](/download/version/2.2)
 - [Version 2.1](/download/version/2.1)
 - [Version 2.0](/download/version/2.0)
 - [Version 1.8](/download/version/1.8)
