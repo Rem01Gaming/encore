@@ -39,7 +39,8 @@ cp -r ./src/scripts/* module/system/bin
 cp LICENSE ./module
 
 # Parse version info to module prop
-zipName="encore-$version-$version_code_$gitsha1.zip" && echo "zipName=$zipName" >>$GITHUB_OUTPUT
+zipName="encore-$version-$version_code_$gitsha1.zip"
+echo "zipName=$zipName" >>$GITHUB_OUTPUT
 
 # Generate sha256sum for integrity checkup
 for file in ${need_integrity[@]}; do
@@ -47,4 +48,9 @@ for file in ${need_integrity[@]}; do
 done
 
 # Zip the file
-cd ./module && zip -r9 ../$zipName * -x *placeholder* *.map
+cd ./module
+zip -r9 ../$zipName * -x *placeholder* *.map
+zip -z ../$zipName <<EOF
+$version (GIT@$gitsha1)
+Build Date $(date +"%a %b %d %H:%M:%S %Z %Y")
+EOF
