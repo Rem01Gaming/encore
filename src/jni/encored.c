@@ -359,7 +359,7 @@ static inline char* pidof(const char* name) {
  * Function Name      : handle_mlbb
  * Inputs             : const char *gamestart - Game package name
  * Outputs            : None
- * Returns            : int - (> 2) if MLBB is running in foreground
+ * Returns            : int - 2 if MLBB is running in foreground
  *                            1 if MLBB is running in background
  *                            0 if gamestart is not MLBB
  *                           -1 if gamestart is NULL
@@ -373,9 +373,8 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    char* pid_mlbb = pidof(GAME_STRESS);
-    if (pid_mlbb != NULL)
-        return atoi(pid_mlbb);
+    if (systemv("pidof %s >/dev/null", GAME_STRESS) == 0)
+        return 2;
 
     return 1;
 }
@@ -453,11 +452,15 @@ int main(void) {
                 continue;
 
             // Get PID and check if the game is "real" running program
-            pid = (mlbb_is_running > 2) ? &mlbb_is_running : pidof(gamestart);
+            pid = pidof(gamestart);
             if (pid == NULL) {
                 log_encore("error: unable to fetch PID of %s", gamestart);
                 continue;
             }
+
+            // Handle weird behavior of MLBB
+            if (mlbb_is_running == 2)
+                pid = pidof(GAME_STRESS);
 
             cur_mode = 1;
             log_encore("info: applying performance profile for %s", gamestart);
