@@ -3,18 +3,18 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx parcel src/index.html",
-    "build": "npx parcel build src/index.html",
-    "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css"
+    "build": "npx parcel build src/index.html"
   },
   "devDependencies": {
     "parcel": "^2.12.0",
-    "tailwindcss": "^3.4.10"
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
   },
   "dependencies": {
     "kernelsu": "^1.0.6"
   },
   "keywords": [],
   "author": "Rem01Gaming",
-  "license": "GPL3+",
+  "license": "Apache-2.0",
   "description": ""
 }

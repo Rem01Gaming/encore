@@ -37,7 +37,6 @@ jobs:
       working-directory: ./src/webui
       run: |
         npm install
-        npm run tailwind
         npm run build
         cp ./dist/* ../../module/webroot
     - name: Compile flashable zip
