@@ -314,6 +314,7 @@ com.soulgamechst.majsoul
 com.spaceapegames.beatstar
 com.sprduck.garena.vn
 com.squareenix.lis
+com.starform.metalstorm
 com.stove.epic7.google
 com.sugarfun.gp.sea.lzgwy
 com.sunborn.girlsfrontline.en
