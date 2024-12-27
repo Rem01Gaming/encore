@@ -11,6 +11,7 @@
 
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
+#define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 1024
@@ -271,6 +272,18 @@ static inline void set_priority(const char* pid) {
 }
 
 /***********************************************************************************
+ * Function Name      : rewrite_module_prop
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Prevent 3rd party from renaming the module
+ ***********************************************************************************/
+static inline void rewrite_module_prop(void) {
+    systemv("sed -i 's/name=.*/name=Encore Tweaks/' %s", MODULE_PROP);
+    systemv("sed -i 's/author=.*/author=Rem01Gaming/' %s", MODULE_PROP);
+}
+
+/***********************************************************************************
  * Function Name      : run_profiler
  * Inputs             : int - 0 for perfcommon
  *                            1 for performance
@@ -282,6 +295,7 @@ static inline void set_priority(const char* pid) {
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
+    rewrite_module_prop();
     return systemv("encore_profiler %d", profile);
 }
 
