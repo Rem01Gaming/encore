@@ -394,14 +394,20 @@ static inline int handle_mlbb(const char* gamestart) {
 }
 
 int main(void) {
-    // Handle case when module gets updated
-    if (access(MODULE_UPDATE, F_OK) == 0) {
-        notify("Please reboot your device to complete module update.");
-        exit(EXIT_SUCCESS);
+    // Handle case when module ID is not 'encore'
+    if (access(MODULE_PROP, F_OK) != 0) {
+    	log_encore("error: critical file not found (%s)", MODULE_PROP);
+        exit(EXIT_FAILURE);
+    }
+
+    // Handle missing Gamelist
+    if (access(GAMELIST, F_OK) != 0) {
+    	log_encore("error: critical file not found (%s)", GAMELIST);
+        exit(EXIT_FAILURE);
     }
 
     // Daemonize service
-    if (daemon(0, 0) != 0) {
+    if (daemon(0, 0)) {
         log_encore("error: unable to daemonize service");
         exit(EXIT_FAILURE);
     }
@@ -456,6 +462,7 @@ int main(void) {
 
         // Handle case when module gets updated
         if (access(MODULE_UPDATE, F_OK) == 0) {
+        	log_encore("notice: module update detected, exiting.");
             notify("Please reboot your device to complete module update.");
             exit(EXIT_SUCCESS);
         }
