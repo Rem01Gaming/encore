@@ -109,6 +109,7 @@ fi
 
 [ $soc -eq 0 ] && ui_print "! Unknown SoC manufacturer, skipping some tweaks"
 echo $soc >/data/encore/soc_recognition
+touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
 
 # Easter Egg
 case "$((RANDOM % 6 + 1))" in
