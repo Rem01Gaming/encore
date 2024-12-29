@@ -122,13 +122,13 @@ void log_encore(const char* message, ...) {
 }
 
 /***********************************************************************************
- * Function Name      : signal_handler
+ * Function Name      : sighandler
  * Inputs             : int signal - exit signal
  * Outputs            : None
  * Returns            : None
  * Description        : Handle exit signal.
  ***********************************************************************************/
-static inline void signal_handler(const int signal) {
+static inline void sighandler(const int signal) {
     switch (signal) {
     case SIGTERM:
         log_encore("notice: received SIGTERM.");
@@ -414,9 +414,9 @@ int main(void) {
     }
 
     // Register signal handlers
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-    signal(SIGSEGV, signal_handler);
+    signal(SIGINT, sighandler);
+    signal(SIGTERM, sighandler);
+    signal(SIGSEGV, sighandler);
 
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
          path[MAX_PATH_LENGTH];
