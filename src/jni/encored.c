@@ -14,6 +14,7 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
+#define MY_PATH "PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
@@ -163,6 +164,7 @@ char* execute_command(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
+    putenv(MY_PATH);
     FILE* fp;
     char buffer[MAX_OUTPUT_LENGTH];
     char* result = NULL;
@@ -216,8 +218,7 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    putenv("PATH=/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/data/data/com.termux/files/usr/bin:/system/bin:/system/xbin:/"
-           "sbin:/debug_ramdisk:/su/bin:/su/xbin:/sbin/su");
+    putenv(MY_PATH);
     return system(command);
 }
 
@@ -396,13 +397,13 @@ static inline int handle_mlbb(const char* gamestart) {
 int main(void) {
     // Handle case when module ID is not 'encore'
     if (access(MODULE_PROP, F_OK) != 0) {
-    	log_encore("error: critical file not found (%s)", MODULE_PROP);
+        log_encore("error: critical file not found (%s)", MODULE_PROP);
         exit(EXIT_FAILURE);
     }
 
     // Handle missing Gamelist
     if (access(GAMELIST, F_OK) != 0) {
-    	log_encore("error: critical file not found (%s)", GAMELIST);
+        log_encore("error: critical file not found (%s)", GAMELIST);
         exit(EXIT_FAILURE);
     }
 
@@ -462,7 +463,7 @@ int main(void) {
 
         // Handle case when module gets updated
         if (access(MODULE_UPDATE, F_OK) == 0) {
-        	log_encore("notice: module update detected, exiting.");
+            log_encore("notice: module update detected, exiting.");
             notify("Please reboot your device to complete module update.");
             exit(EXIT_SUCCESS);
         }
