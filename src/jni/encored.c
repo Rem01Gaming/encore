@@ -258,6 +258,9 @@ static inline int notify_toast(const char* message) {
  *                      process.
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
+    if (pid == NULL)
+        return;
+
     const int prio = -20;   // Niceness
     const int io_class = 1; // I/O class
     const int io_prio = 0;  // I/O priority
