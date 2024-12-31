@@ -22,26 +22,28 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Parse version to module.prop
-      working-directory: ./
-      run: bash .github/scripts/parse_version.sh
+
     - name: NDK Setup
       uses: nttld/setup-ndk@v1
       with:
         ndk-version: r27c
+
     - name: Build Encore JNI
       working-directory: ./src
       run: ndk-build
+
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
         npm install
         npm run build
         cp ./dist/* ../../module/webroot
-    - name: Compile flashable zip
+
+    - name: Compile Flashable Zip
       id: compileZip
       run: bash .github/scripts/compile_zip.sh
-    - name: Upload to telegram
+
+    - name: Upload To Telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -52,7 +54,7 @@ jobs:
       run: |
         if [ ! -z "${{ secrets.CHAT_ID }}" ] && [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
           export VERSION=$(git rev-list --count HEAD)
-          bash .github/scripts/telegram_bot.sh $GITHUB_WORKSPACE/${{ steps.compileZip.outputs.zipName }}
+          bash .github/scripts/telegram_bot.sh ${{ steps.compileZip.outputs.zipName }}
         else
           echo "Telegram bot token or chatid is undefined, please add it to repository secrets!"
           exit 1

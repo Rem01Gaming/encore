@@ -27,8 +27,10 @@ need_integrity=(
 
 # Version info
 version="$(cat version)"
-version_code=$(git rev-list HEAD --count)
-gitsha1=$(git rev-parse --short HEAD)
+version_code="$(git rev-list HEAD --count)"
+release_code="$(git rev-list HEAD --count)-$(git rev-parse --short HEAD)-release"
+sed -i "s/version=.*/version=$version ($release_code)/" module/module.prop
+sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 
 # Compile Gamelist
 bash gamelist_compile.sh
@@ -39,7 +41,7 @@ cp -r ./src/scripts/* module/system/bin
 cp LICENSE ./module
 
 # Parse version info to module prop
-zipName="encore-$version-$version_code_$gitsha1.zip"
+zipName="encore-$version-$release_code.zip"
 echo "zipName=$zipName" >>$GITHUB_OUTPUT
 
 # Generate sha256sum for integrity checkup
@@ -51,6 +53,6 @@ done
 cd ./module
 zip -r9 ../$zipName * -x *placeholder* *.map
 zip -z ../$zipName <<EOF
-$version (GIT@$gitsha1)
+$version-$release_code
 Build Date $(date +"%a %b %d %H:%M:%S %Z %Y")
 EOF
