@@ -30,7 +30,7 @@ async function getServiceState() {
 }
 
 async function getKillLogdSwitch() {
-  const { errno, stdout } = await exec('cat kill_logd', { cwd: config_path });
+  const { errno, stdout } = await exec(`cat ${config_path}/kill_logd`);
   if (errno === 0) {
     const switchElement = document.getElementById('killLogdSwitch');
     switchElement.checked = stdout.trim() === '1';
@@ -39,10 +39,10 @@ async function getKillLogdSwitch() {
 
 async function toggleKillLogdSwitch(isChecked) {
   const command = isChecked
-    ? 'echo 1 >kill_logd'
-    : 'echo 0 >kill_logd';
+    ? `echo 1 >${config_path}/kill_logd`
+    : `echo 0 >${config_path}/kill_logd`;
   toast('Reboot your device to take effect');
-  await exec(command, { cwd: config_path });
+  await exec(command);
 }
 
 async function restartService() {
@@ -51,8 +51,7 @@ async function restartService() {
 }
 
 async function changeCPUGovernor(governor, config) {
-  const command = `echo ${governor} >${config}`;
-  await exec(command, { cwd: config_path });
+  await exec(`echo ${governor} >${config_path}/${config}`);
 }
 
 async function fetchCPUGovernors() {
@@ -77,13 +76,13 @@ async function fetchCPUGovernors() {
       selectElement2.appendChild(option2);
     });
 
-    const { errno: defaultErrno, stdout: defaultStdout } = await exec('[ -f custom_default_cpu_gov ] && cat custom_default_cpu_gov || cat default_cpu_gov', { cwd: config_path });
+    const { errno: defaultErrno, stdout: defaultStdout } = await exec(`[ -f ${config_path}/custom_default_cpu_gov ] && cat ${config_path}/custom_default_cpu_gov || cat ${config_path}/default_cpu_gov`);
     if (defaultErrno === 0) {
       const defaultGovernor = defaultStdout.trim();
       selectElement1.value = defaultGovernor;
     }
 
-    const { errno: powersaveErrno, stdout: powersaveStdout } = await exec('cat powersave_cpu_gov', { cwd: config_path });
+    const { errno: powersaveErrno, stdout: powersaveStdout } = await exec(`cat ${config_path}/powersave_cpu_gov`);
     if (powersaveErrno === 0) {
       const defaultPowersaveGovernor = powersaveStdout.trim();
       selectElement2.value = defaultPowersaveGovernor;
@@ -100,7 +99,7 @@ async function openGamelistModal() {
   const modal = document.getElementById('gamelistModal');
   const input = document.getElementById('gamelistInput');
 
-  const { errno, stdout } = await exec('cat gamelist.txt', { cwd: config_path });
+  const { errno, stdout } = await exec(`cat ${config_path}/gamelist.txt`);
   if (errno === 0) {
     input.value = stdout.trim().replace(/\|/g, '\n');
   }
@@ -111,7 +110,7 @@ async function openGamelistModal() {
 async function saveGamelist() {
   const input = document.getElementById('gamelistInput');
   const gamelist = input.value.trim().replace(/\n+/g, '/');
-  await exec(`echo "${gamelist}" | tr '/' '|' >gamelist.txt`, { cwd: config_path });
+  await exec(`echo "${gamelist}" | tr '/' '|' >${config_path}/gamelist.txt`);
   toast('Gamelist saved successfully.');
 }
 
