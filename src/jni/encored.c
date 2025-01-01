@@ -212,7 +212,7 @@ static inline int systemv(const char* format, ...) {
     if (format == NULL)
         return -1;
 
-    char command[MAX_OUTPUT_LENGTH];
+    char command[MAX_COMMAND_LENGTH];
     va_list args;
     va_start(args, format);
     vsnprintf(command, sizeof(command), format, args);
