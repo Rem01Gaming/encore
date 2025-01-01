@@ -25,6 +25,7 @@ source "$TMPDIR/verify.sh"
 ui_print "- Extracting module files"
 extract "$ZIPFILE" 'module.prop' $MODPATH
 extract "$ZIPFILE" 'service.sh' $MODPATH
+extract "$ZIPFILE" 'uninstall.sh' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
 
@@ -52,6 +53,19 @@ ui_print "- Encore Tweaks configuration setup"
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
+touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
+
+# symlink encored to manager path (only for ksu and ap)
+manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
+module_path="/data/adb/modules/encore"
+for path in $manager_paths; do
+	if [ -d "$path" ] && [ ! -f "$path/encored" ]; then
+		echo "[+] creating symlink in $path"
+		ln -sf "$module_path/system/bin/encored" "$path/encored"
+		ln -sf "$module_path/system/bin/encore_profiler" "$path/encore_profiler"
+		ln -sf "$module_path/system/bin/encore_utility" "$path/encore_utility"
+	fi
+done
 
 # Install KSU WebUI for Magisk user
 if [ "$(which magisk)" ]; then
@@ -109,7 +123,9 @@ fi
 
 [ $soc -eq 0 ] && ui_print "! Unknown SoC manufacturer, skipping some tweaks"
 echo $soc >/data/encore/soc_recognition
-touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
+
+# leverage skip_mount
+touch "$MODPATH/skip_mount"
 
 # Easter Egg
 case "$((RANDOM % 6 + 1))" in

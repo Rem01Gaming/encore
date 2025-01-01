@@ -17,6 +17,7 @@ need_integrity=(
 	"module/libs"
 	"module/META-INF"
 	"module/service.sh"
+	"module/uninstall.sh"
 	"module/action.sh"
 	"module/toast.apk"
 	"module/webui.apk"
