@@ -5,8 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="index.css" type="text/css" rel="stylesheet">
   <script type="module" src="webui_utils.js"></script>
+  <script src="mmrl_css.js"></script>
+  <style>
+    .root_layout {
+      padding-top: var(--window-inset-top);
+      padding-bottom: var(--window-inset-bottom);
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+<body class="bg-gray-900 text-white flex flex-col min-h-screen root_layout">
   <header class="sticky mt-3 ml-3 top-0 z-50 backdrop-blur-md p-4">
     <h1 class="text-2xl font-bold">Encore Tweaks</h1>
     <span id="moduleVer" class="text-sm text-pink-400"></span>
