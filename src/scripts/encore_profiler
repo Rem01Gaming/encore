@@ -817,9 +817,6 @@ powersave_profile() {
 # Main Function
 ###################################
 
-# Sync to data in the rare case a device crashes
-sync
-
 case "$1" in
 0) perfcommon ;;
 1) performance_profile ;;
