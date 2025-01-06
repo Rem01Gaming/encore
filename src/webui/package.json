@@ -1,6 +1,8 @@
 {
-  "name": "Encore Tweaks",
+  "name": "encore-tweaks",
   "version": "1.0.0",
+  "author": "Rem01Gaming",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "npx parcel src/index.html",
     "build": "npx parcel build src/index.html"
@@ -12,9 +14,5 @@
   },
   "dependencies": {
     "kernelsu": "^1.0.6"
-  },
-  "keywords": [],
-  "author": "Rem01Gaming",
-  "license": "Apache-2.0",
-  "description": ""
+  }
 }
