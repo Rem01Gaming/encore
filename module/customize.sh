@@ -60,30 +60,16 @@ manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
 module_path="/data/adb/modules/encore"
 for path in $manager_paths; do
 	if [ -d "$path" ] && [ ! -f "$path/encored" ]; then
-		echo "[+] creating symlink in $path"
+		ui_print '- Creating symlink in $PATH'
 		ln -sf "$module_path/system/bin/encored" "$path/encored"
 		ln -sf "$module_path/system/bin/encore_profiler" "$path/encore_profiler"
 		ln -sf "$module_path/system/bin/encore_utility" "$path/encore_utility"
 	fi
 done
 
-# Install KSU WebUI for Magisk user
+# Action script for Magisk user
 if [ "$(which magisk)" ]; then
 	extract "$ZIPFILE" 'action.sh' $MODPATH
-
-	if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
-		ui_print "- Magisk detected, Installing KSU WebUI for Magisk"
-		extract "$ZIPFILE" 'webui.apk' $TMPDIR
-		pm install $TMPDIR/webui.apk >&2
-		rm -f $TMPDIR/webui.apk
-	fi
-
-	if ! pm list packages | grep -q io.github.a13e300.ksuwebui; then
-		ui_print "! Can't install KSU WebUI due to selinux restrictions"
-		ui_print "! Please install the app manually after installation."
-	else
-		ui_print "- Please grant root permission for KSU WebUI"
-	fi
 fi
 
 # Install Bellavita Toast
