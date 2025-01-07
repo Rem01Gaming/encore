@@ -534,13 +534,6 @@ perfcommon() {
 		stop logd
 		stop traced
 		stop statsd
-		stop aee.log-1-1
-		stop vendor_tcpdump
-		stop emdlogger
-		stop consyslogger
-		stop mobile_log_d
-		stop wifi_dump
-		stop bt_dump
 	fi
 
 	# Disable schedstats
