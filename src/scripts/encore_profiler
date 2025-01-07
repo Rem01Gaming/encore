@@ -652,9 +652,9 @@ performance_profile() {
 	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 	for path in /sys/devices/system/cpu/*/cpufreq; do
 		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+		apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
 		apply "$cpu_maxfreq" $path/scaling_max_freq
 		apply "$cpu_maxfreq" $path/scaling_min_freq
-		apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
 	done
 	change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
