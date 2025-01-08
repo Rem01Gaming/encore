@@ -16,8 +16,8 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 - Other misc optimizations
 
 ## Download
-- [Download](https://shrinkme.ink/FSd2)
-- [Download (Alternative link)](https://sfl.gl/WcztH)
+- [Download](https://shrinkme.ink/siAtnS)
+- [Download (Alternative link)](https://sfl.gl/DS5co)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
