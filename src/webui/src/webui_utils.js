@@ -3,7 +3,6 @@ import encoreHappy from './assets/encore1.webp';
 import encoreSleeping from './assets/encore2.webp';
 
 let config_path = '/data/encore'
-let module_bin = '/data/adb/modules/encore/system/bin'
 
 async function getModuleVersion() {
   const { errno, stdout } = await exec(
@@ -46,7 +45,7 @@ async function toggleKillLogdSwitch(isChecked) {
 }
 
 async function restartService() {
-  await exec(`pkill encored && su -c ${module_bin}/encored`);
+  await exec('pkill encored && su -c /system/bin/encored');
   await getServiceState();
 }
 
@@ -91,7 +90,7 @@ async function fetchCPUGovernors() {
 }
 
 async function saveLog() {
-  await exec(`${module_bin}/encore_utility save_logs`);
+  await exec('encore_utility save_logs');
   toast('Logs have been saved on /sdcard/encore_log');
 }
 
