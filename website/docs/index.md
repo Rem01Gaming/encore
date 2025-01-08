@@ -25,9 +25,12 @@ features:
   - icon: 🤖
     title: Fully Automatic
     details: Encore Tweaks works by monitoring apps that you open and determine which performance profile should applied in that moment without any user settings.
+  - icon: 🔋
+    title: Don't suck on battery
+    details: Encore Tweaks only applies performance scripts when playing games, unlike other performance modules.
   - icon: 📱
     title: Universal SoC Compatibility
-    details: Designed to support a wide range of popular SoCs, including Snapdragon, MediaTek, Exynos, Google Tensor, and even Unisoc. X86 and RISCV CPUs also supported.
+    details: Encore Tweaks support any devices, Snapdragon, MediaTek, Exynos, Google Tensor, Unisoc, even X86 and RISCV CPUs are supported.
   - icon: 🚀
     title: Game-First Prioritization
     details: Encore Tweaks prioritizes games by allocating maximum CPU and I/O resources, ensuring seamless performance while gaming.

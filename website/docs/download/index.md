@@ -3,20 +3,21 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 2.3
+# Encore Tweaks 2.4
 
 ## Changelog
-- Incorporated fixes on version 2.2
-- Simplify fetch PID logic
-- Fix possible syntax error on I/O tweaks
-- MediaTek: Simplify PPM policies settings logic
-- MediaTek: Disable more logging service (via kill logger feature)
-- MediaTek: Let Encore control anything without FPSGO
-- Other misc optimization and changes
+- Fix service stopped due to bad fetch PID logic for `com.mobile.legends:UnityKillsMe`
+- Fix game force close in the background
+- Fix some weird issues when kill logger enabled
+- Fix some tweaks may not apply correctly
+- No longer bundling KSU WebUI APK
+- Versioning scheme changes
+- webui: Introduce MMRL window safe area insets
+- Other misc optimizations
 
 ## Download
-- [Download](https://shrinkme.ink/lGNW4F56)
-- [Download (Alternative link)](https://sfl.gl/pR8DnKp)
+- [Download](https://shrinkme.ink/FSd2)
+- [Download (Alternative link)](https://sfl.gl/WcztH)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -24,6 +25,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 2.3](/download/version/2.3)
 - [Version 2.2](/download/version/2.2)
 - [Version 2.1](/download/version/2.1)
 - [Version 2.0](/download/version/2.0)
