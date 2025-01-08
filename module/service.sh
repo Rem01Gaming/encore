@@ -3,18 +3,6 @@ while [ -z "$(getprop sys.boot_completed)" ]; do
 	sleep 40
 done
 
-MODPATH=${0%/*}
-
-# Create symlink at every boot these tmpfs dirs 
-# Magisk will add /debug_ramdisk, /sbin on $rwdir
-[ -f /data/adb/magisk/magisk ] && {
-	[ -w /sbin ] && rwdir=/sbin
-	[ -w /debug_ramdisk ] && rwdir=/debug_ramdisk
-	ln -sf "$MODPATH/system/bin/encored" "$rwdir/encored"
-	ln -sf "$MODPATH/system/bin/encore_profiler" "$rwdir/encore_profiler"
-	ln -sf "$MODPATH/system/bin/encore_utility" "$rwdir/encore_utility"
-}
-
 # Parse Governor to use
 chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 default_gov="$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"

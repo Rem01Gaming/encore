@@ -55,18 +55,6 @@ ui_print "- Encore Tweaks configuration setup"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
 
-# symlink encored to manager path (only for ksu and ap)
-manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
-module_path="/data/adb/modules/encore"
-for path in $manager_paths; do
-	if [ -d "$path" ] && [ ! -f "$path/encored" ]; then
-		ui_print '- Creating symlink in $PATH'
-		ln -sf "$module_path/system/bin/encored" "$path/encored"
-		ln -sf "$module_path/system/bin/encore_profiler" "$path/encore_profiler"
-		ln -sf "$module_path/system/bin/encore_utility" "$path/encore_utility"
-	fi
-done
-
 # Action script for Magisk user
 if [ "$(which magisk)" ]; then
 	extract "$ZIPFILE" 'action.sh' $MODPATH
@@ -109,9 +97,6 @@ fi
 
 [ $soc -eq 0 ] && ui_print "! Unknown SoC manufacturer, skipping some tweaks"
 echo $soc >/data/encore/soc_recognition
-
-# leverage skip_mount
-touch "$MODPATH/skip_mount"
 
 # Easter Egg
 case "$((RANDOM % 6 + 1))" in
