@@ -671,6 +671,8 @@ performance_profile() {
 	4) unisoc_performance ;;
 	5) tensor_performance ;;
 	esac
+
+	echo 3 >/proc/sys/vm/drop_caches
 }
 
 normal_profile() {
