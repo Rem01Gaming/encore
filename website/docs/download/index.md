@@ -7,7 +7,6 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 
 ## Changelog
 - Fix service stopped due to bad fetch PID logic for `com.mobile.legends:UnityKillsMe`
-- Fix game force close in the background
 - Fix some weird issues when kill logger enabled
 - Fix some tweaks may not apply correctly
 - No longer bundling KSU WebUI APK
