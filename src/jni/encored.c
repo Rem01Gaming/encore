@@ -19,6 +19,18 @@
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
 
+typedef enum {
+    NORMAL_PROFILE = 0,
+    PERFORMANCE_PROFILE = 1,
+    POWERSAVE_PROFILE = 2
+} ProfileMode;
+
+typedef enum {
+    MLBB_NOT_RUNNING = 0,
+    MLBB_RUN_BG = 1,
+    MLBB_RUNNING = 2
+} MLBBState;
+
 /***********************************************************************************
  * Function Name      : trim_newline
  * Inputs             : str (char *) - string to trim newline from
@@ -416,10 +428,13 @@ int main(void) {
     signal(SIGINT, sighandler);
     signal(SIGTERM, sighandler);
 
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
-         path[MAX_PATH_LENGTH];
+    // Initialize variables
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, path[MAX_PATH_LENGTH];
+    MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
+    ProfileMode cur_mode = -1;
+
     log_encore("info: daemon started");
-    run_profiler(0);
+    run_profiler(0); // exec perfcommon
 
     while (1) {
         free(screenstate);
@@ -466,9 +481,9 @@ int main(void) {
             exit(EXIT_SUCCESS);
         }
 
-        if (gamestart && (strcmp(screenstate, "Awake") == 0 || strcmp(screenstate, "true") == 0) && mlbb_is_running != 1) {
+        if (gamestart && (strcmp(screenstate, "Awake") == 0 || strcmp(screenstate, "true") == 0) && mlbb_is_running != MLBB_RUN_BG) {
             // Bail out if we already on performance profile
-            if (cur_mode == 1)
+            if (cur_mode == PERFORMANCE_PROFILE)
                 continue;
 
             // Get PID and check if the game is "real" running program
@@ -479,29 +494,29 @@ int main(void) {
             }
 
             // Handle weird behavior of MLBB
-            if (mlbb_is_running == 2)
+            if (mlbb_is_running == MLBB_RUNNING)
                 pid = pidof(GAME_STRESS);
 
-            cur_mode = 1;
+            cur_mode = PERFORMANCE_PROFILE;
             log_encore("info: applying performance profile for %s", gamestart);
             notify_toast("Applying performance profile...");
             run_profiler(1);
             set_priority(pid);
         } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
             // Bail out if we already on powersave profile
-            if (cur_mode == 2)
+            if (cur_mode == POWERSAVE_PROFILE)
                 continue;
 
-            cur_mode = 2;
+            cur_mode = POWERSAVE_PROFILE;
             log_encore("info: applying powersave profile");
             notify_toast("Applying powersave profile...");
             run_profiler(3);
         } else {
             // Bail out if we already on normal profile
-            if (cur_mode == 0)
+            if (cur_mode == NORMAL_PROFILE)
                 continue;
 
-            cur_mode = 0;
+            cur_mode = NORMAL_PROFILE;
             log_encore("info: applying normal profile");
             notify_toast("Applying normal profile...");
             run_profiler(2);
