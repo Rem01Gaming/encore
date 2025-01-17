@@ -136,10 +136,6 @@ static inline void sighandler(const int signal) {
     case SIGINT:
         log_encore("notice: received SIGINT.");
         break;
-    case SIGSEGV:
-        log_encore("error: Segmentation Fault, please report to maintainer!");
-        exit(SIGSEGV);
-        break;
     }
 
     // Exit gracefully
@@ -419,7 +415,6 @@ int main(void) {
     // Register signal handlers
     signal(SIGINT, sighandler);
     signal(SIGTERM, sighandler);
-    signal(SIGSEGV, sighandler);
 
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, mlbb_is_running = 0, cur_mode = -1,
          path[MAX_PATH_LENGTH];
