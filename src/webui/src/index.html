@@ -1,88 +1,228 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="index.css" type="text/css" rel="stylesheet">
-  <script type="module" src="webui_utils.js"></script>
-  <script src="mmrl_css.js"></script>
-  <style>
-    .root_layout {
-      padding-top: var(--window-inset-top);
-      padding-bottom: var(--window-inset-bottom);
-    }
-  </style>
-</head>
-<body class="bg-gray-900 text-white flex flex-col min-h-screen root_layout">
-  <header class="sticky mt-3 ml-3 top-0 z-50 backdrop-blur-md p-4">
-    <h1 class="text-2xl font-bold">Encore Tweaks</h1>
-    <span id="moduleVer" class="text-sm text-pink-400"></span>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="index.css" type="text/css" rel="stylesheet" />
+    <script type="module" src="webui_utils.js"></script>
+    <script src="mmrl_css.js"></script>
+  </head>
+  <body
+    class="bg-blue-background text-white flex justify-center min-h-screen root_layout"
+  >
+    <main class="p-3 text-sm w-full max-w-2xl">
+      <h1 class="text-left text-lg font-semibold mt-2 ml-1 mb-6">
+        Encore Tweaks
+      </h1>
 
-  <main class="pt-1 flex-grow">
-    <div class="p-6">
-      <div class="bg-gray-800 mb-4 p-4 rounded-lg flex items-start justify-between">
+      <!-- daemon status -->
+      <div
+        class="bg-blue-secondary mb-4 p-4 rounded-lg flex items-start justify-between"
+      >
         <div>
-          <span id="serviceStatus" class="text-xl font-semibold">Loading</span>
-          <span id="servicePID" class="text-gray-400 text-xs mt-2 block">One moment please...</span>
+          <span id="daemon_status" class="text-lg font-semibold">Loading</span>
+          <span id="daemon_pid" class="text-xs mt-3 block"
+            >One moment please...</span
+          >
         </div>
-        <img id="imgEncore" class="w-24 h-24">
+        <img id="encore_pics" class="w-24 h-24" />
       </div>
-      <div class="bg-gray-800 mb-4 p-4 rounded-lg">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-semibold mb-4">Settings</h2>
+
+      <!-- device & module info -->
+      <div class="bg-blue-container mb-4 p-4 rounded-lg">
+        <div class="py-2">
+          <h3 class="text-sm font-medium mb-1">Encore Tweaks</h3>
+          <span id="module_version" class="text-gray-400 text-xs"></span>
         </div>
-        <div class="flex items-center justify-between mb-3">
-          <label class="inline-flex items-center w-full cursor-pointer">
-            <p class="text-sm text-white">Kill Logger</p>
-            <div class="ml-auto">
-              <input type="checkbox" id="killLogdSwitch" class="sr-only peer">
-              <div class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </div>
-          </label>
+        <div class="py-2">
+          <h3 class="text-sm font-medium mb-1">Kernel</h3>
+          <span id="kernel_version" class="text-gray-400 text-xs"></span>
         </div>
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-sm text-white">Default CPU Governor</p>
-          <select id="cpuGovernor" class="bg-gray-700 text-xs text-white border-none outline-none shadow-none rounded-md p-2">
+        <div class="py-2">
+          <h3 class="text-sm font-medium mb-1">Chipset</h3>
+          <span id="chipset_name" class="text-gray-400 text-xs"></span>
+        </div>
+        <div class="py-2">
+          <h3 class="text-sm font-medium mb-1">Android SDK</h3>
+          <span id="android_sdk" class="text-gray-400 text-xs"></span>
+        </div>
+      </div>
+
+      <!-- settings -->
+      <div class="bg-blue-container mb-4 p-4 rounded-lg">
+        <h2 class="text-base font-semibold mb-2">Settings</h2>
+
+        <div class="flex items-center justify-between py-1 mb-2">
+          <div>
+            Kill Logger
+            <button
+              class="btn btn-circle btn-ghost btn-xs text-blue-primary"
+              onclick="kill_logger.showModal()"
+            >
+              <svg
+                tabindex="0"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="h-4 w-4 stroke-current"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <input
+            id="kill_logd_switch"
+            type="checkbox"
+            class="toggle border-blue-primary bg-blue-primary hover:bg-blue-primary"
+          />
+        </div>
+
+        <div class="py-1 mb-2">
+          <p class="mb-2">Default CPU Governor</p>
+          <select
+            id="default_cpu_gov"
+            class="select bg-blue-primary text-xs text-black w-full p-2"
+          >
             <option value="schedutil" selected>schedutil</option>
           </select>
         </div>
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-sm text-white">Powersave CPU Governor</p>
-          <select id="cpuGovernorPowersave" class="bg-gray-700 text-xs text-white border-none outline-none shadow-none rounded-md p-2">
+
+        <div class="py-1 mb-2">
+          <p class="mb-2">Powersave CPU Governor</p>
+          <select
+            id="powersave_cpu_gov"
+            class="select bg-blue-primary text-xs text-black w-full p-2"
+          >
             <option value="powersave" selected>powersave</option>
           </select>
         </div>
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-sm text-white">Edit Gamelist</p>
-          <button id="editGamelistButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-10 rounded-md">Edit</button>
-        </div>
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-sm text-white">Save Logs</p>
-          <button id="saveLogButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-9 rounded-md">Save</button>
-        </div>
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-sm text-white">Restart Service</p>
-          <button id="restartServiceButton" class="bg-gray-700 hover:bg-gray-600 text-sm text-white py-1 px-7 rounded-md">Restart</button>
-        </div>
       </div>
-    </div>
-  </main>
 
-  <div id="gamelistModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-    <div class="bg-gray-800 rounded-lg p-6 w-11/12 max-w-md">
-      <h3 class="text-lg font-semibold mb-2">Edit Gamelist</h3>
-      <p class="text-xs text-slate-300 mb-4">Any Apps and Games listed here will trigger performance profile</p>
-      <textarea id="gamelistInput" class="w-full p-2 text-sm text-white bg-gray-700 border-none outline-none shadow-none rounded-md resize-none" rows="16"></textarea>
-      <div class="flex justify-end mt-4">
-        <button id="cancelButton" class="bg-gray-600 hover:bg-gray-500 text-sm text-white py-1 px-4 rounded-md mr-2">Cancel</button>
-        <button id="saveGamelistButton" class="bg-blue-600 hover:bg-blue-500 text-sm text-white py-1 px-4 rounded-md">Save</button>
+      <!-- actions -->
+      <div class="bg-blue-container mb-4 p-4 rounded-lg">
+        <h2 class="text-base font-semibold mb-4">Actions</h2>
+        <button
+          id="edit_gamelist_btn"
+          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+          onclick="edit_gamelist.showModal()"
+        >
+          Edit Gamelist
+        </button>
+        <button
+          id="restart_daemon_btn"
+          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+        >
+          Restart Daemon
+        </button>
+        <button
+          id="save_log_btn"
+          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+        >
+          Save Module Logs
+        </button>
       </div>
-    </div>
-  </div>
 
-  <footer class="text-gray-600 text-xs text-center mb-2 py-3 mt-auto">
-    <p>Designed by Rem01Gaming</p>
-  </footer>
-</body>
+      <!-- modal -->
+      <dialog id="kill_logger" class="modal">
+        <div class="modal-box bg-blue-container">
+          <form method="dialog">
+            <button
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
+          <h3 class="text-lg font-bold">Kill Logger</h3>
+          <p class="py-4">
+            This option will stop the logger services and silence logs, enabling
+            a reduction in performance overhead.
+          </p>
+          <div role="alert" class="alert bg-blue-primary text-black">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <span
+              >WARNING: Software that depends on the logd service will not work
+              properly!</span
+            >
+          </div>
+        </div>
+      </dialog>
+
+      <dialog id="mmrl_denied" class="modal">
+        <div class="modal-box bg-blue-container">
+          <form method="dialog">
+            <button
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
+          <h3 class="text-lg font-bold">Permission Denied</h3>
+          <p class="py-4">
+            Please activate the JavaScript API for Encore Tweaks in MMRL
+            settings; this WebUI will not function without it.
+          </p>
+
+          <div class="breadcrumbs text-sm">
+            <ul>
+              <li>Settings</li>
+              <li>Security</li>
+              <li>Allow JavaScript API</li>
+              <li>Encore Tweaks</li>
+            </ul>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog id="edit_gamelist" class="modal">
+        <div class="modal-box bg-blue-container">
+          <form method="dialog">
+            <button
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
+          <h3 class="text-lg font-bold">Edit Gamelist</h3>
+          <p class="py-4">
+            Any apps and games listed here will trigger performance profile.
+          </p>
+          <textarea
+            id="gamelist_textarea"
+            class="w-full p-2 text-sm text-white bg-blue-secondary border-none outline-none shadow-none rounded-md resize-none mb-2"
+            rows="14"
+          ></textarea>
+          <form method="dialog">
+            <button
+              id="save_gamelist_btn"
+              class="btn btn-block btn-sm bg-blue-primary text-black font-normal mb-2"
+            >
+              Save Changes
+            </button>
+            <button
+              class="btn btn-block btn-sm bg-blue-secondary text-white font-normal"
+            >
+              Cancel Changes
+            </button>
+          </form>
+        </div>
+      </dialog>
+    </main>
+  </body>
 </html>

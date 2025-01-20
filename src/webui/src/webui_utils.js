@@ -1,6 +1,6 @@
 import { exec, toast } from 'kernelsu';
-import encoreHappy from './assets/encore1.webp';
-import encoreSleeping from './assets/encore2.webp';
+import encoreHappy from './encore_happy.webp';
+import encoreSleeping from './encore_sleeping.webp';
 
 let config_path = '/data/encore'
 
@@ -9,21 +9,48 @@ async function getModuleVersion() {
     `grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'`
   );
   if (errno === 0) {
-    document.getElementById('moduleVer').textContent = stdout.trim();
+    document.getElementById('module_version').textContent = stdout.trim();
+  }
+}
+
+async function getKernelVersion() {
+  const { errno, stdout } = await exec(
+    `uname -r -m`
+  );
+  if (errno === 0) {
+    document.getElementById('kernel_version').textContent = stdout.trim();
+  }
+}
+
+async function getChipset() {
+  const { errno, stdout } = await exec(
+    `getprop ro.board.platform`
+  );
+  if (errno === 0) {
+    document.getElementById('chipset_name').textContent = stdout.trim();
+  }
+}
+
+async function getAndroidSDK() {
+  const { errno, stdout } = await exec(
+    `getprop ro.build.version.sdk`
+  );
+  if (errno === 0) {
+    document.getElementById('android_sdk').textContent = stdout.trim();
   }
 }
 
 async function getServiceState() {
-  const serviceStatusElement = document.getElementById('serviceStatus');
-  const image = document.getElementById('imgEncore');
+  const serviceStatusElement = document.getElementById('daemon_status');
+  const image = document.getElementById('encore_pics');
   const { errno, stdout } = await exec('pidof encored');
   if (errno === 0) {
     serviceStatusElement.textContent = "Working ✨";
-    document.getElementById('servicePID').textContent = "Service PID: " + stdout.trim();
+    document.getElementById('daemon_pid').textContent = "Daemon PID: " + stdout.trim();
     image.src = encoreHappy;
   } else {
     serviceStatusElement.textContent = "Stopped 💤";
-    document.getElementById('servicePID').textContent = "Service PID: null";
+    document.getElementById('daemon_pid').textContent = "Daemon PID: null";
     image.src = encoreSleeping;
   }
 }
@@ -31,7 +58,7 @@ async function getServiceState() {
 async function getKillLogdSwitch() {
   const { errno, stdout } = await exec(`cat ${config_path}/kill_logd`);
   if (errno === 0) {
-    const switchElement = document.getElementById('killLogdSwitch');
+    const switchElement = document.getElementById('kill_logd_switch');
     switchElement.checked = stdout.trim() === '1';
   }
 }
@@ -57,8 +84,8 @@ async function fetchCPUGovernors() {
   const { errno: govErrno, stdout: govStdout } = await exec('chmod 644 scaling_available_governors && cat scaling_available_governors', { cwd: '/sys/devices/system/cpu/cpu0/cpufreq' });
   if (govErrno === 0) {
     const governors = govStdout.trim().split(/\s+/);
-    const selectElement1 = document.getElementById('cpuGovernor');
-    const selectElement2 = document.getElementById('cpuGovernorPowersave');
+    const selectElement1 = document.getElementById('default_cpu_gov');
+    const selectElement2 = document.getElementById('powersave_cpu_gov');
 
     selectElement1.innerHTML = '';
     selectElement2.innerHTML = '';
@@ -94,20 +121,16 @@ async function saveLog() {
   toast('Logs have been saved on /sdcard/encore_log');
 }
 
-async function openGamelistModal() {
-  const modal = document.getElementById('gamelistModal');
-  const input = document.getElementById('gamelistInput');
-
+async function fetchGamelist() {
+  const input = document.getElementById('gamelist_textarea');
   const { errno, stdout } = await exec(`cat ${config_path}/gamelist.txt`);
   if (errno === 0) {
     input.value = stdout.trim().replace(/\|/g, '\n');
   }
-
-  modal.classList.remove('hidden');
 }
 
 async function saveGamelist() {
-  const input = document.getElementById('gamelistInput');
+  const input = document.getElementById('gamelist_textarea');
   const gamelist = input.value.trim().replace(/\n+/g, '/');
   await exec(`echo "${gamelist}" | tr '/' '|' >${config_path}/gamelist.txt`);
   toast('Gamelist saved successfully.');
@@ -117,46 +140,42 @@ async function openWebsite() {
   await exec('/system/bin/am start -a android.intent.action.VIEW -d https://encore.rem01gaming.dev/');
 }
 
-document.addEventListener('DOMContentLoaded', async (event) => {
-  await getModuleVersion();
-  await getServiceState();
-  await getKillLogdSwitch();
-  await fetchCPUGovernors();
+getModuleVersion();
+getKernelVersion();
+getChipset();
+getAndroidSDK();
+getServiceState();
+getKillLogdSwitch();
+fetchCPUGovernors();
 
-  document.getElementById('saveLogButton').addEventListener('click', async function() {
-    await saveLog();
-  });
+document.getElementById('save_log_btn').addEventListener('click', async function() {
+  saveLog();
+});
 
-  document.getElementById('restartServiceButton').addEventListener('click', async function() {
-    await restartService();
-  });
+document.getElementById('restart_daemon_btn').addEventListener('click', async function() {
+  restartService();
+});
 
-  document.getElementById('killLogdSwitch').addEventListener('change', async function() {
-    await toggleKillLogdSwitch(this.checked);
-  });
+document.getElementById('kill_logd_switch').addEventListener('change', async function() {
+  toggleKillLogdSwitch(this.checked);
+});
 
-  document.getElementById('cpuGovernorPowersave').addEventListener('change', async function() {
-    await changeCPUGovernor(this.value, "powersave_cpu_gov");
-  });
+document.getElementById('powersave_cpu_gov').addEventListener('change', async function() {
+  changeCPUGovernor(this.value, "powersave_cpu_gov");
+});
   
-  document.getElementById('cpuGovernor').addEventListener('change', async function() {
-    await changeCPUGovernor(this.value, "custom_default_cpu_gov");
-  });
+document.getElementById('default_cpu_gov').addEventListener('change', async function() {
+  changeCPUGovernor(this.value, "custom_default_cpu_gov");
+});
 
-  document.getElementById('editGamelistButton').addEventListener('click', function() {
-    openGamelistModal();
-  });
+document.getElementById('edit_gamelist_btn').addEventListener('click', function() {
+  fetchGamelist();
+});
 
-  document.getElementById('cancelButton').addEventListener('click', function() {
-    document.getElementById('gamelistModal').classList.add('hidden');
-  });
+document.getElementById('save_gamelist_btn').addEventListener('click', async function() {
+  saveGamelist();
+});
 
-  document.getElementById('saveGamelistButton').addEventListener('click', async function() {
-    await saveGamelist();
-    document.getElementById('gamelistModal').classList.add('hidden');
-  });
-
-  document.getElementById('imgEncore').addEventListener('click', async function() {
-    await openWebsite();
-  });
+document.getElementById('encore_pics').addEventListener('click', async function() {
+  openWebsite();
 });

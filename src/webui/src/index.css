@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.root_layout {
+  padding-top: var(--window-inset-top);
+  padding-bottom: var(--window-inset-bottom);
+}
