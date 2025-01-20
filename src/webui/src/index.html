@@ -8,16 +8,16 @@
     <script type="module" src="mmrl_css.js"></script>
   </head>
   <body
-    class="bg-blue-background text-white flex justify-center min-h-screen root_layout"
+    class="bg-surface flex justify-center min-h-screen root_layout"
   >
     <main class="p-3 text-sm w-full max-w-2xl">
-      <h1 class="text-left text-lg font-semibold mt-2 ml-1 mb-6">
+      <h1 class="text-left text-lg font-semibold mt-2 ml-1 mb-6 text-on-surface">
         Encore Tweaks
       </h1>
 
       <!-- daemon status -->
       <div
-        class="bg-blue-secondary mb-4 p-4 rounded-lg flex items-start justify-between"
+        class="bg-secondary mb-4 p-4 rounded-lg flex items-start justify-between text-on-secondary"
       >
         <div>
           <span id="daemon_status" class="text-lg font-semibold">Loading</span>
@@ -29,34 +29,34 @@
       </div>
 
       <!-- device & module info -->
-      <div class="bg-blue-container mb-4 p-4 rounded-lg">
+      <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Encore Tweaks</h3>
-          <span id="module_version" class="text-gray-400 text-xs"></span>
+          <span id="module_version" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Kernel</h3>
-          <span id="kernel_version" class="text-gray-400 text-xs"></span>
+          <span id="kernel_version" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Chipset</h3>
-          <span id="chipset_name" class="text-gray-400 text-xs"></span>
+          <span id="chipset_name" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Android SDK</h3>
-          <span id="android_sdk" class="text-gray-400 text-xs"></span>
+          <span id="android_sdk" class="text-on-surface-variant text-xs"></span>
         </div>
       </div>
 
       <!-- settings -->
-      <div class="bg-blue-container mb-4 p-4 rounded-lg">
+      <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
         <h2 class="text-base font-semibold mb-2">Settings</h2>
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
             Kill Logger
             <button
-              class="btn btn-circle btn-ghost btn-xs text-blue-primary"
+              class="btn btn-circle btn-ghost btn-xs text-primary"
               onclick="kill_logger.showModal()"
             >
               <svg
@@ -78,7 +78,7 @@
           <input
             id="kill_logd_switch"
             type="checkbox"
-            class="toggle border-blue-primary bg-blue-primary hover:bg-blue-primary"
+            class="toggle border-primary bg-primary hover:bg-primary"
           />
         </div>
 
@@ -86,7 +86,7 @@
           <p class="mb-2">Default CPU Governor</p>
           <select
             id="default_cpu_gov"
-            class="select bg-blue-primary text-xs text-black w-full p-2"
+            class="select bg-primary text-xs text-on-primary w-full p-2"
           >
             <option value="schedutil" selected>schedutil</option>
           </select>
@@ -96,7 +96,7 @@
           <p class="mb-2">Powersave CPU Governor</p>
           <select
             id="powersave_cpu_gov"
-            class="select bg-blue-primary text-xs text-black w-full p-2"
+            class="select bg-primary text-xs text-on-primary w-full p-2"
           >
             <option value="powersave" selected>powersave</option>
           </select>
@@ -104,24 +104,24 @@
       </div>
 
       <!-- actions -->
-      <div class="bg-blue-container mb-4 p-4 rounded-lg">
-        <h2 class="text-base font-semibold mb-4">Actions</h2>
+      <div class="bg-surface-container mb-4 p-4 rounded-lg">
+        <h2 class="text-base font-semibold mb-4 text-on-surface">Actions</h2>
         <button
           id="edit_gamelist_btn"
-          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+          class="btn btn-block bg-primary text-on-primary py-1 mb-2"
           onclick="edit_gamelist.showModal()"
         >
           Edit Gamelist
         </button>
         <button
           id="restart_daemon_btn"
-          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+          class="btn btn-block bg-primary text-on-primary py-1 mb-2"
         >
           Restart Daemon
         </button>
         <button
           id="save_log_btn"
-          class="btn btn-block bg-blue-primary text-black py-1 mb-2"
+          class="btn btn-block bg-primary text-on-primary py-1 mb-2"
         >
           Save Module Logs
         </button>
@@ -129,7 +129,7 @@
 
       <!-- modal -->
       <dialog id="kill_logger" class="modal">
-        <div class="modal-box bg-blue-container">
+        <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
             <button
               class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -142,7 +142,7 @@
             This option will stop the logger services and silence logs, enabling
             a reduction in performance overhead.
           </p>
-          <div role="alert" class="alert bg-blue-primary text-black">
+          <div role="alert" class="alert bg-primary text-on-primary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 shrink-0 stroke-current"
@@ -165,7 +165,7 @@
       </dialog>
 
       <dialog id="mmrl_denied" class="modal">
-        <div class="modal-box bg-blue-container">
+        <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
             <button
               class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -191,7 +191,7 @@
       </dialog>
 
       <dialog id="edit_gamelist" class="modal">
-        <div class="modal-box bg-blue-container">
+        <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
             <button
               class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -205,18 +205,18 @@
           </p>
           <textarea
             id="gamelist_textarea"
-            class="w-full p-2 text-sm text-white bg-blue-secondary border-none outline-none shadow-none rounded-md resize-none mb-2"
+            class="w-full p-2 text-sm text-on-surface bg-surface border-none outline-none shadow-none rounded-md resize-none mb-2"
             rows="14"
           ></textarea>
           <form method="dialog">
             <button
               id="save_gamelist_btn"
-              class="btn btn-block btn-sm bg-blue-primary text-black font-normal mb-2"
+              class="btn btn-block btn-sm bg-primary text-on-primary font-normal mb-2"
             >
               Save Changes
             </button>
             <button
-              class="btn btn-block btn-sm bg-blue-secondary text-white font-normal"
+              class="btn btn-block btn-sm bg-secondary text-on-secondary font-normal"
             >
               Cancel Changes
             </button>
