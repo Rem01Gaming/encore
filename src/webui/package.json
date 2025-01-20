@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "author": "Rem01Gaming",
   "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
     "dev": "npx vite",
     "build": "npx vite build --emptyOutDir",
