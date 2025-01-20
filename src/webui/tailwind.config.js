@@ -6,8 +6,8 @@ module.exports = {
       colors: {
         "primary": "var(--primary, #99BBFF)",
         "on-primary": "var(--onPrimary, #000000)",
-        "secondary": "var(--secondary, #394253)",
-        "on-secondary": "var(--onSecondary, #FFFFFF)",
+        "secondary-container": "var(--secondaryContainer, #394253)",
+        "on-secondary-container": "var(--onSecondaryContainer, #FFFFFF)",
         "surface": "var(--surface, #0F141B)",
         "on-surface": "var(--onSurface, #FFFFFF)",
         "on-surface-variant": "var(--onSurfaceVariant, #9ca3af)",
