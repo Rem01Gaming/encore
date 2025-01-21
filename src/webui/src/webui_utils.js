@@ -47,17 +47,19 @@ async function getAndroidSDK() {
 }
 
 async function getServiceState() {
-  const serviceStatusElement = document.getElementById('daemon_status');
+  const status = document.getElementById('daemon_status');
   const image = document.getElementById('encore_pics');
-  const { errno, stdout } = await exec('pidof encored');
-  if (errno === 0) {
-    serviceStatusElement.textContent = "Working ✨";
-    document.getElementById('daemon_pid').textContent = "Daemon PID: " + stdout.trim();
-    image.src = encoreHappy;
-  } else {
-    serviceStatusElement.textContent = "Stopped 💤";
-    document.getElementById('daemon_pid').textContent = "Daemon PID: null";
+  const pid = document.getElementById('daemon_pid');
+  
+  const { stdout } = await exec('su -c pidof encored || echo null');
+  pid.textContent = "Daemon PID: " + stdout.trim();
+
+  if (stdout.trim() === "null") {
+    status.textContent = "Stopped 💤";
     image.src = encoreSleeping;
+  } else {
+    status.textContent = "Working ✨";
+    image.src = encoreHappy;
   }
 }
 
@@ -78,7 +80,8 @@ async function toggleKillLogdSwitch(isChecked) {
 }
 
 async function restartService() {
-  await exec('pkill encored && su -c /system/bin/encored');
+  await exec('pkill encored');
+  await exec('su -c encored');
   await getServiceState();
 }
 
