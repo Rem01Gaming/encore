@@ -75,11 +75,11 @@
               </svg>
             </button>
           </div>
-          <input
-            id="kill_logd_switch"
-            type="checkbox"
-            class="toggle border-primary bg-primary hover:bg-primary"
-          />
+          <label class="relative inline-flex cursor-pointer items-center">
+            <input id="kill_logd_switch" type="checkbox" class="peer sr-only" />
+            <label for="kill_logd_switch" class="hidden"></label>
+            <div class="peer h-6 w-11 rounded-full border border-on-surface bg-surface-container after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-on-surface after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:bg-on-primary"></div>
+          </label>
         </div>
 
         <div class="py-1 mb-2">
