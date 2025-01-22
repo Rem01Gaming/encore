@@ -78,7 +78,7 @@
           <label class="relative inline-flex cursor-pointer items-center">
             <input id="kill_logd_switch" type="checkbox" class="peer sr-only" />
             <label for="kill_logd_switch" class="hidden"></label>
-            <div class="peer h-6 w-11 rounded-full border border-on-surface bg-surface-container after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-on-surface after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:bg-on-primary"></div>
+            <div class="peer h-6 w-11 rounded-full border border-outline bg-surface-variant after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-4 after:border-surface-variant after:bg-outline after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-on-primary peer-checked:after:bg-on-primary"></div>
           </label>
         </div>
 
@@ -142,7 +142,7 @@
             This option will stop the logger services and silence logs, enabling
             a reduction in performance overhead.
           </p>
-          <div role="alert" class="alert bg-primary text-on-primary">
+          <div role="alert" class="alert bg-error text-on-error">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 shrink-0 stroke-current"
@@ -205,7 +205,7 @@
           </p>
           <textarea
             id="gamelist_textarea"
-            class="w-full p-2 text-sm text-on-surface bg-surface border-none outline-none shadow-none rounded-md resize-none mb-2"
+            class="w-full p-2 text-sm text-on-surface bg-surface-dim border border-primary outline-none shadow-none rounded-md resize-none mb-2"
             rows="14"
           ></textarea>
           <form method="dialog">
