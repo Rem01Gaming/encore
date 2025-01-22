@@ -544,6 +544,9 @@ perfcommon() {
 
 	# Disable schedstats
 	apply 0 /proc/sys/kernel/sched_schedstats
+	
+	# Disable Oppo/Realme cpustats
+	apply 0 /proc/sys/kernel/task_cpustats_enable
 
 	# Disable Sched auto group
 	apply 0 /proc/sys/kernel/sched_autogroup_enabled
