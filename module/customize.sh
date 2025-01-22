@@ -1,10 +1,12 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
+SOC=0
 
 abort_unsupported_arch() {
 	ui_print "*********************************************************"
 	ui_print "! Unsupported ARCH: $ARCH"
 	ui_print "! Encore Tweaks does not support your CPU architecture"
+	ui_print "! If you think this is wrong, please report to maintainer"
 	abort "*********************************************************"
 }
 
@@ -13,6 +15,46 @@ abort_corrupted() {
 	ui_print "! Unable to extract verify.sh!"
 	ui_print "! This zip may be corrupted, please try downloading again"
 	abort "*********************************************************"
+}
+
+soc_recognition_extra() {
+	[ -d /sys/class/kgsl/kgsl-3d0/devfreq ] && {
+		SOC=2
+		ui_print "- Implementing tweaks for Snapdragon"
+		return 0
+	}
+
+	[ -d /sys/devices/platform/kgsl-2d0.0/kgsl ] && {
+		SOC=2
+		ui_print "- Implementing tweaks for Snapdragon"
+		return 0
+	}
+	
+	[ -d /sys/kernel/ged/hal ] && {
+		SOC=1
+		ui_print "- Implementing tweaks for MediaTek"
+		return 0
+	}
+
+	[ -d /sys/kernel/tegra_gpu ] && {
+		SOC=7
+		ui_print "- Implementing tweaks for Nvidia Tegra"
+		return 0
+	}
+
+	return 1
+}
+
+recognize_soc() {
+	case "$1" in
+	*mt* | *MT*) SOC=1 && ui_print "- Implementing tweaks for MediaTek" ;;
+	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
+	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung*) SOC=3 && ui_print "- Implementing tweaks for Exynos" ;;
+	*Unisoc* | *unisoc*) SOC=4 && ui_print "- Implementing tweaks for Unisoc" ;;
+	*gs*) SOC=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
+	*Intel* | *intel*) SOC=6 && ui_print "- Implementing tweaks for Intel" ;;
+	*) return 1 ;;
+	esac
 }
 
 # Flashable integrity checkup
@@ -77,26 +119,22 @@ fi
 ui_print "- Permission setup"
 set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 
-# Determine Chipset
-chipset=$(grep "Hardware" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')
-[ -z "$chipset" ] && chipset="$(getprop ro.board.platform) $(getprop ro.hardware)"
+# SOC CODE:
+# 1 = MediaTek
+# 2 = Qualcomm Snapdragon
+# 3 = Exynos
+# 4 = Unisoc
+# 5 = Google Tensor
+# 6 = Intel
+# 7 = Nvidia Tegra
 
-case "$chipset" in
-*mt* | *MT*) soc=1 && ui_print "- Implementing tweaks for Mediatek" ;;
-*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) soc=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
-*exynos*) soc=3 && ui_print "- Implementing tweaks for Exynos" ;;
-*Unisoc* | *unisoc*) soc=4 && ui_print "- Implementing tweaks for Unisoc" ;;
-*gs*) soc=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
-*Intel* | *intel*) soc=6 && ui_print "- Implementing tweaks for Intel" ;;
-*) soc=0 ;;
-esac
-
-if [ $soc -eq 0 ] && [ -f /sys/devices/soc0/machine ] && [ ! -d /sys/kernel/gpu ]; then
-	soc=2 && ui_print "- Implementing tweaks for Snapdragon"
-fi
-
-[ $soc -eq 0 ] && ui_print "! Unknown SoC manufacturer, skipping some tweaks"
-echo $soc >/data/encore/soc_recognition
+# Recognize Chipset
+soc_recognition_extra
+[ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')" # Try normal way
+[ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"           # Try Intel (or X86) way
+[ $SOC -eq 0 ] && recognize_soc "$(getprop ro.board.platform) $(getprop ro.hardware) $(getprop ro.hardware.chipname)"        # Try Android way
+[ $SOC -eq 0 ] && ui_print "! Unknown SoC, skipping some tweaks"                                                             # Unrecognizable :(
+echo $SOC >/data/encore/soc_recognition
 
 # Easter Egg
 case "$((RANDOM % 6 + 1))" in
