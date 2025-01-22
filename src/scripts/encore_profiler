@@ -492,6 +492,12 @@ tensor_powersave() {
 ###################################
 
 perfcommon() {
+	# Disable Kernel panic
+	apply 0 /proc/sys/kernel/panic
+	apply 0 /proc/sys/kernel/panic_on_oops
+	apply 0 /proc/sys/kernel/panic_on_warn
+	apply 0 /proc/sys/kernel/softlockup_panic
+
 	# Sync to data in the rare case a device crashes
 	sync
 
