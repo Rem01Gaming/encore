@@ -605,6 +605,9 @@ performance_profile() {
 		fi
 	fi
 
+	# Disable split lock mitigation
+	apply 0 /proc/sys/kernel/split_lock_mitigate
+
 	if [ -f "/sys/kernel/debug/sched_features" ]; then
 		# Consider scheduling tasks that are eager to run
 		apply NEXT_BUDDY /sys/kernel/debug/sched_features
@@ -699,6 +702,9 @@ normal_profile() {
 			apply N /sys/module/battery_saver/parameters/enabled
 		fi
 	fi
+
+	# Enable split lock mitigation
+	apply 1 /proc/sys/kernel/split_lock_mitigate
 
 	if [ -f "/sys/kernel/debug/sched_features" ]; then
 		# Consider scheduling tasks that are eager to run
