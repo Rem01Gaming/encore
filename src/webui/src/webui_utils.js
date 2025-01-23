@@ -79,6 +79,21 @@ async function toggleKillLogdSwitch(isChecked) {
   await exec(command);
 }
 
+async function getBypassChargingSwitch() {
+  const { errno, stdout } = await exec(`cat ${config_path}/bypass_charging`);
+  if (errno === 0) {
+    const switchElement = document.getElementById('bypass_charging_switch');
+    switchElement.checked = stdout.trim() === '1';
+  }
+}
+
+async function toggleBypassChargingSwitch(isChecked) {
+  const command = isChecked
+    ? `echo 1 >${config_path}/bypass_charging`
+    : `echo 0 >${config_path}/bypass_charging`;
+  await exec(command);
+}
+
 async function restartService() {
   await exec('pkill encored');
   await exec('su -c encored');
@@ -155,6 +170,7 @@ getChipset();
 getAndroidSDK();
 getServiceState();
 getKillLogdSwitch();
+getBypassChargingSwitch();
 fetchCPUGovernors();
 
 document.getElementById('save_log_btn').addEventListener('click', async function() {
@@ -167,6 +183,10 @@ document.getElementById('restart_daemon_btn').addEventListener('click', async fu
 
 document.getElementById('kill_logd_switch').addEventListener('change', async function() {
   toggleKillLogdSwitch(this.checked);
+});
+
+document.getElementById('bypass_charging_switch').addEventListener('change', async function() {
+  toggleBypassChargingSwitch(this.checked);
 });
 
 document.getElementById('powersave_cpu_gov').addEventListener('change', async function() {

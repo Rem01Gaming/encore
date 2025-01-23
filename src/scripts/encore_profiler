@@ -726,6 +726,10 @@ performance_profile() {
 	7) tegra_performance ;;
 	esac
 
+	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
+		encore_bypass_chg 1
+	}
+
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
@@ -825,6 +829,10 @@ normal_profile() {
 	6) intel_normal ;;
 	7) tegra_normal ;;
 	esac
+
+	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
+		encore_bypass_chg 0
+	}
 }
 
 powersave_profile() {
