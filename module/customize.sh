@@ -29,7 +29,7 @@ soc_recognition_extra() {
 		ui_print "- Implementing tweaks for Snapdragon"
 		return 0
 	}
-	
+
 	[ -d /sys/kernel/ged/hal ] && {
 		SOC=1
 		ui_print "- Implementing tweaks for MediaTek"

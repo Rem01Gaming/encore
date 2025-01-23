@@ -143,6 +143,15 @@ snapdragon_performance() {
 	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
+tegra_performance() {
+	gpu_path="/sys/kernel/tegra_gpu"
+	if [ -d $gpu_path ]; then
+		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		apply $freq $gpu_path/gpu_floor_rate
+		apply $freq $gpu_path/gpu_cap_rate
+	fi
+}
+
 exynos_performance() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
@@ -177,6 +186,10 @@ tensor_performance() {
 		apply $freq $gpu_path/scaling_min_freq
 		apply $freq $gpu_path/scaling_max_freq
 	fi
+}
+
+intel_performance() {
+	return 0 # some tweaks soon
 }
 
 ###################################
@@ -311,6 +324,16 @@ snapdragon_normal() {
 	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
+tegra_normal() {
+	gpu_path="/sys/kernel/tegra_gpu"
+	if [ -d $gpu_path ]; then
+		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		apply $min_freq $gpu_path/gpu_floor_rate
+		apply $max_freq $gpu_path/gpu_cap_rate
+	fi
+}
+
 exynos_normal() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
@@ -348,6 +371,10 @@ tensor_normal() {
 		apply $min_freq $gpu_path/scaling_min_freq
 		apply $max_freq $gpu_path/scaling_max_freq
 	fi
+}
+
+intel_normal() {
+	return 0 # some tweaks soon
 }
 
 ###################################
@@ -454,6 +481,15 @@ snapdragon_powersave() {
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
+tegra_powersave() {
+	gpu_path="/sys/kernel/tegra_gpu"
+	if [ -d $gpu_path ]; then
+		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		apply $freq $gpu_path/gpu_floor_rate
+		apply $freq $gpu_path/gpu_cap_rate
+	fi
+}
+
 exynos_powersave() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
@@ -485,6 +521,10 @@ tensor_powersave() {
 		apply $freq $gpu_path/scaling_min_freq
 		apply $freq $gpu_path/scaling_max_freq
 	fi
+}
+
+intel_powersave() {
+	return 0 # some tweaks soon
 }
 
 ###################################
@@ -544,7 +584,7 @@ perfcommon() {
 
 	# Disable schedstats
 	apply 0 /proc/sys/kernel/sched_schedstats
-	
+
 	# Disable Oppo/Realme cpustats
 	apply 0 /proc/sys/kernel/task_cpustats_enable
 
@@ -682,6 +722,8 @@ performance_profile() {
 	3) exynos_performance ;;
 	4) unisoc_performance ;;
 	5) tensor_performance ;;
+	6) intel_performance ;;
+	7) tegra_performance ;;
 	esac
 
 	echo 3 >/proc/sys/vm/drop_caches
@@ -780,6 +822,8 @@ normal_profile() {
 	3) exynos_normal ;;
 	4) unisoc_normal ;;
 	5) tensor_normal ;;
+	6) intel_normal ;;
+	7) tegra_normal ;;
 	esac
 }
 
@@ -818,6 +862,8 @@ powersave_profile() {
 	3) exynos_powersave ;;
 	4) unisoc_powersave ;;
 	5) tensor_powersave ;;
+	6) intel_powersave ;;
+	7) tegra_powersave ;;
 	esac
 }
 
