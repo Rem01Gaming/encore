@@ -400,9 +400,6 @@ mediatek_powersave() {
 	elif [ -f /sys/kernel/helio-dvfsrc/dvfsrc_opp_table ]; then
 		apply "$(cat /sys/kernel/helio-dvfsrc/dvfsrc_opp_table | grep -o '\[[^]]*\]' | grep -oE '[+-]?[0-9]+' | sort -nr | head -n 1)" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	fi
-
-	apply "powersave" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
-	apply "powersave" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
 }
 
 snapdragon_powersave() {
