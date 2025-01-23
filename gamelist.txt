@@ -45,6 +45,7 @@ com.and.games505.Terraria
 com.archosaur.sea.dr.gp
 com.autumn.skullgirls
 com.axlebolt.standoff2
+com.bandainamcoent.dblegends_ww
 com.bandainamcoent.idolmaster_gakuen
 com.bandainamcoent.imas_millionlive_theaterdays
 com.bandainamcoent.opbrww
