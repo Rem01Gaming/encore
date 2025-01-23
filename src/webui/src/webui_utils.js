@@ -145,8 +145,8 @@ async function saveGamelist() {
   toast('Gamelist saved successfully.');
 }
 
-async function openWebsite() {
-  await exec('/system/bin/am start -a android.intent.action.VIEW -d https://encore.rem01gaming.dev/');
+async function openWebsite(link) {
+  await exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`);
 }
 
 getModuleVersion();
@@ -186,5 +186,9 @@ document.getElementById('save_gamelist_btn').addEventListener('click', async fun
 });
 
 document.getElementById('encore_pics').addEventListener('click', async function() {
-  openWebsite();
+  openWebsite("https://encore.rem01gaming.dev/");
+});
+
+document.getElementById('donate_btn').addEventListener('click', async function() {
+  openWebsite("https://t.me/rem01schannel/670");
 });
