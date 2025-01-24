@@ -28,6 +28,9 @@ jobs:
       with:
         ndk-version: r27c
 
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+
     - name: Build Encore JNI
       working-directory: ./src
       run: ndk-build
@@ -35,7 +38,6 @@ jobs:
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
-        npm install -g bun
         bun install
         bun run build
         cp -r ./dist/* ../../module/webroot
