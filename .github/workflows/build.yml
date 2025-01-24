@@ -35,8 +35,9 @@ jobs:
     - name: Build WebUI
       working-directory: ./src/webui
       run: |
-        npm install
-        npm run build
+        npm install -g bun
+        bun install
+        bun run build
         cp -r ./dist/* ../../module/webroot
 
     - name: Compile Flashable Zip
