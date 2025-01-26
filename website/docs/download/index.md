@@ -3,20 +3,23 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 2.4
+# Encore Tweaks 2.6
 
 ## Changelog
-- Fix service stopped due to bad fetch PID logic for `com.mobile.legends:UnityKillsMe`
-- Fix some weird issues when kill logger enabled
-- Fix some tweaks may not apply correctly
-- No longer bundling KSU WebUI APK
-- Versioning scheme changes
-- webui: Introduce MMRL window safe area insets
-- Other misc optimizations
+- WebUI redesign with dynamic material you theme (dynamic theme only available on MMRL)
+- Handle MMRL _no-js-api_ permission
+- Migrate WebUI from parcel to vite
+- Initial support for Nvidia Tegra
+- Improve SoC recognition for Intel and Exynos
+- Disable _split lock mitigations_ (X86 only)
+- Introduced bypass charging feature (experimental)
+- Fix lag and screen glitches on newer MediaTek Dimensity devices when powersave profile enabled
+- Fix kernel panic on some devices
+- Disable Oppo/Realme cpustats
 
 ## Download
-- [Download](https://shrinkme.ink/siAtnS)
-- [Download (Alternative link)](https://sfl.gl/DS5co)
+- [Download](https://shrinkme.ink/TpEUd)
+- [Download (Alternative link)](https://sfl.gl/ZTuy)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -24,6 +27,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 2.4](/download/version/2.4)
 - [Version 2.3](/download/version/2.3)
 - [Version 2.2](/download/version/2.2)
 - [Version 2.1](/download/version/2.1)

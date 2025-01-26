@@ -7,10 +7,10 @@ description: "Learn how to configure Encore Tweaks settings via Module WebUI for
 
 The Encore Tweaks module provides a range of settings accessible through [Module WebUI](https://kernelsu.org/guide/module-webui.html), a KernelSU feature that lets modules build interactive HTML, CSS, and JavaScript interfaces. Through this WebUI, users can conveniently configure Encore Tweaks and adjust performance options.
 
-While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [this app](https://t.me/rem01schannel/636).
+While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20241217-084918_KernelSU.png)
+![Encore Tweaks WebUI](/Screenshot_20250126-093350_MMRL.png)
 :::
 
 ## Configuration Options
@@ -21,6 +21,9 @@ This option will stops the logger services and silence logs. Enable this option 
 ::: warning
 Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging. Software that depends on `logd` service will not working properly!
 :::
+
+### Bypass Charging on Gameplay
+Enable bypass charging when playing games, allowing your device to directly draw power from the charger, bypassing the battery entirely.
 
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
