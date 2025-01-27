@@ -91,6 +91,7 @@ async function toggleBypassChargingSwitch(isChecked) {
   const command = isChecked
     ? `echo 1 >${config_path}/bypass_charging`
     : `echo 0 >${config_path}/bypass_charging`;
+  toast('Reboot your device to take effect');
   await exec(command);
 }
 
