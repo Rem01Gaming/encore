@@ -18,6 +18,10 @@ change_permission() {
 	fi
 }
 
+set_dnd() {
+	cmd notification set_dnd $1
+}
+
 ###################################
 # Device-specific performance profile
 ###################################
@@ -727,6 +731,8 @@ performance_profile() {
 		encore_bypass_chg 1
 	}
 
+	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && set_dnd priority
+
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
@@ -830,6 +836,8 @@ normal_profile() {
 	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
 		encore_bypass_chg 0
 	}
+
+	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && set_dnd off
 }
 
 powersave_profile() {

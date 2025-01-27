@@ -95,6 +95,21 @@ async function toggleBypassChargingSwitch(isChecked) {
   await exec(command);
 }
 
+async function getDNDSwitch() {
+  const { errno, stdout } = await exec(`cat ${config_path}/dnd_gameplay`);
+  if (errno === 0) {
+    const switchElement = document.getElementById('dnd_switch');
+    switchElement.checked = stdout.trim() === '1';
+  }
+}
+
+async function toggleDNDSwitch(isChecked) {
+  const command = isChecked
+    ? `echo 1 >${config_path}/dnd_gameplay`
+    : `echo 0 >${config_path}/dnd_gameplay && cmd notification set_dnd off`;
+  await exec(command);
+}
+
 async function restartService() {
   await exec('pkill encored');
   await exec('su -c encored');
@@ -172,6 +187,7 @@ getAndroidSDK();
 getServiceState();
 getKillLogdSwitch();
 getBypassChargingSwitch();
+getDNDSwitch();
 fetchCPUGovernors();
 
 document.getElementById('save_log_btn').addEventListener('click', async function() {
@@ -188,6 +204,10 @@ document.getElementById('kill_logd_switch').addEventListener('change', async fun
 
 document.getElementById('bypass_charging_switch').addEventListener('change', async function() {
   toggleBypassChargingSwitch(this.checked);
+});
+
+document.getElementById('dnd_switch').addEventListener('change', async function() {
+  toggleDNDSwitch(this.checked);
 });
 
 document.getElementById('powersave_cpu_gov').addEventListener('change', async function() {
