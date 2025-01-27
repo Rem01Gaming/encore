@@ -95,6 +95,7 @@ ui_print "- Encore Tweaks configuration setup"
 [ ! -d /data/encore ] && mkdir /data/encore
 [ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
 [ ! -f /data/encore/bypass_charging ] && echo 0 >/data/encore/bypass_charging
+[ ! -f /data/encore/dnd_gameplay ] && echo 0 >/data/encore/dnd_gameplay
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
