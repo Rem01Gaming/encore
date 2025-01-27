@@ -21,6 +21,7 @@
     "vite-plugin-mkcert": "^1.17.6"
   },
   "dependencies": {
-    "kernelsu": "^1.0.6"
+    "kernelsu": "^1.0.6",
+    "mmrl": "^0.2.22"
   }
 }

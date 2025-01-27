@@ -5,17 +5,11 @@ import encoreSleeping from './encore_sleeping.webp';
 let config_path = '/data/encore'
 
 async function getModuleVersion() {
-  try {
-    const { errno, stdout } = await exec(
-      `grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'`
-    );
-    if (errno === 0) {
-      document.getElementById('module_version').textContent = stdout.trim();
-    }
-  } catch (error) {
-    if (typeof ksu !== 'undefined' && ksu.mmrl) {
-      mmrl_denied.showModal();
-    }
+  const { errno, stdout } = await exec(
+    `grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'`
+  );
+  if (errno === 0) {
+    document.getElementById('module_version').textContent = stdout.trim();
   }
 }
 
