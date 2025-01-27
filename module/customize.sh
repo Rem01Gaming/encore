@@ -50,7 +50,7 @@ recognize_soc() {
 	*mt* | *MT*) SOC=1 && ui_print "- Implementing tweaks for MediaTek" ;;
 	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
 	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung*) SOC=3 && ui_print "- Implementing tweaks for Exynos" ;;
-	*Unisoc* | *unisoc*) SOC=4 && ui_print "- Implementing tweaks for Unisoc" ;;
+	*Unisoc* | *unisoc* | *ums*) SOC=4 && ui_print "- Implementing tweaks for Unisoc" ;;
 	*gs*) SOC=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
 	*Intel* | *intel*) SOC=6 && ui_print "- Implementing tweaks for Intel" ;;
 	*) return 1 ;;
@@ -135,7 +135,11 @@ soc_recognition_extra
 [ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')" # Try normal way
 [ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"           # Try Intel (or X86) way
 [ $SOC -eq 0 ] && recognize_soc "$(getprop ro.board.platform) $(getprop ro.hardware) $(getprop ro.hardware.chipname)"        # Try Android way
-[ $SOC -eq 0 ] && ui_print "! Unknown SoC, skipping some tweaks"                                                             # Unrecognizable :(
+[ $SOC -eq 0 ] && {
+	ui_print "! Unknown SoC, skipping some tweaks"
+	ui_print "! If you think this is wrong, please report to maintainer"
+}
+
 echo $SOC >/data/encore/soc_recognition
 
 # Easter Egg
