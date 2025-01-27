@@ -50,8 +50,8 @@ async function getServiceState() {
   const status = document.getElementById('daemon_status');
   const image = document.getElementById('encore_pics');
   const pid = document.getElementById('daemon_pid');
-  
-  const { stdout } = await exec('su -c pidof encored || echo null');
+
+  const { stdout } = await exec('busybox pidof encored || pidof encored || echo null');
   pid.textContent = "Daemon PID: " + stdout.trim();
 
   if (stdout.trim() === "null") {
