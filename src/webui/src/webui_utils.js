@@ -5,10 +5,15 @@ import encoreSleeping from './encore_sleeping.webp';
 let config_path = '/data/encore'
 
 async function getModuleVersion() {
-  const { errno, stdout } = await exec(
-    `grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}'`
+  const { stdout } = await exec(
+    `[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`,
+    { cwd: '/data/adb/modules/encore' }
   );
-  if (errno === 0) {
+
+  if (stdout === "null") {
+    unauthorized_mod.showModal();
+    toast("Unauthorized modification by third party detected.");
+  } else {
     document.getElementById('module_version').textContent = stdout.trim();
   }
 }
@@ -106,8 +111,12 @@ async function toggleDNDSwitch(isChecked) {
 
 async function restartService() {
   await exec('pkill encored');
-  await exec('su -c encored');
+  const { errno, stderr } = await exec('su -c encored');
   await getServiceState();
+
+  if (errno != 0) {
+    toast(`Unable to restart service. stderr: ${stderr}`);
+  }
 }
 
 async function changeCPUGovernor(governor, config) {
@@ -157,21 +166,32 @@ async function saveLog() {
 
 async function fetchGamelist() {
   const input = document.getElementById('gamelist_textarea');
-  const { errno, stdout } = await exec(`cat ${config_path}/gamelist.txt`);
+  const { errno, stdout, stderr } = await exec(`cat ${config_path}/gamelist.txt`);
+
   if (errno === 0) {
     input.value = stdout.trim().replace(/\|/g, '\n');
+  } else {
+    toast(`Unable fetch gamelist. stderr: ${stderr}`);
   }
 }
 
 async function saveGamelist() {
   const input = document.getElementById('gamelist_textarea');
   const gamelist = input.value.trim().replace(/\n+/g, '/');
-  await exec(`echo "${gamelist}" | tr '/' '|' >${config_path}/gamelist.txt`);
-  toast('Gamelist saved successfully.');
+  const { errno, stderr } = await exec(`echo "${gamelist}" | tr '/' '|' >${config_path}/gamelist.txt`);
+
+  if (errno === 0) {
+    toast('Gamelist saved successfully.');
+  } else {
+    toast(`Unable save gamelist. stderr: ${stderr}`);
+  }
 }
 
 async function openWebsite(link) {
-  await exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`);
+  const { errno, stderr } = await exec(`am start -a android.intent.action.VIEW -d ${link}`);
+  if (errno != 0) {
+    toast(`Unable to open external browser. stderr: ${stderr}`);
+  }
 }
 
 getModuleVersion();
