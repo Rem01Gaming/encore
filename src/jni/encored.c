@@ -308,6 +308,7 @@ static inline void rewrite_module_prop(void) {
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
     rewrite_module_prop();
+    write2file("/dev/encore_mode", profile, 0);
     return systemv("encore_profiler %d", profile);
 }
 

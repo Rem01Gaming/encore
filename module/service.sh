@@ -19,5 +19,8 @@ echo $default_gov >/data/encore/default_cpu_gov
 rm -f /data/encore/encore_log
 touch /data/encore/encore_log
 
+# Expose ProfileMode from here
+touch /dev/encore_mode
+
 # Start Encore Daemon
 encored
