@@ -50,7 +50,7 @@ async function getServiceState() {
   const image = document.getElementById('encore_pics');
   const pid = document.getElementById('daemon_pid');
 
-  const { stdout } = await exec('busybox pidof encored || pidof encored || echo null');
+  const { stdout } = await exec('toybox pidof encored || busybox pidof encored || pidof encored || echo null');
   pid.textContent = "Daemon PID: " + stdout.trim();
 
   if (stdout.trim() === "null") {
@@ -110,7 +110,7 @@ async function toggleDNDSwitch(isChecked) {
 }
 
 async function restartService() {
-  await exec('pkill encored');
+  await exec('toybox pkill encored || busybox pkill encored || pkill encored');
   const { errno, stderr } = await exec('su -c encored');
   await getServiceState();
 
