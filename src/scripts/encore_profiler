@@ -18,10 +18,6 @@ change_permission() {
 	fi
 }
 
-set_dnd() {
-	cmd notification set_dnd $1
-}
-
 ###################################
 # Device-specific performance profile
 ###################################
@@ -637,6 +633,12 @@ perfcommon() {
 }
 
 performance_profile() {
+	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
+		encore_utility enable_bypass_chg
+	}
+
+	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd priority
+
 	# Disable battery saver module
 	if [ -f /sys/module/battery_saver/parameters/enabled ]; then
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
@@ -727,16 +729,16 @@ performance_profile() {
 	7) tegra_performance ;;
 	esac
 
-	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
-		encore_bypass_chg 1
-	}
-
-	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && set_dnd priority
-
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
 normal_profile() {
+	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
+		encore_utility disable_bypass_chg
+	}
+
+	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd off
+
 	if [ -f /data/encore/custom_default_cpu_gov ]; then
 		default_cpu_gov=$(cat /data/encore/custom_default_cpu_gov)
 	else
@@ -832,12 +834,6 @@ normal_profile() {
 	6) intel_normal ;;
 	7) tegra_normal ;;
 	esac
-
-	[ "$(cat /data/encore/bypass_charging)" -eq 1 ] && {
-		encore_bypass_chg 0
-	}
-
-	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && set_dnd off
 }
 
 powersave_profile() {

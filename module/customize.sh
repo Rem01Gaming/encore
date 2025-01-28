@@ -72,7 +72,6 @@ extract "$ZIPFILE" 'uninstall.sh' $MODPATH
 extract "$ZIPFILE" 'action.sh' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore_bypass_chg' $MODPATH
 
 # Extract executables
 case $ARCH in
@@ -102,7 +101,6 @@ if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
 			ln -sf "$BIN_PATH/encored" "$dir/encored"
 			ln -sf "$BIN_PATH/encore_profiler" "$dir/encore_profiler"
 			ln -sf "$BIN_PATH/encore_utility" "$dir/encore_utility"
-			ln -sf "$BIN_PATH/encore_bypass_chg" "$dir/encore_bypass_chg"
 		}
 	done
 fi

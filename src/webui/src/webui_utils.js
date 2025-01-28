@@ -105,7 +105,7 @@ async function getDNDSwitch() {
 async function toggleDNDSwitch(isChecked) {
   const command = isChecked
     ? `echo 1 >${config_path}/dnd_gameplay`
-    : `echo 0 >${config_path}/dnd_gameplay && cmd notification set_dnd off`;
+    : `echo 0 >${config_path}/dnd_gameplay && encore_utility set_dnd off`;
   await exec(command);
 }
 
