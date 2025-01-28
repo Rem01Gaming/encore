@@ -160,8 +160,8 @@ async function fetchCPUGovernors() {
 }
 
 async function saveLog() {
-  await exec('encore_utility save_logs');
-  toast('Logs have been saved on /sdcard/encore_log');
+  const { stdout } = await exec('encore_utility save_logs');
+  toast(`Logs have been saved on ${stdout}`);
 }
 
 async function fetchGamelist() {

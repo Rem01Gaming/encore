@@ -1,16 +1,18 @@
 #!/system/bin/sh
 
 save_logs() {
-	cat <<EOF >/sdcard/encore_log
+	[ ! -d /sdcard/Download ] && mkdir /sdcard/Download
+	log_file="/sdcard/Download/encore_bugreport_$(date +"%Y-%m-%d_%H_%M").txt"
+	echo "$log_file"
+	cat <<EOF >"$log_file"
 *****************************************************
 Encore Tweaks Log
 
-Module Version: $(grep "version=" /data/adb/modules/encore/module.prop | awk -F'=' '{print $2}')
+Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
 Chipset: $(getprop "ro.board.platform") ($(cat /data/encore/soc_recognition))
-ABI: $(getprop ro.product.cpu.abi)
 Fingerprint: $(getprop ro.build.fingerprint)
-Android: $(getprop ro.build.version.release)
-Kernel: $(uname -r)
+Android SDK: $(getprop ro.build.version.sdk)
+Kernel: $(uname -r -m)
 *****************************************************
 
 $(cat /data/encore/encore_log)
