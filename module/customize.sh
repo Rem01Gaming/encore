@@ -1,6 +1,7 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 SOC=0
+BIN_PATH="/data/adb/modules/encore/system/bin"
 
 abort_unsupported_arch() {
 	ui_print "*********************************************************"
@@ -68,6 +69,7 @@ ui_print "- Extracting module files"
 extract "$ZIPFILE" 'module.prop' $MODPATH
 extract "$ZIPFILE" 'service.sh' $MODPATH
 extract "$ZIPFILE" 'uninstall.sh' $MODPATH
+extract "$ZIPFILE" 'action.sh' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
 extract "$ZIPFILE" 'system/bin/encore_bypass_chg' $MODPATH
@@ -86,6 +88,25 @@ extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
 cp $TMPDIR/libs/$ARCH_TMP/* "$MODPATH/system/bin"
 rm -rf "$TMPDIR/libs"
 
+if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
+	# remove action on APatch / KernelSU
+	rm "$MODPATH/action.sh"
+	# skip mount on APatch / KernelSU
+	touch "$MODPATH/skip_mount"
+	ui_print "- KSU/AP Detected, skipping module mount (skip_mount)"
+	# symlink ourselves on $PATH
+	manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
+	for dir in $manager_paths; do
+		[ -d "$dir" ] && {
+			ui_print "- Creating symlink in $dir"
+			ln -sf "$BIN_PATH/encored" "$dir/encored"
+			ln -sf "$BIN_PATH/encore_profiler" "$dir/encore_profiler"
+			ln -sf "$BIN_PATH/encore_utility" "$dir/encore_utility"
+			ln -sf "$BIN_PATH/encore_bypass_chg" "$dir/encore_bypass_chg"
+		}
+	done
+fi
+
 # Extract webroot
 ui_print "- Extracting webroot"
 unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
@@ -99,11 +120,6 @@ ui_print "- Encore Tweaks configuration setup"
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
-
-# Action script for Magisk user
-if [ "$(which magisk)" ]; then
-	extract "$ZIPFILE" 'action.sh' $MODPATH
-fi
 
 # Install Bellavita Toast
 if ! pm list packages | grep -q bellavita.toast; then
