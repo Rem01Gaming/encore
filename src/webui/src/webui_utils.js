@@ -121,6 +121,12 @@ async function restartService() {
 
 async function changeCPUGovernor(governor, config) {
   await exec(`echo ${governor} >${config_path}/${config}`);
+
+  if (config === "powersave_cpu_gov") {
+    await exec(`[ "$(cat /dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
+  } else if (config === "custom_default_cpu_gov") {
+    await exec(`[ "$(cat /dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
+  }
 }
 
 async function fetchCPUGovernors() {

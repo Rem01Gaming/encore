@@ -8,6 +8,12 @@ apply() {
 	fi
 }
 
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
 set_dnd() {
 	cmd notification set_dnd $1
 }

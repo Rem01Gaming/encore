@@ -307,8 +307,10 @@ static inline void rewrite_module_prop(void) {
  * Description        : Executes a command to switch to performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
+    char profile_str[16];
+    snprintf(profile_str, sizeof(profile_str), "%d", profile);
+    write2file("/dev/encore_mode", profile_str, 0);
     rewrite_module_prop();
-    write2file("/dev/encore_mode", profile, 0);
     return systemv("encore_profiler %d", profile);
 }
 
