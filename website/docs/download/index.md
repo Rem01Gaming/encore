@@ -3,23 +3,20 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 2.6
+# Encore Tweaks 2.7
 
 ## Changelog
-- WebUI redesign with dynamic material you theme (dynamic theme only available on MMRL)
-- Handle MMRL _no-js-api_ permission
-- Migrate WebUI from parcel to vite
-- Initial support for Nvidia Tegra
-- Improve SoC recognition for Intel and Exynos
-- Disable _split lock mitigations_ (X86 only)
-- Introduced bypass charging feature (experimental)
-- Fix lag and screen glitches on newer MediaTek Dimensity devices when powersave profile enabled
-- Fix kernel panic on some devices
-- Disable Oppo/Realme cpustats
+- Instantly change governor on setting changes depending on current profile
+- Introduce DND on Gameplay feature
+- Skip mount on KSU/AP to prevent root detection
+- Improve WebUI error handling
+- Fix Unisoc SoC detection
+- Fix visual bug on daemon status
+- Other misc optimizations
 
 ## Download
-- [Download](https://shrinkme.ink/TpEUd)
-- [Download (Alternative link)](https://sfl.gl/ZTuy)
+- [Download](https://shrinkme.ink/HmNq)
+- [Download (Alternative link)](https://sfl.gl/YYGIXB)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -27,6 +24,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 2.6](/download/version/2.6)
 - [Version 2.4](/download/version/2.4)
 - [Version 2.3](/download/version/2.3)
 - [Version 2.2](/download/version/2.2)

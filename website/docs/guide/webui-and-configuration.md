@@ -10,7 +10,7 @@ The Encore Tweaks module provides a range of settings accessible through [Module
 While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20250126-093350_MMRL.png)
+![Encore Tweaks WebUI](/Screenshot_20250129-102055_MMRL.png)
 :::
 
 ## Configuration Options
@@ -24,6 +24,9 @@ Do NOT enable this option if you're testing ROMs or apps, as it will completely 
 
 ### Bypass Charging on Gameplay
 Enable bypass charging when playing games, allowing your device to directly draw power from the charger, bypassing the battery entirely.
+
+### DND on Gameplay
+Enable do not disturb mode when playing games. limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.
 
 ### Default CPU Governor
 Select the default CPU governor for both "Normal" and "Powersave" profiles. The CPU governor determines power and performance trade-offs.
