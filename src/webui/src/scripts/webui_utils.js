@@ -1,6 +1,6 @@
 import { exec, toast } from 'kernelsu';
-import encoreHappy from './encore_happy.webp';
-import encoreSleeping from './encore_sleeping.webp';
+import encoreHappy from '../assets/encore_happy.webp';
+import encoreSleeping from '../assets/encore_sleeping.webp';
 
 let config_path = '/data/encore'
 
