@@ -50,7 +50,7 @@ recognize_soc() {
 	case "$1" in
 	*mt* | *MT*) SOC=1 && ui_print "- Implementing tweaks for MediaTek" ;;
 	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
-	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung*) SOC=3 && ui_print "- Implementing tweaks for Exynos" ;;
+	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd*) SOC=3 && ui_print "- Implementing tweaks for Exynos" ;;
 	*Unisoc* | *unisoc* | *ums*) SOC=4 && ui_print "- Implementing tweaks for Unisoc" ;;
 	*gs*) SOC=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
 	*Intel* | *intel*) SOC=6 && ui_print "- Implementing tweaks for Intel" ;;
