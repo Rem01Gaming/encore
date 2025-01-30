@@ -20,9 +20,10 @@
 #define MAX_PATH_LENGTH 256
 
 typedef enum {
-    NORMAL_PROFILE = 0,
-    PERFORMANCE_PROFILE = 1,
-    POWERSAVE_PROFILE = 2
+    PERFCOMMON = 0,
+    NORMAL_PROFILE = 1,
+    PERFORMANCE_PROFILE = 2,
+    POWERSAVE_PROFILE = 3
 } ProfileMode;
 
 typedef enum {
@@ -437,7 +438,7 @@ int main(void) {
     ProfileMode cur_mode = -1;
 
     log_encore("info: daemon started");
-    run_profiler(0); // exec perfcommon
+    run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
         free(screenstate);
@@ -503,7 +504,7 @@ int main(void) {
             cur_mode = PERFORMANCE_PROFILE;
             log_encore("info: applying performance profile for %s", gamestart);
             notify_toast("Applying performance profile...");
-            run_profiler(1);
+            run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
         } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
             // Bail out if we already on powersave profile
@@ -513,7 +514,7 @@ int main(void) {
             cur_mode = POWERSAVE_PROFILE;
             log_encore("info: applying powersave profile");
             notify_toast("Applying powersave profile...");
-            run_profiler(3);
+            run_profiler(POWERSAVE_PROFILE);
         } else {
             // Bail out if we already on normal profile
             if (cur_mode == NORMAL_PROFILE)
@@ -522,7 +523,7 @@ int main(void) {
             cur_mode = NORMAL_PROFILE;
             log_encore("info: applying normal profile");
             notify_toast("Applying normal profile...");
-            run_profiler(2);
+            run_profiler(NORMAL_PROFILE);
         }
     }
 
