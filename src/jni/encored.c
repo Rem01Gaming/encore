@@ -21,8 +21,8 @@
 
 typedef enum {
     PERFCOMMON = 0,
-    NORMAL_PROFILE = 1,
-    PERFORMANCE_PROFILE = 2,
+    PERFORMANCE_PROFILE = 1,
+    NORMAL_PROFILE = 2,
     POWERSAVE_PROFILE = 3
 } ProfileMode;
 
