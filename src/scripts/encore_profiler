@@ -697,14 +697,12 @@ performance_profile() {
 		done
 	fi
 
-	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 	for path in /sys/devices/system/cpu/*/cpufreq; do
 		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
 		apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
 		apply "$cpu_maxfreq" $path/scaling_max_freq
 		apply "$cpu_maxfreq" $path/scaling_min_freq
 	done
-	change_permission 000 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -788,7 +786,9 @@ normal_profile() {
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
 		apply "$default_cpu_gov" "$path/scaling_governor"
 	done &
+
 	apply 1 /sys/devices/system/cpu/cpu1/online
+	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
@@ -807,7 +807,6 @@ normal_profile() {
 		apply "$cpu_maxfreq" $path/scaling_max_freq
 		apply "$cpu_minfreq" $path/scaling_min_freq
 	done
-	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
