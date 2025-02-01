@@ -46,13 +46,11 @@ mediatek_performance() {
 	fi
 
 	# Disable GPU Power limiter
-	if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
-		apply "ignore_batt_oc 1" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_batt_percent 1" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_low_batt 1" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_thermal_protect 1" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_pbm_limited 1" /proc/gpufreq/gpufreq_power_limited
-	fi
+	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
+		for setting in ignore_batt_oc ignore_batt_percent ignore_low_batt ignore_thermal_protect ignore_pbm_limited; do
+			apply "$setting 1" /proc/gpufreq/gpufreq_power_limited
+		done
+	}
 
 	# Disable battery current limiter
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
@@ -218,14 +216,12 @@ mediatek_normal() {
 		apply -1 /proc/gpufreqv2/fix_target_opp_index
 	fi
 
-	# Disable GPU Power limiter
-	if [ -f "/proc/gpufreq/gpufreq_power_limited" ]; then
-		apply "ignore_batt_oc 0" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_batt_percent 0" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_low_batt 0" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_thermal_protect 0" /proc/gpufreq/gpufreq_power_limited
-		apply "ignore_pbm_limited 0" /proc/gpufreq/gpufreq_power_limited
-	fi
+	# GPU Power limiter
+	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
+		for setting in ignore_batt_oc ignore_batt_percent ignore_low_batt ignore_thermal_protect ignore_pbm_limited; do
+			apply "$setting 0" /proc/gpufreq/gpufreq_power_limited
+		done
+	}
 
 	# Disable Power Budget management for new 5.x mtk kernels
 	apply "stop 0" /proc/pbm/pbm_stop
