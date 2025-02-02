@@ -36,11 +36,11 @@ jobs:
       run: ndk-build
 
     - name: Build WebUI
-      working-directory: ./src/webui
+      working-directory: ./webui
       run: |
         bun install
         bun run build
-        cp -r ./dist/* ../../module/webroot
+        cp -r ./dist/* ../module/webroot
 
     - name: Compile Flashable Zip
       id: compileZip
