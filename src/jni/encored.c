@@ -381,7 +381,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    char* pid = execute_command("pidof %s", name);
+    char* pid = execute_command("toybox pidof %s || busybox pidof %s || pidof %s", name, name, name);
     return trim_newline(pid);
 }
 
@@ -403,7 +403,7 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    if (systemv("pidof %s >/dev/null", GAME_STRESS) == 0)
+    if (systemv("toybox pidof %s || busybox pidof %s || pidof %s", GAME_STRESS, GAME_STRESS, GAME_STRESS) == 0)
         return 2;
 
     return 1;
