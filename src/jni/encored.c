@@ -410,6 +410,12 @@ static inline int handle_mlbb(const char* gamestart) {
 }
 
 int main(void) {
+	// Handle case when not running on root
+	if (getuid() != 0) {
+        fprintf(stderr, "Run it as root\n");
+        exit(EXIT_FAILURE);
+    }
+	
     // Handle case when module ID is not 'encore'
     if (access(MODULE_PROP, F_OK) != 0) {
         log_encore("error: critical file not found (%s)", MODULE_PROP);
