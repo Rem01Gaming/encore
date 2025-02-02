@@ -13,9 +13,7 @@ apply() {
 }
 
 change_permission() {
-	if [ -f $2 ]; then
-		chmod $1 $2
-	fi
+	[ -f $2 ] && chmod $1 $2
 }
 
 ###################################
@@ -223,10 +221,10 @@ mediatek_normal() {
 		done
 	}
 
-	# Disable Power Budget management for new 5.x mtk kernels
+	# Enable Power Budget management for new 5.x mtk kernels
 	apply "stop 0" /proc/pbm/pbm_stop
 
-	# Disable battery current limiter
+	# Enable battery current limiter
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
@@ -633,13 +631,13 @@ performance_profile() {
 	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd priority
 
 	# Disable battery saver module
-	if [ -f /sys/module/battery_saver/parameters/enabled ]; then
+	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
 			apply 0 /sys/module/battery_saver/parameters/enabled
 		else
 			apply N /sys/module/battery_saver/parameters/enabled
 		fi
-	fi
+	}
 
 	# Disable split lock mitigation
 	apply 0 /proc/sys/kernel/split_lock_mitigate
@@ -734,13 +732,13 @@ normal_profile() {
 	fi
 
 	# Disable battery saver module
-	if [ -f /sys/module/battery_saver/parameters/enabled ]; then
+	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
 			apply 0 /sys/module/battery_saver/parameters/enabled
 		else
 			apply N /sys/module/battery_saver/parameters/enabled
 		fi
-	fi
+	}
 
 	# Enable split lock mitigation
 	apply 1 /proc/sys/kernel/split_lock_mitigate
@@ -829,13 +827,13 @@ powersave_profile() {
 	normal_profile
 
 	# Enable battery saver module
-	if [ -f /sys/module/battery_saver/parameters/enabled ]; then
+	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
 			apply 1 /sys/module/battery_saver/parameters/enabled
 		else
 			apply Y /sys/module/battery_saver/parameters/enabled
 		fi
-	fi
+	}
 
 	# Disable cpu1 to save some power
 	apply 0 /sys/devices/system/cpu/cpu1/online
