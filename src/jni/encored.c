@@ -14,23 +14,16 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
-#define MY_PATH "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/xbin:/data/data/com.termux/files/usr/bin"
+#define MY_PATH                                                                                                                    \
+    "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
+    "xbin:/data/data/com.termux/files/usr/bin"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
 
-typedef enum {
-    PERFCOMMON = 0,
-    PERFORMANCE_PROFILE = 1,
-    NORMAL_PROFILE = 2,
-    POWERSAVE_PROFILE = 3
-} ProfileMode;
+typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
 
-typedef enum {
-    MLBB_NOT_RUNNING = 0,
-    MLBB_RUN_BG = 1,
-    MLBB_RUNNING = 2
-} MLBBState;
+typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
 
 /***********************************************************************************
  * Function Name      : trim_newline
@@ -410,12 +403,12 @@ static inline int handle_mlbb(const char* gamestart) {
 }
 
 int main(void) {
-	// Handle case when not running on root
-	if (getuid() != 0) {
+    // Handle case when not running on root
+    if (getuid() != 0) {
         fprintf(stderr, "Run it as root\n");
         exit(EXIT_FAILURE);
     }
-	
+
     // Handle case when module ID is not 'encore'
     if (access(MODULE_PROP, F_OK) != 0) {
         log_encore("error: critical file not found (%s)", MODULE_PROP);
