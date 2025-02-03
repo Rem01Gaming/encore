@@ -1,7 +1,6 @@
 # shellcheck disable=SC2034
 SKIPUNZIP=1
 SOC=0
-BIN_PATH="/data/adb/modules/encore/system/bin"
 
 abort_unsupported_arch() {
 	ui_print "*********************************************************"
@@ -95,6 +94,7 @@ if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
 	ui_print "- KSU/AP Detected, skipping module mount (skip_mount)"
 	# symlink ourselves on $PATH
 	manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
+	BIN_PATH="/data/adb/modules/encore/system/bin"
 	for dir in $manager_paths; do
 		[ -d "$dir" ] && {
 			ui_print "- Creating symlink in $dir"
@@ -158,11 +158,13 @@ soc_recognition_extra
 echo $SOC >/data/encore/soc_recognition
 
 # Easter Egg
-case "$((RANDOM % 6 + 1))" in
+case "$((RANDOM % 8 + 1))" in
 1) ui_print "- Wooly's Fairy Tale" ;;
 2) ui_print "- Sheep-counting Lullaby" ;;
 3) ui_print "- Fog? The Black Shores!" ;;
 4) ui_print "- Adventure? Let's go!" ;;
 5) ui_print "- Hero Takes the Stage!" ;;
 6) ui_print "- Woolies Save the World!" ;;
+7) ui_print "- How much people will let you live for Encore?" ;;
+8) ui_print "- Wen Donate?" ;;
 esac
