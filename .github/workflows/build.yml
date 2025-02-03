@@ -27,7 +27,7 @@ jobs:
     - name: NDK Setup
       uses: nttld/setup-ndk@v1
       with:
-        ndk-version: r27c
+        ndk-version: r28-beta3
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
