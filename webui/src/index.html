@@ -22,11 +22,11 @@
       >
         <div>
           <span id="daemon_status" class="text-lg font-semibold">Loading</span>
-          <span id="daemon_pid" class="text-xs mt-3 block"
-            >One moment please...</span
-          >
+          <span id="daemon_pid" class="text-xs mt-3 block">
+            One moment please...
+          </span>
         </div>
-        <img id="encore_pics" class="w-24 h-24" />
+        <img id="encore_logo" class="w-24 h-24" />
       </div>
 
       <!-- device & module info -->
@@ -34,6 +34,10 @@
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Encore Tweaks</h3>
           <span id="module_version" class="text-on-surface-variant text-xs"></span>
+        </div>
+        <div class="py-2">
+          <h3 class="text-sm font-medium mb-1">Current Profile</h3>
+          <span id="encore_profile" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
           <h3 class="text-sm font-medium mb-1">Kernel</h3>
@@ -305,22 +309,6 @@
         </div>
       </dialog>
 
-      <dialog id="unauthorized_mod" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
-          <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
-          </form>
-          <h3 class="text-lg font-bold">Unauthorized Modification</h3>
-          <p class="py-4">
-            This module appears to have been modified by an unknown third party. For your security, please download and reinstall the official version from our website https://encore.rem01gaming.dev/.
-          </p>
-        </div>
-      </dialog>
-
       <dialog id="edit_gamelist" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
@@ -352,6 +340,20 @@
               Cancel Changes
             </button>
           </form>
+        </div>
+      </dialog>
+      
+      <dialog id="error_modal" class="modal">
+        <div class="modal-box bg-surface-container text-on-surface">
+          <form method="dialog">
+            <button
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
+          <h3 id="error_title" class="text-lg font-bold"></h3>
+          <p id="error_msg" class="py-4"></p>
         </div>
       </dialog>
     </main>

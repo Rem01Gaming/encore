@@ -2,254 +2,212 @@ import { exec, toast } from 'kernelsu';
 import encoreHappy from '../assets/encore_happy.webp';
 import encoreSleeping from '../assets/encore_sleeping.webp';
 
-let config_path = '/data/encore'
+const configPath = '/data/encore';
 
-async function getModuleVersion() {
-  const { stdout } = await exec(
-    `[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`,
-    { cwd: '/data/adb/modules/encore' }
-  );
+// Helper function for executing shell commands
+const runCommand = async (cmd, cwd = null) => {
+  const { errno, stdout, stderr } = await exec(cmd, cwd ? { cwd } : {});
+  return errno === 0 ? stdout.trim() : { error: stderr };
+};
 
-  if (stdout === "null") {
-    unauthorized_mod.showModal();
-    toast("Unauthorized modification by third party detected.");
+// Display an error modal
+const showErrorModal = (title, msg) => {
+  document.getElementById('error_title').textContent = title;
+  document.getElementById('error_msg').textContent = msg;
+  error_modal.showModal();
+};
+
+/* ======================== SYSTEM INFO ======================== */
+const getModuleVersion = async () => {
+  const output = await runCommand(`[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`, '/data/adb/modules/encore');
+  if (output === 'null') {
+    showErrorModal("Unauthorized Modification", "This module may have been modified by a third party. For your security, please download the official version from https://encore.rem01gaming.dev/");
+    toast("Unauthorized modification detected.");
   } else {
-    document.getElementById('module_version').textContent = stdout.trim();
+    document.getElementById('module_version').textContent = output;
   }
-}
+};
 
-async function getKernelVersion() {
-  const { errno, stdout } = await exec(
-    `uname -r -m`
-  );
-  if (errno === 0) {
-    document.getElementById('kernel_version').textContent = stdout.trim();
-  }
-}
+const getCurrentProfile = async () => {
+  const output = await runCommand('cat /dev/encore_mode');
+  let profile = "Unknown";
 
-async function getChipset() {
-  const { errno, stdout } = await exec(
-    `getprop ro.board.platform`
-  );
-  if (errno === 0) {
-    document.getElementById('chipset_name').textContent = stdout.trim();
-  }
-}
+  switch(output) {
+    case "0":
+      profile = "Initializing";
+      break;
+    case "1":
+      profile = "Performance";
+      break;
+    case "2":
+      profile = "Normal";
+      break;
+    case "3":
+      profile = "Powersave";
+      break;
+    default:
+      profile = "Unknown";
+      break;
+    }
+    
+  document.getElementById('encore_profile').textContent = profile;
+};
 
-async function getAndroidSDK() {
-  const { errno, stdout } = await exec(
-    `getprop ro.build.version.sdk`
-  );
-  if (errno === 0) {
-    document.getElementById('android_sdk').textContent = stdout.trim();
-  }
-}
+const getChipset = async () => {
+  const chipset = await runCommand(`getprop ro.board.platform`);
+  const soc = await runCommand(`cat /data/encore/soc_recognition`);
+  let brand = "Unknown";
+  
+  switch(soc) {
+    case "1":
+      brand = "MediaTek";
+      break;
+    case "2":
+      brand = "Snapdragon";
+      break;
+    case "3":
+      brand = "Exynos";
+      break;
+    case "4":
+      brand = "Unisoc";
+      break;
+    case "5":
+      brand = "Tensor";
+      break;
+    case "6":
+      brand = "Intel";
+      break;
+    case "7":
+      brand = "Tegra";
+      break;
+    default:
+      brand = "Unknown";
+      break;
+    }
+    
+  document.getElementById('chipset_name').textContent = `${brand} ${chipset}`;
+};
 
-async function getServiceState() {
+const getKernelVersion = async () => {
+  document.getElementById('kernel_version').textContent = await runCommand(`uname -r -m`);
+};
+
+const getAndroidSDK = async () => {
+  document.getElementById('android_sdk').textContent = await runCommand(`getprop ro.build.version.sdk`);
+};
+
+// Update profile each 2s
+setInterval(getCurrentProfile, 2000);
+
+/* ======================== SERVICE MANAGEMENT ======================== */
+const getServiceState = async () => {
   const status = document.getElementById('daemon_status');
-  const image = document.getElementById('encore_pics');
-  const pid = document.getElementById('daemon_pid');
+  const image = document.getElementById('encore_logo');
+  const pidElem = document.getElementById('daemon_pid');
 
-  const { stdout } = await exec('toybox pidof encored || busybox pidof encored || pidof encored || echo null');
-  pid.textContent = "Daemon PID: " + stdout.trim();
+  const pid = await runCommand('toybox pidof encored || busybox pidof encored || pidof encored || echo null');
+  pidElem.textContent = `Daemon PID: ${pid}`;
 
-  if (stdout.trim() === "null") {
+  if (pid === "null") {
     status.textContent = "Stopped 💤";
     image.src = encoreSleeping;
   } else {
     status.textContent = "Working ✨";
     image.src = encoreHappy;
   }
-}
+};
 
-async function getKillLogdSwitch() {
-  const { errno, stdout } = await exec(`cat ${config_path}/kill_logd`);
-  if (errno === 0) {
-    const switchElement = document.getElementById('kill_logd_switch');
-    switchElement.checked = stdout.trim() === '1';
+const restartService = async () => {
+  await runCommand('toybox pkill encored || busybox pkill encored || pkill encored');
+  const result = await runCommand('su -c encored');
+  if (result.error) {
+    showErrorModal("Unable to restart service", result.error);
+  } else {
+    getServiceState();
   }
-}
+};
 
-async function toggleKillLogdSwitch(isChecked) {
-  const command = isChecked
-    ? `echo 1 >${config_path}/kill_logd`
-    : `echo 0 >${config_path}/kill_logd`;
-  toast('Reboot your device to take effect');
-  await exec(command);
-}
+/* ======================== CONFIGURATION ======================== */
+const toggleConfig = async (file, isChecked, rebootMessage = false) => {
+  await runCommand(`echo ${isChecked ? '1' : '0'} >${configPath}/${file}`);
+  if (rebootMessage) toast('Reboot your device to apply changes');
+};
 
-async function getBypassChargingSwitch() {
-  const { errno, stdout } = await exec(`cat ${config_path}/bypass_charging`);
-  if (errno === 0) {
-    const switchElement = document.getElementById('bypass_charging_switch');
-    switchElement.checked = stdout.trim() === '1';
-  }
-}
+const setupSwitch = async (id, file, rebootMessage = false) => {
+  const switchElement = document.getElementById(id);
+  switchElement.checked = await runCommand(`cat ${configPath}/${file}`) === '1';
+  switchElement.addEventListener('change', () => toggleConfig(file, switchElement.checked, rebootMessage));
+};
 
-async function toggleBypassChargingSwitch(isChecked) {
-  const command = isChecked
-    ? `echo 1 >${config_path}/bypass_charging`
-    : `echo 0 >${config_path}/bypass_charging`;
-  toast('Reboot your device to take effect');
-  await exec(command);
-}
+// Initialize switches
+setupSwitch('kill_logd_switch', 'kill_logd', true);
+setupSwitch('bypass_charging_switch', 'bypass_charging', true);
+setupSwitch('dnd_switch', 'dnd_gameplay');
 
-async function getDNDSwitch() {
-  const { errno, stdout } = await exec(`cat ${config_path}/dnd_gameplay`);
-  if (errno === 0) {
-    const switchElement = document.getElementById('dnd_switch');
-    switchElement.checked = stdout.trim() === '1';
-  }
-}
-
-async function toggleDNDSwitch(isChecked) {
-  const command = isChecked
-    ? `echo 1 >${config_path}/dnd_gameplay`
-    : `echo 0 >${config_path}/dnd_gameplay && encore_utility set_dnd off`;
-  await exec(command);
-}
-
-async function restartService() {
-  await exec('toybox pkill encored || busybox pkill encored || pkill encored');
-  const { errno, stderr } = await exec('su -c encored');
-  await getServiceState();
-
-  if (errno != 0) {
-    toast(`Unable to restart service. stderr: ${stderr}`);
-  }
-}
-
-async function changeCPUGovernor(governor, config) {
-  await exec(`echo ${governor} >${config_path}/${config}`);
-
+/* ======================== CPU GOVERNOR MANAGEMENT ======================== */
+const changeCPUGovernor = async (governor, config) => {
+  await runCommand(`echo ${governor} >${configPath}/${config}`);
   if (config === "powersave_cpu_gov") {
-    await exec(`[ "$(cat /dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(cat /dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
   } else if (config === "custom_default_cpu_gov") {
-    await exec(`[ "$(cat /dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(cat /dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
   }
-}
+};
 
-async function fetchCPUGovernors() {
-  const { errno: govErrno, stdout: govStdout } = await exec('chmod 644 scaling_available_governors && cat scaling_available_governors', { cwd: '/sys/devices/system/cpu/cpu0/cpufreq' });
-  if (govErrno === 0) {
-    const governors = govStdout.trim().split(/\s+/);
-    const selectElement1 = document.getElementById('default_cpu_gov');
-    const selectElement2 = document.getElementById('powersave_cpu_gov');
+const fetchCPUGovernors = async () => {
+  const governors = (await runCommand('cat scaling_available_governors', '/sys/devices/system/cpu/cpu0/cpufreq')).split(/\s+/);
+  ['default_cpu_gov', 'powersave_cpu_gov'].forEach(id => {
+    const select = document.getElementById(id);
+    select.innerHTML = governors.map(gov => `<option value="${gov}">${gov}</option>`).join('');
+    select.addEventListener('change', () => changeCPUGovernor(select.value, id.includes('powersave') ? "powersave_cpu_gov" : "custom_default_cpu_gov"));
+  });
 
-    selectElement1.innerHTML = '';
-    selectElement2.innerHTML = '';
+  document.getElementById('default_cpu_gov').value = await runCommand(`[ -f ${configPath}/custom_default_cpu_gov ] && cat ${configPath}/custom_default_cpu_gov || cat ${configPath}/default_cpu_gov`);
+  document.getElementById('powersave_cpu_gov').value = await runCommand(`cat ${configPath}/powersave_cpu_gov`);
+};
 
-    governors.forEach(gov => {
-      const option1 = document.createElement('option');
-      option1.value = gov;
-      option1.textContent = gov;
-      selectElement1.appendChild(option1);
-
-      const option2 = document.createElement('option');
-      option2.value = gov;
-      option2.textContent = gov;
-      selectElement2.appendChild(option2);
-    });
-
-    const { errno: defaultErrno, stdout: defaultStdout } = await exec(`[ -f ${config_path}/custom_default_cpu_gov ] && cat ${config_path}/custom_default_cpu_gov || cat ${config_path}/default_cpu_gov`);
-    if (defaultErrno === 0) {
-      const defaultGovernor = defaultStdout.trim();
-      selectElement1.value = defaultGovernor;
-    }
-
-    const { errno: powersaveErrno, stdout: powersaveStdout } = await exec(`cat ${config_path}/powersave_cpu_gov`);
-    if (powersaveErrno === 0) {
-      const defaultPowersaveGovernor = powersaveStdout.trim();
-      selectElement2.value = defaultPowersaveGovernor;
-    }
-  }
-}
-
-async function saveLog() {
-  const { stdout } = await exec('encore_utility save_logs');
-  toast(`Logs have been saved on ${stdout}`);
-}
-
-async function fetchGamelist() {
+/* ======================== GAMELIST MANAGEMENT ======================== */
+const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const { errno, stdout, stderr } = await exec(`cat ${config_path}/gamelist.txt`);
-
-  if (errno === 0) {
-    input.value = stdout.trim().replace(/\|/g, '\n');
+  const output = await runCommand(`cat ${configPath}/gamelist.txt`);
+  if (output.error) {
+    showErrorModal("Unable to fetch Gamelist", output.error);
   } else {
-    toast(`Unable fetch gamelist. stderr: ${stderr}`);
+    input.value = output.replace(/\|/g, '\n');
   }
-}
+};
 
-async function saveGamelist() {
+const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const gamelist = input.value.trim().replace(/\n+/g, '/');
-  const { errno, stderr } = await exec(`echo "${gamelist}" | tr '/' '|' >${config_path}/gamelist.txt`);
+  const formattedList = input.value.trim().replace(/\n+/g, '|');
+  const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
+  result.error ? showErrorModal("Unable to save Gamelist", result.error) : toast('Gamelist saved successfully.');
+};
 
-  if (errno === 0) {
-    toast('Gamelist saved successfully.');
-  } else {
-    toast(`Unable save gamelist. stderr: ${stderr}`);
-  }
-}
+/* ======================== UTILITIES ======================== */
+const saveLog = async () => {
+  const output = await runCommand('encore_utility save_logs');
+  output.error ? showErrorModal("Unable to save logs", output.error) : toast(`Logs saved at ${output}`);
+};
 
-async function openWebsite(link) {
-  const { errno, stderr } = await exec(`am start -a android.intent.action.VIEW -d ${link}`);
-  if (errno != 0) {
-    toast(`Unable to open external browser. stderr: ${stderr}`);
-  }
-}
+const openWebsite = async (link) => {
+  const result = await runCommand(`am start -a android.intent.action.VIEW -d ${link}`);
+  if (result.error) showErrorModal("Unable to open browser", result.error);
+};
 
+/* ======================== EVENT LISTENERS ======================== */
+document.getElementById('save_log_btn').addEventListener('click', saveLog);
+document.getElementById('restart_daemon_btn').addEventListener('click', restartService);
+document.getElementById('edit_gamelist_btn').addEventListener('click', fetchGamelist);
+document.getElementById('save_gamelist_btn').addEventListener('click', saveGamelist);
+document.getElementById('donate_btn').addEventListener('click', () => openWebsite("https://t.me/rem01schannel/670"));
+document.getElementById('encore_logo').addEventListener('click', () => openWebsite("https://encore.rem01gaming.dev/"));
+
+/* ======================== INITIALIZATION ======================== */
 getModuleVersion();
+getCurrentProfile();
 getKernelVersion();
 getChipset();
 getAndroidSDK();
 getServiceState();
-getKillLogdSwitch();
-getBypassChargingSwitch();
-getDNDSwitch();
 fetchCPUGovernors();
-
-document.getElementById('save_log_btn').addEventListener('click', async function() {
-  saveLog();
-});
-
-document.getElementById('restart_daemon_btn').addEventListener('click', async function() {
-  restartService();
-});
-
-document.getElementById('kill_logd_switch').addEventListener('change', async function() {
-  toggleKillLogdSwitch(this.checked);
-});
-
-document.getElementById('bypass_charging_switch').addEventListener('change', async function() {
-  toggleBypassChargingSwitch(this.checked);
-});
-
-document.getElementById('dnd_switch').addEventListener('change', async function() {
-  toggleDNDSwitch(this.checked);
-});
-
-document.getElementById('powersave_cpu_gov').addEventListener('change', async function() {
-  changeCPUGovernor(this.value, "powersave_cpu_gov");
-});
-  
-document.getElementById('default_cpu_gov').addEventListener('change', async function() {
-  changeCPUGovernor(this.value, "custom_default_cpu_gov");
-});
-
-document.getElementById('edit_gamelist_btn').addEventListener('click', function() {
-  fetchGamelist();
-});
-
-document.getElementById('save_gamelist_btn').addEventListener('click', async function() {
-  saveGamelist();
-});
-
-document.getElementById('encore_pics').addEventListener('click', async function() {
-  openWebsite("https://encore.rem01gaming.dev/");
-});
-
-document.getElementById('donate_btn').addEventListener('click', async function() {
-  openWebsite("https://t.me/rem01schannel/670");
-});
