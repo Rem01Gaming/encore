@@ -47,13 +47,22 @@ soc_recognition_extra() {
 
 recognize_soc() {
 	case "$1" in
-	*mt* | *MT*) SOC=1 && ui_print "- Implementing tweaks for MediaTek" ;;
-	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 && ui_print "- Implementing tweaks for Snapdragon" ;;
-	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 && ui_print "- Implementing tweaks for Exynos" ;;
-	*Unisoc* | *unisoc* | *ums*) SOC=4 && ui_print "- Implementing tweaks for Unisoc" ;;
-	*gs*) SOC=5 && ui_print "- Implementing tweaks for Google Tensor" ;;
-	*Intel* | *intel*) SOC=6 && ui_print "- Implementing tweaks for Intel" ;;
-	*) return 1 ;;
+	*mt* | *MT*) SOC=1 ;;
+	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 ;;
+	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 ;;
+	*Unisoc* | *unisoc* | *ums*) SOC=4 ;;
+	*gs*) SOC=5 ;;
+	*Intel* | *intel*) SOC=6 ;;
+	esac
+	
+	case "$SOC" in
+	1) ui_print "- Implementing tweaks for MediaTek" ;;
+	2) ui_print "- Implementing tweaks for Snapdragon" ;;
+	3) ui_print "- Implementing tweaks for Exynos" ;;
+	4) ui_print "- Implementing tweaks for Unisoc" ;;
+	5) ui_print "- Implementing tweaks for Google Tensor" ;;
+	6) ui_print "- Implementing tweaks for Intel" ;;
+	0) return 1 ;;
 	esac
 }
 
