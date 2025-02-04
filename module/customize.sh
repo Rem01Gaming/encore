@@ -129,15 +129,15 @@ extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
 
 # Install Bellavita Toast
-if ! pm list packages | grep -q bellavita.toast; then
+if ! grep -q "bellavita.toast" /data/system/packages.list; then
 	ui_print "- Installing bellavita Toast"
 	extract "$ZIPFILE" 'toast.apk' $TMPDIR
 	pm install $TMPDIR/toast.apk >&2
 	rm -f $TMPDIR/toast.apk
 fi
 
-if ! pm list packages | grep -q bellavita.toast; then
-	ui_print "! Can't install Bellavita Toast due to selinux restrictions"
+if ! grep -q "bellavita.toast" /data/system/packages.list; then
+	ui_print "! Unable to install Bellavita Toast"
 	ui_print "! Please install the app manually after installation."
 fi
 
