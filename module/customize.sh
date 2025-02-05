@@ -54,7 +54,7 @@ recognize_soc() {
 	*gs*) SOC=5 ;;
 	*Intel* | *intel*) SOC=6 ;;
 	esac
-	
+
 	case "$SOC" in
 	1) ui_print "- Implementing tweaks for MediaTek" ;;
 	2) ui_print "- Implementing tweaks for Snapdragon" ;;

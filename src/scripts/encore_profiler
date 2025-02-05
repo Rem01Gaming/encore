@@ -5,15 +5,16 @@
 ###################################
 
 apply() {
-	if [ -f $2 ]; then
-		chmod 644 $2 >/dev/null 2>&1
-		echo $1 >$2 2>/dev/null
-		chmod 444 $2 >/dev/null 2>&1
-	fi
+	[ ! -f $2 ] && return 1
+	chmod 644 $2 >/dev/null 2>&1
+	echo $1 >$2 2>/dev/null
+	chmod 444 $2 >/dev/null 2>&1
 }
 
-change_permission() {
-	[ -f $2 ] && chmod $1 $2
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
 ###################################
@@ -680,9 +681,7 @@ performance_profile() {
 	done &
 
 	# Force CPU to highest possible OPP
-	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		apply performance "$path/scaling_governor"
-	done &
+	change_cpu_gov performance
 	apply 1 /sys/devices/system/cpu/cpu1/online
 
 	if [ -d /proc/ppm ]; then
@@ -781,12 +780,9 @@ normal_profile() {
 	done &
 
 	# Restore min CPU frequency
-	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		apply "$default_cpu_gov" "$path/scaling_governor"
-	done &
-
+	change_cpu_gov "$default_cpu_gov"
 	apply 1 /sys/devices/system/cpu/cpu1/online
-	change_permission 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
+	chmod -f 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
@@ -848,9 +844,7 @@ powersave_profile() {
 
 	# CPU governor
 	powersave_cpu_gov="$(cat /data/encore/powersave_cpu_gov)"
-	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		apply "$powersave_cpu_gov" "$path/scaling_governor"
-	done &
+	change_cpu_gov "$powersave_cpu_gov"
 
 	case "$(cat /data/encore/soc_recognition)" in
 	1) mediatek_powersave ;;
