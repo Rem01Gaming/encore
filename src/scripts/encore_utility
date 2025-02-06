@@ -1,13 +1,5 @@
 #!/system/bin/sh
 
-apply() {
-	if [ -f $2 ]; then
-		chmod 644 $2 >/dev/null 2>&1
-		echo $1 >$2 2>/dev/null
-		chmod 444 $2 >/dev/null 2>&1
-	fi
-}
-
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
@@ -16,68 +8,6 @@ change_cpu_gov() {
 
 set_dnd() {
 	cmd notification set_dnd $1
-}
-
-enable_bypass_chg() {
-	battery_node_path="/sys/class/power_supply/battery"
-	apply "1" "${battery_node_path}/batt_slate_mode"
-	apply "1" "${battery_node_path}/battery_input_suspend"
-	apply "1" "${battery_node_path}/bd_trickle_cnt"
-	apply "0" "${battery_node_path}/device/Charging_Enable"
-	apply "0" "${battery_node_path}/charging_enabled"
-	apply "1" "${battery_node_path}/op_disable_charge"
-	apply "1" "${battery_node_path}/store_mode"
-	apply "1" "${battery_node_path}/test_mode"
-	apply "1" "${battery_node_path}/battery_ext/smart_charging_interruption"
-	apply "0" "${battery_node_path}/siop_level"
-	apply "0" "${battery_node_path}/battery_charging_enabled"
-	apply "0" "${battery_node_path}/mmi_charging_enable"
-	apply "1" "${battery_node_path}/stop_charging_enable"
-	apply "1" "${battery_node_path}/store_mode"
-	apply "0" "/sys/class/hw_power/charger/charge_data/enable_charger"
-	apply "1" "/sys/class/qcom-battery/input_suspend"
-	apply "1" "/sys/devices/platform/charger/tran_aichg_disable_charger"
-	apply "1" "/sys/devices/platform/charger/bypass_charger"
-	apply "0" "/sys/devices/platform/huawei_charger/enable_charger"
-	apply "1" "/sys/devices/platform/lge-unified-nodes/charging_completed"
-	apply "0" "/sys/devices/platform/lge-unified-nodes/charging_enable"
-	apply "1" "/sys/devices/platform/mt-battery/disable_charger"
-	apply "1" "/sys/devices/platform/soc/soc:google,charger/charge_disable"
-	apply "1" "/sys/kernel/debug/google_charger/chg_suspend"
-	apply "1" "/sys/kernel/debug/google_charger/input_suspend"
-	apply "on" "/sys/kernel/nubia_charge/charger_bypass"
-	apply "0 1" "/proc/mtk_battery_cmd/current_cmd"
-}
-
-disable_bypass_chg() {
-	battery_node_path="/sys/class/power_supply/battery"
-	apply "0" "${battery_node_path}/batt_slate_mode"
-	apply "0" "${battery_node_path}/battery_input_suspend"
-	apply "0" "${battery_node_path}/bd_trickle_cnt"
-	apply "1" "${battery_node_path}/device/Charging_Enable"
-	apply "1" "${battery_node_path}/charging_enabled"
-	apply "0" "${battery_node_path}/op_disable_charge"
-	apply "0" "${battery_node_path}/store_mode"
-	apply "2" "${battery_node_path}/test_mode"
-	apply "0" "${battery_node_path}/battery_ext/smart_charging_interruption"
-	apply "100" "${battery_node_path}/siop_level"
-	apply "1" "${battery_node_path}/battery_charging_enabled"
-	apply "1" "${battery_node_path}/mmi_charging_enable"
-	apply "0" "${battery_node_path}/stop_charging_enable"
-	apply "0" "${battery_node_path}/store_mode"
-	apply "1" "/sys/class/hw_power/charger/charge_data/enable_charger"
-	apply "0" "/sys/class/qcom-battery/input_suspend"
-	apply "0" "/sys/devices/platform/charger/tran_aichg_disable_charger"
-	apply "0" "/sys/devices/platform/charger/bypass_charger"
-	apply "1" "/sys/devices/platform/huawei_charger/enable_charger"
-	apply "0" "/sys/devices/platform/lge-unified-nodes/charging_completed"
-	apply "1" "/sys/devices/platform/lge-unified-nodes/charging_enable"
-	apply "0" "/sys/devices/platform/mt-battery/disable_charger"
-	apply "0" "/sys/devices/platform/soc/soc:google,charger/charge_disable"
-	apply "0" "/sys/kernel/debug/google_charger/chg_suspend"
-	apply "0" "/sys/kernel/debug/google_charger/input_suspend"
-	apply "off" "/sys/kernel/nubia_charge/charger_bypass"
-	apply "0 0" "/proc/mtk_battery_cmd/current_cmd"
 }
 
 save_logs() {
