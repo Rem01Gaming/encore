@@ -296,6 +296,7 @@ com.riotgames.league.teamfighttacticstw
 com.riotgames.league.teamfighttacticsvn
 com.riotgames.league.wildrift
 com.roblox.client
+com.roblox.client.vnggames
 com.robtopx.geometryjump
 com.rockstargames.gta3
 com.rockstargames.gta3.de
