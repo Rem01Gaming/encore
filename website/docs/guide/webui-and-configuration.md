@@ -10,7 +10,7 @@ The Encore Tweaks module provides a range of settings accessible through [Module
 While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20250129-102055_MMRL.png)
+![Encore Tweaks WebUI](/Screenshot_20250206-175121_MMRL.png)
 :::
 
 ## Configuration Options
@@ -21,9 +21,6 @@ This option will stops the logger services and silence logs. Enable this option 
 ::: warning
 Do NOT enable this option if you're testing ROMs or apps, as it will completely disable system logging. Software that depends on `logd` service will not working properly!
 :::
-
-### Bypass Charging on Gameplay
-Enable bypass charging when playing games, allowing your device to directly draw power from the charger, bypassing the battery entirely.
 
 ### DND on Gameplay
 Enable do not disturb mode when playing games. limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.
@@ -38,7 +35,7 @@ Choose the CPU governor specifically for the "Powersave" profile, which is optim
 Edit the list of games and other performance-intensive applications. When these apps are active, Encore Tweaks will automatically apply the "Performance" profile.
 
 ### Save Logs
-Enable this to save Encore daemon logs to internal storage at `/sdcard/encore_log`. This log can help with troubleshooting.
+Save Encore daemon logs to internal storage, this log can help with troubleshooting.
 
 ### Restart Service
-Restarts the Encore daemon to apply changes immediately or refresh the service if it encounters issues.
+Restarts the Encore daemon to refresh the service if it encounters issues.

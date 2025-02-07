@@ -6,7 +6,7 @@ description: "Encore Tweaks is an performance Magisk module designed to boost de
 # What is Encore Tweaks?
 Encore Tweaks is a Magisk Module created to enhance device performance during gaming sessions, while keeping battery life optimized for normal use. With **fully automatic performance profiles** and **wide compatibility** across various SoCs, Encore Tweaks adapts dynamically to boost your device's performance when it matters most.
 
-## Key Features
+## Features
 
 - **Automatic Performance Profiles**: No need to manually adjust performance settings; Encore Tweaks automatically switches profiles based on app usage, allowing you to focus on what matters.
 - **Optimized for Popular SoCs**: Supports a wide range of System-on-Chips (SoCs), including Snapdragon, MediaTek, Exynos, Google Tensor, and even Unisoc, with custom optimizations tailored for each.
