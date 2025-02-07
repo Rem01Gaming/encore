@@ -22,5 +22,17 @@ touch /data/encore/encore_log
 # Expose ProfileMode from here
 touch /dev/encore_mode
 
+# Initialize Encore Cgroups
+[ -d /dev/cpuctl ] && {
+	mkdir /dev/cpuctl/encore
+	echo 10000 >/dev/cpuctl/encore/cpu.shares
+}
+
+[ -d /dev/stune ] && {
+	mkdir /dev/stune/encore
+	echo 100 >/dev/stune/encore/schedtune.boost
+	echo 1 >/dev/stune/encore/schedtune.prefer_idle
+}
+
 # Start Encore Daemon
 encored
