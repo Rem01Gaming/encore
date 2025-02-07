@@ -3,6 +3,7 @@ import encoreHappy from '../assets/encore_happy.webp';
 import encoreSleeping from '../assets/encore_sleeping.webp';
 
 const configPath = '/data/encore';
+const binPath = '/data/adb/modules/encore/system/bin';
 
 // Helper function for executing shell commands
 const runCommand = async (cmd, cwd = null) => {
@@ -119,7 +120,7 @@ const getServiceState = async () => {
 
 const restartService = async () => {
   await runCommand('toybox pkill encored || busybox pkill encored || pkill encored');
-  const result = await runCommand('su -c encored');
+  const result = await runCommand(`su -c ${binPath}/encored`);
   if (result.error) {
     showErrorModal("Unable to restart service", result.error);
   } else {
@@ -185,7 +186,7 @@ const saveGamelist = async () => {
 
 /* ======================== UTILITIES ======================== */
 const saveLog = async () => {
-  const output = await runCommand('encore_utility save_logs');
+  const output = await runCommand(`${binPath}/encore_utility save_logs`);
   output.error ? showErrorModal("Unable to save logs", output.error) : toast(`Logs saved at ${output}`);
 };
 
