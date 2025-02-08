@@ -14,7 +14,6 @@
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
-#define MAX_PATH_LENGTH 256
 
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
@@ -423,7 +422,7 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, path[MAX_PATH_LENGTH];
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = -1;
 
@@ -445,9 +444,7 @@ int main(void) {
             gamestart = get_gamestart();
             low_power = get_low_power_state();
         } else {
-            // Check if the game is still running
-            snprintf(path, sizeof(path), "/proc/%s", pid);
-            if (access(path, F_OK) == -1) {
+            if (pid && kill(atoi(pid), 0) == -1) {
                 free(pid);
                 pid = NULL;
                 free(gamestart);
