@@ -448,14 +448,12 @@ int main(void) {
             // prevent overhead from dumpsys commands.
             gamestart = get_gamestart();
             low_power = get_low_power_state();
-        } else {
-            if (pid && kill(atoi(pid), 0) == -1) {
-                free(pid);
-                pid = NULL;
-                free(gamestart);
-                gamestart = get_gamestart();
-                low_power = get_low_power_state();
-            }
+        } else if (pid && kill(atoi(pid), 0) == -1) {
+            free(pid);
+            pid = NULL;
+            free(gamestart);
+            gamestart = get_gamestart();
+            low_power = get_low_power_state();
         }
 
         screenstate = get_screenstate();
