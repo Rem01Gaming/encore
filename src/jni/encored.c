@@ -85,10 +85,15 @@ static inline int write2file(const char* file_path, const char* content, const i
         return -1;
 
     const char* write_mode;
-    if (mode == 1) {
-        write_mode = "a"; // Append mode
-    } else {
-        write_mode = "w"; // Write mode
+    switch (mode) {
+    case 0:
+        write_mode = "w";
+        break;
+    case 1:
+        write_mode = "a";
+        break;
+    default:
+        write_mode = "w";
     }
 
     FILE* file = fopen(file_path, write_mode);
