@@ -16,6 +16,9 @@
 #define MAX_OUTPUT_LENGTH 150
 #define MAX_PATH_LENGTH 256
 
+#define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
+#define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
+
 #define MY_PATH                                                                                                                    \
     "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
     "xbin:/data/data/com.termux/files/usr/bin"
@@ -472,7 +475,7 @@ int main(void) {
             exit(EXIT_SUCCESS);
         }
 
-        if (gamestart && (strcmp(screenstate, "Awake") == 0 || strcmp(screenstate, "true") == 0) && mlbb_is_running != MLBB_RUN_BG) {
+        if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
             // Bail out if we already on performance profile
             if (cur_mode == PERFORMANCE_PROFILE)
                 continue;
@@ -493,7 +496,7 @@ int main(void) {
             notify_toast("Applying performance profile...");
             run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
-        } else if (low_power && (strcmp(low_power, "true") == 0 || strcmp(low_power, "1") == 0)) {
+        } else if (low_power && IS_LOW_POWER(low_power)) {
             // Bail out if we already on powersave profile
             if (cur_mode == POWERSAVE_PROFILE)
                 continue;
