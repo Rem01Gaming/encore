@@ -652,6 +652,14 @@ performance_profile() {
 		apply NO_TTWU_QUEUE /sys/kernel/debug/sched_features
 	fi
 
+	if [ -d "/dev/stune/" ]; then
+		# Prefer to schedule top-app tasks on idle CPUs
+		apply 1 /dev/stune/top-app/schedtune.prefer_idle
+
+		# Mark top-app as boosted, find high-performing CPUs
+		apply 1 /dev/stune/top-app/schedtune.boost
+	fi
+
 	# Oppo/Oplus/Realme Touchpanel
 	tp_path="/proc/touchpanel"
 	if [ -d tp_path ]; then
@@ -740,6 +748,14 @@ normal_profile() {
 
 		# Schedule tasks on their origin CPU if possible
 		apply TTWU_QUEUE /sys/kernel/debug/sched_features
+	fi
+
+	if [ -d "/dev/stune/" ]; then
+		# We are not concerned with prioritizing latency
+		apply 0 /dev/stune/top-app/schedtune.prefer_idle
+
+		# Mark top-app as boosted, find high-performing CPUs
+		apply 1 /dev/stune/top-app/schedtune.boost
 	fi
 
 	# Oppo/Oplus/Realme Touchpanel

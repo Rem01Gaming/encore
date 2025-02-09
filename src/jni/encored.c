@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
@@ -12,17 +14,17 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
+#define MY_PATH                                                                                                                    \
+    "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
+    "xbin:/data/data/com.termux/files/usr/bin"
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_OUTPUT_LENGTH 150
 
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
-#define MY_PATH                                                                                                                    \
-    "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
-    "xbin:/data/data/com.termux/files/usr/bin"
-
 typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
+
 typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
 
 /***********************************************************************************
@@ -253,8 +255,18 @@ static inline void set_priority(const char* pid) {
     if (pid == NULL)
         return;
 
-    write2file("/dev/cpuctl/encore/tasks", pid, 0);
-    write2file("/dev/stune/encore/tasks", pid, 0);
+    const int prio = -20;   // Niceness
+    const int io_class = 1; // I/O class
+    const int io_prio = 0;  // I/O priority
+
+    pid_t process_id = atoi(pid);
+    log_encore("info: applying priority settings for PID %s", pid);
+
+    if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
+        log_encore("error: unable to set nice priority for %s", pid);
+
+    if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
+        log_encore("error: unable to set IO priority for %s", pid);
 }
 
 /***********************************************************************************
