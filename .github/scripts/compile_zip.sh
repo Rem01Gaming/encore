@@ -16,7 +16,6 @@ need_integrity=(
 	"module/service.sh"
 	"module/uninstall.sh"
 	"module/action.sh"
-	"module/toast.apk"
 	"module/module.prop"
 	"module/encore_logo.png"
 	"module/gamelist.txt"

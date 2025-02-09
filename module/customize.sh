@@ -127,19 +127,6 @@ ui_print "- Encore Tweaks configuration setup"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
 
-# Install Bellavita Toast
-if ! grep -q "bellavita.toast" /data/system/packages.list; then
-	ui_print "- Installing bellavita Toast"
-	extract "$ZIPFILE" 'toast.apk' $TMPDIR
-	pm install $TMPDIR/toast.apk >&2
-	rm -f $TMPDIR/toast.apk
-fi
-
-if ! grep -q "bellavita.toast" /data/system/packages.list; then
-	ui_print "! Unable to install Bellavita Toast"
-	ui_print "! Please install the app manually after installation."
-fi
-
 # Permission settings
 ui_print "- Permission setup"
 set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755

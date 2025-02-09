@@ -242,21 +242,6 @@ static inline int notify(const char* message) {
 }
 
 /***********************************************************************************
- * Function Name      : notify_toast
- * Inputs             : message (char *) - Message to display
- * Outputs            : None
- * Returns            : int - 0 if success
- *                           -1 if failed
- * Description        : Sends a command to start a toast notification with
- *                      your message. Uses the `am start` command to trigger
- *                      a toast via the bellavita.toast MainActivity.
- ***********************************************************************************/
-static inline int notify_toast(const char* message) {
-    return systemv(
-        "/system/bin/am start -a android.intent.action.MAIN -e toasttext \"%s\" -n bellavita.toast/.MainActivity >/dev/null", message);
-}
-
-/***********************************************************************************
  * Function Name      : set_priority
  * Inputs             : pid (const char *) - PID as a string
  * Outputs            : None
@@ -493,7 +478,6 @@ int main(void) {
 
             cur_mode = PERFORMANCE_PROFILE;
             log_encore("info: applying performance profile for %s", gamestart);
-            notify_toast("Applying performance profile...");
             run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
         } else if (low_power && IS_LOW_POWER(low_power)) {
@@ -503,7 +487,6 @@ int main(void) {
 
             cur_mode = POWERSAVE_PROFILE;
             log_encore("info: applying powersave profile");
-            notify_toast("Applying powersave profile...");
             run_profiler(POWERSAVE_PROFILE);
         } else {
             // Bail out if we already on normal profile
@@ -512,7 +495,6 @@ int main(void) {
 
             cur_mode = NORMAL_PROFILE;
             log_encore("info: applying normal profile");
-            notify_toast("Applying normal profile...");
             run_profiler(NORMAL_PROFILE);
         }
     }
