@@ -525,6 +525,8 @@ intel_powersave() {
 
 perfcommon() {
 	# Disable Kernel panic
+	# I know this is wrong, but I have no other options
+	# to fix random kernel panic on some devices.
 	apply 0 /proc/sys/kernel/panic
 	apply 0 /proc/sys/kernel/panic_on_oops
 	apply 0 /proc/sys/kernel/panic_on_warn
