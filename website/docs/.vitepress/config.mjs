@@ -9,6 +9,21 @@ export default defineConfig({
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
   },
+  
+  head: [
+    [
+      'script',
+      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-1962PRCX05' }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1962PRCX05');`
+    ]
+  ],
 
   transformPageData(pageData) {
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
