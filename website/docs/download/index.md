@@ -3,19 +3,15 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 3.0
+# Encore Tweaks 3.1
 
 ## Changelog
-- Handle race condition on `set_priority()` call
-- Remove toast notification due to causing game freeze and crash on performance profile execution
-- PID checking without creating file descriptor
-- Revert MediaTek's PPM related changes
-- Revert Cgroups implementation
-- Other misc optimizations
+- **HOTFIX**: Fix system instability on MediaTek devices when powersave mode activated.
+- This version is hotfix from previous version, please read [previous version changelog](/download/version/3.0).
 
 ## Download
-- [Download](https://shrinkme.ink/9BfyMSI)
-- [Download (Alternative link)](https://sfl.gl/Mgmbvz)
+- [Download](https://shrinkme.ink/azk97zDr)
+- [Download (Alternative link)](https://sfl.gl/hHwU0yud)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -23,6 +19,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 3.0](/download/version/3.0)
 - [Version 2.8](/download/version/2.8)
 - [Version 2.7](/download/version/2.7)
 - [Version 2.6](/download/version/2.6)
