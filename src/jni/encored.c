@@ -127,9 +127,7 @@ void log_encore(const char* message, ...) {
 
         char logEncore[MAX_OUTPUT_LENGTH];
         snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
-        if (write2file(LOG_FILE, logEncore, 1) == -1)
-            printf("[%s] error: encore_log file is inaccessible!\n", timestamp);
-
+        write2file(LOG_FILE, logEncore, 1);
         free(timestamp);
     }
 }
