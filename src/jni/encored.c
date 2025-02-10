@@ -250,20 +250,18 @@ static inline int notify(const char* message) {
  *                      process.
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
-    if (pid == NULL)
+    if (pid == NULL) {
+    	log_encore("error: set_priority called with null PID!");
         return;
-
-    const int prio = -20;   // Niceness
-    const int io_class = 1; // I/O class
-    const int io_prio = 0;  // I/O priority
+    }
 
     pid_t process_id = atoi(pid);
     log_encore("info: applying priority settings for PID %s", pid);
 
-    if (setpriority(PRIO_PROCESS, process_id, prio) == -1)
+    if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
         log_encore("error: unable to set nice priority for %s", pid);
 
-    if (syscall(SYS_ioprio_set, 1, process_id, (io_class << 13) | io_prio) == -1)
+    if (syscall(SYS_ioprio_set, 1, process_id, (1 << 13) | 0) == -1)
         log_encore("error: unable to set IO priority for %s", pid);
 }
 
