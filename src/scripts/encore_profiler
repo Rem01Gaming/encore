@@ -388,13 +388,6 @@ mediatek_powersave() {
 		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
 		apply $min_gpufreq_index /proc/gpufreqv2/fix_target_opp_index
 	fi
-
-	# DRAM frequency
-	if [ -f /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_opp_table ]; then
-		apply "$(cat /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_opp_table | grep -o '\[[^]]*\]' | grep -oE '[+-]?[0-9]+' | sort -nr | head -n 1)" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-	elif [ -f /sys/kernel/helio-dvfsrc/dvfsrc_opp_table ]; then
-		apply "$(cat /sys/kernel/helio-dvfsrc/dvfsrc_opp_table | grep -o '\[[^]]*\]' | grep -oE '[+-]?[0-9]+' | sort -nr | head -n 1)" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	fi
 }
 
 snapdragon_powersave() {
