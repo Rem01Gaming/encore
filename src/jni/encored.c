@@ -14,17 +14,17 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
+#define MAX_COMMAND_LENGTH 1024
+#define MAX_OUTPUT_LENGTH 150
+
 #define MY_PATH                                                                                                                    \
     "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
     "xbin:/data/data/com.termux/files/usr/bin"
-#define MAX_COMMAND_LENGTH 1024
-#define MAX_OUTPUT_LENGTH 150
 
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
 typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
-
 typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
 
 /***********************************************************************************
