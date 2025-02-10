@@ -451,6 +451,11 @@ int main(void) {
             free(gamestart);
             gamestart = get_gamestart();
             low_power = get_low_power_state();
+            
+            if (gamestart) {
+                pid = pidof(gamestart);
+                set_priority(pid);
+            }
         }
 
         screenstate = get_screenstate();
