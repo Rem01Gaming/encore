@@ -404,6 +404,7 @@ int main(void) {
     // Handle case when module ID is not 'encore'
     if (access(MODULE_PROP, F_OK) != 0) {
         log_encore("error: critical file not found (%s)", MODULE_PROP);
+        notify("Trying to rename me?");
         exit(EXIT_FAILURE);
     }
 
