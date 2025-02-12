@@ -97,9 +97,6 @@ const getAndroidSDK = async () => {
   document.getElementById('android_sdk').textContent = await runCommand(`getprop ro.build.version.sdk`);
 };
 
-// Update profile each 2s
-setInterval(getCurrentProfile, 2000);
-
 /* ======================== SERVICE MANAGEMENT ======================== */
 const getServiceState = async () => {
   const status = document.getElementById('daemon_status');
