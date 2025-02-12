@@ -65,6 +65,12 @@ mediatek_performance() {
 }
 
 snapdragon_performance() {
+	# Disable thermal restrictions
+	apply 0 /sys/kernel/msm_thermal/enabled
+    apply N /sys/module/msm_thermal/parameters/enabled
+    apply 0 /sys/module/msm_thermal/core_control/enabled
+    apply 0 /sys/module/msm_thermal/vdd_restriction/enabled
+
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "performance" $path/governor
@@ -130,6 +136,9 @@ snapdragon_performance() {
 		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
 	fi
+	
+	# Disable GPU throttling
+	apply 0 /sys/class/kgsl/kgsl-3d0/throttling
 
 	# GPU Bus and DDR
 	for path in /sys/class/devfreq/*gpubw*; do
@@ -248,6 +257,12 @@ mediatek_normal() {
 }
 
 snapdragon_normal() {
+	# Enable back thermal restrictions
+	apply 1 /sys/kernel/msm_thermal/enabled
+    apply Y /sys/module/msm_thermal/parameters/enabled
+    apply 1 /sys/module/msm_thermal/core_control/enabled
+    apply 1 /sys/module/msm_thermal/vdd_restriction/enabled
+  
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		apply "compute" $path/governor
@@ -318,6 +333,9 @@ snapdragon_normal() {
 		apply $min_freq $gpu_path/min_freq
 		apply $max_freq $gpu_path/max_freq
 	fi
+	
+	# Enable back GPU throttling
+	apply 1 /sys/class/kgsl/kgsl-3d0/throttling
 
 	# GPU Bus and DDR
 	for path in /sys/class/devfreq/*gpubw*; do
