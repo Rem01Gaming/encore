@@ -139,6 +139,12 @@ snapdragon_performance() {
 		apply "performance" $path/governor
 	done &
 
+	if [ -d /sys/class/devfreq/kgsl-busmon ]; then
+		freq=$(cat /sys/class/devfreq/kgsl-busmon/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		apply $freq /sys/class/devfreq/kgsl-busmon/max_freq
+		apply $freq /sys/class/devfreq/kgsl-busmon/min_freq
+	fi
+
 	# Adreno Boost
 	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
@@ -321,6 +327,13 @@ snapdragon_normal() {
 		apply "msm-adreno-tz" $path/governor
 	done &
 
+	if [ -d /sys/class/devfreq/kgsl-busmon ]; then
+		max_freq=$(cat /sys/class/devfreq/kgsl-busmon/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		min_freq=$(cat/sys/class/devfreq/kgsl-busmon/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		apply $max_freq /sys/class/devfreq/kgsl-busmon/max_freq
+		apply $min_freq /sys/class/devfreq/kgsl-busmon/min_freq
+	fi
+
 	# Adreno Boost
 	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
@@ -470,6 +483,12 @@ snapdragon_powersave() {
 	for path in /sys/class/devfreq/*kgsl-ddr-qos; do
 		apply "powersave" $path/governor
 	done &
+
+	if [ -d /sys/class/devfreq/kgsl-busmon ]; then
+		freq=$(cat/sys/class/devfreq/kgsl-busmon/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
+		apply $freq /sys/class/devfreq/kgsl-busmon/max_freq
+		apply $freq /sys/class/devfreq/kgsl-busmon/min_freq
+	fi
 
 	# Adreno Boost
 	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
