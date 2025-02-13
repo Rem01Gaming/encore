@@ -1,6 +1,6 @@
 ---
 title: "Encore Tweaks"
-description: "Boost your device's performance with Encore Tweaks! Featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU. Compatible with Snapdragon, MediaTek, Exynos, Google Tensor, Unisoc, X86, and RISCV CPUs."
+description: "Boost your device's performance with Encore Tweaks! Featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU. Compatible with any Android device."
 layout: home
 
 hero:
@@ -30,7 +30,7 @@ features:
     details: Encore Tweaks only activates performance scripts during gaming sessions, preserving battery life for everyday use.
   - icon: 📱
     title: Universal SoC Compatibility
-    details: Encore Tweaks supports all major SoCs, including Snapdragon, MediaTek, Exynos, Google Tensor, Unisoc, X86, and RISCV CPUs, making it compatible with any device.
+    details: Encore Tweaks are compatible with any Android device, no matter how weird it is.
   - icon: 🚀
     title: Game-First Resource Allocation
     details: Encore Tweaks prioritizes gaming performance by allocating maximum CPU and I/O resources, ensuring lag-free gameplay.

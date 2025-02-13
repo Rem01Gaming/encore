@@ -26,7 +26,7 @@ Encore Tweaks automatically runs on boot, so you don't need to start it manually
 No, Encore Tweaks does not require the BusyBox module.
 
 ## Why are some games randomly boosting even when they’re closed?
-Some games attend to run on background hence causing random boosts. to prevent random boosts, force stop the affected games and restrict them from running in the background.
+Some games attend to run on background hence causing random boosts. to prevent random boosts, force stop the affected games and restrict them from running in the background. If needed, you could create remove them from gamelist.
 
 ## How can I access Encore's WebUI?
 - **KernelSU or APatch Manager Users**: Click "open" in the module card to access the WebUI.

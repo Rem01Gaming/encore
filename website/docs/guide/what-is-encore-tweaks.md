@@ -19,17 +19,11 @@ Encore Tweaks works like a automated profiling system, it's dynamically adjusts 
 
 #### **Performance Profile**
 - **Activation**: Automatically enabled when an app or game listed in the **Gamelist** is launched and screen was awake.  
-- **Purpose**: Ensures maximum responsiveness and stability during intensive tasks.  
-- **Key Features**:  
-  - Sets **CPU**, **CPU Bus**, **GPU**, and **DRAM** frequencies to their highest operating points (OPP).  
-  - Prioritizes **CPU** and **I/O** resources for Game to minimize lag and jitter.  
+- **Purpose**: Ensures maximum responsiveness and stability during intensive tasks. Sets **CPU**, **GPU**, and **DRAM** frequencies to their highest operating points (OPP) and prioritizes **CPU** and **I/O** resources for Game to minimize lag and jitter.  
 
 #### **Powersave Profile**
 - **Activation**: Automatically enabled when the device is in **Battery Saver Mode** (except while charging).  
-- **Purpose**: Maximizes power efficiency for extended battery life.  
-- **Key Features**:  
-  - Limits **CPU**, **GPU**, and **DRAM** frequencies to their lowest OPP.  
-  - **Note**: The Powersave Profile will not override the Performance Profile if it is needed.  
+- **Purpose**: Maximizes power efficiency for extended battery life. Limits non-essential component frequencies to their lowest OPP.
 
 #### **Normal Profile**
 - **Activation**: Applied when neither Performance nor Powersave conditions are met.  
