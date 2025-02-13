@@ -399,20 +399,20 @@ int main(void) {
 
     // Handle case when module ID is not 'encore'
     if (access(MODULE_PROP, F_OK) != 0) {
-        log_encore("error: critical file not found (%s)", MODULE_PROP);
+        log_encore("fatal error: critical file not found (%s)", MODULE_PROP);
         notify("Trying to rename me?");
         exit(EXIT_FAILURE);
     }
 
     // Handle missing Gamelist
     if (access(GAMELIST, F_OK) != 0) {
-        log_encore("error: critical file not found (%s)", GAMELIST);
+        log_encore("fatal error: critical file not found (%s)", GAMELIST);
         exit(EXIT_FAILURE);
     }
 
     // Daemonize service
     if (daemon(0, 0)) {
-        log_encore("error: unable to daemonize service");
+        log_encore("fatal error: unable to daemonize service");
         exit(EXIT_FAILURE);
     }
 
@@ -425,7 +425,7 @@ int main(void) {
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = -1;
 
-    log_encore("info: daemon started");
+    log_encore("info: daemon started as PID %d", getpid());
     run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
