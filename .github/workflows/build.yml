@@ -14,6 +14,11 @@ on:
       - 'gamelist.txt'
       - 'version'
 
+# Allow only one concurrent build workflows
+concurrency:
+  group: build
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build Flashable Zip
