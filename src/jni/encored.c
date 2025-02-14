@@ -539,15 +539,12 @@ int main(void) {
                 continue;
 
             // Get PID and check if the game is "real" running program
-            pid = pidof(gamestart);
+            // Handle weird behavior of MLBB
+            pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
             if (pid == NULL) {
                 log_encore("error: unable to fetch PID of %s", gamestart);
                 continue;
             }
-
-            // Handle weird behavior of MLBB
-            if (mlbb_is_running == MLBB_RUNNING)
-                pid = pidof(GAME_STRESS);
 
             cur_mode = PERFORMANCE_PROFILE;
             log_encore("info: applying performance profile for %s", gamestart);
