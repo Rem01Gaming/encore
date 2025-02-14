@@ -119,18 +119,20 @@ static inline int write2file(const char* file_path, const char* content, const i
  ***********************************************************************************/
 void log_encore(const char* message, ...) {
     char* timestamp = timern();
-    if (timestamp != NULL) {
-        char logMesg[MAX_OUTPUT_LENGTH];
-        va_list args;
-        va_start(args, message);
-        vsnprintf(logMesg, sizeof(logMesg), message, args);
-        va_end(args);
-
-        char logEncore[MAX_OUTPUT_LENGTH];
-        snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
-        write2file(LOG_FILE, logEncore, 1);
-        free(timestamp);
+    if (timestamp == NULL) {
+        return;
     }
+
+    char logMesg[MAX_OUTPUT_LENGTH];
+    va_list args;
+    va_start(args, message);
+    vsnprintf(logMesg, sizeof(logMesg), message, args);
+    va_end(args);
+
+    char logEncore[MAX_OUTPUT_LENGTH];
+    snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
+    write2file(LOG_FILE, logEncore, 1);
+    free(timestamp);
 }
 
 /***********************************************************************************
@@ -274,7 +276,7 @@ static inline int notify(const char* message) {
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
     if (pid == NULL) {
-    	log_encore("error: set_priority called with null PID!");
+        log_encore("error: set_priority called with null PID!");
         return;
     }
 
@@ -467,7 +469,7 @@ int main(void) {
             free(gamestart);
             gamestart = get_gamestart();
             low_power = get_low_power_state();
-            
+
             if (gamestart) {
                 pid = pidof(gamestart);
                 set_priority(pid);
