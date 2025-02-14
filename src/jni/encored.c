@@ -150,7 +150,7 @@ static inline void sighandler(const int signal) {
     }
 
     // Exit gracefully
-    exit(EXIT_SUCCESS);
+    _exit(EXIT_SUCCESS);
 }
 
 /***********************************************************************************
