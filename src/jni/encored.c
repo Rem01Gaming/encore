@@ -174,39 +174,79 @@ char* execute_command(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    putenv(MY_PATH);
-    FILE* fp;
-    char buffer[MAX_OUTPUT_LENGTH];
-    char* result = NULL;
-    size_t result_length = 0;
-
-    fp = popen(command, "r");
-    if (fp == NULL) {
-        log_encore("error: unable to exec command '%s'", command);
+    int pipefd[2];
+    if (pipe(pipefd) == -1) {
+        log_encore("error: pipe creation failed for '%s'", command);
         return NULL;
     }
 
-    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-        size_t buffer_length = strlen(buffer);
-        char* new_result = realloc(result, result_length + buffer_length + 1);
-        if (new_result == NULL) {
-            log_encore("error: memory allocation error in execute_command()");
-            free(result);
-            pclose(fp);
-            return NULL;
-        }
-        result = new_result;
-        strcpy(result + result_length, buffer);
-        result_length += buffer_length;
+    pid_t pid = fork();
+    if (pid == -1) {
+        close(pipefd[0]);
+        close(pipefd[1]);
+        log_encore("error: fork failed for '%s'", command);
+        return NULL;
     }
 
-    if (result != NULL)
-        result[result_length] = '\0';
+    if (pid == 0) {
+        dup2(pipefd[1], STDOUT_FILENO);
+        close(pipefd[0]);
+        close(pipefd[1]);
 
-    if (pclose(fp) == -1)
-        log_encore("error: closing command stream in execute_command()");
+        char* env[] = {MY_PATH, NULL};
+        execle("/system/bin/sh", "sh", "-c", command, NULL, env);
+        _exit(127);
+    }
 
-    return result;
+    close(pipefd[1]);
+
+    char static_buf[MAX_OUTPUT_LENGTH];
+    char* dynamic_buf = NULL;
+    size_t total_read = 0;
+    ssize_t bytes_read;
+    int use_static = 1;
+
+    while ((bytes_read = read(pipefd[0], use_static ? static_buf + total_read : dynamic_buf + total_read,
+                              use_static ? sizeof(static_buf) - total_read - 1 : MAX_OUTPUT_LENGTH - total_read - 1)) > 0) {
+        total_read += bytes_read;
+
+        if (total_read >= MAX_OUTPUT_LENGTH - 1) {
+            log_encore("warning: output truncated for '%s'", command);
+            break;
+        }
+
+        if (use_static && total_read >= sizeof(static_buf) / 2) {
+            // Switch to dynamic allocation for large outputs
+            dynamic_buf = malloc(MAX_OUTPUT_LENGTH);
+            if (!dynamic_buf)
+                break;
+            memcpy(dynamic_buf, static_buf, total_read);
+            use_static = 0;
+        }
+    }
+
+    close(pipefd[0]);
+
+    int status;
+    if (waitpid(pid, &status, 0) == -1) {
+        log_encore("error: waitpid failed for '%s'", command);
+    }
+
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+        log_encore("error: command '%s' exited with status %d", command, WEXITSTATUS(status));
+        free(dynamic_buf);
+        return NULL;
+    }
+
+    char* result = NULL;
+    if (use_static) {
+        result = strndup(static_buf, total_read);
+    } else {
+        dynamic_buf[total_read] = '\0';
+        result = dynamic_buf;
+    }
+
+    return trim_newline(result);
 }
 
 /***********************************************************************************
@@ -218,7 +258,7 @@ char* execute_command(const char* format, ...) {
  *                           -1 if execution failed
  * Description        : Executes a shell command using system().
  ***********************************************************************************/
-static inline int systemv(const char* format, ...) {
+int systemv(const char* format, ...) {
     if (format == NULL)
         return -1;
 
@@ -334,8 +374,7 @@ static inline int run_profiler(const int profile) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_gamestart(void) {
-    char* gamestart = execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo -f %s", GAMELIST);
-    return trim_newline(gamestart);
+    return execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo -f %s", GAMELIST);
 }
 
 /***********************************************************************************
@@ -355,7 +394,7 @@ static inline char* get_screenstate(void) {
         state = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
                                 "awk -F'=' '{print $2}'");
     }
-    return trim_newline(state);
+    return state;
 }
 
 /***********************************************************************************
@@ -375,7 +414,7 @@ static inline char* get_low_power_state(void) {
                                     "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
                                     "awk -F'=' '{print $2}'");
     }
-    return trim_newline(low_power);
+    return low_power;
 }
 
 /***********************************************************************************
@@ -387,8 +426,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    char* pid = execute_command("toybox pidof %s || busybox pidof %s || pidof %s", name, name, name);
-    return trim_newline(pid);
+    return execute_command("toybox pidof %s || busybox pidof %s || pidof %s", name, name, name);
 }
 
 /***********************************************************************************
