@@ -57,19 +57,20 @@ static inline char* trim_newline(char* string) {
  *                      [Day Mon DD HH:MM:SS YYYY].
  ***********************************************************************************/
 char* timern(void) {
+    static char timestamp[64];
     time_t t = time(NULL);
     struct tm* tm = localtime(&t);
-    char* timestamp = malloc(64 * sizeof(char));
-    if (timestamp == NULL) {
-        printf("error: memory allocation failed in timern()\n");
-        return NULL;
+
+    if (tm == NULL) {
+        strcpy(timestamp, "[TimeError]");
+        return timestamp;
     }
-    size_t ret = strftime(timestamp, 64, "%c", tm);
+
+    size_t ret = strftime(timestamp, sizeof(timestamp), "%c", tm);
     if (ret == 0) {
-        printf("error: strftime failed in timern()\n");
-        free(timestamp);
-        return NULL;
+        strcpy(timestamp, "[TimeFormatError]");
     }
+
     return timestamp;
 }
 
@@ -132,7 +133,6 @@ void log_encore(const char* message, ...) {
     char logEncore[MAX_OUTPUT_LENGTH];
     snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
     write2file(LOG_FILE, logEncore, 1);
-    free(timestamp);
 }
 
 /***********************************************************************************
