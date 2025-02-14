@@ -225,8 +225,30 @@ static inline int systemv(const char* format, ...) {
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
 
-    putenv(MY_PATH);
-    return system(command);
+    pid_t pid = fork();
+    if (pid == -1) {
+        log_encore("error: fork failed in systemv()");
+        return -1;
+    }
+
+    if (pid == 0) {
+        char* env[] = {MY_PATH, NULL};
+        execle("/system/bin/sh", "sh", "-c", command, NULL, env);
+
+        // If exec fails
+        _exit(127);
+    }
+
+    int status;
+    if (waitpid(pid, &status, 0) == -1) {
+        log_encore("error: waitpid failed in systemv()");
+        return -1;
+    }
+
+    if (WIFEXITED(status)) {
+        return WEXITSTATUS(status);
+    }
+    return -1;
 }
 
 /***********************************************************************************
