@@ -256,7 +256,7 @@ char* execute_command(const char* format, ...) {
  * Outputs            : None
  * Returns            : int - 0 if execution success
  *                           -1 if execution failed
- * Description        : Executes a shell command using system().
+ * Description        : Executes a shell command just like system() with additional format.
  ***********************************************************************************/
 int systemv(const char* format, ...) {
     if (format == NULL)
@@ -300,7 +300,7 @@ int systemv(const char* format, ...) {
  * Outputs            : None
  * Returns            : int - 0 if success
  *                           -1 if failed
- * Description        : Sends a message to regular notification.
+ * Description        : Push a notification.
  ***********************************************************************************/
 static inline int notify(const char* message) {
     return systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
@@ -335,7 +335,7 @@ static inline void set_priority(const char* pid) {
  * Inputs             : None
  * Outputs            : None
  * Returns            : None
- * Description        : Prevent 3rd party from renaming the module
+ * Description        : Prevent 3rd party from renaming the module.
  ***********************************************************************************/
 static inline void rewrite_module_prop(void) {
     systemv("sed -i 's/name=.*/name=Encore Tweaks/' %s", MODULE_PROP);
@@ -351,7 +351,7 @@ static inline void rewrite_module_prop(void) {
  * Outputs            : None
  * Returns            : int - 0 if execution success
  *                           -1 if execution failed
- * Description        : Executes a command to switch to performance profile.
+ * Description        : Switch to specified performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
     char profile_str[16];
