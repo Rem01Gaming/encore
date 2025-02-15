@@ -233,7 +233,6 @@ char* execute_command(const char* format, ...) {
     }
 
     if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-        log_encore("error: command '%s' exited with status %d", command, WEXITSTATUS(status));
         free(dynamic_buf);
         return NULL;
     }
