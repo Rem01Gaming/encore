@@ -10,6 +10,9 @@ Find answers to common questions about using Encore Tweaks, including setup, sup
 ## Does Encore Tweaks support my device?
 Encore Tweaks is compatible with a wide range of devices, including those using Mediatek, Snapdragon, Google Tensor, Exynos, Tegra, and Unisoc chipsets. Even if your device doesn't use one of these chipsets, you may still be able to use Encore Tweaks.
 
+## Where's the Encore Tweaks app?
+Encore Tweaks never had an App for UI configuration, you maybe meant the [Module WebUI](/guide/webui-and-configuration).
+
 ## How I can change the performance profile manually?
 For now, Encore Tweaks doesn't have manual profile selection. however Encore Tweaks service will change performance profile automatically for you so you don't have to tune anything.
 
@@ -26,11 +29,11 @@ Encore Tweaks automatically runs on boot, so you don't need to start it manually
 No, Encore Tweaks does not require the BusyBox module.
 
 ## Why are some games randomly boosting even when they’re closed?
-Some games attend to run on background hence causing random boosts. to prevent random boosts, force stop the affected games and restrict them from running in the background. If needed, you could create remove them from gamelist.
+Some games attend to run on background hence causing random boosts. to prevent random boosts, force stop the affected games and restrict them from running in the background. If needed, you can also remove them from gamelist.
 
 ## How can I access Encore's WebUI?
-- **KernelSU or APatch Manager Users**: Click "open" in the module card to access the WebUI.
-- **Magisk Users**: Natlive WebUI support isn't available in Magisk. Use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL) to access the WebUI if needed.
+- **KernelSU or APatch Users**: Click "open" in the module card to access the WebUI.
+- **Magisk Users**: Native WebUI support isn't available in Magisk. Use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL) to access the WebUI if needed.
 
 ## What should I do if I find a bug or issue in Encore Tweaks?
 Report any issues or bugs in our [Telegram chat group](https://t.me/rem01shideout).

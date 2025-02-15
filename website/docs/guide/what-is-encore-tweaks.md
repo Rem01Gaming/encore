@@ -9,8 +9,10 @@ Encore Tweaks is a Magisk Module created to enhance device performance during ga
 ## Features
 
 - **Automatic Performance Profiles**: No need to manually adjust performance settings; Encore Tweaks automatically switches profiles based on app usage, allowing you to focus on what matters.
-- **Optimized for Popular SoCs**: Supports a wide range of System-on-Chips (SoCs), including Snapdragon, MediaTek, Exynos, Google Tensor, and even Unisoc, with custom optimizations tailored for each.
+- **Battery-Friendly Performance**: Encore Tweaks only activates performance scripts during gaming sessions, preserving battery life for everyday use. Encore Tweaks also can cut your power consumption on battery saver mode.
+- **Optimized for Popular SoCs**: Supports a wide range of System-on-Chips (SoCs), including Snapdragon, MediaTek, Exynos, Google Tensor, Tegra, and even Unisoc, with custom optimizations tailored for each.
 - **Lag-Free Gaming Experience**: By prioritizing resources for gaming apps, Encore Tweaks minimizes lag, jitter, and latency for smoother gameplay.
+- **Safe and Reliable**: With zero reported incidents of bootloops or bricked devices, Encore Tweaks is a trusted solution for performance optimization.
 
 ## How Encore Tweaks Works
 Encore Tweaks works like a automated profiling system, it's dynamically adjusts your device's performance based on real-time data, such as the currently running app, screen state (awake or not), and battery saver mode. Using this information, it seamlessly switches between different profiles to optimize performance or save power as needed.
