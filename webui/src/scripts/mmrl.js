@@ -6,5 +6,9 @@ mmrl.injectStyleSheets();
 
 // handle no-js-api permission
 if (!mmrl.hasAccessToAdvancedKernelSuAPI) {
-  mmrl_denied.showModal();
+  try {
+    mmrl.requestAdvancedKernelSUAPI();
+  } catch (error) {
+    mmrl_denied.showModal();
+  }
 }
