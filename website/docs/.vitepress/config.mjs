@@ -51,6 +51,7 @@ export default defineConfig({
     pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: ogImage }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
+    pageData.frontmatter.head.push(['meta', { name: "google-adsense-account", content: "ca-pub-1732060781110494"}])
 
     // Add structured data for the home page only
     if (pageData.relativePath === 'index.md') {
