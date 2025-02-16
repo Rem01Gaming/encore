@@ -176,7 +176,7 @@ char* execute_command(const char* format, ...) {
 
     int pipefd[2];
     if (pipe(pipefd) == -1) {
-        log_encore("error: pipe creation failed for '%s'", command);
+        log_encore("error: pipe creation failed in execute_command()");
         return NULL;
     }
 
@@ -184,7 +184,7 @@ char* execute_command(const char* format, ...) {
     if (pid == -1) {
         close(pipefd[0]);
         close(pipefd[1]);
-        log_encore("error: fork failed for '%s'", command);
+        log_encore("error: fork failed in execute_command()");
         return NULL;
     }
 
@@ -211,7 +211,7 @@ char* execute_command(const char* format, ...) {
         total_read += bytes_read;
 
         if (total_read >= MAX_OUTPUT_LENGTH - 1) {
-            log_encore("warning: output truncated for '%s'", command);
+            log_encore("warning: output truncated while executing code");
             break;
         }
 
@@ -229,7 +229,7 @@ char* execute_command(const char* format, ...) {
 
     int status;
     if (waitpid(pid, &status, 0) == -1) {
-        log_encore("error: waitpid failed for '%s'", command);
+        log_encore("error: waitpid failed in execute_command()");
     }
 
     if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
