@@ -40,7 +40,7 @@ typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBSta
  * Description        : Create lock file and check if there's any another instance of
  *                      this daemon running.
  ***********************************************************************************/
-int create_lock_file() {
+int create_lock_file(void) {
     int fd = open(LOCK_FILE, O_WRONLY | O_CREAT, 0644);
     if (fd == -1) {
         perror("open");
