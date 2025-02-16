@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/file.h>
 #include <sys/prctl.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
@@ -11,6 +12,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#define LOCK_FILE "/data/encore/encored.lock"
 #define LOG_FILE "/data/encore/encore_log"
 #define GAMELIST "/data/encore/gamelist.txt"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
@@ -28,6 +30,30 @@
 
 typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
 typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
+
+/***********************************************************************************
+ * Function Name      : create_lock_file
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : int - 0 if lock file created successfully
+ *                           -1 if another instance running
+ * Description        : Create lock file and check if there's any another instance of
+ *                      this daemon running.
+ ***********************************************************************************/
+int create_lock_file() {
+    int fd = open(LOCK_FILE, O_WRONLY | O_CREAT, 0644);
+    if (fd == -1) {
+        perror("open");
+        return -1;
+    }
+
+    if (flock(fd, LOCK_EX | LOCK_NB) == -1) {
+        close(fd);
+        return -1;
+    }
+
+    return 0;
+}
 
 /***********************************************************************************
  * Function Name      : ksu_grant_root
@@ -472,6 +498,12 @@ int main(void) {
     // Try grant KSU ROOT via prctl
     if (getuid() != 0 && ksu_grant_root() != 0) {
         fprintf(stderr, "Run it as root\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Make sure only one instance is running
+    if (create_lock_file() != 0) {
+        fprintf(stderr, "Another instance of Encore Daemon is already running\n");
         exit(EXIT_FAILURE);
     }
 
