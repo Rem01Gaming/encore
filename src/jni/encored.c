@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/prctl.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/syscall.h>
@@ -27,6 +28,24 @@
 
 typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
 typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
+
+/***********************************************************************************
+ * Function Name      : ksu_grant_root
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : int - 0 if granted successfully
+ *                           -1 if request denied or error
+ * Description        : Request SU permission from KernelSU via prctl.
+ ***********************************************************************************/
+static inline int ksu_grant_root(void) {
+    uint32_t result = 0;
+    prctl(0xdeadbeef, 0, 0, 0, &result);
+
+    if (result == 0xdeadbeef)
+        return 0;
+
+    return -1;
+}
 
 /***********************************************************************************
  * Function Name      : trim_newline
@@ -450,7 +469,8 @@ static inline int handle_mlbb(const char* gamestart) {
 
 int main(void) {
     // Handle case when not running on root
-    if (getuid() != 0) {
+    // Try grant KSU ROOT via prctl
+    if (getuid() != 0 && ksu_grant_root() != 0) {
         fprintf(stderr, "Run it as root\n");
         exit(EXIT_FAILURE);
     }
