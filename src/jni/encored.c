@@ -375,18 +375,6 @@ static inline void set_priority(const char* pid) {
 }
 
 /***********************************************************************************
- * Function Name      : rewrite_module_prop
- * Inputs             : None
- * Outputs            : None
- * Returns            : None
- * Description        : Prevent 3rd party from renaming the module.
- ***********************************************************************************/
-static inline void rewrite_module_prop(void) {
-    systemv("sed -i 's/name=.*/name=Encore Tweaks/' %s", MODULE_PROP);
-    systemv("sed -i 's/author=.*/author=Rem01Gaming/' %s", MODULE_PROP);
-}
-
-/***********************************************************************************
  * Function Name      : run_profiler
  * Inputs             : int - 0 for perfcommon
  *                            1 for performance
@@ -398,10 +386,15 @@ static inline void rewrite_module_prop(void) {
  * Description        : Switch to specified performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
+    if (systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
+        log_encore("fatal error: module modified by 3rd party");
+        notify("Trying to rename me?");
+        exit(EXIT_FAILURE);
+    }
+
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
     write2file("/dev/encore_mode", profile_str, 0);
-    rewrite_module_prop();
     return systemv("encore_profiler %d", profile);
 }
 
@@ -507,9 +500,9 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
 
-    // Handle case when module ID is not 'encore'
-    if (access(MODULE_PROP, F_OK) != 0) {
-        log_encore("fatal error: critical file not found (%s)", MODULE_PROP);
+    // Handle case when module renamed by 3rd party
+    if (access(MODULE_PROP, F_OK) != 0 || systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
+        log_encore("fatal error: module modified by 3rd party");
         notify("Trying to rename me?");
         exit(EXIT_FAILURE);
     }
