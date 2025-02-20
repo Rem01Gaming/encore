@@ -220,7 +220,7 @@ static inline void sighandler(const int signal) {
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
 char* execute_command(const char* format, ...) {
-    if (format == NULL)
+    if (!format)
         return NULL;
 
     char command[MAX_COMMAND_LENGTH];
@@ -231,7 +231,7 @@ char* execute_command(const char* format, ...) {
 
     int pipefd[2];
     if (pipe(pipefd) == -1) {
-        log_encore("error: pipe creation failed in execute_command()");
+        log_encore("error: pipe failed");
         return NULL;
     }
 
@@ -239,7 +239,7 @@ char* execute_command(const char* format, ...) {
     if (pid == -1) {
         close(pipefd[0]);
         close(pipefd[1]);
-        log_encore("error: fork failed in execute_command()");
+        log_encore("error: fork failed");
         return NULL;
     }
 
@@ -255,52 +255,101 @@ char* execute_command(const char* format, ...) {
 
     close(pipefd[1]);
 
-    char static_buf[MAX_OUTPUT_LENGTH];
-    char* dynamic_buf = NULL;
-    size_t total_read = 0;
-    ssize_t bytes_read;
-    int use_static = 1;
-
-    while ((bytes_read = read(pipefd[0], use_static ? static_buf + total_read : dynamic_buf + total_read,
-                              use_static ? sizeof(static_buf) - total_read - 1 : MAX_OUTPUT_LENGTH - total_read - 1)) > 0) {
-        total_read += bytes_read;
-
-        if (total_read >= MAX_OUTPUT_LENGTH - 1) {
-            log_encore("warning: output truncated while executing code");
+    char output[MAX_OUTPUT_LENGTH] = {0};
+    ssize_t total_read = 0;
+    while (1) {
+        ssize_t bytes = read(pipefd[0], output + total_read, sizeof(output) - total_read - 1);
+        if (bytes <= 0)
             break;
-        }
 
-        if (use_static && total_read >= sizeof(static_buf) / 2) {
-            // Switch to dynamic allocation for large outputs
-            dynamic_buf = malloc(MAX_OUTPUT_LENGTH);
-            if (!dynamic_buf)
-                break;
-            memcpy(dynamic_buf, static_buf, total_read);
-            use_static = 0;
-        }
+        total_read += bytes;
+
+        if (total_read >= (ssize_t)(sizeof(output) - 1))
+            break;
     }
-
     close(pipefd[0]);
 
     int status;
-    if (waitpid(pid, &status, 0) == -1) {
-        log_encore("error: waitpid failed in execute_command()");
-    }
+    waitpid(pid, &status, 0);
+    if (WEXITSTATUS(status))
+        return NULL;
 
-    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-        free(dynamic_buf);
+    return strdup(trim_newline(output));
+}
+
+/***********************************************************************************
+ * Function Name      : execute_direct
+ * Inputs             : path (const char *) - Path to the executable
+ *                      arg0 (const char *) - First argument (typically the program name)
+ *                      ... (variadic arguments) - Additional arguments, must end with NULL
+ * Outputs            : None
+ * Returns            : char * - Pointer to the dynamically allocated output of the command
+ * Description        : Executes a binary directly with specified arguments and captures output.
+ * Note               : Caller is responsible for freeing the returned string.
+ ***********************************************************************************/
+char* execute_direct(const char* path, const char* arg0, ...) {
+    if (!path || !arg0)
+        return NULL;
+
+    const char* argv[16]; // Supports up to 15 arguments + NULL
+    int argc = 0;
+    argv[argc++] = arg0;
+
+    va_list args;
+    va_start(args, arg0);
+    const char* arg;
+    while ((arg = va_arg(args, const char*)) && argc < 15) {
+        argv[argc++] = arg;
+    }
+    argv[argc] = NULL;
+    va_end(args);
+
+    int pipefd[2];
+    if (pipe(pipefd) == -1) {
+        log_encore("error: pipe failed");
         return NULL;
     }
 
-    char* result = NULL;
-    if (use_static) {
-        result = strndup(static_buf, total_read);
-    } else {
-        dynamic_buf[total_read] = '\0';
-        result = dynamic_buf;
+    pid_t pid = fork();
+    if (pid == -1) {
+        close(pipefd[0]);
+        close(pipefd[1]);
+        log_encore("error: fork failed");
+        return NULL;
     }
 
-    return trim_newline(result);
+    if (pid == 0) {
+        dup2(pipefd[1], STDOUT_FILENO);
+        close(pipefd[0]);
+        close(pipefd[1]);
+
+        char* env[] = {MY_PATH, NULL};
+        execve(path, (char* const*)argv, env);
+        _exit(127);
+    }
+
+    close(pipefd[1]);
+
+    char output[MAX_OUTPUT_LENGTH] = {0};
+    ssize_t total_read = 0;
+    while (1) {
+        ssize_t bytes = read(pipefd[0], output + total_read, sizeof(output) - total_read - 1);
+        if (bytes <= 0)
+            break;
+
+        total_read += bytes;
+
+        if (total_read >= (ssize_t)(sizeof(output) - 1))
+            break;
+    }
+    close(pipefd[0]);
+
+    int status;
+    waitpid(pid, &status, 0);
+    if (WEXITSTATUS(status))
+        return NULL;
+
+    return strdup(trim_newline(output));
 }
 
 /***********************************************************************************
@@ -455,7 +504,7 @@ static inline char* get_screenstate(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_low_power_state(void) {
-    char* low_power = execute_command("settings get global low_power");
+    char* low_power = execute_direct("/system/bin/settings", "settings", "get", "global", "low_power", NULL);
     if (low_power == NULL) {
         low_power = execute_command("dumpsys power | grep -Eo "
                                     "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
@@ -473,7 +522,7 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    return execute_command("toybox pidof %s || busybox pidof %s || pidof %s", name, name, name);
+    return execute_direct("/system/bin/toybox", "pidof", name, NULL);
 }
 
 /***********************************************************************************
@@ -490,7 +539,7 @@ static inline int handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
-    if (systemv("toybox pidof %s || busybox pidof %s || pidof %s", GAME_STRESS, GAME_STRESS, GAME_STRESS) == 0)
+    if (pidof(GAME_STRESS) != NULL)
         return 2;
 
     return 1;
