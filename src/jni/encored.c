@@ -28,8 +28,18 @@
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
-typedef enum { PERFCOMMON = 0, PERFORMANCE_PROFILE = 1, NORMAL_PROFILE = 2, POWERSAVE_PROFILE = 3 } ProfileMode;
-typedef enum { MLBB_NOT_RUNNING = 0, MLBB_RUN_BG = 1, MLBB_RUNNING = 2 } MLBBState;
+typedef enum {
+    PERFCOMMON = 0,
+    PERFORMANCE_PROFILE = 1,
+    NORMAL_PROFILE = 2,
+    POWERSAVE_PROFILE = 3
+} ProfileMode;
+
+typedef enum {
+    MLBB_NOT_RUNNING = 0,
+    MLBB_RUN_BG = 1,
+    MLBB_RUNNING = 2
+} MLBBState;
 
 /***********************************************************************************
  * Function Name      : create_lock_file

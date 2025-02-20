@@ -1,5 +1,3 @@
-# see https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-# Source: https://github.com/martinus/nanobench/blob/master/src/include/.clang-format
 ---
 BasedOnStyle: LLVM
 
@@ -15,3 +13,4 @@ AlwaysBreakTemplateDeclarations: true
 BreakConstructorInitializers: BeforeComma
 IndentPPDirectives: AfterHash
 PointerAlignment: Left
+AllowShortEnumsOnASingleLine: false
