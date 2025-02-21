@@ -175,10 +175,6 @@ static inline int write2file(const char* file_path, const char* content, const i
  ***********************************************************************************/
 void log_encore(const char* message, ...) {
     char* timestamp = timern();
-    if (timestamp == NULL) {
-        return;
-    }
-
     char logMesg[MAX_OUTPUT_LENGTH];
     va_list args;
     va_start(args, message);
@@ -372,7 +368,7 @@ int systemv(const char* format, ...) {
 
     pid_t pid = fork();
     if (pid == -1) {
-        log_encore("error: fork failed in systemv()");
+        log_encore("error: fork failed");
         return -1;
     }
 
@@ -386,7 +382,6 @@ int systemv(const char* format, ...) {
 
     int status;
     if (waitpid(pid, &status, 0) == -1) {
-        log_encore("error: waitpid failed in systemv()");
         return -1;
     }
 
