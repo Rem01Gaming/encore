@@ -323,8 +323,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
         close(pipefd[0]);
         close(pipefd[1]);
 
-        char* env[] = {MY_PATH, NULL};
-        execve(path, (char* const*)argv, env);
+        execv(path, (char* const*)argv);
         _exit(127);
     }
 
