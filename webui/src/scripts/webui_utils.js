@@ -103,7 +103,7 @@ const getServiceState = async () => {
   const image = document.getElementById('encore_logo');
   const pidElem = document.getElementById('daemon_pid');
 
-  const pid = await runCommand('toybox pidof encored || busybox pidof encored || pidof encored || echo null');
+  const pid = await runCommand('/system/bin/toybox pidof encored || echo null');
   pidElem.textContent = `Daemon PID: ${pid}`;
 
   if (pid === "null") {
@@ -116,7 +116,7 @@ const getServiceState = async () => {
 };
 
 const restartService = async () => {
-  await runCommand('toybox pkill encored || busybox pkill encored || pkill encored');
+  await runCommand('/system/bin/toybox pkill encored');
   const result = await runCommand(`${binPath}/encored`);
   if (result.error) {
     showErrorModal("Unable to restart service", result.error);
