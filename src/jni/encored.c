@@ -167,7 +167,7 @@ static inline int write2file(const char* file_path, const char* content, const i
 /***********************************************************************************
  * Function Name      : log_encore
  * Inputs             : message (const char *) - message to log
- *                      ... (variadic arguments) - additional arguments for message
+ *                      variadic arguments - additional arguments for message
  * Outputs            : None
  * Returns            : None
  * Description        : print and logs a formatted message with a timestamp
@@ -213,6 +213,7 @@ static inline void sighandler(const int signal) {
  * Outputs            : None
  * Returns            : char * - pointer to the dynamically allocated output of
  *                      the command execution
+ *                      variadic arguments - Additional arguments for command
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
 char* execute_command(const char* format, ...) {
@@ -277,7 +278,7 @@ char* execute_command(const char* format, ...) {
  * Function Name      : execute_direct
  * Inputs             : path (const char *) - Path to the executable
  *                      arg0 (const char *) - First argument (typically the program name)
- *                      ... (variadic arguments) - Additional arguments, must end with NULL
+ *                      variadic arguments - Additional arguments, must end with NULL
  * Outputs            : None
  * Returns            : char * - Pointer to the dynamically allocated output of the command
  * Description        : Executes a binary directly with specified arguments and captures output.
@@ -428,6 +429,21 @@ static inline void set_priority(const char* pid) {
 }
 
 /***********************************************************************************
+ * Function Name      : is_kanged
+ * Inputs             : None
+ * Outputs            : None
+ * Returns            : None
+ * Description        : Checks if the module renamed/modified by 3rd party.
+ ***********************************************************************************/
+static inline void is_kanged(void) {
+    if (access(MODULE_PROP, F_OK) != 0 || systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
+        log_encore("fatal error: module modified by 3rd party");
+        notify("Trying to rename me?");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/***********************************************************************************
  * Function Name      : run_profiler
  * Inputs             : int - 0 for perfcommon
  *                            1 for performance
@@ -439,12 +455,7 @@ static inline void set_priority(const char* pid) {
  * Description        : Switch to specified performance profile.
  ***********************************************************************************/
 static inline int run_profiler(const int profile) {
-    if (systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
-        log_encore("fatal error: module modified by 3rd party");
-        notify("Trying to rename me?");
-        exit(EXIT_FAILURE);
-    }
-
+    is_kanged();
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
     write2file("/dev/encore_mode", profile_str, 0);
@@ -549,19 +560,16 @@ int main(void) {
 
     // Make sure only one instance is running
     if (create_lock_file() != 0) {
-        fprintf(stderr, "Another instance of Encore Daemon is already running\n");
+        fprintf(stderr, "ERROR: Another instance of Encore Daemon is already running!\n");
         exit(EXIT_FAILURE);
     }
 
-    // Handle case when module renamed by 3rd party
-    if (access(MODULE_PROP, F_OK) != 0 || systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
-        log_encore("fatal error: module modified by 3rd party");
-        notify("Trying to rename me?");
-        exit(EXIT_FAILURE);
-    }
+    // Handle case when module modified by 3rd party
+    is_kanged();
 
     // Handle missing Gamelist
     if (access(GAMELIST, F_OK) != 0) {
+        fprintf(stderr, "FATAL ERROR: Unable to access Gamelist, either has been removed or moved.\n");
         log_encore("fatal error: critical file not found (%s)", GAMELIST);
         exit(EXIT_FAILURE);
     }
