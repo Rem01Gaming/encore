@@ -18,8 +18,8 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
-#define MAX_COMMAND_LENGTH 1024
-#define MAX_OUTPUT_LENGTH 150
+#define MAX_COMMAND_LENGTH 600
+#define MAX_OUTPUT_LENGTH 256
 
 #define MY_PATH                                                                                                                    \
     "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
