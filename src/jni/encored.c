@@ -30,14 +30,14 @@
 
 char screenstate_fail = 0;
 
-typedef enum {
+typedef enum __attribute__((packed)) {
     PERFCOMMON = 0,
     PERFORMANCE_PROFILE = 1,
     NORMAL_PROFILE = 2,
     POWERSAVE_PROFILE = 3
 } ProfileMode;
 
-typedef enum {
+typedef enum __attribute__((packed)) {
     MLBB_NOT_RUNNING = 0,
     MLBB_RUN_BG = 1,
     MLBB_RUNNING = 2
