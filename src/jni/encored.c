@@ -685,20 +685,18 @@ int main(void) {
             mlbb_is_running = handle_mlbb(gamestart);
 
         // Handle in case screenstate is empty
-        if (screenstate == NULL) {
-            if (screenstate_fail <= 6) {
-                log_encore("error: unable to get current screenstate");
-                screenstate_fail++;
+        if (screenstate == NULL && screenstate_fail <= 6) {
+            log_encore("error: unable to get current screenstate");
+            screenstate_fail++;
 
-                // Set default state after too many failures
-                if (screenstate_fail == 6) {
-                    log_encore("warning: too much error, assume screenstate was awake anytime from now!");
-                    screenstate = "Awake";
-                }
+            // Set default state after too many failures
+            if (screenstate_fail == 6) {
+                log_encore("warning: too much error, assume screenstate was awake anytime from now!");
+                screenstate = "Awake";
             }
 
             continue;
-        } else {
+        } else if (screenstate != NULL) {
             // Reset failure counter if screenstate is valid
             screenstate_fail = 0;
         }
