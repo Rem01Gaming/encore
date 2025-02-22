@@ -357,6 +357,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
  * Outputs            : None
  * Returns            : int - 0 if execution success
  *                           -1 if execution failed
+ *                            * otherwise if command returns an error
  * Description        : Executes a shell command just like system() with additional format.
  ***********************************************************************************/
 int systemv(const char* format, ...) {
