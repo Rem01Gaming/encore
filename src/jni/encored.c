@@ -28,6 +28,8 @@
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
+char screenstate_fail = 0;
+
 typedef enum {
     PERFCOMMON = 0,
     PERFORMANCE_PROFILE = 1,
@@ -593,7 +595,11 @@ int main(void) {
     run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
-        free(screenstate);
+        if (screenstate_fail != 6) {
+            free(screenstate);
+            screenstate = get_screenstate();
+        }
+
         if (low_power) {
             free(low_power);
             low_power = NULL;
@@ -619,16 +625,26 @@ int main(void) {
             }
         }
 
-        screenstate = get_screenstate();
-
         if (gamestart != NULL)
             mlbb_is_running = handle_mlbb(gamestart);
 
         // Handle in case screenstate is empty
         if (screenstate == NULL) {
-            log_encore("error: unable to get current screenstate, service won't work properly!");
-            sleep(30);
+            if (screenstate_fail <= 6) {
+                log_encore("error: unable to get current screenstate");
+                screenstate_fail++;
+
+                // Set default state after too many failures
+                if (screenstate_fail == 6) {
+                    log_encore("warning: too much error, assume screenstate was awake anytime from now!");
+                    screenstate = "Awake";
+                }
+            }
+
             continue;
+        } else {
+            // Reset failure counter if screenstate is valid
+            screenstate_fail = 0;
         }
 
         // Handle case when module gets updated
