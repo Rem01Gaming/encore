@@ -694,7 +694,7 @@ int main(void) {
             }
 
             continue;
-        } else if (screenstate != NULL) {
+        } else if (screenstate != NULL && screenstate_fail != 6) {
             // Reset failure counter if screenstate is valid
             screenstate_fail = 0;
         }
