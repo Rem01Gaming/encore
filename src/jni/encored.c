@@ -30,8 +30,6 @@
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 #define CHECK_PID(pid, gamestart) (kill(atoi(pid), 0) == -1 || revalidate_pid(pid, gamestart) == 0)
 
-char screenstate_fail = 0;
-
 typedef enum __attribute__((packed)) {
     PERFCOMMON = 0,
     PERFORMANCE_PROFILE = 1,
@@ -643,7 +641,7 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, screenstate_fail = 0;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
 
@@ -685,7 +683,7 @@ int main(void) {
             mlbb_is_running = handle_mlbb(gamestart);
 
         // Handle in case screenstate is empty
-        if (screenstate == NULL && screenstate_fail <= 6) {
+        if (screenstate == NULL && screenstate_fail != 6) {
             log_encore("error: unable to get current screenstate");
             screenstate_fail++;
 
