@@ -589,7 +589,7 @@ int main(void) {
     // Initialize variables
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
-    ProfileMode cur_mode = -1;
+    ProfileMode cur_mode = PERFCOMMON;
 
     log_encore("info: daemon started as PID %d", getpid());
     run_profiler(PERFCOMMON); // exec perfcommon
