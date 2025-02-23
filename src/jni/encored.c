@@ -29,7 +29,7 @@
 #include <unistd.h>
 
 #define LOCK_FILE "/data/encore/encored.lock"
-#define LOG_FILE "/data/encore/encore_log"
+#define LOG_FILE "/dev/encore_log"
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"

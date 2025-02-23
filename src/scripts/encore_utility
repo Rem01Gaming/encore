@@ -45,7 +45,7 @@ Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
 *****************************************************
 
-$(cat /data/encore/encore_log)
+$(cat /dev/encore_log)
 EOF
 }
 

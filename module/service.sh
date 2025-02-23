@@ -15,9 +15,8 @@ fi
 echo $default_gov >/data/encore/default_cpu_gov
 [ ! -f /data/encore/powersave_cpu_gov ] && echo $default_gov >/data/encore/powersave_cpu_gov
 
-# Clear old logs
-rm -f /data/encore/encore_log
-touch /data/encore/encore_log
+# Touch log file
+touch /dev/encore_log
 
 # Expose ProfileMode from here
 touch /dev/encore_mode
