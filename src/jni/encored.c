@@ -192,7 +192,8 @@ static inline int write2file(const char* file_path, const char* content, const i
 
 /***********************************************************************************
  * Function Name      : log_encore
- * Inputs             : message (const char *) - message to log
+ * Inputs             : level - Log level
+ *                      message (const char *) - message to log
  *                      variadic arguments - additional arguments for message
  * Outputs            : None
  * Returns            : None
