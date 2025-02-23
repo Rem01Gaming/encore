@@ -22,5 +22,8 @@ touch /data/encore/encore_log
 # Expose ProfileMode from here
 touch /dev/encore_mode
 
+# Copy gamelist to tmpfs
+encore_utility copy_gamelist
+
 # Start Encore Daemon
 encored

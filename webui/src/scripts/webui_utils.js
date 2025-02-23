@@ -177,7 +177,7 @@ const fetchGamelist = async () => {
 const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const formattedList = input.value.trim().replace(/\n+/g, '|');
-  const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
+  const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt && encore_utility copy_gamelist`);
   result.error ? showErrorModal("Unable to save Gamelist", result.error) : toast('Gamelist saved successfully.');
 };
 
