@@ -166,7 +166,7 @@ const fetchCPUGovernors = async () => {
 /* ======================== GAMELIST MANAGEMENT ======================== */
 const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const output = await runCommand(`cat ${configPath}/gamelist.txt`);
+  const output = await runCommand(`cat /dev/encore_gamelist`);
   if (output.error) {
     showErrorModal("Unable to fetch Gamelist", output.error);
   } else {
