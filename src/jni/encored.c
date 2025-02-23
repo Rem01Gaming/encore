@@ -31,6 +31,14 @@
 #define CHECK_PID(pid, gamestart) (kill(atoi(pid), 0) == -1 || revalidate_pid(pid, gamestart) == 0)
 
 typedef enum __attribute__((packed)) {
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARN,
+    LOG_ERROR,
+    LOG_FATAL
+} LogLevel;
+
+typedef enum __attribute__((packed)) {
     PERFCOMMON = 0,
     PERFORMANCE_PROFILE = 1,
     NORMAL_PROFILE = 2,
@@ -175,7 +183,9 @@ static inline int write2file(const char* file_path, const char* content, const i
  * Description        : print and logs a formatted message with a timestamp
  *                      to a log file.
  ***********************************************************************************/
-void log_encore(const char* message, ...) {
+void log_encore(LogLevel level, const char* message, ...) {
+    const char* level_str[] = {"DEBUG", "INFO ", "WARN ", "ERROR", "FATAL"};
+
     char* timestamp = timern();
     char logMesg[MAX_OUTPUT_LENGTH];
     va_list args;
@@ -184,7 +194,7 @@ void log_encore(const char* message, ...) {
     va_end(args);
 
     char logEncore[MAX_OUTPUT_LENGTH];
-    snprintf(logEncore, sizeof(logEncore), "[%s] %s", timestamp, logMesg);
+    snprintf(logEncore, sizeof(logEncore), "[%s] [%s] %s", timestamp, level_str[level], logMesg);
     write2file(LOG_FILE, logEncore, 1);
 }
 
@@ -198,10 +208,10 @@ void log_encore(const char* message, ...) {
 static inline void sighandler(const int signal) {
     switch (signal) {
     case SIGTERM:
-        log_encore("notice: received SIGTERM.");
+        log_encore(LOG_INFO, "Received SIGTERM, exiting.");
         break;
     case SIGINT:
-        log_encore("notice: received SIGINT.");
+        log_encore(LOG_INFO, "Received SIGINT, exiting.");
         break;
     }
 
@@ -230,7 +240,7 @@ char* execute_command(const char* format, ...) {
 
     int pipefd[2];
     if (pipe(pipefd) == -1) {
-        log_encore("error: pipe failed");
+        log_encore(LOG_ERROR, "pipe failed in execute_command()");
         return NULL;
     }
 
@@ -238,7 +248,7 @@ char* execute_command(const char* format, ...) {
     if (pid == -1) {
         close(pipefd[0]);
         close(pipefd[1]);
-        log_encore("error: fork failed");
+        log_encore(LOG_ERROR, "fork failed in execute_command()");
         return NULL;
     }
 
@@ -305,7 +315,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
 
     int pipefd[2];
     if (pipe(pipefd) == -1) {
-        log_encore("error: pipe failed");
+        log_encore(LOG_ERROR, "pipe failed in execute_direct()");
         return NULL;
     }
 
@@ -313,7 +323,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
     if (pid == -1) {
         close(pipefd[0]);
         close(pipefd[1]);
-        log_encore("error: fork failed");
+        log_encore(LOG_ERROR, "fork failed in execute_direct()");
         return NULL;
     }
 
@@ -372,7 +382,7 @@ int systemv(const char* format, ...) {
 
     pid_t pid = fork();
     if (pid == -1) {
-        log_encore("error: fork failed");
+        log_encore(LOG_ERROR, "fork failed in systemv()");
         return -1;
     }
 
@@ -417,18 +427,18 @@ static inline int notify(const char* message) {
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
     if (pid == NULL) {
-        log_encore("error: set_priority called with null PID!");
+        log_encore(LOG_ERROR, "set_priority() called with null PID!");
         return;
     }
 
     pid_t process_id = atoi(pid);
-    log_encore("info: applying priority settings for PID %s", pid);
+    log_encore(LOG_DEBUG, "Applying priority settings for PID %s", pid);
 
     if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
-        log_encore("error: unable to set nice priority for %s", pid);
+        log_encore(LOG_ERROR, "Unable to set nice priority for %s", pid);
 
     if (syscall(SYS_ioprio_set, 1, process_id, (1 << 13) | 0) == -1)
-        log_encore("error: unable to set IO priority for %s", pid);
+        log_encore(LOG_ERROR, "Unable to set IO priority for %s", pid);
 }
 
 /***********************************************************************************
@@ -440,7 +450,7 @@ static inline void set_priority(const char* pid) {
  ***********************************************************************************/
 static inline void is_kanged(void) {
     if (systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) {
-        log_encore("fatal error: module modified by 3rd party");
+        log_encore(LOG_FATAL, "Module modified by 3rd party, exiting.");
         notify("Trying to rename me?");
         exit(EXIT_FAILURE);
     }
@@ -627,13 +637,13 @@ int main(void) {
     // Handle missing Gamelist
     if (access(GAMELIST, F_OK) != 0) {
         fprintf(stderr, "FATAL ERROR: Unable to access Gamelist, either has been removed or moved.\n");
-        log_encore("fatal error: critical file not found (%s)", GAMELIST);
+        log_encore(LOG_FATAL, "Critical file not found (%s)", GAMELIST);
         exit(EXIT_FAILURE);
     }
 
     // Daemonize service
     if (daemon(0, 0)) {
-        log_encore("fatal error: unable to daemonize service");
+        log_encore(LOG_FATAL, "Unable to daemonize service");
         exit(EXIT_FAILURE);
     }
 
@@ -646,7 +656,7 @@ int main(void) {
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
 
-    log_encore("info: daemon started as PID %d", getpid());
+    log_encore(LOG_INFO, "Daemon started as PID %d", getpid());
     run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
@@ -685,12 +695,13 @@ int main(void) {
 
         // Handle in case screenstate is empty
         if (screenstate == NULL && screenstate_fail != 6) {
-            log_encore("error: unable to get current screenstate");
             screenstate_fail++;
+            log_encore(LOG_ERROR, "Unable to get current screenstate");
+            log_encore(LOG_DEBUG, "screenstate fail count: %s", screenstate_fail);
 
             // Set default state after too many failures
             if (screenstate_fail == 6) {
-                log_encore("warning: too much error, assume screenstate was awake anytime from now!");
+                log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
                 screenstate = "Awake";
             }
 
@@ -702,7 +713,7 @@ int main(void) {
 
         // Handle case when module gets updated
         if (access(MODULE_UPDATE, F_OK) == 0) {
-            log_encore("notice: module update detected, exiting.");
+            log_encore(LOG_INFO, "Module update detected, exiting.");
             notify("Please reboot your device to complete module update.");
             exit(EXIT_SUCCESS);
         }
@@ -721,12 +732,12 @@ int main(void) {
             // Get PID and check if the game is "real" running program
             pid = pidof(gamestart);
             if (pid == NULL) {
-                log_encore("error: unable to fetch PID of %s", gamestart);
+                log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
             }
 
             cur_mode = PERFORMANCE_PROFILE;
-            log_encore("info: applying performance profile for %s", gamestart);
+            log_encore(LOG_INFO, "Applying performance profile for %s", gamestart);
             run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
         } else if (low_power && IS_LOW_POWER(low_power)) {
@@ -735,7 +746,7 @@ int main(void) {
                 continue;
 
             cur_mode = POWERSAVE_PROFILE;
-            log_encore("info: applying powersave profile");
+            log_encore(LOG_INFO, "Applying powersave profile");
             run_profiler(POWERSAVE_PROFILE);
         } else {
             // Bail out if we already on normal profile
@@ -743,7 +754,7 @@ int main(void) {
                 continue;
 
             cur_mode = NORMAL_PROFILE;
-            log_encore("info: applying normal profile");
+            log_encore(LOG_INFO, "Applying normal profile");
             run_profiler(NORMAL_PROFILE);
         }
     }
