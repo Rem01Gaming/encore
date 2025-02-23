@@ -146,11 +146,8 @@ snapdragon_performance() {
 		apply $freq $gpu_path/max_freq
 	fi
 
-	# GPU Bus and DDR
+	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
-		apply "performance" $path/governor
-	done &
-	for path in /sys/class/devfreq/*kgsl-ddr-qos; do
 		apply "performance" $path/governor
 	done &
 
@@ -328,12 +325,9 @@ snapdragon_normal() {
 		apply $max_freq $gpu_path/max_freq
 	fi
 
-	# GPU Bus and DDR
+	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
 		apply "bw_vbif" $path/governor
-	done &
-	for path in /sys/class/devfreq/*kgsl-ddr-qos; do
-		apply "msm-adreno-tz" $path/governor
 	done &
 
 	# Adreno Boost
@@ -480,9 +474,6 @@ snapdragon_powersave() {
 
 	# GPU Bus
 	for path in /sys/class/devfreq/*gpubw*; do
-		apply "powersave" $path/governor
-	done &
-	for path in /sys/class/devfreq/*kgsl-ddr-qos; do
 		apply "powersave" $path/governor
 	done &
 
