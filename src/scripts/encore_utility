@@ -30,10 +30,6 @@ set_dnd() {
 	esac
 }
 
-copy_gamelist() {
-	cp /data/encore/gamelist.txt /dev/encore_gamelist
-}
-
 save_logs() {
 	[ ! -d /sdcard/Download ] && mkdir /sdcard/Download
 	log_file="/sdcard/Download/encore_bugreport_$(date +"%Y-%m-%d_%H_%M").txt"

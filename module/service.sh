@@ -23,7 +23,7 @@ touch /data/encore/encore_log
 touch /dev/encore_mode
 
 # Copy gamelist to tmpfs
-encore_utility copy_gamelist
+cp /data/encore/gamelist.txt /dev/encore_gamelist
 
 # Start Encore Daemon
 encored
