@@ -34,7 +34,6 @@
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 #define GAME_STRESS "com.mobile.legends:UnityKillsMe"
-#define MAX_PROCESS_NAME_LENGTH 256
 #define MAX_COMMAND_LENGTH 600
 #define MAX_OUTPUT_LENGTH 256
 
@@ -44,7 +43,6 @@
 
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
-#define CHECK_PID(pid, gamestart) (kill(atoi(pid), 0) == -1 || revalidate_pid(pid, gamestart) == 0)
 
 typedef enum __attribute__((packed)) {
     LOG_DEBUG,
@@ -578,60 +576,6 @@ static inline int handle_mlbb(const char* gamestart) {
     return 1;
 }
 
-/***********************************************************************************
- * Function Name      : get_process_name
- * Inputs             : pid (const char *) - PID as a string
- * Outputs            : None
- * Returns            : char * - dynamically allocated string with the process name
- * Description        : Retrieves the process name from /proc/[pid]/cmdline.
- * Note               : Caller is responsible for freeing the returned string.
- ***********************************************************************************/
-static inline char* get_process_name(const char* pid) {
-    char path[MAX_COMMAND_LENGTH];
-    snprintf(path, sizeof(path), "/proc/%s/cmdline", pid);
-
-    FILE* file = fopen(path, "r");
-    if (file == NULL)
-        return NULL;
-
-    char* name = malloc(MAX_PROCESS_NAME_LENGTH);
-    if (name == NULL) {
-        fclose(file);
-        return NULL;
-    }
-
-    if (fgets(name, MAX_PROCESS_NAME_LENGTH, file) == NULL) {
-        free(name);
-        fclose(file);
-        return NULL;
-    }
-
-    fclose(file);
-    trim_newline(name);
-    return name;
-}
-
-/***********************************************************************************
- * Function Name      : revalidate_pid
- * Inputs             : pid (const char *) - PID as a string
- *                      expected_name (const char *) - game package name
- * Outputs            : None
- * Returns            : int - 1 if the PID is still valid, 0 otherwise
- * Description        : Revalidates the PID to ensure it still corresponds to the game process.
- ***********************************************************************************/
-static inline int revalidate_pid(const char* pid, const char* expected_name) {
-    if (pid == NULL || expected_name == NULL)
-        return 0;
-
-    char* process_name = get_process_name(pid);
-    if (process_name == NULL)
-        return 0;
-
-    int result = strcmp(process_name, expected_name) == 0;
-    free(process_name);
-    return result;
-}
-
 int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
@@ -692,7 +636,7 @@ int main(void) {
             // prevent overhead from dumpsys commands.
             gamestart = get_gamestart();
             low_power = get_low_power_state();
-        } else if (pid && CHECK_PID(pid, gamestart)) {
+        } else if (pid && kill(atoi(pid), 0) == -1) {
             free(pid);
             pid = NULL;
             free(gamestart);
@@ -738,14 +682,9 @@ int main(void) {
             if (cur_mode == PERFORMANCE_PROFILE)
                 continue;
 
-            // Handle weird behavior of MLBB
-            if (mlbb_is_running == MLBB_RUNNING) {
-                free(gamestart);
-                gamestart = GAME_STRESS;
-            }
-
             // Get PID and check if the game is "real" running program
-            pid = pidof(gamestart);
+            // Handle weird behavior of MLBB
+            pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
             if (pid == NULL) {
                 log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
