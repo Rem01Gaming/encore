@@ -132,12 +132,12 @@ static inline char* trim_newline(char* string) {
  * Function Name      : timern
  * Inputs             : None
  * Outputs            : Formatted timestamp
- * Returns            : char * - pointer to a dynamically allocated string
+ * Returns            : char * - pointer to a statically allocated string
  *                      with the formatted time.
  * Description        : Generates a timestamp with the format
  *                      [Day Mon DD HH:MM:SS YYYY].
  ***********************************************************************************/
-char* timern(void) {
+static inline char* timern(void) {
     static char timestamp[64];
     time_t t = time(NULL);
     struct tm* tm = localtime(&t);
