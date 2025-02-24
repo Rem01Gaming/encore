@@ -731,7 +731,7 @@ int main(void) {
         if (access(MODULE_UPDATE, F_OK) == 0) {
             log_encore(LOG_INFO, "Module update detected, exiting.");
             notify("Please reboot your device to complete module update.");
-            exit(EXIT_SUCCESS);
+            break;
         }
 
         if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
