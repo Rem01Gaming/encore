@@ -619,11 +619,6 @@ int main(void) {
     run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
-        if (screenstate_fail != 6) {
-            free(screenstate);
-            screenstate = get_screenstate();
-        }
-
         if (low_power) {
             free(low_power);
             low_power = NULL;
@@ -652,22 +647,29 @@ int main(void) {
         if (gamestart != NULL)
             mlbb_is_running = handle_mlbb(gamestart);
 
-        // Handle in case screenstate is empty
-        if (screenstate == NULL && screenstate_fail != 6) {
-            screenstate_fail++;
-            log_encore(LOG_ERROR, "Unable to get current screenstate");
-            log_encore(LOG_DEBUG, "screenstate fail count: %s", screenstate_fail);
+        // If screenstate_fail threshold eq to 6, skip this routine entirely
+        if (screenstate_fail != 6) {
+            // Fetch screenstate
+            free(screenstate);
+            screenstate = get_screenstate();
 
-            // Set default state after too many failures
-            if (screenstate_fail == 6) {
-                log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
-                screenstate = "Awake";
+            // Handle in case screenstate is empty
+            if (screenstate == NULL) {
+                screenstate_fail++;
+                log_encore(LOG_ERROR, "Unable to get current screenstate");
+                log_encore(LOG_DEBUG, "screenstate fail count: %s", screenstate_fail);
+
+                // Set default state after too many failures
+                if (screenstate_fail == 6) {
+                    log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
+                    screenstate = "Awake";
+                }
+
+                continue;
+            } else {
+                // Reset failure counter if screenstate is valid
+                screenstate_fail = 0;
             }
-
-            continue;
-        } else if (screenstate != NULL && screenstate_fail != 6) {
-            // Reset failure counter if screenstate is valid
-            screenstate_fail = 0;
         }
 
         // Handle case when module gets updated
