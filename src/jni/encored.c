@@ -20,14 +20,14 @@
 #include <string.h>
 #include <sys/file.h>
 #include <sys/prctl.h>
-#include <sys/resource.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
+#define ENCORE_CPUCTL "/dev/cpuctl/encore/tasks"
+#define ENCORE_STUNE "/dev/stune/encore/tasks"
 #define LOCK_FILE "/data/encore/encored.lock"
 #define LOG_FILE "/dev/encore_log"
 #define GAMELIST "/dev/encore_gamelist"
@@ -447,14 +447,13 @@ static inline void set_priority(const char* pid) {
         return;
     }
 
-    pid_t process_id = atoi(pid);
-    log_encore(LOG_DEBUG, "Applying priority settings for PID %s", pid);
+    log_encore(LOG_DEBUG, "Assigning PID %s to encore cgroups", pid);
 
-    if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
-        log_encore(LOG_ERROR, "Unable to set nice priority for %s", pid);
+    if (write2file(ENCORE_CPUCTL, pid, 0) == -1)
+        log_encore(LOG_ERROR, "Unable to assign cpuctl, %s is inaccessible!", ENCORE_CPUCTL);
 
-    if (syscall(SYS_ioprio_set, 1, process_id, (1 << 13) | 0) == -1)
-        log_encore(LOG_ERROR, "Unable to set IO priority for %s", pid);
+    if (write2file(ENCORE_STUNE, pid, 0) == -1)
+        log_encore(LOG_ERROR, "Unable to assign stune, %s is inaccessible!", ENCORE_STUNE);
 }
 
 /***********************************************************************************

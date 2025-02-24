@@ -32,6 +32,18 @@ change_cpu_gov() {
 	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
+cgroups_perf() {
+	echo 10000 >/dev/cpuctl/encore/cpu.shares
+	echo 100 >/dev/stune/encore/schedtune.boost
+	echo 1 >/dev/stune/encore/schedtune.prefer_idle
+}
+
+cgroups_norm() {
+	echo 1024 >/dev/cpuctl/encore/cpu.shares
+	echo 0 >/dev/stune/encore/schedtune.boost
+	echo 0 >/dev/stune/encore/schedtune.prefer_idle
+}
+
 ###################################
 # Device-specific performance profile
 ###################################
@@ -640,6 +652,9 @@ perfcommon() {
 performance_profile() {
 	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 1
 
+	# Setup cgroups for performance
+	cgroups_perf
+
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
@@ -731,6 +746,9 @@ performance_profile() {
 
 normal_profile() {
 	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 0
+
+	# Setup cgroups for normal usage
+	cgroups_norm
 
 	if [ -f /data/encore/custom_default_cpu_gov ]; then
 		default_cpu_gov=$(cat /data/encore/custom_default_cpu_gov)
