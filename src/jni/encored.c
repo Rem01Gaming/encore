@@ -28,7 +28,7 @@
 
 #define ENCORE_CPUCTL "/dev/cpuctl/encore/tasks"
 #define ENCORE_STUNE "/dev/stune/encore/tasks"
-#define LOCK_FILE "/data/encore/encored.lock"
+#define LOCK_FILE "/data/encore/encore.lock"
 #define LOG_FILE "/dev/encore_log"
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
