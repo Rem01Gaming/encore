@@ -157,14 +157,6 @@ snapdragon_performance() {
 		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
 	fi
-
-	# GPU Bus
-	for path in /sys/class/devfreq/*gpubw*; do
-		apply "performance" $path/governor
-	done &
-
-	# Adreno Boost
-	apply 3 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
 tegra_performance() {
@@ -336,14 +328,6 @@ snapdragon_normal() {
 		apply $min_freq $gpu_path/min_freq
 		apply $max_freq $gpu_path/max_freq
 	fi
-
-	# GPU Bus
-	for path in /sys/class/devfreq/*gpubw*; do
-		apply "bw_vbif" $path/governor
-	done &
-
-	# Adreno Boost
-	apply 1 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
 tegra_normal() {
@@ -483,14 +467,6 @@ snapdragon_powersave() {
 		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
 	fi
-
-	# GPU Bus
-	for path in /sys/class/devfreq/*gpubw*; do
-		apply "powersave" $path/governor
-	done &
-
-	# Adreno Boost
-	apply 0 /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost
 }
 
 tegra_powersave() {
