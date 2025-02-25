@@ -97,6 +97,9 @@ const getChipset = async () => {
     case "7":
       brand = "Tegra";
       break;
+    case "8":
+      brand = "Kirin";
+      break;
     default:
       brand = "Unknown";
       break;

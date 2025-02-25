@@ -53,6 +53,7 @@ recognize_soc() {
 	*Unisoc* | *unisoc* | *ums*) SOC=4 ;;
 	*gs*) SOC=5 ;;
 	*Intel* | *intel*) SOC=6 ;;
+	*kirin*) SOC=8 ;;
 	esac
 
 	case "$SOC" in
@@ -62,6 +63,8 @@ recognize_soc() {
 	4) ui_print "- Implementing tweaks for Unisoc" ;;
 	5) ui_print "- Implementing tweaks for Google Tensor" ;;
 	6) ui_print "- Implementing tweaks for Intel" ;;
+	7) ui_print "- Implementing tweaks for Nvidia Tegra" ;;
+	8) ui_print "- Implementing tweaks for Kirin" ;;
 	0) return 1 ;;
 	esac
 }
@@ -139,6 +142,7 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 # 5 = Google Tensor
 # 6 = Intel
 # 7 = Nvidia Tegra
+# 8 = Kirin
 
 # Recognize Chipset
 soc_recognition_extra
