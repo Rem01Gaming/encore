@@ -40,7 +40,7 @@ const translations = {
     settingsTitle: "Pengaturan",
     killLogger: "Bunuh Log",
     dndGameplay: "Mode Jangan Ganggu",
-    defaultCpuGov: "Default CPU Governor",
+    defaultCpuGov: "CPU Governor Default",
     powersaveCpuGov: "CPU Governor Hemat Daya",
     actionsTitle: "Aksi",
     supportTitle: "Dukung Saya",
