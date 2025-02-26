@@ -7,76 +7,66 @@
     <script type="module" src="scripts/webui_utils.js"></script>
     <script type="module" src="scripts/block_copy.js"></script>
     <script type="module" src="scripts/mmrl.js"></script>
+    <script type="module" src="scripts/language.js"></script>
   </head>
-  <body
-    class="bg-surface flex justify-center min-h-screen root_layout"
-  >
-    <main class="p-3 text-sm w-full max-w-2xl">
-      <h1 class="text-left text-lg font-semibold mt-2 ml-1 mb-6 text-on-surface">
-        Encore Tweaks
-      </h1>
 
-      <!-- daemon status -->
-      <div
-        class="bg-secondary-container mb-4 p-4 rounded-lg flex items-start justify-between text-on-secondary-container"
-      >
+  <body class="bg-surface flex justify-center min-h-screen root_layout">
+    <main class="p-3 text-sm w-full max-w-2xl">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6 text-on-surface">
+        <h1 data-i18n="title" class="text-lg font-semibold">Encore Tweaks</h1>
+        <div>
+          <select id="languageSelector" class="select select-sm bg-surface-container text-on-surface">
+            <option value="en">English</option>
+            <option value="id">Indonesia</option>
+            <option value="ru">Русский</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Daemon Status -->
+      <div class="bg-secondary-container mb-4 p-4 rounded-lg flex items-start justify-between text-on-secondary-container">
         <div>
           <span id="daemon_status" class="text-lg font-semibold">Loading</span>
-          <span id="daemon_pid" class="text-xs mt-3 block">
-            One moment please...
-          </span>
+          <span id="daemon_pid" class="text-xs mt-3 block">One moment please...</span>
         </div>
         <img id="encore_logo" class="w-24 h-24" />
       </div>
 
-      <!-- device & module info -->
+      <!-- Device & Module Info -->
       <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
         <div class="py-2">
-          <h3 class="text-sm font-medium mb-1">Encore Tweaks</h3>
+          <h3 data-i18n="moduleTitle" class="text-sm font-medium mb-1"></h3>
           <span id="module_version" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
-          <h3 class="text-sm font-medium mb-1">Current Profile</h3>
+          <h3 data-i18n="profileTitle" class="text-sm font-medium mb-1"></h3>
           <span id="encore_profile" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
-          <h3 class="text-sm font-medium mb-1">Kernel</h3>
+          <h3 data-i18n="kernelTitle" class="text-sm font-medium mb-1"></h3>
           <span id="kernel_version" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
-          <h3 class="text-sm font-medium mb-1">Chipset</h3>
+          <h3 data-i18n="chipsetTitle" class="text-sm font-medium mb-1"></h3>
           <span id="chipset_name" class="text-on-surface-variant text-xs"></span>
         </div>
         <div class="py-2">
-          <h3 class="text-sm font-medium mb-1">Android SDK</h3>
+          <h3 data-i18n="androidSDKTitle" class="text-sm font-medium mb-1"></h3>
           <span id="android_sdk" class="text-on-surface-variant text-xs"></span>
         </div>
       </div>
 
-      <!-- settings -->
+      <!-- Settings -->
       <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
-        <h2 class="text-base font-semibold mb-2">Settings</h2>
+        <h2 data-i18n="settingsTitle" class="text-base font-semibold mb-2"></h2>
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            Kill Logger
-            <button
-              class="btn btn-circle btn-ghost btn-xs text-primary"
-              onclick="kill_logger.showModal()"
-            >
-              <svg
-                tabindex="0"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="h-4 w-4 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
+            <span data-i18n="killLogger"></span>
+            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="kill_logger.showModal()">
+              <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </button>
           </div>
@@ -89,24 +79,10 @@
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            DND on Gameplay
-            <button
-              class="btn btn-circle btn-ghost btn-xs text-primary"
-              onclick="dnd_gameplay.showModal()"
-            >
-              <svg
-                tabindex="0"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="h-4 w-4 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
+            <span data-i18n="dndGameplay"></span>
+            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="dnd_gameplay.showModal()">
+              <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </button>
           </div>
@@ -118,88 +94,47 @@
         </div>
 
         <div class="py-1 mb-2">
-          <p class="mb-2">Default CPU Governor</p>
-          <select
-            id="default_cpu_gov"
-            class="select bg-primary text-xs text-on-primary w-full p-2"
-          >
+          <p class="mb-2" data-i18n="defaultCpuGov"></p>
+          <select id="default_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
             <option value="schedutil" selected>schedutil</option>
           </select>
         </div>
 
         <div class="py-1 mb-2">
-          <p class="mb-2">Powersave CPU Governor</p>
-          <select
-            id="powersave_cpu_gov"
-            class="select bg-primary text-xs text-on-primary w-full p-2"
-          >
+          <p class="mb-2" data-i18n="powersaveCpuGov"></p>
+          <select id="powersave_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
             <option value="powersave" selected>powersave</option>
           </select>
         </div>
       </div>
 
-      <!-- actions -->
+      <!-- Actions -->
       <div class="bg-surface-container mb-4 p-4 rounded-lg">
-        <h2 class="text-base font-semibold mb-4 text-on-surface">Actions</h2>
-        <button
-          id="edit_gamelist_btn"
-          class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"
-          onclick="edit_gamelist.showModal()"
-        >
-          Edit Gamelist
-        </button>
-        <button
-          id="restart_daemon_btn"
-          class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"
-        >
-          Restart Daemon
-        </button>
-        <button
-          id="save_log_btn"
-          class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"
-        >
-          Save Module Logs
-        </button>
+        <h2 data-i18n="actionsTitle" class="text-base font-semibold mb-4 text-on-surface"></h2>
+        <button id="edit_gamelist_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2" onclick="edit_gamelist.showModal()"></button>
+        <button id="restart_daemon_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
+        <button id="save_log_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
       </div>
 
+      <!-- Donate Button -->
       <button id="donate_btn" class="text-left text-on-surface bg-surface-container mb-4 p-4 rounded-lg w-full active:bg-secondary-container transition duration-300">
-        <h2 class="text-base font-semibold px-2 mb-1">Support Me</h2>
-        <p class="text-sm text-on-surface-variant px-2 mb-1">Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation.</p>
+        <h2 data-i18n="supportTitle" class="text-base font-semibold px-2 mb-1"></h2>
+        <p data-i18n="supportDescription" class="text-sm text-on-surface-variant px-2 mb-1"></p>
       </button>
 
-      <!-- modal -->
+      <!-- Modals -->
       <dialog id="kill_logger" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold">Kill Logger</h3>
-          <p class="py-4">
-            This option will stop the logger services and silence logs, enabling
-            a reduction in performance overhead.
-          </p>
+          <h3 data-i18n="killLoggerTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="killLoggerDesc" class="py-4"></p>
           <div role="alert" class="alert bg-primary text-on-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 shrink-0 stroke-current"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
-            <span
-              >WARNING: Software that depends on the logd service will not work
-              properly!</span
-            >
+            <span data-i18n="killLoggerWarning"></span>
           </div>
         </div>
       </dialog>
@@ -207,39 +142,26 @@
       <dialog id="dnd_gameplay" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold">Do Not Disturb</h3>
-          <p class="py-4">
-            Enable do not disturb mode when playing games. limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.
-          </p>
+          <h3 data-i18n="dndTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="dndDesc" class="py-4"></p>
         </div>
       </dialog>
 
       <dialog id="mmrl_denied" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold">Permission Denied</h3>
-          <p class="py-4">
-            Please activate the JavaScript API for Encore Tweaks in MMRL
-            settings; this WebUI will not function without it.
-          </p>
+          <h3 data-i18n="permissionDeniedTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="permissionDeniedDesc" class="py-4"></p>
           <div class="breadcrumbs text-sm">
             <ul>
-              <li>Settings</li>
-              <li>Modules & Permissions</li>
-              <li>Encore Tweaks</li>
-              <li>Allow Advanced KernelSU API</li>
+              <li data-i18n="breadcrumbsSettings"></li>
+              <li data-i18n="breadcrumbsModules"></li>
+              <li data-i18n="breadcrumbsEncore"></li>
+              <li data-i18n="breadcrumbsAllowAPI"></li>
             </ul>
           </div>
         </div>
@@ -248,45 +170,22 @@
       <dialog id="edit_gamelist" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold">Edit Gamelist</h3>
-          <p class="py-4">
-            The performance profile will be activated when any of the games and apps listed here are launched.
-          </p>
-          <textarea
-            id="gamelist_textarea"
-            class="w-full p-2 text-sm text-on-surface bg-surface-dim border border-primary outline-none shadow-none rounded-md resize-none mb-2"
-            rows="14"
-          ></textarea>
+          <h3 data-i18n="editGamelistTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="editGamelistDesc" class="py-4"></p>
+          <textarea id="gamelist_textarea" class="w-full p-2 text-sm text-on-surface bg-surface-dim border border-primary outline-none shadow-none rounded-md resize-none mb-2" rows="14"></textarea>
           <form method="dialog">
-            <button
-              id="save_gamelist_btn"
-              class="btn btn-block btn-sm bg-primary text-on-primary font-normal mb-2 hover:bg-primary duration-300"
-            >
-              Save Changes
-            </button>
-            <button
-              class="btn btn-block btn-sm bg-secondary-container text-on-secondary-container font-normal hover:bg-secondary-container duration-300"
-            >
-              Cancel Changes
-            </button>
+            <button id="save_gamelist_btn" class="btn btn-block btn-sm bg-primary text-on-primary font-normal mb-2 hover:bg-primary duration-300" data-i18n="saveChanges"></button>
+            <button class="btn btn-block btn-sm bg-secondary-container text-on-secondary-container font-normal hover:bg-secondary-container duration-300" data-i18n="cancelChanges"></button>
           </form>
         </div>
       </dialog>
-      
+
       <dialog id="error_modal" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">
-            <button
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
           <h3 id="error_title" class="text-lg font-bold"></h3>
           <p id="error_msg" class="py-4"></p>
