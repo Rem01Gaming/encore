@@ -24,9 +24,5 @@ touch /dev/encore_mode
 # Copy gamelist to tmpfs
 cp /data/encore/gamelist.txt /dev/encore_gamelist
 
-# Initialize Encore Cgroups
-[ -d /dev/cpuctl ] && mkdir /dev/cpuctl/encore
-[ -d /dev/stune ] && mkdir /dev/stune/encore
-
 # Start Encore Daemon
 encored
