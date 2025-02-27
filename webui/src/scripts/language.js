@@ -367,7 +367,7 @@ const translations = {
     supportTitle: "Sokong Saya",
     supportDescription: "Encore Tweaks sentiasa percuma untuk semua orang. Namun, anda boleh menunjukkan sokongan dengan membuat sumbangan.",
     killLoggerTitle: "Matikan Logger",
-    killLoggerDesc: "Pilihan ini akan menghentikan perkhidmatan log dan menyenyapkan log, mengurangkan beban prestasi.",
+    killLoggerDesc: "Pilihan ini akan menghentikan perkhidmatan log dan menyenyapkan log, mengurangkan beban performa.",
     killLoggerWarning: "AMARAN: Perisian yang bergantung kepada perkhidmatan logd mungkin tidak berfungsi dengan betul!",
     dndTitle: "Jangan Ganggu",
     dndDesc: "Aktifkan mod Jangan Ganggu semasa bermain permainan. Menghadkan gangguan daripada notifikasi dan panggilan, membolehkan anda bermain tanpa gangguan.",
