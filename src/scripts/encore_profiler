@@ -402,63 +402,6 @@ mediatek_powersave() {
 }
 
 snapdragon_powersave() {
-	# Qualcomm CPU Bus and DRAM frequencies
-	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
-		apply "powersave" $path/governor
-	done &
-
-	for path in /sys/class/devfreq/*cpu*-lat; do
-		apply "powersave" $path/governor
-	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
-		apply "powersave" $path/governor
-	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
-		apply "powersave" $path/governor
-	done &
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
 	# GPU Frequency
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
 
