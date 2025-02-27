@@ -703,6 +703,38 @@ const translations = {
     cancelChanges: "Anuluj Zmiany",
     restartDaemon: "Restartuj Daemon",
     saveLogs: "Zapisz Logi Modułu"
+  },
+  tl: {
+    moduleTitle: "Encore Tweaks",
+    profileTitle: "Kasalukuyang Profile",
+    kernelTitle: "Kernel",
+    chipsetTitle: "Chipset",
+    androidSDKTitle: "Android SDK",
+    settingsTitle: "Mga Setting",
+    killLogger: "Ihinto ang Logger",
+    dndGameplay: "DND sa Paglalaro",
+    defaultCpuGov: "Default na CPU Governor",
+    powersaveCpuGov: "Powersave na CPU Governor",
+    actionsTitle: "Mga Aksyon",
+    supportTitle: "Suportahan Mo Ako",
+    supportDescription: "Ang Encore Tweaks ay, at palaging magiging, libre para sa iyo, at sa lahat. Gayunpaman, maaari mong ipakita na nagmamalasakit ka sa pamamagitan ng pagbibigay ng donasyon.",
+    killLoggerTitle: "Ihinto ang Logger",
+    killLoggerDesc: "Ang opsyon na ito ay ihihinto ang mga serbisyo ng logger at tatahimik ang mga log, na magbibigay-daan sa pagbabawas ng performance overhead.",
+    killLoggerWarning: "BABALA: Ang software na umaasa sa logd service ay hindi gagana nang maayos!",
+    dndTitle: "Huwag Istorbohin",
+    dndDesc: "I-enable ang mode na 'Huwag Istorbohin' kapag naglalaro ng mga laro. Nililimitahan ang mga pagpapatigil mula sa mga notification at tawag, na nagpapahintulot sa iyo na maglaro ng iyong mga paboritong laro nang walang anumang pagkaabala.",
+    permissionDeniedTitle: "Pahintulot Tinanggihan",
+    permissionDeniedDesc: "Paki-activate ang JavaScript API para sa Encore Tweaks sa mga setting ng MMRL; ang WebUI na ito ay hindi gagana nang wala ito.",
+    breadcrumbsSettings: "Mga Setting",
+    breadcrumbsModules: "Mga Module at Pahintulot",
+    breadcrumbsEncore: "Encore Tweaks",
+    breadcrumbsAllowAPI: "Pahintulutan ang Advanced na KernelSU API",
+    editGamelistTitle: "I-edit ang Gamelist",
+    editGamelistDesc: "Ang performance profile ay maa-activate kapag ang alinman sa mga laro at apps na nakalista dito ay inilunsad.",
+    saveChanges: "I-save ang mga Pagbabago",
+    cancelChanges: "Kanselahin ang mga Pagbabago",
+    restartDaemon: "I-restart ang Daemon",
+    saveLogs: "I-save ang mga Log ng Module"
   }
 };
 
