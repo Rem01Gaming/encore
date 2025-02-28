@@ -735,6 +735,38 @@ const translations = {
     cancelChanges: "Kanselahin ang mga Pagbabago",
     restartDaemon: "I-restart ang Daemon",
     saveLogs: "I-save ang mga Log ng Module"
+  },
+  ro: {
+    moduleTitle: "Encore Tweaks",
+    profileTitle: "Profil Curent",
+    kernelTitle: "Kernel",
+    chipsetTitle: "Chipset",
+    androidSDKTitle: "Android SDK",
+    settingsTitle: "Setări",
+    killLogger: "Dezactivează Logger-ul",
+    dndGameplay: "DND în Jocuri",
+    defaultCpuGov: "Guvernator CPU Implicit",
+    powersaveCpuGov: "Guvernator CPU Economisire Energie",
+    actionsTitle: "Acțiuni",
+    supportTitle: "Susține-mă",
+    supportDescription: "Encore Tweaks este și va fi întotdeauna gratuit pentru tine și pentru toată lumea. Totuși, poți arăta că îți pasă făcând o donație.",
+    killLoggerTitle: "Dezactivează Logger-ul",
+    killLoggerDesc: "Această opțiune va opri serviciile de logare și va dezactiva logurile, reducând astfel consumul de resurse.",
+    killLoggerWarning: "AVERTISMENT: Software-ul care depinde de serviciul logd nu va funcționa corect!",
+    dndTitle: "Nu Deranja",
+    dndDesc: "Activează modul „Nu deranja” în timpul jocurilor. Limitează întreruperile cauzate de notificări și apeluri, permițându-ți să te bucuri de jocuri fără distrageri.",
+    permissionDeniedTitle: "Permisiune Refuzată",
+    permissionDeniedDesc: "Te rugăm să activezi API-ul JavaScript pentru Encore Tweaks în setările MMRL; această interfață web nu va funcționa fără el.",
+    breadcrumbsSettings: "Setări",
+    breadcrumbsModules: "Module & Permisiuni",
+    breadcrumbsEncore: "Encore Tweaks",
+    breadcrumbsAllowAPI: "Permite API-ul Avansat KernelSU",
+    editGamelistTitle: "Editează Lista de Jocuri",
+    editGamelistDesc: "Profilul de performanță va fi activat când oricare dintre jocurile sau aplicațiile listate aici este lansat.",
+    saveChanges: "Salvează Modificările",
+    cancelChanges: "Anulează Modificările",
+    restartDaemon: "Repornește Daemon-ul",
+    saveLogs: "Salvează Logurile Modulului"
   }
 };
 
