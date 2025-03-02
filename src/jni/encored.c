@@ -581,13 +581,13 @@ int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
     if (getuid() != 0 && ksu_grant_root() != 0) {
-        fprintf(stderr, "Run it as root\n");
+        fprintf(stderr, "\033[31mERROR:\033[0m Please run this daemon as root\n");
         exit(EXIT_FAILURE);
     }
 
     // Make sure only one instance is running
     if (create_lock_file() != 0) {
-        fprintf(stderr, "ERROR: Another instance of Encore Daemon is already running!\n");
+        fprintf(stderr, "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -596,7 +596,7 @@ int main(void) {
 
     // Handle missing Gamelist
     if (access(GAMELIST, F_OK) != 0) {
-        fprintf(stderr, "FATAL ERROR: Unable to access Gamelist, either has been removed or moved.\n");
+        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m Unable to access Gamelist, either has been removed or moved.\n");
         log_encore(LOG_FATAL, "Critical file not found (%s)", GAMELIST);
         exit(EXIT_FAILURE);
     }
