@@ -44,7 +44,7 @@
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
-typedef enum __attribute__((packed)) {
+typedef enum : char {
     LOG_DEBUG,
     LOG_INFO,
     LOG_WARN,
@@ -52,14 +52,14 @@ typedef enum __attribute__((packed)) {
     LOG_FATAL
 } LogLevel;
 
-typedef enum __attribute__((packed)) {
+typedef enum : char {
     PERFCOMMON = 0,
     PERFORMANCE_PROFILE = 1,
     NORMAL_PROFILE = 2,
     POWERSAVE_PROFILE = 3
 } ProfileMode;
 
-typedef enum __attribute__((packed)) {
+typedef enum : char {
     MLBB_NOT_RUNNING = 0,
     MLBB_RUN_BG = 1,
     MLBB_RUNNING = 2
