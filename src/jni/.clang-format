@@ -11,6 +11,6 @@ AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: true
 BreakConstructorInitializers: BeforeComma
-IndentPPDirectives: AfterHash
+IndentPPDirectives: BeforeHash
 PointerAlignment: Left
 AllowShortEnumsOnASingleLine: false
