@@ -74,7 +74,7 @@ typedef enum : char {
  * Description        : Create lock file and check if there's any another instance of
  *                      this daemon running.
  ***********************************************************************************/
-int create_lock_file(void) {
+[[nodiscard]] int create_lock_file(void) {
     int fd = open(LOCK_FILE, O_WRONLY | O_CREAT, 0644);
     if (fd == -1) {
         perror("open");
@@ -97,7 +97,7 @@ int create_lock_file(void) {
  *                           -1 if request denied or error
  * Description        : Request SU permission from KernelSU via prctl.
  ***********************************************************************************/
-static inline int ksu_grant_root(void) {
+[[nodiscard]] static inline int ksu_grant_root(void) {
     uint32_t result = 0;
     prctl(0xdeadbeef, 0, 0, 0, &result);
 
@@ -385,6 +385,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
  *                            * otherwise if command returns an error
  * Description        : Executes a shell command just like system() with additional format.
  ***********************************************************************************/
+[[nodiscard("Shell command can be faulty and you should check it's returns!")]]
 int systemv(const char* format, ...) {
     if (format == NULL)
         return -1;
