@@ -2,6 +2,14 @@
 SKIPUNZIP=1
 SOC=0
 
+make_node() {
+	[ ! -f "$2" ] && echo "$1" >"$2"
+}
+
+make_dir() {
+	[ ! -d "$1" ] && mkdir "$1"
+}
+
 abort_unsupported_arch() {
 	ui_print "*********************************************************"
 	ui_print "! Unsupported ARCH: $ARCH"
@@ -123,9 +131,9 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
-[ ! -d /data/encore ] && mkdir /data/encore
-[ ! -f /data/encore/kill_logd ] && echo 0 >/data/encore/kill_logd
-[ ! -f /data/encore/dnd_gameplay ] && echo 0 >/data/encore/dnd_gameplay
+make_dir /data/encore
+make_node 0 /data/encore/kill_logd
+make_node 0 /data/encore/dnd_gameplay
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY

@@ -19,6 +19,9 @@
 # Common Function
 ###################################
 
+# Fetch SoC recognition
+SOC="$(cat /data/encore/soc_recognition)"
+
 apply() {
 	[ ! -f $2 ] && return 1
 	chmod 644 $2 >/dev/null 2>&1
@@ -635,7 +638,7 @@ performance_profile() {
 		apply 32 "$dir/queue/read_ahead_kb"
 	done &
 
-	case "$(cat /data/encore/soc_recognition)" in
+	case $SOC in
 	1) mediatek_performance ;;
 	2) snapdragon_performance ;;
 	3) exynos_performance ;;
@@ -735,7 +738,7 @@ normal_profile() {
 		apply 128 "$dir/queue/read_ahead_kb"
 	done &
 
-	case "$(cat /data/encore/soc_recognition)" in
+	case $SOC in
 	1) mediatek_normal ;;
 	2) snapdragon_normal ;;
 	3) exynos_normal ;;
@@ -773,7 +776,7 @@ powersave_profile() {
 	powersave_cpu_gov="$(cat /data/encore/powersave_cpu_gov)"
 	change_cpu_gov "$powersave_cpu_gov"
 
-	case "$(cat /data/encore/soc_recognition)" in
+	case $SOC in
 	1) mediatek_powersave ;;
 	2) snapdragon_powersave ;;
 	3) exynos_powersave ;;
