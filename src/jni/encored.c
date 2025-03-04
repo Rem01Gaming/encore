@@ -220,7 +220,7 @@ void log_encore(LogLevel level, const char* message, ...) {
  * Returns            : None
  * Description        : Handle exit signal.
  ***********************************************************************************/
-static inline void sighandler(const int signal) {
+[[noreturn]] void sighandler(const int signal) {
     switch (signal) {
     case SIGTERM:
         log_encore(LOG_INFO, "Received SIGTERM, exiting.");
