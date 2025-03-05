@@ -420,12 +420,14 @@ int systemv(const char* format, ...) {
  * Function Name      : notify
  * Inputs             : message (char *) - Message to display
  * Outputs            : None
- * Returns            : int - 0 if success
- *                           -1 if failed
+ * Returns            : None
  * Description        : Push a notification.
  ***********************************************************************************/
-static inline int notify(const char* message) {
-    return systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
+static inline void notify(const char* message) {
+    int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
+
+    if (exit != 0)
+        log_encore(LOG_ERROR, "Unable to post push notification, message: %s", message);
 }
 
 /***********************************************************************************
