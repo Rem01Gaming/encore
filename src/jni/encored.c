@@ -65,12 +65,12 @@ typedef enum : char {
  * Function Name      : create_lock_file
  * Inputs             : None
  * Outputs            : None
- * Returns            : int - 0 if lock file created successfully
- *                           -1 if another instance running
+ * Returns            : char - 0 if lock file created successfully
+ *                            -1 if another instance running
  * Description        : Create lock file and check if there's any another instance of
  *                      this daemon running.
  ***********************************************************************************/
-[[nodiscard]] int create_lock_file(void) {
+[[nodiscard]] char create_lock_file(void) {
     int fd = open(LOCK_FILE, O_WRONLY | O_CREAT, 0644);
     if (fd == -1) {
         perror("open");
@@ -89,11 +89,11 @@ typedef enum : char {
  * Function Name      : ksu_grant_root
  * Inputs             : None
  * Outputs            : None
- * Returns            : int - 0 if granted successfully
- *                           -1 if request denied or error
+ * Returns            : char - 0 if granted successfully
+ *                            -1 if request denied or error
  * Description        : Request SU permission from KernelSU via prctl.
  ***********************************************************************************/
-[[nodiscard]] static inline int ksu_grant_root(void) {
+[[nodiscard]] static inline char ksu_grant_root(void) {
     uint32_t result = 0;
     prctl(0xdeadbeef, 0, 0, 0, &result);
 
@@ -155,11 +155,11 @@ static inline char* timern(void) {
  *                      content (const char *) - content to write
  *                      mode (const int) - 1 for append and 0 for write
  * Outputs            : None
- * Returns            : int - 0 if write successful
- *                           -1 if file does not exist or inaccessible
+ * Returns            : char - 0 if write successful
+ *                            -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  ***********************************************************************************/
-static inline int write2file(const char* file_path, const char* content, const int mode) {
+static inline char write2file(const char* file_path, const char* content, const int mode) {
     if (access(file_path, F_OK) == -1)
         return -1;
 
