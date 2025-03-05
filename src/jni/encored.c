@@ -562,13 +562,13 @@ static inline char* pidof(const char* name) {
  * Function Name      : handle_mlbb
  * Inputs             : const char *gamestart - Game package name
  * Outputs            : None
- * Returns            : int - 2 if MLBB is running in foreground
- *                            1 if MLBB is running in background
- *                            0 if gamestart is not MLBB
+ * Returns            : char - 2 if MLBB is running in foreground
+ *                             1 if MLBB is running in background
+ *                             0 if gamestart is not MLBB
  * Description        : Checks if "com.mobile.legends" IS actually running
  *                      on foreground, not in the background.
  ***********************************************************************************/
-static inline int handle_mlbb(const char* gamestart) {
+static inline char handle_mlbb(const char* gamestart) {
     if (strcmp(gamestart, "com.mobile.legends") != 0)
         return 0;
 
