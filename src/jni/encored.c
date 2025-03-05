@@ -474,16 +474,15 @@ static inline void is_kanged(void) {
  *                            2 for normal
  *                            3 for powersave
  * Outputs            : None
- * Returns            : int - 0 if execution success
- *                           -1 if execution failed
+ * Returns            : None
  * Description        : Switch to specified performance profile.
  ***********************************************************************************/
-static inline int run_profiler(const int profile) {
+static inline void run_profiler(const int profile) {
     is_kanged();
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
     write2file("/dev/encore_mode", profile_str, 0);
-    return systemv("encore_profiler %d", profile);
+    (void)systemv("encore_profiler %d", profile);
 }
 
 /***********************************************************************************
