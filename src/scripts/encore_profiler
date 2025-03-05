@@ -627,7 +627,6 @@ performance_profile() {
 
 	for path in /sys/devices/system/cpu/*/cpufreq; do
 		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-		apply "cpu$(awk '{print $1}' $path/affected_cpus) $cpu_maxfreq" /sys/devices/virtual/thermal/thermal_message/cpu_limits
 		apply "$cpu_maxfreq" $path/scaling_max_freq
 		apply "$cpu_maxfreq" $path/scaling_min_freq
 	done
@@ -712,7 +711,6 @@ normal_profile() {
 	# Restore min CPU frequency
 	change_cpu_gov "$default_cpu_gov"
 	apply 1 /sys/devices/system/cpu/cpu1/online
-	chmod -f 644 /sys/devices/virtual/thermal/thermal_message/cpu_limits
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
