@@ -151,8 +151,8 @@ snapdragon_performance() {
 
 	if [ -d $gpu_path ]; then
 		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
+		apply $freq $gpu_path/min_freq
 	fi
 }
 
@@ -160,8 +160,8 @@ tegra_performance() {
 	gpu_path="/sys/kernel/tegra_gpu"
 	if [ -d $gpu_path ]; then
 		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/gpu_floor_rate
 		apply $freq $gpu_path/gpu_cap_rate
+		apply $freq $gpu_path/gpu_floor_rate
 	fi
 }
 
@@ -171,8 +171,8 @@ exynos_performance() {
 
 	if [ -d $gpu_path ]; then
 		freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/gpu_min_clock
 		apply $freq $gpu_path/gpu_max_clock
+		apply $freq $gpu_path/gpu_min_clock
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
@@ -185,8 +185,8 @@ unisoc_performance() {
 
 	if [ -d $gpu_path ]; then
 		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/min_freq
 		apply $freq $gpu_path/max_freq
+		apply $freq $gpu_path/min_freq
 	fi
 }
 
@@ -196,8 +196,8 @@ tensor_performance() {
 
 	if [ -d $gpu_path ]; then
 		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/scaling_min_freq
 		apply $freq $gpu_path/scaling_max_freq
+		apply $freq $gpu_path/scaling_min_freq
 	fi
 }
 
@@ -322,8 +322,8 @@ snapdragon_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $min_freq $gpu_path/min_freq
 		write $max_freq $gpu_path/max_freq
+		write $min_freq $gpu_path/min_freq
 	fi
 }
 
@@ -332,8 +332,8 @@ tegra_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $min_freq $gpu_path/gpu_floor_rate
 		write $max_freq $gpu_path/gpu_cap_rate
+		write $min_freq $gpu_path/gpu_floor_rate
 	fi
 }
 
@@ -344,8 +344,8 @@ exynos_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $min_freq $gpu_path/gpu_min_clock
 		write $max_freq $gpu_path/gpu_max_clock
+		write $min_freq $gpu_path/gpu_min_clock
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
@@ -359,8 +359,8 @@ unisoc_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $min_freq $gpu_path/min_freq
 		write $max_freq $gpu_path/max_freq
+		write $min_freq $gpu_path/min_freq
 	fi
 }
 
@@ -371,8 +371,8 @@ tensor_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $min_freq $gpu_path/scaling_min_freq
 		write $max_freq $gpu_path/scaling_max_freq
+		write $min_freq $gpu_path/scaling_min_freq
 	fi
 }
 
