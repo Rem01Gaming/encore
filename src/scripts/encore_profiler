@@ -29,6 +29,12 @@ apply() {
 	chmod 444 $2 >/dev/null 2>&1
 }
 
+write() {
+	[ ! -f $2 ] && return 1
+	chmod 644 $2 >/dev/null 2>&1
+	echo $1 >$2 2>/dev/null
+}
+
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
@@ -220,9 +226,9 @@ mediatek_normal() {
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		apply "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		write "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
 	elif [ -d /proc/gpufreqv2 ]; then
-		apply -1 /proc/gpufreqv2/fix_target_opp_index
+		write "-1" /proc/gpufreqv2/fix_target_opp_index
 	fi
 
 	# GPU Power limiter
@@ -239,10 +245,10 @@ mediatek_normal() {
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	apply "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-	apply "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	apply "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
-	apply "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+	write "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+	write "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+	write "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
+	write "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
 
 	# Eara Thermal
 	apply "1" /sys/kernel/eara_thermal/enable
@@ -251,29 +257,29 @@ mediatek_normal() {
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
-		apply "compute" $path/governor
+		write "compute" $path/governor
 	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
-		apply "mem_latency" $path/governor
+		write "mem_latency" $path/governor
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
-		apply "bw_hwmon" $path/governor
+		write "bw_hwmon" $path/governor
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
-		apply "bw_hwmon" $path/governor
+		write "bw_hwmon" $path/governor
 	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
-			apply $max_freq $path
+			write $max_freq $path
 		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
-			apply $min_freq $path
+			write $min_freq $path
 		done &
 	fi
 
@@ -281,10 +287,10 @@ snapdragon_normal() {
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
-			apply $max_freq $path
+			write $max_freq $path
 		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
-			apply $min_freq $path
+			write $min_freq $path
 		done &
 	fi
 
@@ -292,10 +298,10 @@ snapdragon_normal() {
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
-			apply $max_freq $path
+			write $max_freq $path
 		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
-			apply $min_freq $path
+			write $min_freq $path
 		done &
 	fi
 
@@ -303,10 +309,10 @@ snapdragon_normal() {
 		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
-			apply $max_freq $path
+			write $max_freq $path
 		done &
 		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
-			apply $min_freq $path
+			write $min_freq $path
 		done &
 	fi
 
@@ -316,8 +322,8 @@ snapdragon_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $min_freq $gpu_path/min_freq
-		apply $max_freq $gpu_path/max_freq
+		write $min_freq $gpu_path/min_freq
+		write $max_freq $gpu_path/max_freq
 	fi
 }
 
@@ -326,8 +332,8 @@ tegra_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $min_freq $gpu_path/gpu_floor_rate
-		apply $max_freq $gpu_path/gpu_cap_rate
+		write $min_freq $gpu_path/gpu_floor_rate
+		write $max_freq $gpu_path/gpu_cap_rate
 	fi
 }
 
@@ -338,8 +344,8 @@ exynos_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $min_freq $gpu_path/gpu_min_clock
-		apply $max_freq $gpu_path/gpu_max_clock
+		write $min_freq $gpu_path/gpu_min_clock
+		write $max_freq $gpu_path/gpu_max_clock
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
@@ -353,8 +359,8 @@ unisoc_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $min_freq $gpu_path/min_freq
-		apply $max_freq $gpu_path/max_freq
+		write $min_freq $gpu_path/min_freq
+		write $max_freq $gpu_path/max_freq
 	fi
 }
 
@@ -365,8 +371,8 @@ tensor_normal() {
 	if [ -d $gpu_path ]; then
 		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $min_freq $gpu_path/scaling_min_freq
-		apply $max_freq $gpu_path/scaling_max_freq
+		write $min_freq $gpu_path/scaling_min_freq
+		write $max_freq $gpu_path/scaling_max_freq
 	fi
 }
 
@@ -718,8 +724,8 @@ normal_profile() {
 		for path in /sys/devices/system/cpu/cpufreq/policy*; do
 			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
 			cpu_minfreq=$(cat $path/cpuinfo_min_freq)
-			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
-			apply "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+			write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+			write "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			((cluster++))
 		done
 	fi
@@ -727,10 +733,9 @@ normal_profile() {
 	for path in /sys/devices/system/cpu/*/cpufreq; do
 		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
 		cpu_minfreq=$(cat $path/cpuinfo_min_freq)
-		apply "$cpu_maxfreq" $path/scaling_max_freq
-		apply "$cpu_minfreq" $path/scaling_min_freq
+		write "$cpu_maxfreq" $path/scaling_max_freq
+		write "$cpu_minfreq" $path/scaling_min_freq
 	done
-	chmod 644 /sys/devices/system/cpu/*/cpufreq/scaling_*_freq
 	chmod 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 
 	# I/O Tweaks
