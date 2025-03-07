@@ -653,7 +653,7 @@ int main(void) {
             screenstate = get_screenstate();
 
             // Handle in case screenstate is empty
-            if (screenstate == NULL) {
+            if (screenstate == NULL) [[clang::unlikely]] {
                 screenstate_fail++;
                 log_encore(LOG_ERROR, "Unable to get current screenstate");
                 log_encore(LOG_DEBUG, "screenstate fail count: %s", screenstate_fail);
