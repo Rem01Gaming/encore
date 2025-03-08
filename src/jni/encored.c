@@ -634,12 +634,12 @@ int main(void) {
 
         sleep(15);
 
-        if (gamestart == NULL) {
+        if (!gamestart) {
             // Only fetch gamestart and low_power state when user not in-game
             // prevent overhead from dumpsys commands.
             gamestart = get_gamestart();
             low_power = get_low_power_state();
-        } else if (pid && kill(atoi(pid), 0) == -1) {
+        } else if (!pid || kill(atoi(pid), 0) == -1) {
             free(pid);
             pid = NULL;
             free(gamestart);
@@ -652,7 +652,7 @@ int main(void) {
             }
         }
 
-        if (gamestart != NULL)
+        if (gamestart)
             mlbb_is_running = handle_mlbb(gamestart);
 
         // If screenstate_fail threshold eq to 6, skip this routine entirely
