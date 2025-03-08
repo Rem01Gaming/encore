@@ -439,7 +439,7 @@ static inline void notify(const char* message) {
  *                      process.
  ***********************************************************************************/
 static inline void set_priority(const char* pid) {
-    if (pid == NULL) {
+    if (pid == NULL) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "set_priority() called with null PID!");
         return;
     }
