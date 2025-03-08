@@ -552,7 +552,16 @@ static inline char* get_low_power_state(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* pidof(const char* name) {
-    return execute_direct("/system/bin/toybox", "pidof", name, NULL);
+    /*
+     * It will execute something like this
+     * /system/bin/toybox pgrep -o -f net.kdt.pojavlaunch
+     *
+     * You maybe asking, why we fetch PID like this?
+     * Sometimes games like pojav launcher will have ridiculous process name such as
+     * 'net.kdt.pojavlaunch:launcher', which doesn't match the game package name.
+     */
+
+    return execute_direct("/system/bin/toybox", "pgrep", "-o", "-f", name, NULL);
 }
 
 /***********************************************************************************
