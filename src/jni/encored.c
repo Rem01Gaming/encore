@@ -154,17 +154,15 @@ static inline char* timern(void) {
  * Function Name      : write2file
  * Inputs             : file_path (const char *) - path to the file
  *                      content (const char *) - content to write
- *                      mode (const int) - 1 for append and 0 for write
+ *                      mode (const char) - 1 for append and 0 for write
  * Outputs            : None
  * Returns            : char - 0 if write successful
  *                            -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  ***********************************************************************************/
-static inline char write2file(const char* file_path, const char* content, const int mode) {
-    if (access(file_path, F_OK) == -1)
-        return -1;
-
+static inline char write2file(const char* file_path, const char* content, const char mode) {
     const char* write_mode;
+
     switch (mode) {
     case 0:
         write_mode = "w";
@@ -241,9 +239,6 @@ void log_encore(LogLevel level, const char* message, ...) {
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
 char* execute_command(const char* format, ...) {
-    if (format == NULL)
-        return NULL;
-
     char command[MAX_COMMAND_LENGTH];
     va_list args;
     va_start(args, format);
@@ -309,10 +304,8 @@ char* execute_command(const char* format, ...) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 char* execute_direct(const char* path, const char* arg0, ...) {
-    if (path == NULL || arg0 == NULL)
-        return NULL;
-
-    const char* argv[16]; // Supports up to 15 arguments + NULL
+    // Supports up to 15 arguments + NULL
+    const char* argv[16];
     int argc = 0;
     argv[argc++] = arg0;
 
@@ -384,9 +377,6 @@ char* execute_direct(const char* path, const char* arg0, ...) {
  ***********************************************************************************/
 [[nodiscard("Shell command can be faulty and you should check it's returns!")]]
 int systemv(const char* format, ...) {
-    if (format == NULL)
-        return -1;
-
     char command[MAX_COMMAND_LENGTH];
     va_list args;
     va_start(args, format);
@@ -522,7 +512,7 @@ static inline char* get_screenstate(void) {
         return "Awake";
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
-                                  "| awk -F'=' '{print $2}'");
+                                        "| awk -F'=' '{print $2}'");
     if (!screenstate) [[clang::unlikely]] {
         screenstate = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
                                 "awk -F'=' '{print $2}'");
