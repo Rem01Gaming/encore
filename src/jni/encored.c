@@ -575,12 +575,33 @@ static inline char* pidof(const char* name) {
  *                      on foreground, not in the background.
  ***********************************************************************************/
 static inline char handle_mlbb(const char* gamestart) {
-    if (strcmp(gamestart, "com.mobile.legends") != 0)
+    static int cached_pid = -1;
+
+    // Is Gamestart MLBB?
+    if (strcmp(gamestart, "com.mobile.legends") != 0) {
+        cached_pid = -1;
         return 0;
+    }
 
-    if (pidof(GAME_STRESS) != NULL)
+    // Check if cached PID is still valid
+    if (cached_pid != -1) {
+        // Does MLBB is still running?
+        if (kill(cached_pid, 0) == 0)
+            return 2;
+
+        // Process died, reset cache
+        cached_pid = -1;
+    }
+
+    // Fetch new PID if cache is invalid
+    char* mlbb_pid = pidof(GAME_STRESS);
+    if (mlbb_pid != NULL) {
+        cached_pid = atoi(mlbb_pid);
+        free(mlbb_pid);
         return 2;
+    }
 
+    // MLBB is in background
     return 1;
 }
 
