@@ -24,6 +24,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#define LOOP_INTERVAL 15
 #define LOCK_FILE "/data/encore/encore.lock"
 #define LOG_FILE "/dev/encore_log"
 #define GAMELIST "/dev/encore_gamelist"
@@ -648,16 +649,23 @@ int main(void) {
     run_profiler(PERFCOMMON); // exec perfcommon
 
     while (1) {
+        sleep(LOOP_INTERVAL);
+
+        // Handle case when module gets updated
+        if (access(MODULE_UPDATE, F_OK) == 0) [[clang::unlikely]] {
+            log_encore(LOG_INFO, "Module update detected, exiting.");
+            notify("Please reboot your device to complete module update.");
+            break;
+        }
+
         if (low_power) {
             free(low_power);
             low_power = NULL;
         }
 
-        sleep(15);
-
+        // Only fetch gamestart and low_power state when user not in-game
+        // prevent overhead from dumpsys commands.
         if (!gamestart) {
-            // Only fetch gamestart and low_power state when user not in-game
-            // prevent overhead from dumpsys commands.
             gamestart = get_gamestart();
             low_power = get_low_power_state();
         } else if (!pid || kill(atoi(pid), 0) == -1) {
@@ -699,13 +707,6 @@ int main(void) {
                 // Reset failure counter if screenstate is valid
                 screenstate_fail = 0;
             }
-        }
-
-        // Handle case when module gets updated
-        if (access(MODULE_UPDATE, F_OK) == 0) {
-            log_encore(LOG_INFO, "Module update detected, exiting.");
-            notify("Please reboot your device to complete module update.");
-            break;
         }
 
         if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
