@@ -94,7 +94,7 @@ typedef enum : char {
  *                            -1 if request denied or error
  * Description        : Request SU permission from KernelSU via prctl.
  ***********************************************************************************/
-[[nodiscard]] static inline char ksu_grant_root(void) {
+[[nodiscard]] char ksu_grant_root(void) {
     uint32_t result = 0;
     prctl(0xdeadbeef, 0, 0, 0, &result);
 
@@ -132,7 +132,7 @@ typedef enum : char {
  * Description        : Generates a timestamp with the format
  *                      [Day Mon DD HH:MM:SS YYYY].
  ***********************************************************************************/
-static inline char* timern(void) {
+char* timern(void) {
     static char timestamp[64];
     time_t t = time(NULL);
     struct tm* tm = localtime(&t);
@@ -160,7 +160,7 @@ static inline char* timern(void) {
  *                            -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  ***********************************************************************************/
-static inline char write2file(const char* file_path, const char* content, const char mode) {
+char write2file(const char* file_path, const char* content, const char mode) {
     const char* write_mode;
 
     switch (mode) {
@@ -429,7 +429,7 @@ static inline void notify(const char* message) {
  * Description        : Sets the CPU nice priority and I/O priority of a given
  *                      process.
  ***********************************************************************************/
-static inline void set_priority(const char* pid) {
+void set_priority(const char* pid) {
     if (pid == NULL) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "set_priority() called with null PID!");
         return;
@@ -470,7 +470,7 @@ static inline void is_kanged(void) {
  * Returns            : None
  * Description        : Switch to specified performance profile.
  ***********************************************************************************/
-static inline void run_profiler(const int profile) {
+void run_profiler(const int profile) {
     is_kanged();
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
@@ -504,7 +504,7 @@ static inline char* get_gamestart(void) {
  *                      through an alternative dumpsys window command.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-static inline char* get_screenstate(void) {
+char* get_screenstate(void) {
     static char screenstate_fail = 0;
 
     // Set default state after too many failures
@@ -542,7 +542,7 @@ static inline char* get_screenstate(void) {
  *                      Useful for determining low-power states.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-static inline char* get_low_power_state(void) {
+char* get_low_power_state(void) {
     char* low_power = execute_direct("/system/bin/settings", "settings", "get", "global", "low_power", NULL);
     if (!low_power) [[clang::unlikely]] {
         low_power = execute_command("dumpsys power | grep -Eo "
@@ -583,7 +583,7 @@ static inline char* pidof(const char* name) {
  * Description        : Checks if Mobile Legends: Bang Bang IS actually running
  *                      on foreground, not in the background.
  ***********************************************************************************/
-static inline char handle_mlbb(const char* gamestart) {
+char handle_mlbb(const char* gamestart) {
     static pid_t cached_pid = -1;
 
     // Is Gamestart MLBB?
