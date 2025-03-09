@@ -515,13 +515,31 @@ static inline char* get_gamestart(void) {
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
 static inline char* get_screenstate(void) {
-    char* state = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
+    static char screenstate_fail = 0;
+
+    // Set default state after too many failures
+    if (screenstate_fail == 6)
+        return "Awake";
+
+    char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                   "| awk -F'=' '{print $2}'");
-    if (state == NULL) {
-        state = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
+    if (!screenstate) [[clang::unlikely]] {
+        screenstate = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
                                 "awk -F'=' '{print $2}'");
     }
-    return state;
+
+    if (!screenstate) [[clang::unlikely]] {
+        screenstate_fail++;
+        log_encore(LOG_ERROR, "Unable to get current screenstate, assuming it was awake.");
+
+        if (screenstate_fail == 6)
+            log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
+
+        return "Awake";
+    }
+
+    screenstate_fail = 0;
+    return screenstate;
 }
 
 /***********************************************************************************
@@ -641,7 +659,7 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL, screenstate_fail = 0;
+    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
 
@@ -658,10 +676,15 @@ int main(void) {
             break;
         }
 
+        // Reset low power state
         if (low_power) {
             free(low_power);
             low_power = NULL;
         }
+
+        // Fetch screen state
+        free(screenstate);
+        screenstate = get_screenstate();
 
         // Only fetch gamestart and low_power state when user not in-game
         // prevent overhead from dumpsys commands.
@@ -683,31 +706,6 @@ int main(void) {
 
         if (gamestart)
             mlbb_is_running = handle_mlbb(gamestart);
-
-        // If screenstate_fail threshold eq to 6, skip this routine entirely
-        if (screenstate_fail != 6) {
-            // Fetch screenstate
-            free(screenstate);
-            screenstate = get_screenstate();
-
-            // Handle in case screenstate is empty
-            if (screenstate == NULL) [[clang::unlikely]] {
-                screenstate_fail++;
-                log_encore(LOG_ERROR, "Unable to get current screenstate");
-                log_encore(LOG_DEBUG, "screenstate fail count: %s", screenstate_fail);
-
-                // Set default state after too many failures
-                if (screenstate_fail == 6) {
-                    log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
-                    screenstate = "Awake";
-                }
-
-                continue;
-            } else {
-                // Reset failure counter if screenstate is valid
-                screenstate_fail = 0;
-            }
-        }
 
         if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
             // Bail out if we already on performance profile
