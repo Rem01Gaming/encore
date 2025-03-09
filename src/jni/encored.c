@@ -29,7 +29,7 @@
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
-#define GAME_STRESS "com.mobile.legends:UnityKillsMe"
+#define GAME_STRESS "com.mobile.legends:UnityKillsMe|com.mobilelegends.hwag:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 600
 #define MAX_OUTPUT_LENGTH 256
 
@@ -578,7 +578,7 @@ static inline char handle_mlbb(const char* gamestart) {
     static pid_t cached_pid = -1;
 
     // Is Gamestart MLBB?
-    if (strcmp(gamestart, "com.mobile.legends") != 0) {
+    if (strcmp(gamestart, "com.mobile.legends") != 0 && strcmp(gamestart, "com.mobilelegends.hwag") != 0) {
         cached_pid = -1;
         return 0;
     }
