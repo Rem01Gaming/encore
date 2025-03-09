@@ -134,16 +134,16 @@ typedef enum : char {
  ***********************************************************************************/
 char* timern(void) {
     static char timestamp[64];
-    time_t t = time(NULL);
-    struct tm* tm = localtime(&t);
+    time_t current_time = time(NULL);
+    struct tm* local_time = localtime(&current_time);
 
-    if (tm == NULL) {
+    if (local_time == NULL) [[clang::unlikely]] {
         strcpy(timestamp, "[TimeError]");
         return timestamp;
     }
 
-    size_t ret = strftime(timestamp, sizeof(timestamp), "%c", tm);
-    if (ret == 0) {
+    size_t format_result = strftime(timestamp, sizeof(timestamp), "%c", local_time);
+    if (format_result == 0) [[clang::unlikely]] {
         strcpy(timestamp, "[TimeFormatError]");
     }
 
