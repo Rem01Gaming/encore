@@ -571,11 +571,11 @@ static inline char* pidof(const char* name) {
  * Returns            : char - 2 if MLBB is running in foreground
  *                             1 if MLBB is running in background
  *                             0 if gamestart is not MLBB
- * Description        : Checks if "com.mobile.legends" IS actually running
+ * Description        : Checks if Mobile Legends: Bang Bang IS actually running
  *                      on foreground, not in the background.
  ***********************************************************************************/
 static inline char handle_mlbb(const char* gamestart) {
-    static int cached_pid = -1;
+    static pid_t cached_pid = -1;
 
     // Is Gamestart MLBB?
     if (strcmp(gamestart, "com.mobile.legends") != 0) {
