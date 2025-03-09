@@ -452,7 +452,7 @@ void set_priority(const char* pid) {
  * Returns            : None
  * Description        : Checks if the module renamed/modified by 3rd party.
  ***********************************************************************************/
-static inline void is_kanged(void) {
+void is_kanged(void) {
     if (systemv("grep -q 'author=Rem01Gaming' %s", MODULE_PROP) != 0) [[clang::unlikely]] {
         log_encore(LOG_FATAL, "Module modified by 3rd party, exiting.");
         notify("Trying to rename me?");
