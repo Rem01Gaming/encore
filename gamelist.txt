@@ -5,6 +5,7 @@ brownmonster.app.game.rushrally3
 com.AlfaBravo.Combat
 com.CarXTech.street
 com.ChillyRoom.DungeonShooter
+com.EndlessClouds.Treeverse
 com.EtherGaming.PocketRogues
 com.Flanne.MinutesTillDawn.roguelike.shooting.gp
 com.FosFenes.Sonolus
@@ -124,6 +125,7 @@ com.gameloft.android.ANMP.GloftA9HM
 com.gameloft.android.ANMP.GloftMVHM
 com.gameloft.android.SAMS.GloftA9SS
 com.garena.game.codm
+com.garena.game.df
 com.garena.game.kgid
 com.garena.game.kgtw
 com.garena.game.kgvn
@@ -421,6 +423,8 @@ me.pou.app
 me.tigerhix.cytoid
 moe.low.arc
 net.kdt.pojavlaunch
+net.kdt.pojavlaunch.debug
+net.kdt.pojavlaunch.firefly
 net.wargaming.wot.blitz
 org.citra.emu
 org.citron.citron_emu
