@@ -554,7 +554,7 @@ static inline char* get_screenstate(void) {
  ***********************************************************************************/
 static inline char* get_low_power_state(void) {
     char* low_power = execute_direct("/system/bin/settings", "settings", "get", "global", "low_power", NULL);
-    if (low_power == NULL) {
+    if (!low_power) [[clang::unlikely]] {
         low_power = execute_command("dumpsys power | grep -Eo "
                                     "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
                                     "awk -F'=' '{print $2}'");
