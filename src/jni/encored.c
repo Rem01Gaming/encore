@@ -246,13 +246,13 @@ char* execute_command(const char* format, ...) {
     va_end(args);
 
     int pipefd[2];
-    if (pipe(pipefd) == -1) {
+    if (pipe(pipefd) == -1) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "pipe failed in execute_command()");
         return NULL;
     }
 
     pid_t pid = fork();
-    if (pid == -1) {
+    if (pid == -1) [[clang::unlikely]] {
         close(pipefd[0]);
         close(pipefd[1]);
         log_encore(LOG_ERROR, "fork failed in execute_command()");
@@ -319,13 +319,13 @@ char* execute_direct(const char* path, const char* arg0, ...) {
     va_end(args);
 
     int pipefd[2];
-    if (pipe(pipefd) == -1) {
+    if (pipe(pipefd) == -1) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "pipe failed in execute_direct()");
         return NULL;
     }
 
     pid_t pid = fork();
-    if (pid == -1) {
+    if (pid == -1) [[clang::unlikely]] {
         close(pipefd[0]);
         close(pipefd[1]);
         log_encore(LOG_ERROR, "fork failed in execute_direct()");
@@ -384,7 +384,7 @@ int systemv(const char* format, ...) {
     va_end(args);
 
     pid_t pid = fork();
-    if (pid == -1) {
+    if (pid == -1) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "fork failed in systemv()");
         return -1;
     }
