@@ -509,7 +509,7 @@ char* get_screenstate(void) {
 
     // Set default state after too many failures
     if (screenstate_fail == 6)
-        return "Awake";
+        return strdup("Awake");
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                         "| awk -F'=' '{print $2}'");
@@ -525,7 +525,7 @@ char* get_screenstate(void) {
         if (screenstate_fail == 6)
             log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
 
-        return "Awake";
+        return strdup("Awake");
     }
 
     screenstate_fail = 0;
