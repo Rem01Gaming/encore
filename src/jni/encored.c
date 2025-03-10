@@ -651,6 +651,7 @@ int main(void) {
 
     // Initialize variables
     char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
+    bool need_profile_checkup = false;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
 
@@ -689,10 +690,8 @@ int main(void) {
             gamestart = get_gamestart();
             low_power = get_low_power_state();
 
-            if (gamestart) {
-                pid = pidof(gamestart);
-                set_priority(pid);
-            }
+            // Force profile recheck to make sure new game session get boosted
+            need_profile_checkup = true;
         }
 
         if (gamestart)
@@ -700,7 +699,8 @@ int main(void) {
 
         if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
             // Bail out if we already on performance profile
-            if (cur_mode == PERFORMANCE_PROFILE)
+            // However we will pass this if need_profile_checkup was true
+            if (!need_profile_checkup && cur_mode == PERFORMANCE_PROFILE)
                 continue;
 
             // Get PID and check if the game is "real" running program
@@ -712,6 +712,7 @@ int main(void) {
             }
 
             cur_mode = PERFORMANCE_PROFILE;
+            need_profile_checkup = false;
             log_encore(LOG_INFO, "Applying performance profile for %s", gamestart);
             run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
@@ -721,6 +722,7 @@ int main(void) {
                 continue;
 
             cur_mode = POWERSAVE_PROFILE;
+            need_profile_checkup = false;
             log_encore(LOG_INFO, "Applying powersave profile");
             run_profiler(POWERSAVE_PROFILE);
         } else {
@@ -729,6 +731,7 @@ int main(void) {
                 continue;
 
             cur_mode = NORMAL_PROFILE;
+            need_profile_checkup = false;
             log_encore(LOG_INFO, "Applying normal profile");
             run_profiler(NORMAL_PROFILE);
         }
