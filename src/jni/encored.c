@@ -90,18 +90,14 @@ typedef enum : char {
  * Function Name      : ksu_grant_root
  * Inputs             : None
  * Outputs            : None
- * Returns            : char - 0 if granted successfully
- *                            -1 if request denied or error
+ * Returns            : bool - true if granted successfully
+ *                             false if request denied or error
  * Description        : Request SU permission from KernelSU via prctl.
  ***********************************************************************************/
-[[nodiscard]] char ksu_grant_root(void) {
+[[nodiscard]] bool ksu_grant_root(void) {
     uint32_t result = 0;
     prctl(0xdeadbeef, 0, 0, 0, &result);
-
-    if (result == 0xdeadbeef)
-        return 0;
-
-    return -1;
+    return result == 0xdeadbeef;
 }
 
 /***********************************************************************************
@@ -627,7 +623,7 @@ char handle_mlbb(const char* gamestart) {
 int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
-    if (getuid() != 0 && ksu_grant_root() != 0) {
+    if (getuid() != 0 && ksu_grant_root() != true) {
         fprintf(stderr, "\033[31mERROR:\033[0m Please run this daemon as root\n");
         exit(EXIT_FAILURE);
     }
