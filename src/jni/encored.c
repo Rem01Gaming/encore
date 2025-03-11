@@ -425,14 +425,13 @@ void notify(const char* message) {
  * Description        : Sets the CPU nice priority and I/O priority of a given
  *                      process.
  ***********************************************************************************/
-void set_priority(const char* pid) {
-    pid_t process_id = atoi(pid);
+void set_priority(const pid_t pid) {
     log_encore(LOG_DEBUG, "Applying priority settings for PID %s", pid);
 
-    if (setpriority(PRIO_PROCESS, process_id, -20) == -1)
+    if (setpriority(PRIO_PROCESS, pid, -20) == -1)
         log_encore(LOG_ERROR, "Unable to set nice priority for %s", pid);
 
-    if (syscall(SYS_ioprio_set, 1, process_id, (1 << 13) | 0) == -1)
+    if (syscall(SYS_ioprio_set, 1, pid, (1 << 13) | 0) == -1)
         log_encore(LOG_ERROR, "Unable to set IO priority for %s", pid);
 }
 
@@ -565,7 +564,7 @@ bool get_low_power_state(void) {
  * Description        : Fetch PID of a program
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* pidof(const char* name) {
+pid_t pidof(const char* name) {
     /*
      * It will execute something like this
      * /system/bin/toybox pgrep -o -f net.kdt.pojavlaunch
@@ -575,7 +574,13 @@ char* pidof(const char* name) {
      * 'net.kdt.pojavlaunch:launcher', which doesn't match the game package name.
      */
 
-    return execute_direct("/system/bin/toybox", "pgrep", "-o", "-f", name, NULL);
+    char* pid = execute_direct("/system/bin/toybox", "pgrep", "-o", "-f", name, NULL);
+
+    if (pid) [[clang::likely]] {
+        return atoi(pid);
+    }
+
+    return -1;
 }
 
 /***********************************************************************************
@@ -609,10 +614,9 @@ char handle_mlbb(const char* gamestart) {
     }
 
     // Fetch new PID if cache is invalid
-    char* mlbb_pid = pidof(GAME_STRESS);
-    if (mlbb_pid != NULL) {
-        cached_pid = atoi(mlbb_pid);
-        free(mlbb_pid);
+    pid_t mlbb_pid = pidof(GAME_STRESS);
+    if (mlbb_pid != -1) {
+        cached_pid = mlbb_pid;
         return 2;
     }
 
@@ -655,7 +659,8 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char *gamestart = NULL, *pid = NULL;
+    char* gamestart = NULL;
+    pid_t pid = -1;
     bool need_profile_checkup = false;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
@@ -677,9 +682,8 @@ int main(void) {
         // prevent overhead from dumpsys commands.
         if (!gamestart) {
             gamestart = get_gamestart();
-        } else if (!pid || kill(atoi(pid), 0) == -1) {
-            free(pid);
-            pid = NULL;
+        } else if (pid != -1 && kill(pid, 0) == -1) [[clang::unlikely]] {
+            pid = -1;
             free(gamestart);
             gamestart = get_gamestart();
 
@@ -699,7 +703,7 @@ int main(void) {
             // Get PID and check if the game is "real" running program
             // Handle weird behavior of MLBB
             pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
-            if (!pid) [[clang::unlikely]] {
+            if (pid == -1) [[clang::unlikely]] {
                 log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
             }
