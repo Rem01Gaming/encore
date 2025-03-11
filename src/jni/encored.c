@@ -430,11 +430,6 @@ void notify(const char* message) {
  *                      process.
  ***********************************************************************************/
 void set_priority(const char* pid) {
-    if (pid == NULL) [[clang::unlikely]] {
-        log_encore(LOG_ERROR, "set_priority() called with null PID!");
-        return;
-    }
-
     pid_t process_id = atoi(pid);
     log_encore(LOG_DEBUG, "Applying priority settings for PID %s", pid);
 
