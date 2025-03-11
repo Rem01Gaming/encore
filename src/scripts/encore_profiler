@@ -35,6 +35,28 @@ write() {
 	echo $1 >$2 2>/dev/null
 }
 
+devfreq_max_perf() {
+	[ ! -d $1 ] && return 1
+	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	apply $freq $1/max_freq
+	apply $freq $1/min_freq
+}
+
+devfreq_unlock() {
+	[ ! -d $1 ] && return 1
+	max_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	min_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	write $max_freq $1/max_freq
+	write $min_freq $1/min_freq
+}
+
+devfreq_min_perf() {
+	[ ! -d $1 ] && return 1
+	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	apply $freq $1/min_freq
+	apply $freq $1/max_freq
+}
+
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
@@ -81,8 +103,8 @@ mediatek_performance() {
 	# DRAM Frequency
 	apply "0" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	apply "performance" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
-	apply "performance" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+	devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+	devfreq_max_perf /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
 	apply "0" /sys/kernel/eara_thermal/enable
@@ -91,19 +113,19 @@ mediatek_performance() {
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
-		apply "performance" $path/governor
+		devfreq_max_perf $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
-		apply "performance" $path/governor
+		devfreq_max_perf $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
-		apply "performance" $path/governor
+		devfreq_max_perf $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
-		apply "performance" $path/governor
+		devfreq_max_perf $path
 	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
@@ -147,13 +169,7 @@ snapdragon_performance() {
 	fi
 
 	# GPU Frequency
-	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
-
-	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/max_freq
-		apply $freq $gpu_path/min_freq
-	fi
+	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
 }
 
 tegra_performance() {
@@ -182,12 +198,7 @@ exynos_performance() {
 unisoc_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-
-	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		apply $freq $gpu_path/max_freq
-		apply $freq $gpu_path/min_freq
-	fi
+	[ ! -z $gpu_path ] && devfreq_max_perf $gpu_path
 }
 
 tensor_performance() {
@@ -247,8 +258,8 @@ mediatek_normal() {
 	# DRAM Frequency
 	write "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	write "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	write "userspace" /sys/class/devfreq/mtk-dvfsrc-devfreq/governor
-	write "userspace" /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/governor
+	devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
+	devfreq_unlock /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
 	apply "1" /sys/kernel/eara_thermal/enable
@@ -257,19 +268,19 @@ mediatek_normal() {
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
-		write "compute" $path/governor
+		devfreq_unlock $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu*-lat; do
-		write "mem_latency" $path/governor
+		devfreq_unlock $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
-		write "bw_hwmon" $path/governor
+		devfreq_unlock $path
 	done &
 
 	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
-		write "bw_hwmon" $path/governor
+		devfreq_unlock $path
 	done &
 
 	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
@@ -317,14 +328,7 @@ snapdragon_normal() {
 	fi
 
 	# GPU Frequency
-	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
-
-	if [ -d $gpu_path ]; then
-		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $max_freq $gpu_path/max_freq
-		write $min_freq $gpu_path/min_freq
-	fi
+	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
 }
 
 tegra_normal() {
@@ -355,13 +359,7 @@ exynos_normal() {
 unisoc_normal() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-
-	if [ -d $gpu_path ]; then
-		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		write $max_freq $gpu_path/max_freq
-		write $min_freq $gpu_path/min_freq
-	fi
+	[ ! -z $gpu_path ] && devfreq_unlock $gpu_path
 }
 
 tensor_normal() {
@@ -400,13 +398,7 @@ mediatek_powersave() {
 
 snapdragon_powersave() {
 	# GPU Frequency
-	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
-
-	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $freq $gpu_path/min_freq
-		apply $freq $gpu_path/max_freq
-	fi
+	devfreq_min_perf /sys/class/kgsl/kgsl-3d0/devfreq
 }
 
 tegra_powersave() {
@@ -432,12 +424,7 @@ exynos_powersave() {
 unisoc_powersave() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-
-	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
-		apply $freq $gpu_path/min_freq
-		apply $freq $gpu_path/max_freq
-	fi
+	[ ! -z $gpu_path ] && devfreq_min_perf $gpu_path
 }
 
 tensor_powersave() {
@@ -618,10 +605,10 @@ performance_profile() {
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		apply performance $path/governor
+		devfreq_max_perf $path
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		apply performance $path/governor
+		devfreq_max_perf $path
 	done &
 
 	# Force CPU to highest possible OPP
@@ -723,10 +710,10 @@ normal_profile() {
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		apply simple_ondemand $path/governor
+		devfreq_unlock $path
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		apply simple_ondemand $path/governor
+		devfreq_unlock $path
 	done &
 
 	# Restore min CPU frequency
@@ -793,10 +780,10 @@ powersave_profile() {
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		apply powersave $path/governor
+		devfreq_min_perf $path
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		apply powersave $path/governor
+		devfreq_min_perf $path
 	done &
 
 	# CPU governor
