@@ -420,11 +420,11 @@ void notify(const char* message) {
 
 /***********************************************************************************
  * Function Name      : set_priority
- * Inputs             : pid (const char *) - PID as a string
+ * Inputs             : pid (pid_t) - PID to be boosted
  * Outputs            : None
  * Returns            : None
- * Description        : Sets the CPU nice priority and I/O priority of a given
- *                      process.
+ * Description        : Sets the maximum CPU nice priority and I/O priority of a
+ *                      given process.
  ***********************************************************************************/
 void set_priority(const pid_t pid) {
     log_encore(LOG_DEBUG, "Applying priority settings for PID %d", pid);
@@ -560,10 +560,10 @@ bool get_low_power_state(void) {
 /***********************************************************************************
  * Function Name      : pidof
  * Inputs             : name (char *) - Name of process
- * Outputs            : pid (char *) - PID of process
- * Returns            : PID of process
- * Description        : Fetch PID of a program
- * Note               : Caller is responsible for freeing the returned string.
+ * Outputs            : PID of process
+ * Returns            : pid (pid_t) - PID of process
+ * Description        : Fetch PID from a process name.
+ * Note               : You can input inexact name with regex as this function utilize pgrep.
  ***********************************************************************************/
 pid_t pidof(const char* name) {
     /*
