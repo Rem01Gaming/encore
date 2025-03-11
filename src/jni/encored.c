@@ -490,7 +490,7 @@ void run_profiler(const int profile) {
  *                      listed in Gamelist.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-static inline char* get_gamestart(void) {
+char* get_gamestart(void) {
     return execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo -f %s", GAMELIST);
 }
 
