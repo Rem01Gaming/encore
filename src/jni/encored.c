@@ -715,7 +715,7 @@ int main(void) {
             // Get PID and check if the game is "real" running program
             // Handle weird behavior of MLBB
             pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
-            if (pid == NULL) {
+            if (!pid) [[clang::unlikely]] {
                 log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
             }
