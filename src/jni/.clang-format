@@ -7,10 +7,8 @@ IndentWidth: 4
 UseTab: Never
 
 AlignEscapedNewlines: Left
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: Empty
-AlwaysBreakTemplateDeclarations: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
 BreakConstructorInitializers: BeforeComma
 IndentPPDirectives: BeforeHash
 PointerAlignment: Left
-AllowShortEnumsOnASingleLine: false
