@@ -453,11 +453,20 @@ void set_priority(const char* pid) {
  * Description        : Checks if the module renamed/modified by 3rd party.
  ***********************************************************************************/
 void is_kanged(void) {
-    if (systemv("grep -q '^author=Rem01Gaming$' %s", MODULE_PROP) != 0) [[clang::unlikely]] {
-        log_encore(LOG_FATAL, "Module modified by 3rd party, exiting.");
-        notify("Trying to rename me?");
-        exit(EXIT_FAILURE);
+    if (systemv("grep -q '^name=Encore Tweaks$' %s", MODULE_PROP) != 0) [[clang::unlikely]] {
+        goto doorprize;
     }
+
+    if (systemv("grep -q '^author=Rem01Gaming$' %s", MODULE_PROP) != 0) [[clang::unlikely]] {
+        goto doorprize;
+    }
+
+    return;
+
+doorprize:
+    log_encore(LOG_FATAL, "Module modified by 3rd party, exiting.");
+    notify("Trying to rename me?");
+    exit(EXIT_FAILURE);
 }
 
 /***********************************************************************************
@@ -515,7 +524,7 @@ char* get_screenstate(void) {
                                         "| awk -F'=' '{print $2}'");
     if (!screenstate) [[clang::unlikely]] {
         screenstate = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
-                                "awk -F'=' '{print $2}'");
+                                      "awk -F'=' '{print $2}'");
     }
 
     if (!screenstate) [[clang::unlikely]] {
