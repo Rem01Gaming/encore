@@ -414,7 +414,7 @@ int systemv(const char* format, ...) {
  * Returns            : None
  * Description        : Push a notification.
  ***********************************************************************************/
-static inline void notify(const char* message) {
+void notify(const char* message) {
     int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
 
     if (exit != 0)
