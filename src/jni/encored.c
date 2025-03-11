@@ -502,18 +502,18 @@ static inline char* get_gamestart(void) {
  * Function Name      : get_screenstate
  * Inputs             : None
  * Outputs            : None
- * Returns            : char* ("Awake" or "Asleep" based on screen state)
- * Description        : Retrieves the current screen wakefulness state (Awake or Asleep).
- *                      If not available, falls back to checking if the device is awake
- *                      through an alternative dumpsys window command.
- * Note               : Caller is responsible for freeing the returned string.
+ * Returns            : bool - true if screen was awake
+ *                             false if screen was asleep
+ * Description        : Retrieves the current screen wakefulness state from dumpsys command.
+ *                      In repeated failures up to 6, this function will skip dumpsys routine
+ *                      and just return true all time.
  ***********************************************************************************/
-char* get_screenstate(void) {
+bool get_screenstate(void) {
     static char screenstate_fail = 0;
 
     // Set default state after too many failures
     if (screenstate_fail == 6)
-        return strdup("Awake");
+        return true;
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                         "| awk -F'=' '{print $2}'");
@@ -522,38 +522,43 @@ char* get_screenstate(void) {
                                       "awk -F'=' '{print $2}'");
     }
 
-    if (!screenstate) [[clang::unlikely]] {
-        screenstate_fail++;
-        log_encore(LOG_ERROR, "Unable to get current screenstate, assuming it was awake.");
-
-        if (screenstate_fail == 6)
-            log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
-
-        return strdup("Awake");
+    if (screenstate) [[clang::likely]] {
+        screenstate_fail = 0;
+        return IS_AWAKE(screenstate);
     }
 
-    screenstate_fail = 0;
-    return screenstate;
+    screenstate_fail++;
+    log_encore(LOG_ERROR, "Unable to get current screenstate, assuming it was awake.");
+
+    if (screenstate_fail == 6)
+        log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
+
+    return true;
 }
 
 /***********************************************************************************
  * Function Name      : get_low_power_state
  * Inputs             : None
  * Outputs            : None
- * Returns            : char* ("true" or "1" if Battery Saver is enabled, "false" otherwise)
+ * Returns            : bool - true if Battery Saver is enabled
+ *                             false otherwise
  * Description        : Checks if the device's Battery Saver mode is enabled by using
  *                      dumpsys power and filtering for the battery saver status.
  *                      Useful for determining low-power states.
- * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* get_low_power_state(void) {
+bool get_low_power_state(void) {
     char* low_power = execute_direct("/system/bin/settings", "settings", "get", "global", "low_power", NULL);
     if (!low_power) [[clang::unlikely]] {
         low_power = execute_command("dumpsys power | grep -Eo "
                                     "'mSettingBatterySaverEnabled=true|mSettingBatterySaverEnabled=false' | "
                                     "awk -F'=' '{print $2}'");
     }
-    return low_power;
+
+    if (low_power) [[clang::likely]] {
+        return IS_LOW_POWER(low_power);
+    }
+
+    return false;
 }
 
 /***********************************************************************************
@@ -654,7 +659,7 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char *gamestart = NULL, *screenstate = NULL, *low_power = NULL, *pid = NULL;
+    char *gamestart = NULL, *pid = NULL;
     bool need_profile_checkup = false;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
@@ -672,27 +677,15 @@ int main(void) {
             break;
         }
 
-        // Reset low power state
-        if (low_power) {
-            free(low_power);
-            low_power = NULL;
-        }
-
-        // Fetch screen state
-        free(screenstate);
-        screenstate = get_screenstate();
-
-        // Only fetch gamestart and low_power state when user not in-game
+        // Only fetch gamestart when user not in-game
         // prevent overhead from dumpsys commands.
         if (!gamestart) {
             gamestart = get_gamestart();
-            low_power = get_low_power_state();
         } else if (!pid || kill(atoi(pid), 0) == -1) {
             free(pid);
             pid = NULL;
             free(gamestart);
             gamestart = get_gamestart();
-            low_power = get_low_power_state();
 
             // Force profile recheck to make sure new game session get boosted
             need_profile_checkup = true;
@@ -701,7 +694,7 @@ int main(void) {
         if (gamestart)
             mlbb_is_running = handle_mlbb(gamestart);
 
-        if (gamestart && IS_AWAKE(screenstate) && mlbb_is_running != MLBB_RUN_BG) {
+        if (gamestart && get_screenstate() && mlbb_is_running != MLBB_RUN_BG) {
             // Bail out if we already on performance profile
             // However we will pass this if need_profile_checkup was true
             if (!need_profile_checkup && cur_mode == PERFORMANCE_PROFILE)
@@ -720,7 +713,7 @@ int main(void) {
             log_encore(LOG_INFO, "Applying performance profile for %s", gamestart);
             run_profiler(PERFORMANCE_PROFILE);
             set_priority(pid);
-        } else if (low_power && IS_LOW_POWER(low_power)) {
+        } else if (get_low_power_state()) {
             // Bail out if we already on powersave profile
             if (cur_mode == POWERSAVE_PROFILE)
                 continue;
