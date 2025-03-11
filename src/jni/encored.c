@@ -565,7 +565,7 @@ bool get_low_power_state(void) {
  * Description        : Fetch PID of a program
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-static inline char* pidof(const char* name) {
+char* pidof(const char* name) {
     /*
      * It will execute something like this
      * /system/bin/toybox pgrep -o -f net.kdt.pojavlaunch
