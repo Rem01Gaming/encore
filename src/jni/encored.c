@@ -171,12 +171,13 @@ char write2file(const char* file_path, const char* content, const char mode) {
     }
 
     FILE* file = fopen(file_path, write_mode);
-    if (file == NULL)
-        return -1;
+    if (file) [[clang::likely]] {
+        fprintf(file, "%s\n", content);
+        fclose(file);
+        return 0;
+    }
 
-    fprintf(file, "%s\n", content);
-    fclose(file);
-    return 0;
+    return -1;
 }
 
 /***********************************************************************************
