@@ -605,23 +605,19 @@ char handle_mlbb(const char* gamestart) {
 
     // Check if cached PID is still valid
     if (cached_pid != -1) {
-        // Does MLBB is still running?
         if (kill(cached_pid, 0) == 0) [[clang::likely]] {
             return 2;
         }
 
-        // Process died, reset cache
         cached_pid = -1;
     }
 
     // Fetch new PID if cache is invalid
-    pid_t mlbb_pid = pidof(GAME_STRESS);
-    if (mlbb_pid != -1) {
-        cached_pid = mlbb_pid;
+    cached_pid = pidof(GAME_STRESS);
+    if (cached_pid != -1)
         return 2;
-    }
 
-    // MLBB is in background
+    // MLBB is in the background
     return 1;
 }
 
