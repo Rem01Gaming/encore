@@ -682,6 +682,7 @@ int main(void) {
         // Only fetch gamestart when user not in-game
         // prevent overhead from dumpsys commands.
         if (!gamestart) {
+            free(gamestart);
             gamestart = get_gamestart();
         } else if (pid != -1 && kill(pid, 0) == -1) [[clang::unlikely]] {
             pid = -1;
