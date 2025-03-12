@@ -118,16 +118,31 @@ snapdragon_performance() {
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		devfreq_max_perf $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu*-lat; do
+	for path in /sys/class/devfreq/*cpu*-lat*; do
 		devfreq_max_perf $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
+	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw*; do
 		devfreq_max_perf $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
+	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*llccbw*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*bus_llcc*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*bus_ddr*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*l3-*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*memlat*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_max_perf $path
 	done &
 
@@ -171,8 +186,24 @@ snapdragon_performance() {
 		done &
 	fi
 
-	# GPU Frequency
+	# GPU, memory and bus frequency tweak
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
+
+	for path in /sys/class/devfreq/*gpubw*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*kgsl-busmon*; do
+		devfreq_max_perf $path
+	done &
+	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
+		devfreq_max_perf $path
+	done &
+
+	# Disable GPU Bus split
+	apply 0 /sys/class/kgsl/kgsl-3d0/bus_split
+
+	# Force GPU clock on
+	apply 1 /sys/class/kgsl/kgsl-3d0/force_clk_on
 }
 
 tegra_performance() {
@@ -276,16 +307,31 @@ snapdragon_normal() {
 	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
 		devfreq_unlock $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu*-lat; do
+	for path in /sys/class/devfreq/*cpu*-lat*; do
 		devfreq_unlock $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw; do
+	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw*; do
 		devfreq_unlock $path
 	done &
-
-	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw; do
+	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*llccbw*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*bus_llcc*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*bus_ddr*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*l3-*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*memlat*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_unlock $path
 	done &
 
@@ -333,8 +379,24 @@ snapdragon_normal() {
 		done &
 	fi
 
-	# GPU Frequency
+	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
+
+	for path in /sys/class/devfreq/*gpubw*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*kgsl-busmon*; do
+		devfreq_unlock $path
+	done &
+	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
+		devfreq_unlock $path
+	done &
+
+	# Enable back GPU Bus split
+	apply 1 /sys/class/kgsl/kgsl-3d0/bus_split
+
+	# Free GPU clock on/off
+	apply 0 /sys/class/kgsl/kgsl-3d0/force_clk_on
 }
 
 tegra_normal() {
