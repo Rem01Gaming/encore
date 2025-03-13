@@ -130,9 +130,6 @@ snapdragon_performance() {
 	for path in /sys/class/devfreq/*bus_ddr*; do
 		devfreq_max_perf $path
 	done &
-	for path in /sys/class/devfreq/*l3-*; do
-		devfreq_max_perf $path
-	done &
 	for path in /sys/class/devfreq/*memlat*; do
 		devfreq_max_perf $path
 	done &
@@ -308,9 +305,6 @@ snapdragon_normal() {
 		devfreq_unlock $path
 	done &
 	for path in /sys/class/devfreq/*bus_ddr*; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/class/devfreq/*l3-*; do
 		devfreq_unlock $path
 	done &
 	for path in /sys/class/devfreq/*memlat*; do
