@@ -511,6 +511,13 @@ perfcommon() {
 	# Push Notification
 	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'encore' 'Tweaks successfully applied'" >/dev/null &
 
+	# Disable PPM policy SYS_BOOST to prevent buggy CPU freq behavior
+	if [ -d /proc/ppm ]; then
+		for idx in $(cat /proc/ppm/policy_status | grep -E 'SYS_BOOST' | awk -F'[][]' '{print $2}'); do
+			apply "$idx 0" /proc/ppm/policy_status
+		done
+	fi
+
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
 		# Disable I/O statistics accounting
