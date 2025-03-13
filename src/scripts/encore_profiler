@@ -115,16 +115,10 @@ mediatek_performance() {
 
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
+	for path in /sys/class/devfreq/*cpu*-lat; do
 		devfreq_max_perf $path
 	done &
-	for path in /sys/class/devfreq/*cpu*-lat*; do
-		devfreq_max_perf $path
-	done &
-	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw*; do
-		devfreq_max_perf $path
-	done &
-	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw*; do
+	for path in /sys/class/devfreq/*cpu*-bw; do
 		devfreq_max_perf $path
 	done &
 	for path in /sys/class/devfreq/*llccbw*; do
@@ -190,9 +184,6 @@ snapdragon_performance() {
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
 
 	for path in /sys/class/devfreq/*gpubw*; do
-		devfreq_max_perf $path
-	done &
-	for path in /sys/class/devfreq/*kgsl-busmon*; do
 		devfreq_max_perf $path
 	done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
@@ -304,16 +295,10 @@ mediatek_normal() {
 
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	for path in /sys/class/devfreq/*cpu-ddr-latfloor*; do
+	for path in /sys/class/devfreq/*cpu*-lat; do
 		devfreq_unlock $path
 	done &
-	for path in /sys/class/devfreq/*cpu*-lat*; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/class/devfreq/*cpu-cpu-ddr-bw*; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/class/devfreq/*cpu-cpu-llcc-bw*; do
+	for path in /sys/class/devfreq/*cpu*-bw; do
 		devfreq_unlock $path
 	done &
 	for path in /sys/class/devfreq/*llccbw*; do
@@ -383,9 +368,6 @@ snapdragon_normal() {
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
 
 	for path in /sys/class/devfreq/*gpubw*; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/class/devfreq/*kgsl-busmon*; do
 		devfreq_unlock $path
 	done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
