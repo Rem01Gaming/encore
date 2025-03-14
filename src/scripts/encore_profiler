@@ -107,7 +107,6 @@ mediatek_performance() {
 	apply "0" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
-	devfreq_max_perf /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
 	apply "0" /sys/kernel/eara_thermal/enable
@@ -295,7 +294,6 @@ mediatek_normal() {
 	write "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	write "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
-	devfreq_unlock /sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
 	apply "1" /sys/kernel/eara_thermal/enable
