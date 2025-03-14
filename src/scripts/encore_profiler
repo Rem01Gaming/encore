@@ -180,9 +180,10 @@ snapdragon_performance() {
 	# GPU, memory and bus frequency tweak
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
 
-	for path in /sys/class/devfreq/*gpubw*; do
-		devfreq_max_perf $path
-	done &
+	# Commented due causing random reboot in Realme 5i
+	#for path in /sys/class/devfreq/*gpubw*; do
+	#	devfreq_max_perf $path
+	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
 		devfreq_max_perf $path
 	done &
@@ -371,9 +372,10 @@ snapdragon_normal() {
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
 
-	for path in /sys/class/devfreq/*gpubw*; do
-		devfreq_unlock $path
-	done &
+	# Commented due causing random reboot in Realme 5i
+	#for path in /sys/class/devfreq/*gpubw*; do
+	#	devfreq_unlock $path
+	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
 		devfreq_unlock $path
 	done &
