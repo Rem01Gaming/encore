@@ -216,11 +216,8 @@ exynos_performance() {
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
 	apply always_on $mali_sysfs/power_policy
 
-	# DRAM and Interconnect Bus Frequency
-	for path in /sys/devices/platform/*.devfreq_mif/devfreq/*.devfreq_mif; do
-		devfreq_max_perf $path
-	done &
-	for path in /sys/devices/platform/*.devfreq_int/devfreq/*.devfreq_int; do
+	# DRAM and Buses Frequency
+	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
 		devfreq_max_perf $path
 	done &
 }
@@ -241,11 +238,8 @@ tensor_performance() {
 		apply $freq $gpu_path/scaling_min_freq
 	fi
 
-	# DRAM and Interconnect Bus Frequency
-	for path in /sys/devices/platform/*.devfreq_mif/devfreq/*.devfreq_mif; do
-		devfreq_max_perf $path
-	done &
-	for path in /sys/devices/platform/*.devfreq_int/devfreq/*.devfreq_int; do
+	# DRAM and Buses Frequency
+	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
 		devfreq_max_perf $path
 	done &
 }
@@ -415,11 +409,8 @@ exynos_normal() {
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
 	apply coarse_demand $mali_sysfs/power_policy
 
-	# DRAM and Interconnect Bus Frequency
-	for path in /sys/devices/platform/*.devfreq_mif/devfreq/*.devfreq_mif; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/devices/platform/*.devfreq_int/devfreq/*.devfreq_int; do
+	# DRAM and Buses Frequency
+	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
 		devfreq_unlock $path
 	done &
 }
@@ -441,11 +432,8 @@ tensor_normal() {
 		write $min_freq $gpu_path/scaling_min_freq
 	fi
 
-	# DRAM and Interconnect Bus Frequency
-	for path in /sys/devices/platform/*.devfreq_mif/devfreq/*.devfreq_mif; do
-		devfreq_unlock $path
-	done &
-	for path in /sys/devices/platform/*.devfreq_int/devfreq/*.devfreq_int; do
+	# DRAM and Buses Frequency
+	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
 		devfreq_unlock $path
 	done &
 }
