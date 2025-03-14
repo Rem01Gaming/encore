@@ -36,14 +36,14 @@ write() {
 }
 
 devfreq_max_perf() {
-	[ ! -d $1 ] && return 1
+	[ ! -f $1/available_frequencies ] && return 1
 	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 	apply $freq $1/max_freq
 	apply $freq $1/min_freq
 }
 
 devfreq_unlock() {
-	[ ! -d $1 ] && return 1
+	[ ! -f $1/available_frequencies ] && return 1
 	max_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
 	min_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
 	write $max_freq $1/max_freq
@@ -51,7 +51,7 @@ devfreq_unlock() {
 }
 
 devfreq_min_perf() {
-	[ ! -d $1 ] && return 1
+	[ ! -f $1/available_frequencies ] && return 1
 	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
 	apply $freq $1/min_freq
 	apply $freq $1/max_freq
