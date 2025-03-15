@@ -25,8 +25,8 @@ set_dnd() {
 	case $1 in
 	# Turn off DND mode
 	0) cmd notification set_dnd off ;;
-	# Turn on DND mode and stop playback media
-	1) cmd notification set_dnd priority && input keyevent 85 ;;
+	# Turn on DND mode
+	1) cmd notification set_dnd priority ;;
 	esac
 }
 
