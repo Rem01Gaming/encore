@@ -57,6 +57,28 @@ devfreq_min_perf() {
 	apply $freq $1/max_freq
 }
 
+samsung_devfreq_max_perf() {
+	[ ! -f $1/available_frequencies ] && return 1
+	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	apply $freq $1/scaling_devfreq_max
+	apply $freq $1/scaling_devfreq_min
+}
+
+samsung_devfreq_unlock() {
+	[ ! -f $1/available_frequencies ] && return 1
+	max_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	min_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	write $max_freq $1/scaling_devfreq_max
+	write $min_freq $1/scaling_devfreq_min
+}
+
+samsung_devfreq_min_perf() {
+	[ ! -f $1/available_frequencies ] && return 1
+	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	apply $freq $1/scaling_devfreq_min
+	apply $freq $1/scaling_devfreq_max
+}
+
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
@@ -218,7 +240,7 @@ exynos_performance() {
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf $path
+		samsung_devfreq_max_perf $path
 	done &
 }
 
@@ -411,7 +433,7 @@ exynos_normal() {
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock $path
+		samsung_devfreq_unlock $path
 	done &
 }
 
