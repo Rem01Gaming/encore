@@ -30,13 +30,17 @@
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
-#define GAME_STRESS "com.mobile.legends:UnityKillsMe|com.mobilelegends.hwag:UnityKillsMe"
+#define GAME_STRESS "com.mobile.legends:UnityKillsMe|com.mobiin.gp:UnityKillsMe|com.mobilelegends.hwag:UnityKillsMe"
 #define MAX_COMMAND_LENGTH 600
 #define MAX_OUTPUT_LENGTH 256
 
 #define MY_PATH                                                                                                                    \
     "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
     "xbin:/data/data/com.termux/files/usr/bin"
+
+#define IS_MLBB(gamestart)                                                                               \
+    (strcmp(gamestart, "com.mobile.legends") == 0 || strcmp(gamestart, "com.mobilelegends.hwag") == 0 || \
+     strcmp(gamestart, "com.mobiin.gp") == 0)
 
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
@@ -599,7 +603,7 @@ char handle_mlbb(const char* gamestart) {
     static pid_t cached_pid = -1;
 
     // Is Gamestart MLBB?
-    if (strcmp(gamestart, "com.mobile.legends") != 0 && strcmp(gamestart, "com.mobilelegends.hwag") != 0) {
+    if (IS_MLBB(gamestart) != true) {
         cached_pid = -1;
         return 0;
     }
