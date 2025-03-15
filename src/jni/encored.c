@@ -414,8 +414,9 @@ int systemv(const char* format, ...) {
 void notify(const char* message) {
     int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
 
-    if (exit != 0)
+    if (exit != 0) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "Unable to post push notification, message: %s", message);
+    }
 }
 
 /***********************************************************************************
