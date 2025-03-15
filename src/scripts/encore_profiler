@@ -158,46 +158,6 @@ snapdragon_performance() {
 		devfreq_max_perf $path
 	done &
 
-	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
-			apply $freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
-			apply $freq $path
-		done &
-	fi
-
 	# GPU, memory and bus frequency tweak
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
 
@@ -344,50 +304,6 @@ snapdragon_normal() {
 	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_unlock $path
 	done &
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/LLCC ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/LLCC/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/max_freq; do
-			write $max_freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/LLCC/*/min_freq; do
-			write $min_freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/L3 ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/L3/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/max_freq; do
-			write $max_freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/L3/*/min_freq; do
-			write $min_freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDR ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDR/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/max_freq; do
-			write $max_freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDR/*/min_freq; do
-			write $min_freq $path
-		done &
-	fi
-
-	if [ -d /sys/devices/system/cpu/bus_dcvs/DDRQOS ]; then
-		max_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat /sys/devices/system/cpu/bus_dcvs/DDRQOS/available_frequencies | tr ' ' '\n' | sort -n | head -n 1)
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/max_freq; do
-			write $max_freq $path
-		done &
-		for path in /sys/devices/system/cpu/bus_dcvs/DDRQOS/*/min_freq; do
-			write $min_freq $path
-		done &
-	fi
 
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
