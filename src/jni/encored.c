@@ -112,7 +112,7 @@ typedef enum : char {
  * Description        : Trims a newline character at the end of a string if
  *                      present.
  ***********************************************************************************/
-[[gnu::always_inline]] static inline char* trim_newline(char* string) {
+[[gnu::always_inline]] char* trim_newline(char* string) {
     if (string == NULL)
         return NULL;
 
