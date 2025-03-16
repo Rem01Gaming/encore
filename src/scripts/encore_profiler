@@ -37,44 +37,44 @@ write() {
 
 devfreq_max_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
 	apply $freq $1/max_freq
 	apply $freq $1/min_freq
 }
 
 devfreq_unlock() {
 	[ ! -f $1/available_frequencies ] && return 1
-	max_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-	min_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	max_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
+	min_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
 	write $max_freq $1/max_freq
 	write $min_freq $1/min_freq
 }
 
 devfreq_min_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
 	apply $freq $1/min_freq
 	apply $freq $1/max_freq
 }
 
 samsung_devfreq_max_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
 	apply $freq $1/scaling_devfreq_max
 	apply $freq $1/scaling_devfreq_min
 }
 
 samsung_devfreq_unlock() {
 	[ ! -f $1/available_frequencies ] && return 1
-	max_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-	min_freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	max_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
+	min_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
 	write $max_freq $1/scaling_devfreq_max
 	write $min_freq $1/scaling_devfreq_min
 }
 
 samsung_devfreq_min_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(cat $1/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
 	apply $freq $1/scaling_devfreq_min
 	apply $freq $1/scaling_devfreq_max
 }
