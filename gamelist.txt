@@ -13,6 +13,7 @@ com.GameCoaster.ProtectDungeon
 com.HoYoverse.Nap
 com.HoYoverse.hkrpgoversea
 com.LanPiaoPiao.PlantsVsZombiesRH
+com.OxGames.Pluvia
 com.PigeonGames.Phigros
 com.ProjectMoon.LimbusCompany
 com.Psyonix.RL2D
