@@ -686,6 +686,7 @@ int main(void) {
         if (!gamestart) {
             gamestart = get_gamestart();
         } else if (pid != -1 && kill(pid, 0) == -1) [[clang::unlikely]] {
+            log_encore(LOG_INFO, "Process %d exited, resetting profile...", pid);
             pid = -1;
             free(gamestart);
             gamestart = get_gamestart();
@@ -707,6 +708,7 @@ int main(void) {
             // Handle weird behavior of MLBB
             pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
             if (pid == -1) [[clang::unlikely]] {
+                free(gamestart);
                 log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
             }
