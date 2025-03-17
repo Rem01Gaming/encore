@@ -27,6 +27,7 @@
 #define LOOP_INTERVAL 15
 #define LOCK_FILE "/data/encore/encore.lock"
 #define LOG_FILE "/dev/encore_log"
+#define PROFILE_MODE "/dev/encore_mode"
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
@@ -479,7 +480,7 @@ void run_profiler(const int profile) {
     is_kanged();
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
-    write2file("/dev/encore_mode", profile_str, 0);
+    write2file(PROFILE_MODE, profile_str, 0);
     (void)systemv("encore_profiler %d", profile);
 }
 
