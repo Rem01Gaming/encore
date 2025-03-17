@@ -708,9 +708,9 @@ int main(void) {
             // Handle weird behavior of MLBB
             pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
             if (pid == -1) [[clang::unlikely]] {
+                log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 free(gamestart);
                 gamestart = NULL;
-                log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 continue;
             }
 
