@@ -92,7 +92,7 @@ change_cpu_gov() {
 mediatek_performance() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(cat /proc/ppm/policy_status | grep -E 'PWR_THRO|THERMAL|SYS_BOOST' | awk -F'[][]' '{print $2}'); do
+		for idx in $(awk -F'[][]' '/PWR_THRO|THERMAL|SYS_BOOST/{print $2}' /proc/ppm/policy_status); do
 			apply "$idx 0" /proc/ppm/policy_status
 		done
 	fi
@@ -237,7 +237,7 @@ intel_performance() {
 mediatek_normal() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(cat /proc/ppm/policy_status | grep -E 'PWR_THRO|THERMAL|SYS_BOOST' | awk -F'[][]' '{print $2}'); do
+		for idx in $(awk -F'[][]' '/PWR_THRO|THERMAL|SYS_BOOST/{print $2}' /proc/ppm/policy_status); do
 			apply "$idx 1" /proc/ppm/policy_status
 		done
 	fi
