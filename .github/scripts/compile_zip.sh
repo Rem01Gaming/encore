@@ -29,7 +29,7 @@ sed -i "s/version=.*/version=$version ($release_code)/" module/module.prop
 sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 
 # Compile Gamelist
-bash gamelist_compile.sh
+paste -sd '|' - <"$GITHUB_WORKSPACE/gamelist.txt" >"$GITHUB_WORKSPACE/module/gamelist.txt"
 
 # Copy module files
 cp -r ./src/libs module
