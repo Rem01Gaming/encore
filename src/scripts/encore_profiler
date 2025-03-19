@@ -109,7 +109,7 @@ mediatek_performance() {
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		gpu_freq="$(cat /proc/gpufreq/gpufreq_opp_dump | grep -o 'freq = [0-9]*' | sed 's/freq = //' | sort -nr | head -n 1)"
+		gpu_freq="$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)"
 		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 	elif [ -d /proc/gpufreqv2 ]; then
 		apply 0 /proc/gpufreqv2/fix_target_opp_index
@@ -390,7 +390,7 @@ mediatek_powersave() {
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		gpu_freq="$(cat /proc/gpufreq/gpufreq_opp_dump | grep -o 'freq = [0-9]*' | sed 's/freq = //' | sort -n | head -n 1)"
+		gpu_freq="$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -n | head -n 1)"
 		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 	elif [ -d /proc/gpufreqv2 ]; then
 		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
