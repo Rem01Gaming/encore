@@ -70,7 +70,6 @@ typedef enum : char {
 /***********************************************************************************
  * Function Name      : create_lock_file
  * Inputs             : None
- * Outputs            : None
  * Returns            : char - 0 if lock file created successfully
  *                            -1 if another instance running
  * Description        : Create lock file and check if there's any another instance of
@@ -94,7 +93,6 @@ typedef enum : char {
 /***********************************************************************************
  * Function Name      : ksu_grant_root
  * Inputs             : None
- * Outputs            : None
  * Returns            : bool - true if granted successfully
  *                             false if request denied or error
  * Description        : Request SU permission from KernelSU via prctl.
@@ -108,8 +106,7 @@ typedef enum : char {
 /***********************************************************************************
  * Function Name      : trim_newline
  * Inputs             : str (char *) - string to trim newline from
- * Outputs            : str (char *) - string without newline
- * Returns            : char * - pointer to the modified string
+ * Returns            : char * - string without newline
  * Description        : Trims a newline character at the end of a string if
  *                      present.
  ***********************************************************************************/
@@ -127,7 +124,6 @@ typedef enum : char {
 /***********************************************************************************
  * Function Name      : timern
  * Inputs             : None
- * Outputs            : Formatted timestamp
  * Returns            : char * - pointer to a statically allocated string
  *                      with the formatted time.
  * Description        : Generates a timestamp with the format
@@ -156,7 +152,6 @@ char* timern(void) {
  * Inputs             : file_path (const char *) - path to the file
  *                      content (const char *) - content to write
  *                      mode (const char) - 1 for append and 0 for write
- * Outputs            : None
  * Returns            : char - 0 if write successful
  *                            -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
@@ -190,7 +185,6 @@ char write2file(const char* file_path, const char* content, const char mode) {
  * Inputs             : level - Log level
  *                      message (const char *) - message to log
  *                      variadic arguments - additional arguments for message
- * Outputs            : None
  * Returns            : None
  * Description        : print and logs a formatted message with a timestamp
  *                      to a log file.
@@ -213,7 +207,6 @@ void log_encore(LogLevel level, const char* message, ...) {
 /***********************************************************************************
  * Function Name      : sighandler
  * Inputs             : int signal - exit signal
- * Outputs            : None
  * Returns            : None
  * Description        : Handle exit signal.
  ***********************************************************************************/
@@ -234,9 +227,7 @@ void log_encore(LogLevel level, const char* message, ...) {
 /***********************************************************************************
  * Function Name      : execute_command
  * Inputs             : command (const char *) - shell command to execute
- * Outputs            : None
- * Returns            : char * - pointer to the dynamically allocated output of
- *                      the command execution
+ * Returns            : char * - Pointer to the dynamically allocated output of the command
  *                      variadic arguments - Additional arguments for command
  * Description        : Executes a shell command and captures its output.
  ***********************************************************************************/
@@ -300,7 +291,6 @@ char* execute_command(const char* format, ...) {
  * Inputs             : path (const char *) - Path to the executable
  *                      arg0 (const char *) - First argument (typically the program name)
  *                      variadic arguments - Additional arguments, must end with NULL
- * Outputs            : None
  * Returns            : char * - Pointer to the dynamically allocated output of the command
  * Description        : Executes a binary directly with specified arguments and captures output.
  * Note               : Caller is responsible for freeing the returned string.
@@ -371,10 +361,9 @@ char* execute_direct(const char* path, const char* arg0, ...) {
  * Function Name      : systemv
  * Inputs             : format (const char *) - shell command to execute
  *                      variadic arguments - other arguments
- * Outputs            : None
  * Returns            : int - 0 if execution success
  *                           -1 if execution failed
- *                            * otherwise if command returns an error
+ *                            * other if command returns an error
  * Description        : Executes a shell command just like system() with additional format.
  ***********************************************************************************/
 [[nodiscard("Shell command can be faulty and you should check it's returns!")]]
@@ -412,7 +401,6 @@ int systemv(const char* format, ...) {
 /***********************************************************************************
  * Function Name      : notify
  * Inputs             : message (char *) - Message to display
- * Outputs            : None
  * Returns            : None
  * Description        : Push a notification.
  ***********************************************************************************/
@@ -427,7 +415,6 @@ void notify(const char* message) {
 /***********************************************************************************
  * Function Name      : set_priority
  * Inputs             : pid (pid_t) - PID to be boosted
- * Outputs            : None
  * Returns            : None
  * Description        : Sets the maximum CPU nice priority and I/O priority of a
  *                      given process.
@@ -445,7 +432,6 @@ void set_priority(const pid_t pid) {
 /***********************************************************************************
  * Function Name      : is_kanged
  * Inputs             : None
- * Outputs            : None
  * Returns            : None
  * Description        : Checks if the module renamed/modified by 3rd party.
  ***********************************************************************************/
@@ -472,7 +458,6 @@ doorprize:
  *                            1 for performance
  *                            2 for normal
  *                            3 for powersave
- * Outputs            : None
  * Returns            : None
  * Description        : Switch to specified performance profile.
  ***********************************************************************************/
@@ -487,7 +472,6 @@ void run_profiler(const int profile) {
 /***********************************************************************************
  * Function Name      : get_gamestart
  * Inputs             : None
- * Outputs            : None
  * Returns            : char* (dynamically allocated string with the game package name)
  * Description        : Searches for the currently visible application that matches
  *                      any package name listed in /data/encore/gamelist.txt.
@@ -503,7 +487,6 @@ char* get_gamestart(void) {
 /***********************************************************************************
  * Function Name      : get_screenstate
  * Inputs             : None
- * Outputs            : None
  * Returns            : bool - true if screen was awake
  *                             false if screen was asleep
  * Description        : Retrieves the current screen wakefulness state from dumpsys command.
@@ -541,7 +524,6 @@ bool get_screenstate(void) {
 /***********************************************************************************
  * Function Name      : get_low_power_state
  * Inputs             : None
- * Outputs            : None
  * Returns            : bool - true if Battery Saver is enabled
  *                             false otherwise
  * Description        : Checks if the device's Battery Saver mode is enabled by using
@@ -566,7 +548,6 @@ bool get_low_power_state(void) {
 /***********************************************************************************
  * Function Name      : pidof
  * Inputs             : name (char *) - Name of process
- * Outputs            : PID of process
  * Returns            : pid (pid_t) - PID of process
  * Description        : Fetch PID from a process name.
  * Note               : You can input inexact name with regex as this function utilize pgrep.
@@ -593,7 +574,6 @@ pid_t pidof(const char* name) {
 /***********************************************************************************
  * Function Name      : handle_mlbb
  * Inputs             : const char *gamestart - Game package name
- * Outputs            : None
  * Returns            : char - 2 if MLBB is running in foreground
  *                             1 if MLBB is running in background
  *                             0 if gamestart is not MLBB
