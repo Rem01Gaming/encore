@@ -67,6 +67,13 @@ typedef enum : char {
     MLBB_RUNNING = 2
 } MLBBState;
 
+// Function pointer for fetch screenstate function, see function comment on
+// get_screenstate_normal and get_screenstate_fallback for more info.
+// Why do this? it save some CPU cycles per iteration checks.
+bool get_screenstate_normal(void);
+bool get_screenstate_fallback(void);
+bool (*get_screenstate)(void) = get_screenstate_normal;
+
 /***********************************************************************************
  * Function Name      : create_lock_file
  * Inputs             : None
@@ -485,20 +492,28 @@ char* get_gamestart(void) {
 }
 
 /***********************************************************************************
- * Function Name      : get_screenstate
+ * Function Name      : get_screenstate_fallback
+ * Inputs             : None
+ * Returns            : bool - only true
+ * Description        : Error fallback for function get_screenstate(), will be used on repeated
+ *                      dumpsys error via function pointer.
+ * Note               : Never call this function.
+ ***********************************************************************************/
+bool get_screenstate_fallback(void) {
+    return true;
+}
+
+/***********************************************************************************
+ * Function Name      : get_screenstate_normal
  * Inputs             : None
  * Returns            : bool - true if screen was awake
  *                             false if screen was asleep
  * Description        : Retrieves the current screen wakefulness state from dumpsys command.
- *                      In repeated failures up to 6, this function will skip dumpsys routine
- *                      and just return true all time.
+ * Note               : In repeated failures up to 6, this function will skip dumpsys routine
+ *                      and just return true all time using function pointer.
  ***********************************************************************************/
-bool get_screenstate(void) {
+bool get_screenstate_normal(void) {
     static char screenstate_fail = 0;
-
-    // Set default state after too many failures
-    if (screenstate_fail == 6)
-        return true;
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                         "| awk -F'=' '{print $2}'");
@@ -515,8 +530,12 @@ bool get_screenstate(void) {
     screenstate_fail++;
     log_encore(LOG_ERROR, "Unable to get current screenstate, assuming it was awake.");
 
-    if (screenstate_fail == 6)
+    if (screenstate_fail == 6) {
         log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
+
+        // Set default state after too many failures via function pointer
+        get_screenstate = get_screenstate_fallback;
+    }
 
     return true;
 }
