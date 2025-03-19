@@ -112,7 +112,7 @@ mediatek_performance() {
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	echo "0" | tee /sys/devices/platform/*.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp >/dev/null
+	apply "0" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
 
@@ -259,7 +259,7 @@ mediatek_normal() {
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	echo "-1" | tee /sys/devices/platform/*.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp >/dev/null
+	write "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
 	write "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
 
