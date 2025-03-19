@@ -40,7 +40,7 @@ which_maxfreq() {
 }
 
 which_minfreq() {
-	tr ' ' '\n' <"$1" | sort -n | head -n 1
+	tr ' ' '\n' <"$1" | grep -v '^[[:space:]]*$' | sort -n | head -n 1
 }
 
 devfreq_max_perf() {
