@@ -35,46 +35,54 @@ write() {
 	echo $1 >$2 2>/dev/null
 }
 
+which_maxfreq() {
+	tr ' ' '\n' <"$1" | sort -nr | head -n 1
+}
+
+which_minfreq() {
+	tr ' ' '\n' <"$1" | sort -n | head -n 1
+}
+
 devfreq_max_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
+	freq=$(which_maxfreq "$1/available_frequencies")
 	apply $freq $1/max_freq
 	apply $freq $1/min_freq
 }
 
 devfreq_unlock() {
 	[ ! -f $1/available_frequencies ] && return 1
-	max_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
-	min_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	min_freq=$(which_minfreq "$1/available_frequencies")
 	write $max_freq $1/max_freq
 	write $min_freq $1/min_freq
 }
 
 devfreq_min_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
+	freq=$(which_minfreq "$1/available_frequencies")
 	apply $freq $1/min_freq
 	apply $freq $1/max_freq
 }
 
 samsung_devfreq_max_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
+	freq=$(which_maxfreq "$1/available_frequencies")
 	apply $freq $1/scaling_devfreq_max
 	apply $freq $1/scaling_devfreq_min
 }
 
 samsung_devfreq_unlock() {
 	[ ! -f $1/available_frequencies ] && return 1
-	max_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -nr | head -n 1)
-	min_freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	min_freq=$(which_minfreq "$1/available_frequencies")
 	write $max_freq $1/scaling_devfreq_max
 	write $min_freq $1/scaling_devfreq_min
 }
 
 samsung_devfreq_min_perf() {
 	[ ! -f $1/available_frequencies ] && return 1
-	freq=$(tr ' ' '\n' <"$1/available_frequencies" | sort -n | head -n 2)
+	freq=$(which_minfreq "$1/available_frequencies")
 	apply $freq $1/scaling_devfreq_min
 	apply $freq $1/scaling_devfreq_max
 }
@@ -179,7 +187,7 @@ snapdragon_performance() {
 tegra_performance() {
 	gpu_path="/sys/kernel/tegra_gpu"
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		freq=$(which_maxfreq $gpu_path/available_frequencies)
 		apply $freq $gpu_path/gpu_cap_rate
 		apply $freq $gpu_path/gpu_floor_rate
 	fi
@@ -190,7 +198,7 @@ exynos_performance() {
 	gpu_path="/sys/kernel/gpu"
 
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		freq=$(which_maxfreq $gpu_path/gpu_available_frequencies)
 		apply $freq $gpu_path/gpu_max_clock
 		apply $freq $gpu_path/gpu_min_clock
 	fi
@@ -215,7 +223,7 @@ tensor_performance() {
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
+		freq=$(which_maxfreq $gpu_path/available_frequencies)
 		apply $freq $gpu_path/scaling_max_freq
 		apply $freq $gpu_path/scaling_min_freq
 	fi
@@ -326,8 +334,8 @@ snapdragon_normal() {
 tegra_normal() {
 	gpu_path="/sys/kernel/tegra_gpu"
 	if [ -d $gpu_path ]; then
-		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		max_freq=$(which_maxfreq $gpu_path/available_frequencies)
+		min_freq=$(which_minfreq $gpu_path/available_frequencies)
 		write $max_freq $gpu_path/gpu_cap_rate
 		write $min_freq $gpu_path/gpu_floor_rate
 	fi
@@ -338,8 +346,8 @@ exynos_normal() {
 	gpu_path="/sys/kernel/gpu"
 
 	if [ -d $gpu_path ]; then
-		max_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		max_freq=$(which_maxfreq $gpu_path/gpu_available_frequencies)
+		min_freq=$(which_minfreq $gpu_path/gpu_available_frequencies)
 		write $max_freq $gpu_path/gpu_max_clock
 		write $min_freq $gpu_path/gpu_min_clock
 	fi
@@ -364,8 +372,8 @@ tensor_normal() {
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
 	if [ -d $gpu_path ]; then
-		max_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -nr | head -n 1)
-		min_freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		max_freq=$(which_maxfreq $gpu_path/available_frequencies)
+		min_freq=$(which_minfreq $gpu_path/available_frequencies)
 		write $max_freq $gpu_path/scaling_max_freq
 		write $min_freq $gpu_path/scaling_min_freq
 	fi
@@ -406,7 +414,7 @@ snapdragon_powersave() {
 tegra_powersave() {
 	gpu_path="/sys/kernel/tegra_gpu"
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		freq=$(which_minfreq $gpu_path/available_frequencies)
 		apply $freq $gpu_path/gpu_floor_rate
 		apply $freq $gpu_path/gpu_cap_rate
 	fi
@@ -417,7 +425,7 @@ exynos_powersave() {
 	gpu_path="/sys/kernel/gpu"
 
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/gpu_available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		freq=$(which_minfreq $gpu_path/gpu_available_frequencies)
 		apply $freq $gpu_path/gpu_min_clock
 		apply $freq $gpu_path/gpu_max_clock
 	fi
@@ -434,7 +442,7 @@ tensor_powersave() {
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
 	if [ -d $gpu_path ]; then
-		freq=$(cat $gpu_path/available_frequencies | tr ' ' '\n' | sort -n | head -n 2)
+		freq=$(which_minfreq $gpu_path/available_frequencies)
 		apply $freq $gpu_path/scaling_min_freq
 		apply $freq $gpu_path/scaling_max_freq
 	fi
