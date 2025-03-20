@@ -32,8 +32,8 @@ sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 paste -sd '|' - <"$GITHUB_WORKSPACE/gamelist.txt" >"$GITHUB_WORKSPACE/module/gamelist.txt"
 
 # Copy module files
-cp -r ./src/libs module
-cp -r ./src/scripts/* module/system/bin
+cp -r ./libs module
+cp -r ./scripts/* module/system/bin
 cp LICENSE ./module
 
 # Parse version info to module prop

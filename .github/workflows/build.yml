@@ -8,7 +8,8 @@ on:
     paths:
       - '.github/workflows/build.yml'
       - '.github/scripts/**'
-      - 'src/**'
+      - 'jni/**'
+      - 'scripts/**'
       - 'module/**'
       - 'webui/**'
       - 'gamelist.txt'
@@ -38,7 +39,6 @@ jobs:
       uses: oven-sh/setup-bun@v2
 
     - name: Build Encore JNI
-      working-directory: ./src
       run: ndk-build
 
     - name: Build WebUI

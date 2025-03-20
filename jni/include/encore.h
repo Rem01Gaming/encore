@@ -1,0 +1,104 @@
+#ifndef ENCORE_H
+#define ENCORE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/file.h>
+#include <sys/prctl.h>
+#include <sys/syscall.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+
+#define LOOP_INTERVAL 15
+#define MAX_COMMAND_LENGTH 600
+#define MAX_OUTPUT_LENGTH 256
+
+#define LOCK_FILE "/data/encore/encore.lock"
+#define LOG_FILE "/dev/encore_log"
+#define PROFILE_MODE "/dev/encore_mode"
+#define GAMELIST "/dev/encore_gamelist"
+#define MODULE_PROP "/data/adb/modules/encore/module.prop"
+#define MODULE_UPDATE "/data/adb/modules/encore/update"
+#define GAME_STRESS "com.mobile.legends:UnityKillsMe|com.mobiin.gp:UnityKillsMe|com.mobilelegends.hwag:UnityKillsMe"
+
+#define MY_PATH                                                                                                                    \
+    "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
+    "xbin:/data/data/com.termux/files/usr/bin"
+
+#define IS_MLBB(gamestart)                                                                               \
+    (strcmp(gamestart, "com.mobile.legends") == 0 || strcmp(gamestart, "com.mobilelegends.hwag") == 0 || \
+     strcmp(gamestart, "com.mobiin.gp") == 0)
+
+#define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
+#define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
+
+typedef enum : char {
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARN,
+    LOG_ERROR,
+    LOG_FATAL
+} LogLevel;
+
+typedef enum : char {
+    PERFCOMMON = 0,
+    PERFORMANCE_PROFILE = 1,
+    NORMAL_PROFILE = 2,
+    POWERSAVE_PROFILE = 3
+} ProfileMode;
+
+typedef enum : char {
+    MLBB_NOT_RUNNING = 0,
+    MLBB_RUN_BG = 1,
+    MLBB_RUNNING = 2
+} MLBBState;
+
+/*
+ * If you're here for function comments, you
+ * are in the wrong place.
+ */
+
+// Misc Utilities
+void sighandler(const int signal);
+char* trim_newline(char* string);
+void notify(const char* message);
+void is_kanged(void);
+char* timern(void);
+
+// Shell and Command execution
+char* execute_command(const char* format, ...);
+char* execute_direct(const char* path, const char* arg0, ...);
+int systemv(const char* format, ...);
+
+// File Utilities
+char create_lock_file(void);
+char write2file(const char* file_path, const char* content, const char mode);
+
+// Logging system
+void log_encore(LogLevel level, const char* message, ...);
+
+// KernelSU Utilities
+bool ksu_grant_root(void);
+
+// PID and Prioritization logic
+void set_priority(const pid_t pid);
+pid_t pidof(const char* name);
+
+// MLBB Handler
+char handle_mlbb(const char* gamestart);
+
+// Encore Profiler
+char* get_gamestart(void);
+bool get_screenstate_normal(void);
+bool get_screenstate_fallback(void);
+bool get_low_power_state(void);
+void run_profiler(const int profile);
+
+// Function pointer for fetch screenstate function, see function comment on
+// get_screenstate_normal and get_screenstate_fallback for more info.
+// Why do this? it save some CPU cycles per iteration checks.
+extern bool (*get_screenstate)(void);
+
+#endif // ENCORE_H
