@@ -797,10 +797,16 @@ function translatePage(lang) {
   if (saveLogBtn) saveLogBtn.innerText = translations[lang]['saveLogs'];
 }
 
-// Determine the default language based on the user's device language
-let pageLang = navigator.language.split('-')[0]; // Get the primary language code
-if (!translations[pageLang]) {
-  pageLang = 'en'; // Fallback to English if the language is not supported
+// Check localStorage for saved language
+let savedLang = localStorage.getItem('selectedLanguage');
+let pageLang;
+
+if (savedLang && translations.hasOwnProperty(savedLang)) {
+  pageLang = savedLang;
+} else {
+  // Fallback to browser language or English
+  const browserLang = navigator.language.split('-')[0];
+  pageLang = translations.hasOwnProperty(browserLang) ? browserLang : 'en';
 }
 
 // Set the selected language in the language selector
@@ -815,6 +821,8 @@ translatePage(pageLang);
 // Handle language change by the user
 if (languageSelector) {
   languageSelector.addEventListener('change', (e) => {
-    translatePage(e.target.value);
+    const lang = e.target.value;
+    localStorage.setItem('selectedLanguage', lang); // Save to localStorage
+    translatePage(lang);
   });
 }
