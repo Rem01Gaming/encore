@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE := encored
 LOCAL_SRC_FILES := \
-    src/main.c \
+    main.c \
     src/cmd_utils.c \
     src/encore_log.c \
     src/encore_profiler.c \
