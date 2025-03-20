@@ -90,15 +90,11 @@ pid_t pidof(const char* name);
 char handle_mlbb(const char* gamestart);
 
 // Encore Profiler
+extern bool (*get_screenstate)(void);
 char* get_gamestart(void);
 bool get_screenstate_normal(void);
 bool get_screenstate_fallback(void);
 bool get_low_power_state(void);
 void run_profiler(const int profile);
-
-// Function pointer for fetch screenstate function, see function comment on
-// get_screenstate_normal and get_screenstate_fallback for more info.
-// Why do this? it save some CPU cycles per iteration checks.
-extern bool (*get_screenstate)(void);
 
 #endif // ENCORE_H

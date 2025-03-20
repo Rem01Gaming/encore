@@ -16,7 +16,9 @@
 
 #include <encore.h>
 
-// Function pointer for fetch screenstate function
+// Function pointer for fetch screenstate function, see function comment on
+// get_screenstate_normal and get_screenstate_fallback for more info.
+// Why do this? it save some CPU cycles per iteration checks.
 bool (*get_screenstate)(void) = get_screenstate_normal;
 
 /***********************************************************************************
