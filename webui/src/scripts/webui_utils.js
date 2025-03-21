@@ -164,9 +164,9 @@ setupSwitch('dnd_switch', 'dnd_gameplay');
 const changeCPUGovernor = async (governor, config) => {
   await runCommand(`echo ${governor} >${configPath}/${config}`);
   if (config === "powersave_cpu_gov") {
-    await runCommand(`[ "$(cat /dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(</dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
   } else if (config === "custom_default_cpu_gov") {
-    await runCommand(`[ "$(cat /dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(</dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
   }
 };
 
