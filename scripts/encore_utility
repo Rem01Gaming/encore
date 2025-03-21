@@ -39,13 +39,13 @@ save_logs() {
 Encore Tweaks Log
 
 Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
-Chipset: $(getprop ro.board.platform) ($(cat /data/encore/soc_recognition))
+Chipset: $(getprop ro.board.platform) ($(</data/encore/soc_recognition))
 Fingerprint: $(getprop ro.build.fingerprint)
 Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
 *****************************************************
 
-$(cat /dev/encore_log)
+$(</dev/encore_log)
 EOF
 }
 
