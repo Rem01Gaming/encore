@@ -136,7 +136,7 @@ const getServiceState = async () => {
 
 const restartService = async () => {
   await runCommand('/system/bin/toybox pkill encored');
-  const result = await runCommand(`${binPath}/encored`);
+  const result = await runCommand(`sh -c ${binPath}/encored`);
   if (result.error) {
     showErrorModal("Unable to restart service", result.error);
   } else {
