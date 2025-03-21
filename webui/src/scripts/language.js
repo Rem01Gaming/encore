@@ -29,7 +29,6 @@ const translations = {
     editGamelistDesc: "The performance profile will be activated when any of the games and apps listed here are launched.",
     saveChanges: "Save Changes",
     cancelChanges: "Cancel Changes",
-    restartDaemon: "Restart Daemon",
     saveLogs: "Save Module Logs"
   },
   id: {
@@ -61,7 +60,6 @@ const translations = {
     editGamelistDesc: "Profil kinerja akan diaktifkan ketika salah satu permainan dan aplikasi yang tercantum di sini diluncurkan.",
     saveChanges: "Simpan Perubahan",
     cancelChanges: "Batalkan Perubahan",
-    restartDaemon: "Mulai Ulang Daemon",
     saveLogs: "Simpan Log Modul"
   },
   jv: {
@@ -93,7 +91,6 @@ const translations = {
     editGamelistDesc: "Profil kinerja bakal diaktifake nalika game utawa aplikasi sing kadhaptar ing kene dibukak.",
     saveChanges: "Simpen Owahan",
     cancelChanges: "Batalake Owahan",
-    restartDaemon: "Mulai maneh Daemon",
     saveLogs: "Simpen Log Modul"
   },
   da: {
@@ -125,7 +122,6 @@ const translations = {
     editGamelistDesc: "Ydelsesprofilen aktiveres, når et af spillene eller appsene på denne liste startes.",
     saveChanges: "Gem ændringer",
     cancelChanges: "Annuller ændringer",
-    restartDaemon: "Genstart Daemon",
     saveLogs: "Gem Modul-Logger"
   },
   pt: {
@@ -157,7 +153,6 @@ const translations = {
     editGamelistDesc: "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
     saveChanges: "Salvar Alterações",
     cancelChanges: "Cancelar Alterações",
-    restartDaemon: "Reiniciar Daemon",
     saveLogs: "Salvar Logs do Módulo"
   },
   tr: {
@@ -189,7 +184,6 @@ const translations = {
     editGamelistDesc: "Burada listelenen oyunlar veya uygulamalar başlatıldığında performans profili etkinleştirilecektir.",
     saveChanges: "Değişiklikleri Kaydet",
     cancelChanges: "Değişiklikleri İptal Et",
-    restartDaemon: "Daemon'u Yeniden Başlat",
     saveLogs: "Modül Günlüklerini Kaydet"
   },
   fr: {
@@ -221,7 +215,6 @@ const translations = {
     editGamelistDesc: "Le profil de performance sera activé lorsque l'un des jeux ou applications listés ici sera lancé.",
     saveChanges: "Enregistrer les Modifications",
     cancelChanges: "Annuler les Modifications",
-    restartDaemon: "Redémarrer le Daemon",
     saveLogs: "Enregistrer les Journaux du Module"
   },
   de: {
@@ -253,7 +246,6 @@ const translations = {
     editGamelistDesc: "Das Leistungsprofil wird aktiviert, wenn eines der hier aufgeführten Spiele oder Apps gestartet wird.",
     saveChanges: "Änderungen Speichern",
     cancelChanges: "Änderungen Abbrechen",
-    restartDaemon: "Daemon Neustarten",
     saveLogs: "Modulprotokolle Speichern"
   },
   it: {
@@ -285,7 +277,6 @@ const translations = {
     editGamelistDesc: "Il profilo prestazioni verrà attivato quando uno dei giochi o delle app elencati qui verrà avviato.",
     saveChanges: "Salva Modifiche",
     cancelChanges: "Annulla Modifiche",
-    restartDaemon: "Riavvia Daemon",
     saveLogs: "Salva Log del Modulo"
   },
   nl: {
@@ -317,7 +308,6 @@ const translations = {
     editGamelistDesc: "Het prestatieprofiel wordt geactiveerd wanneer een van de hier vermelde spellen of apps wordt gestart.",
     saveChanges: "Wijzigingen Opslaan",
     cancelChanges: "Wijzigingen Annuleren",
-    restartDaemon: "Daemon Herstarten",
     saveLogs: "Module Logs Opslaan"
   },
   hu: {
@@ -349,7 +339,6 @@ const translations = {
     editGamelistDesc: "A teljesítményprofil aktiválódik, amikor bármelyik játék vagy alkalmazás ezen a listán elindul.",
     saveChanges: "Változások mentése",
     cancelChanges: "Változások visszavonása",
-    restartDaemon: "Daemon újraindítása",
     saveLogs: "Modul naplók mentése"
   },
   ms: {
@@ -381,7 +370,6 @@ const translations = {
     editGamelistDesc: "Profil prestasi akan diaktifkan apabila mana-mana permainan atau aplikasi dalam senarai ini dilancarkan.",
     saveChanges: "Simpan Perubahan",
     cancelChanges: "Batal Perubahan",
-    restartDaemon: "Mula Semula Daemon",
     saveLogs: "Simpan Log Modul"
   },
   ru: {
@@ -413,7 +401,6 @@ const translations = {
     editGamelistDesc: "Профиль производительности будет активирован при запуске любой из указанных игр и приложений.",
     saveChanges: "Сохранить изменения",
     cancelChanges: "Отменить изменения",
-    restartDaemon: "Перезапустить демон",
     saveLogs: "Сохранить логи модуля"
   },
   ja: {
@@ -445,7 +432,6 @@ const translations = {
     editGamelistDesc: "ここにリストされたゲームやアプリが起動すると、パフォーマンスプロファイルが有効になります。",
     saveChanges: "変更を保存",
     cancelChanges: "変更をキャンセル",
-    restartDaemon: "デーモンを再起動",
     saveLogs: "モジュールログを保存"
   },
   zh: {
@@ -477,7 +463,6 @@ const translations = {
     editGamelistDesc: "当这里列出的游戏或应用启动时，将自动激活性能配置。",
     saveChanges: "保存更改",
     cancelChanges: "取消更改",
-    restartDaemon: "重启守护进程",
     saveLogs: "保存模块日志"
   },
   th: {
@@ -508,8 +493,6 @@ const translations = {
     editGamelistTitle: "แก้ไขรายการเกม",
     editGamelistDesc: "โปรไฟล์ประสิทธิภาพจะเปิดใช้งานเมื่อเปิดเกมหรือแอปใด ๆ ในรายการนี้",
     saveChanges: "บันทึกการเปลี่ยนแปลง",
-    cancelChanges: "ยกเลิกการเปลี่ยนแปลง",
-    restartDaemon: "รีสตาร์ท Daemon",
     saveLogs: "บันทึกล็อกของโมดูล"
   },
   ko: {
@@ -541,7 +524,6 @@ const translations = {
     editGamelistDesc: "여기에 등록된 게임 또는 앱이 실행될 때 성능 프로필이 활성화됩니다.",
     saveChanges: "변경 사항 저장",
     cancelChanges: "변경 사항 취소",
-    restartDaemon: "데몬 재시작",
     saveLogs: "모듈 로그 저장"
   },
   vi: {
@@ -573,7 +555,6 @@ const translations = {
     editGamelistDesc: "Hồ sơ hiệu suất sẽ được kích hoạt khi bất kỳ trò chơi hoặc ứng dụng nào trong danh sách này được mở.",
     saveChanges: "Lưu thay đổi",
     cancelChanges: "Hủy thay đổi",
-    restartDaemon: "Khởi động lại Daemon",
     saveLogs: "Lưu nhật ký mô-đun"
   },
   hi: {
@@ -605,7 +586,6 @@ const translations = {
     editGamelistDesc: "जब यहां सूचीबद्ध गेम या ऐप्स चालू किए जाते हैं, तो प्रदर्शन प्रोफ़ाइल सक्रिय हो जाएगी।",
     saveChanges: "परिवर्तन सहेजें",
     cancelChanges: "परिवर्तन रद्द करें",
-    restartDaemon: "डेमन पुनः प्रारंभ करें",
     saveLogs: "मॉड्यूल लॉग सहेजें"
   },
   ar: {
@@ -637,7 +617,6 @@ const translations = {
     editGamelistDesc: "سيتم تنشيط ملف الأداء عند تشغيل أي من الألعاب والتطبيقات المدرجة هنا.",
     saveChanges: "حفظ التغييرات",
     cancelChanges: "إلغاء التغييرات",
-    restartDaemon: "إعادة تشغيل الخدمة",
     saveLogs: "حفظ سجلات الوحدة"
   },
   es: {
@@ -669,7 +648,6 @@ const translations = {
     editGamelistDesc: "El perfil de rendimiento se activará cuando se inicie cualquiera de los juegos o aplicaciones listados aquí.",
     saveChanges: "Guardar Cambios",
     cancelChanges: "Cancelar Cambios",
-    restartDaemon: "Reiniciar Daemon",
     saveLogs: "Guardar Registros del Módulo"
   },
   pl: {
@@ -701,7 +679,6 @@ const translations = {
     editGamelistDesc: "Profil wydajności zostanie aktywowany po uruchomieniu dowolnej gry lub aplikacji z tej listy.",
     saveChanges: "Zapisz Zmiany",
     cancelChanges: "Anuluj Zmiany",
-    restartDaemon: "Restartuj Daemon",
     saveLogs: "Zapisz Logi Modułu"
   },
   tl: {
@@ -733,7 +710,6 @@ const translations = {
     editGamelistDesc: "Ang performance profile ay maa-activate kapag ang alinman sa mga laro at apps na nakalista dito ay inilunsad.",
     saveChanges: "I-save ang mga Pagbabago",
     cancelChanges: "Kanselahin ang mga Pagbabago",
-    restartDaemon: "I-restart ang Daemon",
     saveLogs: "I-save ang mga Log ng Module"
   },
   ro: {
@@ -765,7 +741,6 @@ const translations = {
     editGamelistDesc: "Profilul de performanță va fi activat când oricare dintre jocurile sau aplicațiile listate aici este lansat.",
     saveChanges: "Salvează Modificările",
     cancelChanges: "Anulează Modificările",
-    restartDaemon: "Repornește Daemon-ul",
     saveLogs: "Salvează Logurile Modulului"
   }
 };
