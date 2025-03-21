@@ -47,7 +47,7 @@ done
 
 # Zip the file
 cd ./module
-zip -r9 ../$zipName * -x *placeholder* *.map
+zip -r9 ../$zipName * -x *placeholder* *.map .shellcheck
 zip -z ../$zipName <<EOF
 $version-$release_code
 Build Date $(date +"%a %b %d %H:%M:%S %Z %Y")
