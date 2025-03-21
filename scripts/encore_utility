@@ -17,7 +17,7 @@
 
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
@@ -39,7 +39,7 @@ save_logs() {
 Encore Tweaks Log
 
 Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
-Chipset: $(getprop "ro.board.platform") ($(cat /data/encore/soc_recognition))
+Chipset: $(getprop ro.board.platform) ($(cat /data/encore/soc_recognition))
 Fingerprint: $(getprop ro.build.fingerprint)
 Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
@@ -49,4 +49,5 @@ $(cat /dev/encore_log)
 EOF
 }
 
+# shellcheck disable=SC2068
 $@
