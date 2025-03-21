@@ -1,4 +1,4 @@
-# shellcheck disable=SC1091,SC2034
+# shellcheck disable=SC1091,SC2034,SC2317
 SKIPUNZIP=1
 SOC=0
 

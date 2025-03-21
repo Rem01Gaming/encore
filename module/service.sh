@@ -7,7 +7,7 @@ CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
 # Parse Governor to use
 chmod 444 "$CPUFREQ/scaling_governor"
-default_gov=$(<"$CPUFREQ/scaling_governor")
+default_gov=$(cat "$CPUFREQ/scaling_governor")
 
 # Handle case when 'default_gov' is performance
 if [ "$default_gov" == "performance" ]; then
