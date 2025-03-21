@@ -18,10 +18,11 @@ abort_unsupported_arch() {
 	abort "*********************************************************"
 }
 
-abort_corrupted() {
+abort_unsupported_arch() {
 	ui_print "*********************************************************"
-	ui_print "! Unable to extract verify.sh!"
-	ui_print "! This zip may be corrupted, please try downloading again"
+	ui_print "! Unsupported Architecture: $ARCH"
+	ui_print "! Your CPU architecture is not supported by Encore Tweaks."
+	ui_print "! If you believe this is an error, please report it to the maintainer."
 	abort "*********************************************************"
 }
 
