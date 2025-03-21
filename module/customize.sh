@@ -1,4 +1,4 @@
-# shellcheck disable=SC2034
+# shellcheck disable=SC1091,SC2034
 SKIPUNZIP=1
 SOC=0
 
@@ -85,14 +85,14 @@ source "$TMPDIR/verify.sh"
 
 # Extract module files
 ui_print "- Extracting module files"
-extract "$ZIPFILE" 'module.prop' $MODPATH
-extract "$ZIPFILE" 'service.sh' $MODPATH
-extract "$ZIPFILE" 'uninstall.sh' $MODPATH
-extract "$ZIPFILE" 'action.sh' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore_profiler' $MODPATH
-extract "$ZIPFILE" 'system/bin/encore_utility' $MODPATH
+extract "$ZIPFILE" 'module.prop' "$MODPATH"
+extract "$ZIPFILE" 'service.sh' "$MODPATH"
+extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
+extract "$ZIPFILE" 'action.sh' "$MODPATH"
+extract "$ZIPFILE" 'system/bin/encore_profiler' "$MODPATH"
+extract "$ZIPFILE" 'system/bin/encore_utility' "$MODPATH"
 
-# Extract executables
+# Target architecture
 case $ARCH in
 "arm64") ARCH_TMP="arm64-v8a" ;;
 "arm") ARCH_TMP="armeabi-v7a" ;;
@@ -102,8 +102,9 @@ case $ARCH in
 *) abort_unsupported_arch ;;
 esac
 
+# Extract executables
 extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
-cp $TMPDIR/libs/$ARCH_TMP/* "$MODPATH/system/bin"
+cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/system/bin" "$MODPATH/system/bin"
 rm -rf "$TMPDIR/libs"
 
 if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
