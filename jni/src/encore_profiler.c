@@ -20,6 +20,7 @@
 // get_screenstate_normal and get_screenstate_fallback for more info.
 // Why do this? it save some CPU cycles per iteration checks.
 bool (*get_screenstate)(void) = get_screenstate_normal;
+bool (*get_low_power_state)(void) = get_low_power_state_normal;
 
 /***********************************************************************************
  * Function Name      : run_profiler
@@ -54,28 +55,16 @@ char* get_gamestart(void) {
 }
 
 /***********************************************************************************
- * Function Name      : get_screenstate_fallback
- * Inputs             : None
- * Returns            : bool - only true
- * Description        : Error fallback for function get_screenstate(), will be used on repeated
- *                      dumpsys error via function pointer.
- * Note               : Never call this function.
- ***********************************************************************************/
-bool get_screenstate_fallback(void) {
-    return true;
-}
-
-/***********************************************************************************
  * Function Name      : get_screenstate_normal
  * Inputs             : None
  * Returns            : bool - true if screen was awake
  *                             false if screen was asleep
  * Description        : Retrieves the current screen wakefulness state from dumpsys command.
- * Note               : In repeated failures up to 6, this function will skip dumpsys routine
+ * Note               : In repeated failures up to 6, this function will skip fetch routine
  *                      and just return true all time using function pointer.
  ***********************************************************************************/
 bool get_screenstate_normal(void) {
-    static char screenstate_fail = 0;
+    static char fetch_failed = 0;
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                         "| awk -F'=' '{print $2}'");
@@ -85,33 +74,36 @@ bool get_screenstate_normal(void) {
     }
 
     if (screenstate) [[clang::likely]] {
-        screenstate_fail = 0;
+        fetch_failed = 0;
         return IS_AWAKE(screenstate);
     }
 
-    screenstate_fail++;
-    log_encore(LOG_ERROR, "Unable to get current screenstate, assuming it was awake.");
+    fetch_failed++;
+    log_encore(LOG_ERROR, "Unable to fetch current screenstate, assuming it was awake.");
 
-    if (screenstate_fail == 6) {
+    if (fetch_failed == 6) {
         log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
 
         // Set default state after too many failures via function pointer
-        get_screenstate = get_screenstate_fallback;
+        get_screenstate = return_true;
     }
 
     return true;
 }
 
 /***********************************************************************************
- * Function Name      : get_low_power_state
+ * Function Name      : get_low_power_state_normal
  * Inputs             : None
  * Returns            : bool - true if Battery Saver is enabled
  *                             false otherwise
  * Description        : Checks if the device's Battery Saver mode is enabled by using
- *                      dumpsys power and filtering for the battery saver status.
- *                      Useful for determining low-power states.
+ *                      global db or dumpsys power.
+ * Note               : In repeated failures up to 6, this function will skip fetch routine
+ *                      and just return false all time using function pointer.
  ***********************************************************************************/
-bool get_low_power_state(void) {
+bool get_low_power_state_normal(void) {
+    static char fetch_failed = 0;
+
     char* low_power = execute_direct("/system/bin/settings", "settings", "get", "global", "low_power", NULL);
     if (!low_power) {
         low_power = execute_command("dumpsys power | grep -Eo "
@@ -120,7 +112,18 @@ bool get_low_power_state(void) {
     }
 
     if (low_power) [[clang::likely]] {
+        fetch_failed = 0;
         return IS_LOW_POWER(low_power);
+    }
+
+    fetch_failed++;
+    log_encore(LOG_ERROR, "Unable to fetch low battery status, assuming it was false.");
+
+    if (fetch_failed == 6) {
+        log_encore(LOG_WARN, "Too much error, assume low battery status was false anytime from now!");
+
+        // Set default state after too many failures via function pointer
+        get_low_power_state = return_false;
     }
 
     return false;

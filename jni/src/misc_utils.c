@@ -116,3 +116,25 @@ doorprize:
     notify("Trying to rename me?");
     exit(EXIT_FAILURE);
 }
+
+/***********************************************************************************
+ * Function Name      : return_true
+ * Inputs             : None
+ * Returns            : bool - only true
+ * Description        : Will be used for error fallback.
+ * Note               : Never call this function.
+ ***********************************************************************************/
+bool return_true(void) {
+    return true;
+}
+
+/***********************************************************************************
+ * Function Name      : return_false
+ * Inputs             : None
+ * Returns            : bool - only false
+ * Description        : Will be used for error fallback.
+ * Note               : Never call this function.
+ ***********************************************************************************/
+bool return_false(void) {
+    return false;
+}

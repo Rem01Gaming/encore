@@ -66,6 +66,8 @@ char* trim_newline(char* string);
 void notify(const char* message);
 void is_kanged(void);
 char* timern(void);
+bool return_true(void);
+bool return_false(void);
 
 // Shell and Command execution
 char* execute_command(const char* format, ...);
@@ -91,10 +93,10 @@ char handle_mlbb(const char* gamestart);
 
 // Encore Profiler
 extern bool (*get_screenstate)(void);
+extern bool (*get_low_power_state)(void);
 char* get_gamestart(void);
 bool get_screenstate_normal(void);
-bool get_screenstate_fallback(void);
-bool get_low_power_state(void);
+bool get_low_power_state_normal(void);
 void run_profiler(const int profile);
 
 #endif // ENCORE_H
