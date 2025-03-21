@@ -134,16 +134,6 @@ const getServiceState = async () => {
   }
 };
 
-const restartService = async () => {
-  await runCommand('/system/bin/toybox pkill encored');
-  const result = await runCommand(`sh -c ${binPath}/encored`);
-  if (result.error) {
-    showErrorModal("Unable to restart service", result.error);
-  } else {
-    getServiceState();
-  }
-};
-
 /* ======================== CONFIGURATION ======================== */
 const toggleConfig = async (file, isChecked, rebootMessage = false) => {
   await runCommand(`echo ${isChecked ? '1' : '0'} >${configPath}/${file}`);
@@ -213,7 +203,6 @@ const openWebsite = async (link) => {
 
 /* ======================== EVENT LISTENERS ======================== */
 document.getElementById('save_log_btn').addEventListener('click', saveLog);
-document.getElementById('restart_daemon_btn').addEventListener('click', restartService);
 document.getElementById('edit_gamelist_btn').addEventListener('click', fetchGamelist);
 document.getElementById('save_gamelist_btn').addEventListener('click', saveGamelist);
 document.getElementById('donate_btn').addEventListener('click', () => openWebsite("https://t.me/rem01schannel/670"));
