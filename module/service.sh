@@ -3,13 +3,20 @@ while [ -z "$(getprop sys.boot_completed)" ]; do
 	sleep 40
 done
 
+CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
+
 # Parse Governor to use
-chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-default_gov="$(</sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"
+chmod 444 "$CPUFREQ/scaling_governor"
+default_gov=$(<"$CPUFREQ/scaling_governor")
 
 # Handle case when 'default_gov' is performance
-if echo "$default_gov" | grep -q performance; then
-	default_gov="schedutil"
+if [ "$default_gov" == "performance" ]; then
+	for gov in schedhorizon sugov_ext walt schedutil; do
+		grep -q "$gov" "$CPUFREQ/scaling_available_frequencies" && {
+			default_gov="$gov"
+			break
+		}
+	done
 fi
 
 echo "$default_gov" >/data/encore/default_cpu_gov
