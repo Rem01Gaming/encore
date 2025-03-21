@@ -15,24 +15,26 @@
 # limitations under the License.
 #
 
+# shellcheck disable=SC2013
+
 ###################################
 # Common Function
 ###################################
 
 # Fetch SoC recognition
-SOC="$(cat /data/encore/soc_recognition)"
+SOC=$(</data/encore/soc_recognition)
 
 apply() {
-	[ ! -f $2 ] && return 1
-	chmod 644 $2 >/dev/null 2>&1
-	echo $1 >$2 2>/dev/null
-	chmod 444 $2 >/dev/null 2>&1
+	[ ! -f "$2" ] && return 1
+	chmod 644 "$2" >/dev/null 2>&1
+	echo "$1" >"$2" 2>/dev/null
+	chmod 444 "$2" >/dev/null 2>&1
 }
 
 write() {
-	[ ! -f $2 ] && return 1
-	chmod 644 $2 >/dev/null 2>&1
-	echo $1 >$2 2>/dev/null
+	[ ! -f "$2" ] && return 1
+	chmod 644 "$2" >/dev/null 2>&1
+	echo "$1" >"$2" 2>/dev/null
 }
 
 which_maxfreq() {
@@ -44,30 +46,30 @@ which_minfreq() {
 }
 
 devfreq_max_perf() {
-	[ ! -f $1/available_frequencies ] && return 1
+	[ ! -f "$1/available_frequencies" ] && return 1
 	freq=$(which_maxfreq "$1/available_frequencies")
-	apply $freq $1/max_freq
-	apply $freq $1/min_freq
+	apply "$freq" "$1/max_freq"
+	apply "$freq" "$1/min_freq"
 }
 
 devfreq_unlock() {
-	[ ! -f $1/available_frequencies ] && return 1
+	[ ! -f "$1/available_frequencies" ] && return 1
 	max_freq=$(which_maxfreq "$1/available_frequencies")
 	min_freq=$(which_minfreq "$1/available_frequencies")
-	write $max_freq $1/max_freq
-	write $min_freq $1/min_freq
+	write "$max_freq" "$1/max_freq"
+	write "$min_freq" "$1/min_freq"
 }
 
 devfreq_min_perf() {
-	[ ! -f $1/available_frequencies ] && return 1
+	[ ! -f "$1/available_frequencies" ] && return 1
 	freq=$(which_minfreq "$1/available_frequencies")
-	apply $freq $1/min_freq
-	apply $freq $1/max_freq
+	apply "$freq" "$1/min_freq"
+	apply "$freq" "$1/max_freq"
 }
 
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
 	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
@@ -87,15 +89,15 @@ mediatek_performance() {
 	apply 0 /sys/kernel/fpsgo/common/force_onoff
 
 	# MTK Power and CCI mode
-	apply "1" /proc/cpufreq/cpufreq_cci_mode
-	apply "3" /proc/cpufreq/cpufreq_power_mode
+	apply 1 /proc/cpufreq/cpufreq_cci_mode
+	apply 3 /proc/cpufreq/cpufreq_power_mode
 
 	# EAS/HMP Switch
-	apply "0" /sys/devices/system/cpu/eas/enable
+	apply 0 /sys/devices/system/cpu/eas/enable
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		gpu_freq="$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)"
+		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)
 		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 	elif [ -d /proc/gpufreqv2 ]; then
 		apply 0 /proc/gpufreqv2/fix_target_opp_index
@@ -112,36 +114,36 @@ mediatek_performance() {
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	apply "0" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-	apply "0" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+	apply 0 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+	apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
-	apply "0" /sys/kernel/eara_thermal/enable
+	apply 0 /sys/kernel/eara_thermal/enable
 }
 
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu*-lat; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*cpu*-bw; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*llccbw*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*bus_llcc*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*bus_ddr*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*memlat*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/*cpubw*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 
 	# GPU, memory and bus frequency tweak
@@ -149,10 +151,10 @@ snapdragon_performance() {
 
 	# Commented due causing random reboot in Realme 5i
 	#for path in /sys/class/devfreq/*gpubw*; do
-	#	devfreq_max_perf $path
+	#	devfreq_max_perf "$path"
 	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 
 	# Disable GPU Bus split
@@ -164,10 +166,10 @@ snapdragon_performance() {
 
 tegra_performance() {
 	gpu_path="/sys/kernel/tegra_gpu"
-	if [ -d $gpu_path ]; then
-		freq=$(which_maxfreq $gpu_path/available_frequencies)
-		apply $freq $gpu_path/gpu_cap_rate
-		apply $freq $gpu_path/gpu_floor_rate
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_maxfreq "$gpu_path/available_frequencies")
+		apply "$freq" "$gpu_path/gpu_cap_rate"
+		apply "$freq" "$gpu_path/gpu_floor_rate"
 	fi
 }
 
@@ -175,40 +177,40 @@ exynos_performance() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 
-	if [ -d $gpu_path ]; then
-		freq=$(which_maxfreq $gpu_path/gpu_available_frequencies)
-		apply $freq $gpu_path/gpu_max_clock
-		apply $freq $gpu_path/gpu_min_clock
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_maxfreq "$gpu_path/gpu_available_frequencies")
+		apply "$freq" "$gpu_path/gpu_max_clock"
+		apply "$freq" "$gpu_path/gpu_min_clock"
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply always_on $mali_sysfs/power_policy
+	apply always_on "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 }
 
 unisoc_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-	[ ! -z $gpu_path ] && devfreq_max_perf $gpu_path
+	[ -n "$gpu_path" ] && devfreq_max_perf "$gpu_path"
 }
 
 tensor_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
-	if [ -d $gpu_path ]; then
-		freq=$(which_maxfreq $gpu_path/available_frequencies)
-		apply $freq $gpu_path/scaling_max_freq
-		apply $freq $gpu_path/scaling_min_freq
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_maxfreq "$gpu_path/available_frequencies")
+		apply "$freq" "$gpu_path/scaling_max_freq"
+		apply "$freq" "$gpu_path/scaling_min_freq"
 	fi
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 }
 
@@ -232,17 +234,17 @@ mediatek_normal() {
 	apply 2 /sys/kernel/fpsgo/common/force_onoff
 
 	# MTK Power and CCI mode
-	apply "0" /proc/cpufreq/cpufreq_cci_mode
-	apply "0" /proc/cpufreq/cpufreq_power_mode
+	apply 0 /proc/cpufreq/cpufreq_cci_mode
+	apply 0 /proc/cpufreq/cpufreq_power_mode
 
 	# EAS/HMP Switch
-	apply "1" /sys/devices/system/cpu/eas/enable
+	apply 1 /sys/devices/system/cpu/eas/enable
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		write "0" /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
 	elif [ -d /proc/gpufreqv2 ]; then
-		write "-1" /proc/gpufreqv2/fix_target_opp_index
+		write -1 /proc/gpufreqv2/fix_target_opp_index
 	fi
 
 	# GPU Power limiter
@@ -259,36 +261,36 @@ mediatek_normal() {
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	write "-1" /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-	write "-1" /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+	write -1 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+	write -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 	devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
 
 	# Eara Thermal
-	apply "1" /sys/kernel/eara_thermal/enable
+	apply 1 /sys/kernel/eara_thermal/enable
 }
 
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu*-lat; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*cpu*-bw; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*llccbw*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*bus_llcc*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*bus_ddr*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*memlat*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/*cpubw*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 
 	# GPU, memory and bus frequency tweak
@@ -296,10 +298,10 @@ snapdragon_normal() {
 
 	# Commented due causing random reboot in Realme 5i
 	#for path in /sys/class/devfreq/*gpubw*; do
-	#	devfreq_unlock $path
+	#	devfreq_unlock "$path"
 	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 
 	# Enable back GPU Bus split
@@ -311,11 +313,11 @@ snapdragon_normal() {
 
 tegra_normal() {
 	gpu_path="/sys/kernel/tegra_gpu"
-	if [ -d $gpu_path ]; then
-		max_freq=$(which_maxfreq $gpu_path/available_frequencies)
-		min_freq=$(which_minfreq $gpu_path/available_frequencies)
-		write $max_freq $gpu_path/gpu_cap_rate
-		write $min_freq $gpu_path/gpu_floor_rate
+	if [ -d "$gpu_path" ]; then
+		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
+		min_freq=$(which_minfreq "$gpu_path/available_frequencies")
+		write "$max_freq" "$gpu_path/gpu_cap_rate"
+		write "$min_freq" "$gpu_path/gpu_floor_rate"
 	fi
 }
 
@@ -323,42 +325,42 @@ exynos_normal() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 
-	if [ -d $gpu_path ]; then
-		max_freq=$(which_maxfreq $gpu_path/gpu_available_frequencies)
-		min_freq=$(which_minfreq $gpu_path/gpu_available_frequencies)
-		write $max_freq $gpu_path/gpu_max_clock
-		write $min_freq $gpu_path/gpu_min_clock
+	if [ -d "$gpu_path" ]; then
+		max_freq=$(which_maxfreq "$gpu_path/gpu_available_frequencies")
+		min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
+		write "$max_freq" "$gpu_path/gpu_max_clock"
+		write "$min_freq" "$gpu_path/gpu_min_clock"
 	fi
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply coarse_demand $mali_sysfs/power_policy
+	apply coarse_demand "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 }
 
 unisoc_normal() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-	[ ! -z $gpu_path ] && devfreq_unlock $gpu_path
+	[ -n "$gpu_path" ] && devfreq_unlock "$gpu_path"
 }
 
 tensor_normal() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
-	if [ -d $gpu_path ]; then
-		max_freq=$(which_maxfreq $gpu_path/available_frequencies)
-		min_freq=$(which_minfreq $gpu_path/available_frequencies)
-		write $max_freq $gpu_path/scaling_max_freq
-		write $min_freq $gpu_path/scaling_min_freq
+	if [ -d "$gpu_path" ]; then
+		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
+		min_freq=$(which_minfreq "$gpu_path/available_frequencies")
+		write "$max_freq" "$gpu_path/scaling_max_freq"
+		write "$min_freq" "$gpu_path/scaling_min_freq"
 	fi
 
 	# DRAM and Buses Frequency
 	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 }
 
@@ -372,15 +374,15 @@ intel_normal() {
 
 mediatek_powersave() {
 	# MTK CPU Power mode to low power
-	apply "1" /proc/cpufreq/cpufreq_power_mode
+	apply 1 /proc/cpufreq/cpufreq_power_mode
 
 	# GPU Frequency
 	if [ -d /proc/gpufreq ]; then
-		gpu_freq="$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -n | head -n 1)"
+		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -n | head -n 1)
 		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 	elif [ -d /proc/gpufreqv2 ]; then
 		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
-		apply $min_gpufreq_index /proc/gpufreqv2/fix_target_opp_index
+		apply "$min_gpufreq_index" /proc/gpufreqv2/fix_target_opp_index
 	fi
 }
 
@@ -391,10 +393,10 @@ snapdragon_powersave() {
 
 tegra_powersave() {
 	gpu_path="/sys/kernel/tegra_gpu"
-	if [ -d $gpu_path ]; then
-		freq=$(which_minfreq $gpu_path/available_frequencies)
-		apply $freq $gpu_path/gpu_floor_rate
-		apply $freq $gpu_path/gpu_cap_rate
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_minfreq "$gpu_path/available_frequencies")
+		apply "$freq" "$gpu_path/gpu_floor_rate"
+		apply "$freq" "$gpu_path/gpu_cap_rate"
 	fi
 }
 
@@ -402,27 +404,27 @@ exynos_powersave() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 
-	if [ -d $gpu_path ]; then
-		freq=$(which_minfreq $gpu_path/gpu_available_frequencies)
-		apply $freq $gpu_path/gpu_min_clock
-		apply $freq $gpu_path/gpu_max_clock
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
+		apply "$freq" "$gpu_path/gpu_min_clock"
+		apply "$freq" "$gpu_path/gpu_max_clock"
 	fi
 }
 
 unisoc_powersave() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-	[ ! -z $gpu_path ] && devfreq_min_perf $gpu_path
+	[ -n "$gpu_path" ] && devfreq_min_perf "$gpu_path"
 }
 
 tensor_powersave() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 
-	if [ -d $gpu_path ]; then
-		freq=$(which_minfreq $gpu_path/available_frequencies)
-		apply $freq $gpu_path/scaling_min_freq
-		apply $freq $gpu_path/scaling_max_freq
+	if [ -d "$gpu_path" ]; then
+		freq=$(which_minfreq "$gpu_path/available_frequencies")
+		apply "$freq" "$gpu_path/scaling_min_freq"
+		apply "$freq" "$gpu_path/scaling_max_freq"
 	fi
 }
 
@@ -468,14 +470,14 @@ perfcommon() {
 		apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
 	fi
 
-	apply "1" /proc/sys/net/ipv4/tcp_low_latency
-	apply "1" /proc/sys/net/ipv4/tcp_ecn
-	apply "3" /proc/sys/net/ipv4/tcp_fastopen
-	apply "1" /proc/sys/net/ipv4/tcp_sack
-	apply "0" /proc/sys/net/ipv4/tcp_timestamps
+	apply 1 /proc/sys/net/ipv4/tcp_low_latency
+	apply 1 /proc/sys/net/ipv4/tcp_ecn
+	apply 3 /proc/sys/net/ipv4/tcp_fastopen
+	apply 1 /proc/sys/net/ipv4/tcp_sack
+	apply 0 /proc/sys/net/ipv4/tcp_timestamps
 
 	# Stop tracing and debugging
-	if [ "$(cat /data/encore/kill_logd)" -eq 1 ]; then
+	if [ "$(</data/encore/kill_logd)" -eq 1 ]; then
 		apply 0 /sys/kernel/ccci/debug
 		apply 0 /sys/kernel/tracing/tracing_on
 		apply 0 /proc/sys/kernel/perf_event_paranoid
@@ -533,12 +535,12 @@ perfcommon() {
 
 	# Set thermal governor to step_wise
 	for dir in /sys/class/thermal/thermal_zone*; do
-		apply "step_wise" $dir/policy
+		apply "step_wise" "$dir/policy"
 	done
 }
 
 performance_profile() {
-	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 1
+	[ "$(</data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 1
 
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
@@ -550,11 +552,11 @@ performance_profile() {
 	}
 
 	# Enable touch boost
-	apply "1" /sys/module/msm_performance/parameters/touchboost
-	apply "1" /sys/power/pnpmgr/touch_boost
-	apply "1" /proc/perfmgr/tchbst/kernel/tb_enable
-	apply "1" /sys/devices/virtual/touch/touch_boost
-	apply "1" /sys/module/msm_perfmon/parameters/touch_boost_enable
+	apply 1 /sys/module/msm_performance/parameters/touchboost
+	apply 1 /sys/power/pnpmgr/touch_boost
+	apply 1 /proc/perfmgr/tchbst/kernel/tb_enable
+	apply 1 /sys/devices/virtual/touch/touch_boost
+	apply 1 /sys/module/msm_perfmon/parameters/touch_boost_enable
 
 	# Disable split lock mitigation
 	apply 0 /proc/sys/kernel/split_lock_mitigate
@@ -578,11 +580,11 @@ performance_profile() {
 	# Oppo/Oplus/Realme Touchpanel
 	tp_path="/proc/touchpanel"
 	if [ -d tp_path ]; then
-		apply "1" $tp_path/game_switch_enable
-		apply "0" $tp_path/oplus_tp_limit_enable
-		apply "0" $tp_path/oppo_tp_limit_enable
-		apply "1" $tp_path/oplus_tp_direction
-		apply "1" $tp_path/oppo_tp_direction
+		apply 1 $tp_path/game_switch_enable
+		apply 0 $tp_path/oplus_tp_limit_enable
+		apply 0 $tp_path/oppo_tp_limit_enable
+		apply 1 $tp_path/oplus_tp_direction
+		apply 1 $tp_path/oppo_tp_direction
 	fi
 
 	# Memory tweak
@@ -590,10 +592,10 @@ performance_profile() {
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		devfreq_max_perf $path
+		devfreq_max_perf "$path"
 	done &
 
 	# Force CPU to highest possible OPP
@@ -603,7 +605,7 @@ performance_profile() {
 	if [ -d /proc/ppm ]; then
 		cluster=0
 		for path in /sys/devices/system/cpu/cpufreq/policy*; do
-			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
 			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
 			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			((cluster++))
@@ -611,9 +613,9 @@ performance_profile() {
 	fi
 
 	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-		apply "$cpu_maxfreq" $path/scaling_max_freq
-		apply "$cpu_maxfreq" $path/scaling_min_freq
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		apply "$cpu_maxfreq" "$path/scaling_max_freq"
+		apply "$cpu_maxfreq" "$path/scaling_min_freq"
 	done
 	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 
@@ -637,7 +639,7 @@ performance_profile() {
 }
 
 normal_profile() {
-	[ "$(cat /data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 0
+	[ "$(</data/encore/dnd_gameplay)" -eq 1 ] && encore_utility set_dnd 0
 
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
@@ -668,20 +670,20 @@ normal_profile() {
 	fi
 
 	# Enable touch boost
-	apply "1" /sys/module/msm_performance/parameters/touchboost
-	apply "1" /sys/power/pnpmgr/touch_boost
-	apply "1" /proc/perfmgr/tchbst/kernel/tb_enable
-	apply "1" /sys/devices/virtual/touch/touch_boost
-	apply "1" /sys/module/msm_perfmon/parameters/touch_boost_enable
+	apply 1 /sys/module/msm_performance/parameters/touchboost
+	apply 1 /sys/power/pnpmgr/touch_boost
+	apply 1 /proc/perfmgr/tchbst/kernel/tb_enable
+	apply 1 /sys/devices/virtual/touch/touch_boost
+	apply 1 /sys/module/msm_perfmon/parameters/touch_boost_enable
 
 	# Oppo/Oplus/Realme Touchpanel
 	tp_path="/proc/touchpanel"
 	if [ -d tp_path ]; then
-		apply "0" $tp_path/game_switch_enable
-		apply "1" $tp_path/oplus_tp_limit_enable
-		apply "1" $tp_path/oppo_tp_limit_enable
-		apply "0" $tp_path/oplus_tp_direction
-		apply "0" $tp_path/oppo_tp_direction
+		apply 0 $tp_path/game_switch_enable
+		apply 1 $tp_path/oplus_tp_limit_enable
+		apply 1 $tp_path/oppo_tp_limit_enable
+		apply 0 $tp_path/oplus_tp_direction
+		apply 0 $tp_path/oppo_tp_direction
 	fi
 
 	# Memory Tweaks
@@ -689,25 +691,25 @@ normal_profile() {
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		devfreq_unlock $path
+		devfreq_unlock "$path"
 	done &
 
 	# Restore min CPU frequency
-	if [ -f /data/encore/custom_default_cpu_gov ]; then
-		change_cpu_gov "$(cat /data/encore/custom_default_cpu_gov)"
-	else
-		change_cpu_gov "$(cat /data/encore/default_cpu_gov)"
-	fi
 	apply 1 /sys/devices/system/cpu/cpu1/online
+	if [ -f /data/encore/custom_default_cpu_gov ]; then
+		change_cpu_gov "$(</data/encore/custom_default_cpu_gov)"
+	else
+		change_cpu_gov "$(</data/encore/default_cpu_gov)"
+	fi
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
 		for path in /sys/devices/system/cpu/cpufreq/policy*; do
-			cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-			cpu_minfreq=$(cat $path/cpuinfo_min_freq)
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			cpu_minfreq=$(<"$path/cpuinfo_min_freq")
 			write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
 			write "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			((cluster++))
@@ -715,10 +717,10 @@ normal_profile() {
 	fi
 
 	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(cat $path/cpuinfo_max_freq)
-		cpu_minfreq=$(cat $path/cpuinfo_min_freq)
-		write "$cpu_maxfreq" $path/scaling_max_freq
-		write "$cpu_minfreq" $path/scaling_min_freq
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		cpu_minfreq=$(<"$path/cpuinfo_min_freq")
+		write "$cpu_maxfreq" "$path/scaling_max_freq"
+		write "$cpu_minfreq" "$path/scaling_min_freq"
 	done
 	chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 
@@ -752,25 +754,25 @@ powersave_profile() {
 	}
 
 	# Disable touch boost
-	apply "0" /sys/module/msm_performance/parameters/touchboost
-	apply "0" /sys/power/pnpmgr/touch_boost
-	apply "0" /proc/perfmgr/tchbst/kernel/tb_enable
-	apply "0" /sys/devices/virtual/touch/touch_boost
-	apply "0" /sys/module/msm_perfmon/parameters/touch_boost_enable
+	apply 0 /sys/module/msm_performance/parameters/touchboost
+	apply 0 /sys/power/pnpmgr/touch_boost
+	apply 0 /proc/perfmgr/tchbst/kernel/tb_enable
+	apply 0 /sys/devices/virtual/touch/touch_boost
+	apply 0 /sys/module/msm_perfmon/parameters/touch_boost_enable
 
 	# Disable cpu1 to save some power
 	apply 0 /sys/devices/system/cpu/cpu1/online
 
 	# eMMC and UFS governor
 	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_min_perf $path
+		devfreq_min_perf "$path"
 	done &
 	for path in /sys/class/devfreq/mmc*; do
-		devfreq_min_perf $path
+		devfreq_min_perf "$path"
 	done &
 
 	# CPU governor
-	change_cpu_gov "$(cat /data/encore/powersave_cpu_gov)"
+	change_cpu_gov "$(</data/encore/powersave_cpu_gov)"
 
 	case $SOC in
 	1) mediatek_powersave ;;
