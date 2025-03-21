@@ -33,7 +33,7 @@ extract() {
 	unzip $opts "$zip" "$file.sha256" -d "$TMPDIR_FOR_VERIFY" >&2
 	[ -f "$hash_path" ] || abort_verify "Missing checksum for $file"
 
-	(echo "$(<"$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "Checksum mismatch for $file"
+	(echo "$(cat "$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "Checksum mismatch for $file"
 	ui_print "- Verified $file" >&1
 
 	unset file_path
@@ -46,7 +46,7 @@ hash_path="$file_path.sha256"
 unzip -o "$ZIPFILE" "META-INF/com/google/android/*" -d "$TMPDIR_FOR_VERIFY" >&2
 [ -f "$file_path" ] || abort_verify "$file does not exists"
 if [ -f "$hash_path" ]; then
-	(echo "$(<"$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "Checksum mismatch for $file"
+	(echo "$(cat "$hash_path")  $file_path" | sha256sum -c -s -) || abort_verify "Checksum mismatch for $file"
 	ui_print "- Verified $file" >&1
 else
 	ui_print "- Download from Magisk app"
