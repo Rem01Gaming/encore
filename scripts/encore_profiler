@@ -551,13 +551,6 @@ performance_profile() {
 		fi
 	}
 
-	# Enable touch boost
-	apply 1 /sys/module/msm_performance/parameters/touchboost
-	apply 1 /sys/power/pnpmgr/touch_boost
-	apply 1 /proc/perfmgr/tchbst/kernel/tb_enable
-	apply 1 /sys/devices/virtual/touch/touch_boost
-	apply 1 /sys/module/msm_perfmon/parameters/touch_boost_enable
-
 	# Disable split lock mitigation
 	apply 0 /proc/sys/kernel/split_lock_mitigate
 
@@ -669,13 +662,6 @@ normal_profile() {
 		apply 1 /dev/stune/top-app/schedtune.boost
 	fi
 
-	# Enable touch boost
-	apply 1 /sys/module/msm_performance/parameters/touchboost
-	apply 1 /sys/power/pnpmgr/touch_boost
-	apply 1 /proc/perfmgr/tchbst/kernel/tb_enable
-	apply 1 /sys/devices/virtual/touch/touch_boost
-	apply 1 /sys/module/msm_perfmon/parameters/touch_boost_enable
-
 	# Oppo/Oplus/Realme Touchpanel
 	tp_path="/proc/touchpanel"
 	if [ -d tp_path ]; then
@@ -752,13 +738,6 @@ powersave_profile() {
 			apply Y /sys/module/battery_saver/parameters/enabled
 		fi
 	}
-
-	# Disable touch boost
-	apply 0 /sys/module/msm_performance/parameters/touchboost
-	apply 0 /sys/power/pnpmgr/touch_boost
-	apply 0 /proc/perfmgr/tchbst/kernel/tb_enable
-	apply 0 /sys/devices/virtual/touch/touch_boost
-	apply 0 /sys/module/msm_perfmon/parameters/touch_boost_enable
 
 	# Disable cpu1 to save some power
 	apply 0 /sys/devices/system/cpu/cpu1/online
