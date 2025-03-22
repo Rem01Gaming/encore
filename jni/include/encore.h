@@ -84,7 +84,7 @@ void log_encore(LogLevel level, const char* message, ...);
 // KernelSU Utilities
 bool ksu_grant_root(void);
 
-// PID and Prioritization logic
+// Process Utilities
 void set_priority(const pid_t pid);
 pid_t pidof(const char* name);
 
