@@ -65,10 +65,6 @@ bool get_screenstate_normal(void) {
 
     char* screenstate = execute_command("dumpsys power | grep -Eo 'mWakefulness=Awake|mWakefulness=Asleep' "
                                         "| awk -F'=' '{print $2}'");
-    if (!screenstate) {
-        screenstate = execute_command("dumpsys window displays | grep -Eo 'mAwake=true|mAwake=false' | "
-                                      "awk -F'=' '{print $2}'");
-    }
 
     if (screenstate) [[clang::likely]] {
         fetch_failed = 0;
