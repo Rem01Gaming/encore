@@ -59,6 +59,7 @@ char* get_gamestart(void) {
  * Description        : Retrieves the current screen wakefulness state from dumpsys command.
  * Note               : In repeated failures up to 6, this function will skip fetch routine
  *                      and just return true all time using function pointer.
+ *                      Never call this function, call get_screenstate() instead.
  ***********************************************************************************/
 bool get_screenstate_normal(void) {
     static char fetch_failed = 0;
@@ -93,6 +94,7 @@ bool get_screenstate_normal(void) {
  *                      global db or dumpsys power.
  * Note               : In repeated failures up to 6, this function will skip fetch routine
  *                      and just return false all time using function pointer.
+ *                      Never call this function, call get_low_power_state() instead.
  ***********************************************************************************/
 bool get_low_power_state_normal(void) {
     static char fetch_failed = 0;
