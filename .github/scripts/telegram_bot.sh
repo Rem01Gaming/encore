@@ -16,7 +16,7 @@ if [ ! -f "$file" ]; then
 	exit 1
 fi
 
-curl -s -F document=@$file "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+curl -s -F document=@"$file" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
 	-F chat_id="$CHAT_ID" \
 	-F "disable_web_page_preview=true" \
 	-F "parse_mode=markdownv2" \

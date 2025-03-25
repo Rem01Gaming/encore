@@ -1,12 +1,16 @@
 #!/bin/env bash
+# shellcheck disable=SC2035
 
-if [ -z $GITHUB_WORKSPACE ]; then
+if [ -z "$GITHUB_WORKSPACE" ]; then
 	echo "This script should only run on GitHub action!" >&2
 	exit 1
 fi
 
 # Make sure we're on right directory
-cd $GITHUB_WORKSPACE
+cd "$GITHUB_WORKSPACE" || {
+	echo "Unable to cd to GITHUB_WORKSPACE" >&2
+	exit 1
+}
 
 # Put critical files and folders here
 need_integrity=(
@@ -38,17 +42,21 @@ cp LICENSE ./module
 
 # Parse version info to module prop
 zipName="encore-$version-$release_code.zip"
-echo "zipName=$zipName" >>$GITHUB_OUTPUT
+echo "zipName=$zipName" >>"$GITHUB_OUTPUT"
 
 # Generate sha256sum for integrity checkup
-for file in ${need_integrity[@]}; do
+for file in "${need_integrity[@]}"; do
 	bash .github/scripts/gen_sha256sum.sh "$file"
 done
 
 # Zip the file
-cd ./module
-zip -r9 ../$zipName * -x *placeholder* *.map .shellcheck
-zip -z ../$zipName <<EOF
+cd ./module || {
+	echo "Unable to cd to ./module" >&2
+	exit 1
+}
+
+zip -r9 ../"$zipName" * -x *placeholder* *.map .shellcheckrc
+zip -z ../"$zipName" <<EOF
 $version-$release_code
 Build Date $(date +"%a %b %d %H:%M:%S %Z %Y")
 EOF
