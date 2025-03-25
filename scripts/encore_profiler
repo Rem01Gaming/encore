@@ -583,7 +583,7 @@ performance_profile() {
 	# Memory tweak
 	apply 80 /proc/sys/vm/vfs_cache_pressure
 
-	# eMMC and UFS governor
+	# eMMC and UFS frequency
 	for path in /sys/class/devfreq/*.ufshc; do
 		devfreq_max_perf "$path"
 	done &
@@ -675,7 +675,7 @@ normal_profile() {
 	# Memory Tweaks
 	apply 120 /proc/sys/vm/vfs_cache_pressure
 
-	# eMMC and UFS governor
+	# eMMC and UFS frequency
 	for path in /sys/class/devfreq/*.ufshc; do
 		devfreq_unlock "$path"
 	done &
@@ -742,7 +742,7 @@ powersave_profile() {
 	# Disable cpu1 to save some power
 	apply 0 /sys/devices/system/cpu/cpu1/online
 
-	# eMMC and UFS governor
+	# eMMC and UFS frequency
 	for path in /sys/class/devfreq/*.ufshc; do
 		devfreq_min_perf "$path"
 	done &
