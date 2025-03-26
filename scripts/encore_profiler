@@ -24,6 +24,9 @@
 # Fetch SoC recognition
 SOC=$(</data/encore/soc_recognition)
 
+# Fetch PPM policies settings for MediaTek
+PPM_POLICY=$(</data/encore/ppm_policies_mediatek)
+
 apply() {
 	[ ! -f "$2" ] && return 1
 	chmod 644 "$2" >/dev/null 2>&1
@@ -80,7 +83,7 @@ change_cpu_gov() {
 mediatek_performance() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(awk -F'[][]' '/PWR_THRO|THERMAL|SYS_BOOST/{print $2}' /proc/ppm/policy_status); do
+		for idx in $(awk -F'[][]' -v pattern="$PPM_POLICY" '$0 ~ pattern {print $2}' /proc/ppm/policy_status); do
 			apply "$idx 0" /proc/ppm/policy_status
 		done
 	fi
@@ -225,7 +228,7 @@ intel_performance() {
 mediatek_normal() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(awk -F'[][]' '/PWR_THRO|THERMAL|SYS_BOOST/{print $2}' /proc/ppm/policy_status); do
+		for idx in $(awk -F'[][]' -v pattern="$PPM_POLICY" '$0 ~ pattern {print $2}' /proc/ppm/policy_status); do
 			apply "$idx 1" /proc/ppm/policy_status
 		done
 	fi

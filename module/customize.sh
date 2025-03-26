@@ -153,6 +153,7 @@ ui_print "- Encore Tweaks configuration setup"
 make_dir /data/encore
 make_node 0 /data/encore/kill_logd
 make_node 0 /data/encore/dnd_gameplay
+[ ! -f /data/encore/ppm_policies_mediatek ] && echo 'PWR_THRO|THERMAL' >/data/encore/ppm_policies_mediatek
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
 touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
