@@ -15,7 +15,7 @@
 #define MAX_COMMAND_LENGTH 600
 #define MAX_OUTPUT_LENGTH 256
 
-#define LOCK_FILE "/data/encore/encore.lock"
+#define LOCK_FILE "/dev/encore_lockfile"
 #define LOG_FILE "/dev/encore_log"
 #define PROFILE_MODE "/dev/encore_mode"
 #define GAMELIST "/dev/encore_gamelist"
