@@ -28,17 +28,17 @@ make_dir() {
 
 abort_unsupported_arch() {
 	ui_print "*********************************************************"
-	ui_print "! Unsupported ARCH: $ARCH"
-	ui_print "! Encore Tweaks does not support your CPU architecture"
-	ui_print "! If you think this is wrong, please report to maintainer"
-	abort "*********************************************************"
-}
-
-abort_unsupported_arch() {
-	ui_print "*********************************************************"
 	ui_print "! Unsupported Architecture: $ARCH"
 	ui_print "! Your CPU architecture is not supported by Encore Tweaks."
 	ui_print "! If you believe this is an error, please report it to the maintainer."
+	abort "*********************************************************"
+}
+
+abort_corrupted() {
+	ui_print "*********************************************************"
+	ui_print "! Unable to extract verify.sh!"
+	ui_print "! Installation aborted. The module may be corrupted."
+	ui_print "! Please re-download and try again."
 	abort "*********************************************************"
 }
 
