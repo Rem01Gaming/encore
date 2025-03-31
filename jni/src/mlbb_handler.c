@@ -26,26 +26,28 @@
  *                      on foreground, not in the background.
  ***********************************************************************************/
 char handle_mlbb(const char* gamestart) {
-    static pid_t cached_pid = -1;
-
     // Is Gamestart MLBB?
     if (IS_MLBB(gamestart) != true) {
-        cached_pid = -1;
+        mlbb_pid = 0;
         return 0;
     }
 
     // Check if cached PID is still valid
-    if (cached_pid != -1) {
-        if (kill(cached_pid, 0) == 0) [[clang::likely]] {
+    if (mlbb_pid != 0) {
+        if (kill(mlbb_pid, 0) == 0) [[clang::likely]] {
             return 2;
         }
 
-        cached_pid = -1;
+        mlbb_pid = 0;
     }
 
+    // Concatenate gamestart with ':UnityKillsMe'
+    char mlbb_thread[40];
+    snprintf(mlbb_thread, sizeof(mlbb_thread), "%s%s", gamestart, ":UnityKillsMe");
+
     // Fetch new PID if cache is invalid
-    cached_pid = pidof(GAME_STRESS);
-    if (cached_pid != -1)
+    mlbb_pid = pidof(mlbb_thread);
+    if (mlbb_pid != 0)
         return 2;
 
     // MLBB is in the background

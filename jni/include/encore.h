@@ -1,6 +1,8 @@
 #ifndef ENCORE_H
 #define ENCORE_H
 
+#include <dirent.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +23,6 @@
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
-#define GAME_STRESS "com.mobile.legends:UnityKillsMe|com.mobilelegends.hwag:UnityKillsMe|com.mobiin.gp:UnityKillsMe"
 
 #define MY_PATH                                                                                                                    \
     "PATH=/system/bin:/system/xbin:/data/adb/ap/bin:/data/adb/ksu/bin:/data/adb/magisk:/debug_ramdisk:/sbin:/sbin/su:/su/bin:/su/" \
@@ -89,6 +90,7 @@ void set_priority(const pid_t pid);
 pid_t pidof(const char* name);
 
 // MLBB Handler
+extern pid_t mlbb_pid;
 char handle_mlbb(const char* gamestart);
 
 // Encore Profiler

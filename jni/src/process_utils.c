@@ -21,25 +21,73 @@
  * Inputs             : name (char *) - Name of process
  * Returns            : pid (pid_t) - PID of process
  * Description        : Fetch PID from a process name.
- * Note               : You can input inexact name with regex as this function utilize pgrep.
+ * Note               : You can input inexact process name.
  ***********************************************************************************/
-pid_t pidof(const char* name) {
-    /*
-     * It will execute something like this
-     * /system/bin/toybox pgrep -o -f net.kdt.pojavlaunch
-     *
-     * You maybe asking, why we fetch PID like this?
-     * Sometimes games like pojav launcher will have ridiculous process name such as
-     * 'net.kdt.pojavlaunch:launcher', which doesn't match the game package name.
-     */
-
-    char* pid = execute_direct("/system/bin/toybox", "pgrep", "-o", "-f", name, NULL);
-
-    if (pid) [[clang::likely]] {
-        return atoi(pid);
+pid_t pidof(const char *name) {
+    DIR *proc_dir = opendir("/proc");
+    if (!proc_dir) [[clang::unlikely]] {
+        perror("opendir");
+        return 0;
     }
 
-    return -1;
+    pid_t tracked_pid = 0;
+    struct dirent *entry;
+
+    while ((entry = readdir(proc_dir))) {
+        if (entry->d_type != DT_DIR)
+            continue;
+
+        // Check if directory name is a valid PID
+        bool is_pid = true;
+        for (char *p = entry->d_name; *p; ++p) {
+            if (!isdigit((unsigned char)*p)) {
+                is_pid = false;
+                break;
+            }
+        }
+
+        if (!is_pid) [[clang::unlikely]] {
+            continue;
+        }
+
+        // Read cmdline
+        char path[256];
+        snprintf(path, sizeof(path), "/proc/%s/cmdline", entry->d_name);
+        FILE *fp = fopen(path, "r");
+
+        if (!fp) [[clang::unlikely]] {
+            continue;
+        }
+
+        char cmdline[4096];
+        size_t len = fread(cmdline, 1, sizeof(cmdline) - 1, fp);
+        fclose(fp);
+
+        if (len == 0) [[clang::unlikely]] {
+            continue;
+        }
+
+        // Replace null bytes with spaces
+        for (size_t i = 0; i < len; ++i) {
+            if (cmdline[i] == '\0')
+                cmdline[i] = ' ';
+        }
+        cmdline[len] = '\0';
+
+        // Check for substring match
+        if (strstr(cmdline, name) != NULL) {
+            char *end;
+            long pid_val = strtol(entry->d_name, &end, 10);
+            if (end == entry->d_name || *end != '\0' || pid_val <= 0)
+                continue;
+
+            if (tracked_pid == 0 || pid_val < tracked_pid)
+                tracked_pid = (pid_t)pid_val;
+        }
+    }
+
+    closedir(proc_dir);
+    return tracked_pid;
 }
 
 /***********************************************************************************

@@ -16,6 +16,9 @@
 
 #include <encore.h>
 
+// Cached MLBB PID
+pid_t mlbb_pid = 0;
+
 int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
@@ -52,7 +55,7 @@ int main(void) {
 
     // Initialize variables
     char* gamestart = NULL;
-    pid_t pid = -1;
+    pid_t game_pid = 0;
     bool need_profile_checkup = false;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;
@@ -74,9 +77,9 @@ int main(void) {
         // prevent overhead from dumpsys commands.
         if (!gamestart) {
             gamestart = get_gamestart();
-        } else if (pid != -1 && kill(pid, 0) == -1) [[clang::unlikely]] {
-            log_encore(LOG_INFO, "Process %d exited, resetting profile...", pid);
-            pid = -1;
+        } else if (game_pid != 0 && kill(game_pid, 0) == -1) [[clang::unlikely]] {
+            log_encore(LOG_INFO, "Game %s exited, resetting profile...", gamestart);
+            game_pid = 0;
             free(gamestart);
             gamestart = get_gamestart();
 
@@ -95,8 +98,8 @@ int main(void) {
 
             // Get PID and check if the game is "real" running program
             // Handle weird behavior of MLBB
-            pid = (mlbb_is_running == MLBB_RUNNING) ? pidof(GAME_STRESS) : pidof(gamestart);
-            if (pid == -1) [[clang::unlikely]] {
+            game_pid = (mlbb_is_running == MLBB_RUNNING) ? mlbb_pid : pidof(gamestart);
+            if (game_pid == 0) [[clang::unlikely]] {
                 log_encore(LOG_ERROR, "Unable to fetch PID of %s", gamestart);
                 free(gamestart);
                 gamestart = NULL;
@@ -107,7 +110,7 @@ int main(void) {
             need_profile_checkup = false;
             log_encore(LOG_INFO, "Applying performance profile for %s", gamestart);
             run_profiler(PERFORMANCE_PROFILE);
-            set_priority(pid);
+            set_priority(game_pid);
         } else if (get_low_power_state()) {
             // Bail out if we already on powersave profile
             if (cur_mode == POWERSAVE_PROFILE)
