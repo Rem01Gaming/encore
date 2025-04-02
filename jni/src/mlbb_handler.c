@@ -47,8 +47,10 @@ char handle_mlbb(const char* gamestart) {
 
     // Fetch new PID if cache is invalid
     mlbb_pid = pidof(mlbb_thread);
-    if (mlbb_pid != 0)
+    if (mlbb_pid != 0) {
+        log_encore(LOG_INFO, "Boosting MLBB thread %s", mlbb_thread);
         return 2;
+    }
 
     // MLBB is in the background
     return 1;
