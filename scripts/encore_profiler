@@ -605,7 +605,6 @@ performance_profile() {
 
 	# Force CPU to highest possible OPP
 	change_cpu_gov performance
-	apply 1 /sys/devices/system/cpu/cpu1/online
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
@@ -696,7 +695,6 @@ normal_profile() {
 	done &
 
 	# Restore min CPU frequency
-	apply 1 /sys/devices/system/cpu/cpu1/online
 	if [ -f /data/encore/custom_default_cpu_gov ]; then
 		change_cpu_gov "$(</data/encore/custom_default_cpu_gov)"
 	else
@@ -750,9 +748,6 @@ powersave_profile() {
 			apply Y /sys/module/battery_saver/parameters/enabled
 		fi
 	}
-
-	# Disable cpu1 to save some power
-	apply 0 /sys/devices/system/cpu/cpu1/online
 
 	# eMMC and UFS frequency
 	for path in /sys/class/devfreq/*.ufshc; do
