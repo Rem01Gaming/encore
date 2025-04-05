@@ -92,8 +92,8 @@ set_dnd() {
 mediatek_performance() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(awk -F'[][]' -v pattern="$PPM_POLICY" '$0 ~ pattern {print $2}' /proc/ppm/policy_status); do
-			apply "$idx 0" /proc/ppm/policy_status
+		grep -E "$PPM_POLICY" /proc/ppm/policy_status | while read -r row; do
+			apply "${row:1:1} 0" /proc/ppm/policy_status
 		done
 	fi
 
@@ -237,8 +237,8 @@ intel_performance() {
 mediatek_normal() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		for idx in $(awk -F'[][]' -v pattern="$PPM_POLICY" '$0 ~ pattern {print $2}' /proc/ppm/policy_status); do
-			apply "$idx 1" /proc/ppm/policy_status
+		grep -E "$PPM_POLICY" /proc/ppm/policy_status | while read -r row; do
+			apply "${row:1:1} 1" /proc/ppm/policy_status
 		done
 	fi
 
