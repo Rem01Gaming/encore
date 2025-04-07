@@ -18,6 +18,7 @@ need_integrity=(
 	"module/libs"
 	"module/META-INF"
 	"module/service.sh"
+	"module/post-fs-data.sh"
 	"module/uninstall.sh"
 	"module/action.sh"
 	"module/module.prop"

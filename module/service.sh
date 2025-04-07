@@ -14,20 +14,19 @@
 # limitations under the License.
 #
 
+CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
+
+# Parse Governor to use
+default_gov=$(cat /data/encore/default_cpu_gov)
+
 # Wait until boot completed
 while [ -z "$(getprop sys.boot_completed)" ]; do
 	sleep 40
 done
 
-CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
-
-# Parse Governor to use
-chmod 444 "$CPUFREQ/scaling_governor"
-default_gov=$(cat "$CPUFREQ/scaling_governor")
-
 # Handle case when 'default_gov' is performance
 if [ "$default_gov" == "performance" ]; then
-	for gov in schedhorizon sugov_ext walt schedutil; do
+	for gov in schedhorizon walt sugov_ext uag schedutil schedplus interactive conservative powersave; do
 		grep -q "$gov" "$CPUFREQ/scaling_available_frequencies" && {
 			default_gov="$gov"
 			break
@@ -35,7 +34,8 @@ if [ "$default_gov" == "performance" ]; then
 	done
 fi
 
-echo "$default_gov" >/data/encore/default_cpu_gov
+# Revert to normal CPU governor
+echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 [ ! -f /data/encore/powersave_cpu_gov ] && echo "$default_gov" >/data/encore/powersave_cpu_gov
 
 # Touch log file
