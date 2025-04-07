@@ -14,7 +14,13 @@
 # limitations under the License.
 #
 
-if [ -z "$MMRL" ] && [ -n "$MAGISKTMP" ]; then
+if [ -n "$MMRL" ]; then
+	echo "- This action script is NOT intended to run on MMRL..."
+	echo "- Please open Encore Tweaks WebUI by clicking the module card."
+	exit 0
+fi
+
+if [ -n "$MAGISKTMP" ]; then
 	pm path io.github.a13e300.ksuwebui >/dev/null 2>&1 && {
 		echo "- Launching WebUI in KSUWebUIStandalone..."
 		am start -n "io.github.a13e300.ksuwebui/.WebUIActivity" -e id "encore"
