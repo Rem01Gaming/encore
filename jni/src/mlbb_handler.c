@@ -16,26 +16,27 @@
 
 #include <encore.h>
 
+// Cached MLBB PID
+pid_t mlbb_pid = 0;
+
 /***********************************************************************************
  * Function Name      : handle_mlbb
  * Inputs             : const char *gamestart - Game package name
- * Returns            : char - 2 if MLBB is running in foreground
- *                             1 if MLBB is running in background
- *                             0 if gamestart is not MLBB
+ * Returns            : MLBBState (enum)
  * Description        : Checks if Mobile Legends: Bang Bang IS actually running
  *                      on foreground, not in the background.
  ***********************************************************************************/
-char handle_mlbb(const char* gamestart) {
+MLBBState handle_mlbb(const char* gamestart) {
     // Is Gamestart MLBB?
-    if (IS_MLBB(gamestart) != true) {
+    if (IS_MLBB(gamestart) == false) {
         mlbb_pid = 0;
-        return 0;
+        return MLBB_NOT_RUNNING;
     }
 
     // Check if cached PID is still valid
     if (mlbb_pid != 0) {
         if (kill(mlbb_pid, 0) == 0) [[clang::likely]] {
-            return 2;
+            return MLBB_RUNNING;
         }
 
         mlbb_pid = 0;
@@ -49,9 +50,9 @@ char handle_mlbb(const char* gamestart) {
     mlbb_pid = pidof(mlbb_thread);
     if (mlbb_pid != 0) {
         log_encore(LOG_INFO, "Boosting MLBB thread %s", mlbb_thread);
-        return 2;
+        return MLBB_RUNNING;
     }
 
     // MLBB is in the background
-    return 1;
+    return MLBB_RUN_BG;
 }

@@ -16,9 +16,6 @@
 
 #include <encore.h>
 
-// Cached MLBB PID
-pid_t mlbb_pid = 0;
-
 int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl

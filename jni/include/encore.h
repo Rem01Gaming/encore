@@ -51,9 +51,9 @@ typedef enum : char {
 } ProfileMode;
 
 typedef enum : char {
-    MLBB_NOT_RUNNING = 0,
-    MLBB_RUN_BG = 1,
-    MLBB_RUNNING = 2
+    MLBB_NOT_RUNNING,
+    MLBB_RUN_BG,
+    MLBB_RUNNING
 } MLBBState;
 
 /*
@@ -76,8 +76,8 @@ char* execute_direct(const char* path, const char* arg0, ...);
 int systemv(const char* format, ...);
 
 // File Utilities
-char create_lock_file(void);
-int write2file(const char *filename, const char *data, const char append, const char use_flock);
+int create_lock_file(void);
+int write2file(const char *filename, const char *data, const bool append, const bool use_flock);
 
 // Logging system
 void log_encore(LogLevel level, const char* message, ...);
@@ -91,7 +91,7 @@ pid_t pidof(const char* name);
 
 // MLBB Handler
 extern pid_t mlbb_pid;
-char handle_mlbb(const char* gamestart);
+MLBBState handle_mlbb(const char* gamestart);
 
 // Encore Profiler
 extern bool (*get_screenstate)(void);

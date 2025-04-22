@@ -20,14 +20,14 @@
  * Function Name      : write2file
  * Inputs             : filename (const char *) - path to the file
  *                      content (const char *) - content to write
- *                      append (const char) - 1 for append and 0 for write
- *                      use_flock (const char) - 1 for acquire lock and 0 for no lock
+ *                      append (const bool) - true for append and false for write
+ *                      use_flock (const bool) - true for acquire lock and false for no lock
  * Returns            : int - 0 if write successful
  *                           -1 if file does not exist or inaccessible
  * Description        : Write the provided content to the specified file.
  * Note               : Do not use flock on /sdcard due FUSE, write will fail.
  ***********************************************************************************/
-int write2file(const char *filename, const char *data, const char append, const char use_flock) {
+int write2file(const char *filename, const char *data, const bool append, const bool use_flock) {
     // Reject empty data
     ssize_t bytes_to_write = strlen(data);
     if (!data || bytes_to_write == 0) {
@@ -61,12 +61,12 @@ int write2file(const char *filename, const char *data, const char append, const 
 /***********************************************************************************
  * Function Name      : create_lock_file
  * Inputs             : None
- * Returns            : char - 0 if lock file created successfully
- *                            -1 if another instance running
+ * Returns            : int - 0 if lock file created successfully
+ *                           -1 if another instance running
  * Description        : Create lock file and check if there's any another instance of
  *                      this daemon running.
  ***********************************************************************************/
-char create_lock_file(void) {
+int create_lock_file(void) {
     int fd = open(LOCK_FILE, O_WRONLY | O_CREAT, 0644);
     if (fd == -1) {
         perror("open");
