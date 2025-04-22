@@ -32,7 +32,7 @@ void run_profiler(const int profile) {
     is_kanged();
     char profile_str[16];
     snprintf(profile_str, sizeof(profile_str), "%d", profile);
-    write2file(PROFILE_MODE, profile_str, 0);
+    write2file(PROFILE_MODE, profile_str, 0, 0);
     (void)systemv("encore_profiler %d", profile);
 }
 

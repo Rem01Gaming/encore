@@ -77,7 +77,7 @@ int systemv(const char* format, ...);
 
 // File Utilities
 char create_lock_file(void);
-char write2file(const char* file_path, const char* content, const char mode);
+int write2file(const char *filename, const char *data, const char append, const char use_flock);
 
 // Logging system
 void log_encore(LogLevel level, const char* message, ...);
