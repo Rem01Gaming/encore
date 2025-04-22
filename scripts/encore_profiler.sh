@@ -197,11 +197,6 @@ exynos_performance() {
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
 	apply always_on "$mali_sysfs/power_policy"
-
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf "$path"
-	done &
 }
 
 unisoc_performance() {
@@ -219,11 +214,6 @@ tensor_performance() {
 		apply "$freq" "$gpu_path/scaling_max_freq"
 		apply "$freq" "$gpu_path/scaling_min_freq"
 	fi
-
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf "$path"
-	done &
 }
 
 intel_performance() {
@@ -346,11 +336,6 @@ exynos_normal() {
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
 	apply coarse_demand "$mali_sysfs/power_policy"
-
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock "$path"
-	done &
 }
 
 unisoc_normal() {
@@ -369,11 +354,6 @@ tensor_normal() {
 		write "$max_freq" "$gpu_path/scaling_max_freq"
 		write "$min_freq" "$gpu_path/scaling_min_freq"
 	fi
-
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock "$path"
-	done &
 }
 
 intel_normal() {
