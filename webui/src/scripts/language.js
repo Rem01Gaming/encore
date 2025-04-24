@@ -750,26 +750,30 @@ const translations = {
  * @param {string} lang - language code (e.g., 'en' or 'ru')
  */
 function translatePage(lang) {
-  // Update the lang attribute in the <html> tag
   document.documentElement.lang = lang;
-
-  // Iterate over all elements with data-i18n and update their content
+  
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) {
-      el.innerText = translations[lang][key];
-    }
+    // Fallback to English if key is missing
+    const text = translations[lang]?.[key] || translations.en[key] || key;
+    el.innerText = text;
   });
 
-  // Update the text of buttons that may not have data-i18n (if necessary)
+  // Update buttons with fallback
   const editGamelistBtn = document.getElementById('edit_gamelist_btn');
-  if (editGamelistBtn) editGamelistBtn.innerText = translations[lang]['editGamelistTitle'];
+  if (editGamelistBtn) {
+    editGamelistBtn.innerText = translations[lang]?.editGamelistTitle || translations.en.editGamelistTitle;
+  }
 
   const restartDaemonBtn = document.getElementById('restart_daemon_btn');
-  if (restartDaemonBtn) restartDaemonBtn.innerText = translations[lang]['restartDaemon'];
+  if (restartDaemonBtn) {
+    restartDaemonBtn.innerText = translations[lang]?.restartDaemon || translations.en.restartDaemon;
+  }
 
   const saveLogBtn = document.getElementById('save_log_btn');
-  if (saveLogBtn) saveLogBtn.innerText = translations[lang]['saveLogs'];
+  if (saveLogBtn) {
+    saveLogBtn.innerText = translations[lang]?.saveLogs || translations.en.saveLogs;
+  }
 }
 
 // Check localStorage for saved language
