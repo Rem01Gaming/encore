@@ -104,6 +104,9 @@ mediatek_performance() {
 	apply 1 /proc/cpufreq/cpufreq_cci_mode
 	apply 3 /proc/cpufreq/cpufreq_power_mode
 
+	# DDR Boost mode
+	apply 1 /sys/devices/platform/boot_dramboost/dramboost/dramboost
+
 	# EAS/HMP Switch
 	apply 0 /sys/devices/system/cpu/eas/enable
 
@@ -238,6 +241,9 @@ mediatek_normal() {
 	# MTK Power and CCI mode
 	apply 0 /proc/cpufreq/cpufreq_cci_mode
 	apply 0 /proc/cpufreq/cpufreq_power_mode
+
+	# DDR Boost mode
+	apply 0 /sys/devices/platform/boot_dramboost/dramboost/dramboost
 
 	# EAS/HMP Switch
 	apply 1 /sys/devices/system/cpu/eas/enable
