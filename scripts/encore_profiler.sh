@@ -600,14 +600,14 @@ performance_profile() {
 			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			((cluster++))
 		done
+	else
+		for path in /sys/devices/system/cpu/*/cpufreq; do
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			apply "$cpu_maxfreq" "$path/scaling_max_freq"
+			apply "$cpu_maxfreq" "$path/scaling_min_freq"
+		done
+		chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 	fi
-
-	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-		apply "$cpu_maxfreq" "$path/scaling_max_freq"
-		apply "$cpu_maxfreq" "$path/scaling_min_freq"
-	done
-	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -696,15 +696,15 @@ normal_profile() {
 			write "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			((cluster++))
 		done
+	else
+		for path in /sys/devices/system/cpu/*/cpufreq; do
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			cpu_minfreq=$(<"$path/cpuinfo_min_freq")
+			write "$cpu_maxfreq" "$path/scaling_max_freq"
+			write "$cpu_minfreq" "$path/scaling_min_freq"
+		done
+		chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 	fi
-
-	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-		cpu_minfreq=$(<"$path/cpuinfo_min_freq")
-		write "$cpu_maxfreq" "$path/scaling_max_freq"
-		write "$cpu_minfreq" "$path/scaling_min_freq"
-	done
-	chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
