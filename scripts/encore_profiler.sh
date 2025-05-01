@@ -70,6 +70,28 @@ devfreq_min_perf() {
 	apply "$freq" "$1/max_freq"
 }
 
+qcom_cpudcvs_max_perf() {
+	[ ! -f "$1/available_frequencies" ] && return 1
+	freq=$(which_maxfreq "$1/available_frequencies")
+	apply "$freq" "$1/hw_max_freq"
+	apply "$freq" "$1/hw_min_freq"
+}
+
+qcom_cpudcvs_unlock() {
+	[ ! -f "$1/available_frequencies" ] && return 1
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	min_freq=$(which_minfreq "$1/available_frequencies")
+	write "$max_freq" "$1/hw_max_freq"
+	write "$min_freq" "$1/hw_min_freq"
+}
+
+qcom_cpudcvs_min_perf() {
+	[ ! -f "$1/available_frequencies" ] && return 1
+	freq=$(which_minfreq "$1/available_frequencies")
+	apply "$freq" "$1/hw_min_freq"
+	apply "$freq" "$1/hw_max_freq"
+}
+
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
@@ -160,6 +182,10 @@ snapdragon_performance() {
 	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_max_perf "$path"
 	done &
+
+	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
+	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
 
 	# GPU, memory and bus frequency tweak
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
@@ -300,6 +326,10 @@ snapdragon_normal() {
 	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_unlock "$path"
 	done &
+
+	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/LLCC
+	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
+	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
 
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
