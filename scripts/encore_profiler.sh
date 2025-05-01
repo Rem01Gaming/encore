@@ -495,6 +495,7 @@ perfcommon() {
 	for algo in bbr3 bbr2 bbrplus bbr westwood cubic; do
 		if grep -q "$algo" /proc/sys/net/ipv4/tcp_available_congestion_control; then
 			apply "$algo" /proc/sys/net/ipv4/tcp_congestion_control
+			break
 		fi
 	done
 
