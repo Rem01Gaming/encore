@@ -492,11 +492,11 @@ perfcommon() {
 	done &
 
 	# Networking tweaks
-	if grep -q bbr2 /proc/sys/net/ipv4/tcp_available_congestion_control; then
-		apply "bbr2" /proc/sys/net/ipv4/tcp_congestion_control
-	else
-		apply "cubic" /proc/sys/net/ipv4/tcp_congestion_control
-	fi
+	for algo in bbr3 bbr2 bbrplus bbr westwood cubic; do
+		if grep -q "$algo" /proc/sys/net/ipv4/tcp_available_congestion_control; then
+			apply "$algo" /proc/sys/net/ipv4/tcp_congestion_control
+		fi
+	done
 
 	apply 1 /proc/sys/net/ipv4/tcp_low_latency
 	apply 1 /proc/sys/net/ipv4/tcp_ecn
