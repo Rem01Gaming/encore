@@ -27,7 +27,8 @@ done
 # Handle case when 'default_gov' is performance
 if [ "$default_gov" == "performance" ]; then
 	for gov in schedhorizon walt sugov_ext uag schedutil schedplus interactive conservative powersave; do
-		grep -q "$gov" "$CPUFREQ/scaling_available_frequencies" && {
+		grep -q "$gov" "$CPUFREQ/scaling_available_governors" && {
+			echo "$gov" >/data/encore/default_cpu_gov
 			default_gov="$gov"
 			break
 		}
@@ -35,6 +36,8 @@ if [ "$default_gov" == "performance" ]; then
 fi
 
 # Revert to normal CPU governor
+custom_gov="/data/encore/custom_default_cpu_gov"
+[ -f "$custom_gov" ] && default_gov=$(cat "$custom_gov")
 echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 [ ! -f /data/encore/powersave_cpu_gov ] && echo "$default_gov" >/data/encore/powersave_cpu_gov
 
