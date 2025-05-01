@@ -30,9 +30,14 @@ bool (*get_low_power_state)(void) = get_low_power_state_normal;
  ***********************************************************************************/
 void run_profiler(const int profile) {
     is_kanged();
-    char profile_str[16];
-    snprintf(profile_str, sizeof(profile_str), "%d", profile);
-    write2file(PROFILE_MODE, profile_str, false, false);
+
+    if (profile == 1) {
+        write2file(GAME_INFO, false, false, "%s %d %d\n", gamestart, game_pid, uidof(game_pid));
+    } else {
+        write2file(GAME_INFO, false, false, "NULL 0 0\n");
+    }
+
+    write2file(PROFILE_MODE, false, false, "%d", profile);
     (void)systemv("encore_profiler %d", profile);
 }
 

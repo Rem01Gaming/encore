@@ -35,7 +35,5 @@ void log_encore(LogLevel level, const char* message, ...) {
     vsnprintf(logMesg, sizeof(logMesg), message, args);
     va_end(args);
 
-    char logEncore[MAX_OUTPUT_LENGTH];
-    snprintf(logEncore, sizeof(logEncore), "[%s] [%s] %s\n", timestamp, level_str[level], logMesg);
-    write2file(LOG_FILE, logEncore, true, true);
+    write2file(LOG_FILE, true, true, "[%s] [%s] %s\n", timestamp, level_str[level], logMesg);
 }

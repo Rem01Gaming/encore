@@ -19,43 +19,57 @@
 /***********************************************************************************
  * Function Name      : write2file
  * Inputs             : filename (const char *) - path to the file
- *                      content (const char *) - content to write
  *                      append (const bool) - true for append and false for write
  *                      use_flock (const bool) - true for acquire lock and false for no lock
+ *                      data (const char *) - format string for content
  * Returns            : int - 0 if write successful
- *                           -1 if file does not exist or inaccessible
- * Description        : Write the provided content to the specified file.
- * Note               : Do not use flock on /sdcard due FUSE, write will fail.
+ *                           -1 for any error
+ * Description        : Writes formatted content to the specified file.
+ * Note               : Do not use flock on /sdcard (FUSE limitation)
  ***********************************************************************************/
-int write2file(const char *filename, const char *data, const bool append, const bool use_flock) {
-    // Reject empty data
-    ssize_t bytes_to_write = strlen(data);
-    if (!data || bytes_to_write == 0) {
+int write2file(const char* filename, const bool append, const bool use_flock, const char* data, ...) {
+    // Validate format string
+    if (!data)
         return -1;
-    }
 
+    // Format variable arguments
+    char content[MAX_DATA_LENGTH];
+    va_list args;
+    va_start(args, data);
+    int len = vsnprintf(content, sizeof(content), data, args);
+    va_end(args);
+
+    // Empty content or Invalid format
+    if (len <= 0)
+        return -1;
+
+    // Truncation occurred (buffer limits)
+    if (len >= (int)sizeof(content))
+        return -1;
+
+    // Open file with appropriate mode
     int flags = O_WRONLY | O_CREAT;
     flags |= append ? O_APPEND : O_TRUNC;
-
     int fd = open(filename, flags, 0644);
     if (fd == -1)
         return -1;
 
-    // Conditional locking
+    // Apply file lock if requested
     if (use_flock && flock(fd, LOCK_EX) == -1) {
         close(fd);
         return -1;
     }
 
-    // Write data to the file
-    ssize_t written = write(fd, data, bytes_to_write);
+    // Write formatted content
+    ssize_t written = write(fd, content, len);
 
-    // Conditional unlock
+    // Cleanup resources
     if (use_flock)
         flock(fd, LOCK_UN);
-
     close(fd);
-    return (written == bytes_to_write) ? 0 : -1;
+
+    // Verify full content was written
+    return (written == len) ? 0 : -1;
 }
 
 /***********************************************************************************

@@ -1,8 +1,8 @@
 #ifndef ENCORE_H
 #define ENCORE_H
 
-#include <dirent.h>
 #include <ctype.h>
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,12 +14,15 @@
 #include <unistd.h>
 
 #define LOOP_INTERVAL 15
+#define MAX_DATA_LENGTH 1024
 #define MAX_COMMAND_LENGTH 600
 #define MAX_OUTPUT_LENGTH 256
+#define MAX_PATH_LENGTH 256
 
 #define LOCK_FILE "/dev/encore_lockfile"
 #define LOG_FILE "/dev/encore_log"
 #define PROFILE_MODE "/dev/encore_mode"
+#define GAME_INFO "/dev/encore_game_info"
 #define GAMELIST "/dev/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
@@ -56,6 +59,9 @@ typedef enum : char {
     MLBB_RUNNING
 } MLBBState;
 
+extern char* gamestart;
+extern pid_t game_pid;
+
 /*
  * If you're here for function comments, you
  * are in the wrong place.
@@ -77,7 +83,7 @@ int systemv(const char* format, ...);
 
 // File Utilities
 int create_lock_file(void);
-int write2file(const char *filename, const char *data, const bool append, const bool use_flock);
+int write2file(const char* filename, const bool append, const bool use_flock, const char* data, ...);
 
 // Logging system
 void log_encore(LogLevel level, const char* message, ...);
@@ -88,6 +94,7 @@ bool ksu_grant_root(void);
 // Process Utilities
 void set_priority(const pid_t pid);
 pid_t pidof(const char* name);
+int uidof(pid_t pid);
 
 // MLBB Handler
 extern pid_t mlbb_pid;

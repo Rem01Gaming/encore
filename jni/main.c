@@ -16,6 +16,9 @@
 
 #include <encore.h>
 
+char* gamestart = NULL;
+pid_t game_pid = 0;
+
 int main(void) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
@@ -51,8 +54,6 @@ int main(void) {
     signal(SIGTERM, sighandler);
 
     // Initialize variables
-    char* gamestart = NULL;
-    pid_t game_pid = 0;
     bool need_profile_checkup = false;
     MLBBState mlbb_is_running = MLBB_NOT_RUNNING;
     ProfileMode cur_mode = PERFCOMMON;

@@ -23,15 +23,15 @@
  * Description        : Fetch PID from a process name.
  * Note               : You can input inexact process name.
  ***********************************************************************************/
-pid_t pidof(const char *name) {
-    DIR *proc_dir = opendir("/proc");
+pid_t pidof(const char* name) {
+    DIR* proc_dir = opendir("/proc");
     if (!proc_dir) [[clang::unlikely]] {
         perror("opendir");
         return 0;
     }
 
     pid_t tracked_pid = 0;
-    struct dirent *entry;
+    struct dirent* entry;
 
     while ((entry = readdir(proc_dir))) {
         if (entry->d_type != DT_DIR)
@@ -39,7 +39,7 @@ pid_t pidof(const char *name) {
 
         // Check if directory name is a valid PID
         bool is_pid = true;
-        for (char *p = entry->d_name; *p; ++p) {
+        for (char* p = entry->d_name; *p; ++p) {
             if (!isdigit((unsigned char)*p)) {
                 is_pid = false;
                 break;
@@ -53,7 +53,7 @@ pid_t pidof(const char *name) {
         // Read cmdline
         char path[256];
         snprintf(path, sizeof(path), "/proc/%s/cmdline", entry->d_name);
-        FILE *fp = fopen(path, "r");
+        FILE* fp = fopen(path, "r");
 
         if (!fp) [[clang::unlikely]] {
             continue;
@@ -76,7 +76,7 @@ pid_t pidof(const char *name) {
 
         // Check for substring match
         if (strstr(cmdline, name) != NULL) {
-            char *end;
+            char* end;
             long pid_val = strtol(entry->d_name, &end, 10);
             if (end == entry->d_name || *end != '\0' || pid_val <= 0)
                 continue;
@@ -88,6 +88,37 @@ pid_t pidof(const char *name) {
 
     closedir(proc_dir);
     return tracked_pid;
+}
+
+/***********************************************************************************
+ * Function Name      : uidof
+ * Inputs             : pid (pid_t) - PID of process
+ * Returns            : uid (int) - UID of process
+ * Description        : Fetch UID from a process id.
+ * Note               : Returns -1 on error.
+ ***********************************************************************************/
+int uidof(pid_t pid) {
+    char path[MAX_PATH_LENGTH];
+    char line[MAX_DATA_LENGTH];
+    FILE* status_file;
+    int uid = -1;
+
+    snprintf(path, sizeof(path), "/proc/%d/status", (int)pid);
+    status_file = fopen(path, "r");
+    if (!status_file) {
+        perror("fopen");
+        return -1;
+    }
+
+    while (fgets(line, sizeof(line), status_file) != NULL) {
+        if (strncmp(line, "Uid:", 4) == 0) {
+            sscanf(line + 4, "%d", &uid);
+            break;
+        }
+    }
+
+    fclose(status_file);
+    return uid;
 }
 
 /***********************************************************************************
