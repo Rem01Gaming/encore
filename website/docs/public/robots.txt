@@ -1,0 +1,7 @@
+# Hi! are you a robot?
+
+User-agent: *
+Disallow: /download/version/*
+Allow: /
+
+Sitemap: https://encore.rem01gaming.dev/sitemap.xml
