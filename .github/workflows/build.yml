@@ -48,18 +48,20 @@ jobs:
       run: |
         BASE_VERSION=4
         if [ "${{ github.event.inputs.release_type }}" == "minor_update" ]; then
-          CURRENT_MINOR=$(cat version 2>/dev/null || echo "0")
-          NEW_MINOR=$((CURRENT_MINOR + 1))
-          echo "${BASE_VERSION}.${NEW_MINOR}" > version
-          echo "version=${BASE_VERSION}.${NEW_MINOR}" >> $GITHUB_OUTPUT
+         CURRENT_MINOR=$(cat version 2>/dev/null || echo "0")
+         CURRENT_MINOR=${CURRENT_MINOR%%.*}  # Strip decimal points
+         NEW_MINOR=$((CURRENT_MINOR + 1))
+         echo "${BASE_VERSION}.${NEW_MINOR}" > version
+         echo "version=${BASE_VERSION}.${NEW_MINOR}" >> $GITHUB_OUTPUT
         elif [ "${{ github.event.inputs.release_type }}" == "major_update" ]; then
-          CURRENT_MAJOR=$BASE_VERSION
-          NEW_MAJOR=$((CURRENT_MAJOR + 1))
-          echo "${NEW_MAJOR}.0" > version
-          echo "version=${NEW_MAJOR}.0" >> $GITHUB_OUTPUT
+         CURRENT_MAJOR=$BASE_VERSION
+         CURRENT_MAJOR=${CURRENT_MAJOR%%.*}  # Strip decimal points
+         NEW_MAJOR=$((CURRENT_MAJOR + 1))
+         echo "${NEW_MAJOR}.0" > version
+         echo "version=${NEW_MAJOR}.0" >> $GITHUB_OUTPUT
         else
-          COMMIT_COUNT=$(git rev-list --count HEAD)
-          echo "version=${BASE_VERSION}-build.${COMMIT_COUNT}" >> $GITHUB_OUTPUT
+         COMMIT_COUNT=$(git rev-list --count HEAD)
+         echo "version=${BASE_VERSION}-build.${COMMIT_COUNT}" >> $GITHUB_OUTPUT
         fi
 
     - name: NDK Setup
