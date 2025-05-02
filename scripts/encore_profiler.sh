@@ -542,7 +542,7 @@ perfcommon() {
 	apply 0 /proc/sys/vm/page-cluster
 
 	# Update /proc/stat less often to reduce jitter
-	apply 120 /proc/sys/vm/stat_interval
+	apply 15 /proc/sys/vm/stat_interval
 
 	# Disable compaction_proactiveness
 	apply 0 /proc/sys/vm/compaction_proactiveness
