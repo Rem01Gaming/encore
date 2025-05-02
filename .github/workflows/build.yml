@@ -2,6 +2,16 @@ name: Build Encore Zip
 
 on:
   workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release Type'
+        required: true
+        default: 'no_release'
+        type: 'choice'
+        options:
+          - 'no_release'
+          - 'minor_update'
+          - 'major_update'
   push:
     branches:
       - main
@@ -24,19 +34,41 @@ jobs:
   build:
     name: Build Flashable Zip
     runs-on: ubuntu-latest
+    outputs:
+      zip_name: ${{ steps.compileZip.outputs.zipName }}
+      version: ${{ steps.set_version.outputs.version }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2
       with:
         fetch-depth: 0
 
+    - name: Set Version
+      id: set_version
+      run: |
+        BASE_VERSION=4
+        if [ "${{ github.event.inputs.release_type }}" == "minor_update" ]; then
+          CURRENT_MINOR=$(cat version 2>/dev/null || echo "0")
+          NEW_MINOR=$((CURRENT_MINOR + 1))
+          echo "${BASE_VERSION}.${NEW_MINOR}" > version
+          echo "version=${BASE_VERSION}.${NEW_MINOR}" >> $GITHUB_OUTPUT
+        elif [ "${{ github.event.inputs.release_type }}" == "major_update" ]; then
+          CURRENT_MAJOR=$BASE_VERSION
+          NEW_MAJOR=$((CURRENT_MAJOR + 1))
+          echo "${NEW_MAJOR}.0" > version
+          echo "version=${NEW_MAJOR}.0" >> $GITHUB_OUTPUT
+        else
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          echo "version=${BASE_VERSION}-build.${COMMIT_COUNT}" >> $GITHUB_OUTPUT
+        fi
+
     - name: NDK Setup
-      uses: nttld/setup-ndk@v1
+      uses: nttld/setup-ndk@v1.5.0
       with:
-        ndk-version: r28
+        ndk-version: r28b
 
     - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+      uses: oven-sh/setup-bun@v2.0.2
 
     - name: Build Encore JNI
       run: ndk-build
@@ -52,6 +84,13 @@ jobs:
       id: compileZip
       run: bash .github/scripts/compile_zip.sh
 
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: encore-build
+        path: ${{ steps.compileZip.outputs.zipName }}
+        retention-days: 7
+
     - name: Upload To Telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -62,9 +101,29 @@ jobs:
         TITLE: Encore Tweaks
       run: |
         if [ ! -z "${{ secrets.CHAT_ID }}" ] && [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-          export VERSION=$(git rev-list --count HEAD)
+          export VERSION=${{ steps.set_version.outputs.version }}
           bash .github/scripts/telegram_bot.sh ${{ steps.compileZip.outputs.zipName }}
         else
           echo "Telegram bot token or chatid is undefined, please add it to repository secrets!"
           exit 1
         fi
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.inputs.release_type == 'minor_update' || github.event.inputs.release_type == 'major_update'
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4.3.0
+          name: encore-build
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2.2.2
+        with:
+          tag_name: v${{ needs.build.outputs.version }}
+          name: Encore Tweaks v${{ needs.build.outputs.version }}
+          files: ${{ needs.build.outputs.zip_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
