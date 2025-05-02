@@ -116,6 +116,7 @@ jobs:
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4.3.0
+        with:
           name: encore-build
           
       - name: Create Release
