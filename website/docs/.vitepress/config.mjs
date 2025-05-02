@@ -9,12 +9,27 @@ export default defineConfig({
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
   },
+  
+  head: [
+    [
+      'script',
+      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-1962PRCX05' }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1962PRCX05');`
+    ]
+  ],
 
   transformPageData(pageData) {
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '')
-    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.png`;
+    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.webp`;
     
     pageData.frontmatter.head ??= []
     
@@ -24,7 +39,7 @@ export default defineConfig({
     pageData.frontmatter.head.push(['link', { rel: "canonical", href: canonicalUrl }])
     pageData.frontmatter.head.push(['meta', { name: "hostname", content: "encore.rem01gaming.dev"}])
     pageData.frontmatter.head.push(['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}])
-    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Encore Tweak, Magisk Module, performance module, Magisk, Gaming, Android, Module magisk, gaming performance" }])
+    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance" }])
     pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
     pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
     pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
@@ -63,13 +78,7 @@ export default defineConfig({
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
         ]
       },
-      {
-        text: 'Download',
-        items: [
-          { text: 'Changelog', link: '/download' },
-          { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
-        ]
-      }
+      { text: 'Download', link: '/download' }
     ],
 
     sidebar: [
@@ -82,19 +91,13 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Download',
-        items: [
-          { text: 'Changelog', link: '/download' },
-          { text: 'Contribute', link: 'https://github.com/Rem01Gaming/encore' }
-        ]
-      },
-      {
         text: 'Donate',
         items: [
           { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
           { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
         ]
-      }
+      },
+      { text: 'Download', link: '/download' }
     ],
     
     footer: {

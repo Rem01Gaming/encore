@@ -1,6 +1,6 @@
 ---
 title: "Encore Tweaks"
-description: "A powerful performance module featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU."
+description: "Boost your device's performance with Encore Tweaks! Featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU. Compatible with any Android device."
 layout: home
 
 hero:
@@ -15,25 +15,28 @@ hero:
       text: What is Encore Tweaks?
       link: /guide/what-is-encore-tweaks
     - theme: alt
-      text: Download
+      text: Download Now
       link: /download
     - theme: alt
-      text: GitHub
+      text: View on GitHub
       link: https://github.com/Rem01Gaming/encore
 
 features:
   - icon: 🤖
-    title: Fully Automatic
-    details: Encore Tweaks works by monitoring apps that you open and determine which performance profile should applied in that moment without any user settings.
+    title: Fully Automatic Performance Optimization
+    details: Encore Tweaks intelligently monitors apps and applies the optimal performance profile automatically, ensuring a smooth experience without manual configuration.
+  - icon: 🔋
+    title: Battery-Friendly Performance
+    details: Encore Tweaks only activates performance scripts during gaming sessions, preserving battery life for everyday use.
   - icon: 📱
     title: Universal SoC Compatibility
-    details: Designed to support a wide range of popular SoCs, including Snapdragon, MediaTek, Exynos, Google Tensor, and even Unisoc.
+    details: Encore Tweaks are compatible with any Android device, no matter how weird it is.
   - icon: 🚀
-    title: Game-First Prioritization
-    details: Encore Tweaks prioritizes games by allocating maximum CPU and I/O resources, ensuring seamless performance while gaming.
+    title: Game-First Resource Allocation
+    details: Encore Tweaks prioritizes gaming performance by allocating maximum CPU and I/O resources, ensuring lag-free gameplay.
   - icon: 🌐
-    title: Integrated WebUI
-    details: As the first performance module with a WebUI, Encore Tweaks makes it easy to configure settings and manage operations conveniently.
-  - icon: 👨‍💻
-    title: Open Source and Transparent
-    details: Released under the Apache 2.0 License, Encore Tweaks is open-source and developed by an experienced kernel developer, and free from obfuscated or poorly written code.
+    title: Integrated WebUI for Easy Configuration
+    details: Encore Tweaks is the first performance module to feature a WebUI, allowing users to configure settings and manage operations with ease.
+  - icon: 🤗
+    title: Safe and Reliable
+    details: With zero reported incidents of bootloops or bricked devices, Encore Tweaks is a trusted solution for performance optimization.
