@@ -708,11 +708,15 @@ normal_profile() {
 	done &
 
 	# Restore min CPU frequency
-	if [ -f /data/encore/custom_default_cpu_gov ]; then
-		change_cpu_gov "$(</data/encore/custom_default_cpu_gov)"
-	else
-		change_cpu_gov "$(</data/encore/default_cpu_gov)"
-	fi
+        # (Request) set to schedhorizon instead of schedutil (custom kernel stuffs)
+	# But schedutil setted if schedhorizon is not availabe
+	for path in /sys/devices/system/cpu/cpufreq/policy*; do
+        if grep -q 'schedhorizon' "$path/scaling_available_governors"; then
+        tweak schedhorizon "$path/scaling_governor"
+        else
+        tweak schedutil "$path/scaling_governor"
+        fi
+        done
 
 	if [ -d /proc/ppm ]; then
 		cluster=0
