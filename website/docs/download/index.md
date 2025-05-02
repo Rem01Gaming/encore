@@ -3,23 +3,19 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 4.0
+# Encore Tweaks 4.1
 
 ## Changelog
-- Drop mksh shell due buggy behavior on some devices.
-- Introduce MediaTek DDR boost tweak.
-- Skip CPU scaling tweaks entierly when PPM node exists.
-- Handle write conflict on logging system properly.
-- Other misc changes and optimizations.
-
-## Checksums
-- **MD5**: `f8b42a3bf61fdd5b9ffb3ddbd2702fb9`
-- **SHA1**: `98354012f04ca9e0abca861a9736005d533127cc`
-- **SHA256**: `f77b40ea35a9f20208139ce3021b711209d09de253c0e6db9936594291618f04`
+- Fix CPU governor defaulted as performance
+- Fix overheating after startup
+- Expose game information through /dev/encore_game_info
+- Reintroduce cpu_dcvs tweaks (LLCC, L3 and DDR)
+- Add more TCP congestion algo to use
+- Other misc changes and optimizations
 
 ## Download
-- [Download](https://shrinkme.ink/563Hoa)
-- [Download (Alternative link)](https://safefileku.com/download/sWewuedrvgHHLIPB)
+- [Download](https://safefileku.com/download/M1ZXL7KzRPCwmpBR)
+- [Download (Alternative link)](https://github.com/Rem01Gaming/encore/releases/tag/4.1)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -27,6 +23,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 4.0](/download/version/4.0)
 - [Version 3.9](/download/version/3.9)
 - [Version 3.8](/download/version/3.8)
 - [Version 3.7](/download/version/3.7)
