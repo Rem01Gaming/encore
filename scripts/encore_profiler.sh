@@ -561,11 +561,6 @@ perfcommon() {
 	# Report max CPU capabilities to these libraries
 	apply "libunity.so, libil2cpp.so, libmain.so, libUE4.so, libgodot_android.so, libgdx.so, libgdx-box2d.so, libminecraftpe.so, libLive2DCubismCore.so, libyuzu-android.so, libryujinx.so, libcitra-android.so, libhdr_pro_engine.so, libandroidx.graphics.path.so, libeffect.so" /proc/sys/kernel/sched_lib_name
 	apply 255 /proc/sys/kernel/sched_lib_mask_force
-
-	# Set thermal governor to step_wise
-	for dir in /sys/class/thermal/thermal_zone*; do
-		apply "step_wise" "$dir/policy"
-	done
 }
 
 performance_profile() {
