@@ -4,8 +4,13 @@ An Magisk module created to enhance device performance during gaming sessions, w
 
 More info about this project on [Official Encore Tweaks website](https://encore.rem01gaming.dev/)
 
-## Stop opening source
-Due to the rampant misuse and the contributions received after open-sourcing being less than expected, this module will be closed-source starting from version 2.1.
+## How to Contribute:
+- Fork the Repo
+- Edit tweaks according to your info/docs
+- Prettier the code using shfmt and clang-format (Google style)
+- Commit with proper name and info/docs about what you did
+- Test the change you did and check if eveything it's fine
+- Then make a pull request
 
 ## Special Credits
 - [tytydraco](https://github.com/tytydraco/KTweak) for KTweaks
