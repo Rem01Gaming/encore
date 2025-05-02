@@ -466,8 +466,9 @@ intel_powersave() {
 
 perfcommon() {
 	# Disable Kernel panic
-	# I know this is wrong, but I have no other options
-	# to fix random kernel panic on some devices.
+	# Workaround for kernel panic on startup in S25U.
+	# This is wrong, you know it and I know it.
+	# Move on and call me an idiot later.
 	apply 0 /proc/sys/kernel/panic
 	apply 0 /proc/sys/kernel/panic_on_oops
 	apply 0 /proc/sys/kernel/panic_on_warn
