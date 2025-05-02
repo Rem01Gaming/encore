@@ -1,6 +1,9 @@
 name: Build Encore Zip
 
 on:
+  pull_request:
+    branches:
+      -main
   workflow_dispatch:
   push:
     branches:
@@ -26,17 +29,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2
       with:
         fetch-depth: 0
 
     - name: NDK Setup
-      uses: nttld/setup-ndk@v1
+      uses: nttld/setup-ndk@v1.5.0
       with:
-        ndk-version: r28
+        ndk-version: r28b
 
     - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+      uses: oven-sh/setup-bun@v2.0.2
 
     - name: Build Encore JNI
       run: ndk-build
