@@ -147,6 +147,9 @@ mediatek_performance() {
 		done
 	}
 
+	# Disable power budget management
+	apply "stop 1" /proc/pbm/pbm_stop
+
 	# Disable battery current limiter
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
@@ -288,7 +291,7 @@ mediatek_normal() {
 		done
 	}
 
-	# Enable Power Budget management for new 5.x mtk kernels
+	# Enable power budget management
 	apply "stop 0" /proc/pbm/pbm_stop
 
 	# Enable battery current limiter
