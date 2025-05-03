@@ -1,4 +1,4 @@
-<p align="center"><a href="https://encore.rem01gaming.dev" target="_blank"><img src="./module/encore_logo.png" width="200" alt="Encore Tweaks Logo"></a></p>
+<p align="center"><a href="https://encore.rem01gaming.dev" target="_blank"><img src="https://encore.rem01gaming.dev/logo.webp" width="200" alt="Encore Tweaks Logo"></a></p>
 
 <p align="center">
 <a href="https://t.me/rem01schannel"><img src="https://img.shields.io/badge/Follow-Telegram-white.svg?style=for-the-badge&logo=telegram&logoColor=white&labelColor=222" alt="Join Our Telegram Vhannel"></a>
@@ -37,4 +37,4 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ## License
 
-Encore Tweaks is open-sourced software licensed under the [Apache-2.0 license](./LICENSE).
+Encore Tweaks is open-sourced software licensed under the [Apache-2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
