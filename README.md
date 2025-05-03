@@ -1,4 +1,4 @@
-<p align="center"><a href="https://encore.rem01gaming.dev" target="_blank"><img src="https://github.com/Rem01Gaming/encore/raw/refs/heads/main/module/encore_logo.png" width="200" alt="Encore Tweaks Logo"></a></p>
+<p align="center"><a href="https://encore.rem01gaming.dev" target="_blank"><img src="./module/encore_logo.png" width="200" alt="Encore Tweaks Logo"></a></p>
 
 <p align="center">
 <a href="https://t.me/rem01schannel"><img src="https://img.shields.io/badge/Follow-Telegram-white.svg?style=for-the-badge&logo=telegram&logoColor=white&labelColor=222" alt="Join Our Telegram Vhannel"></a>
@@ -8,9 +8,7 @@
 </p>
 
 ## About Encore Tweaks
-Encore Tweaks is a Magisk module created to enhance device performance during gaming sessions, while keeping battery life optimized for normal use.
-
-Encore Tweaks was fully automatic performance profiles with wide compatibility across various devices, Encore Tweaks adapts dynamically to boost your device's performance when it matters most.
+**Encore Tweaks** is a dynamic Magisk module designed to maximize your device's gaming performance while intelligently preserving battery life during everyday use. Perfect for gamers who demand smooth gameplay without compromising daily usability!
 
 More info about this project on [Official Encore Tweaks website](https://encore.rem01gaming.dev/)
 
@@ -27,16 +25,16 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ## Resources
 
-- [FAQ](https://encore.rem01gaming.dev/guide/faq.html)
-- [WebUI and Configuration](https://encore.rem01gaming.dev/guide/webui-and-configuration.html)
+- [FAQ](https://encore.rem01gaming.dev/guide/faq.html) - Common questions answered
+- [Configuration Guide](https://encore.rem01gaming.dev/guide/webui-and-configuration.html) - How to configure the WebUI
+- [Download](https://encore.rem01gaming.dev/download) - Get the latest version
 
-## Links
+## Community & Support
 
-- Download [here](https://encore.rem01gaming.dev/download)
-- Join our telegram channel [here](https://t.me/rem01schannel)
+- [Telegram Channel](https://t.me/rem01schannel) - Stay updated with announcements
+- [Report Issues](https://github.com/rem01gaming/encore/issues) - Found a bug? Let us know!
+- [Contribute](https://github.com/rem01gaming/encore/pulls) - Submit improvements via PR
 
-## Help and Support
+## License
 
-Report [here](https://github.com/rem01gaming/encore/issues) if you encounter any issues.
-
-[Pull requests](https://github.com/rem01gaming/encore/pulls) are always welcome.
+Encore Tweaks is open-sourced software licensed under the [Apache-2.0 license](./LICENSE).
