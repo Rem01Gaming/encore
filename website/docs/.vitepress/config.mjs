@@ -106,7 +106,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Rem01Gaming', ariaLabel: 'GitHub' },
+      { icon: 'github', link: 'https://github.com/Rem01Gaming/encore', ariaLabel: 'GitHub' },
       { icon: 'youtube', link: 'https://youtube.com/@rem01gaming', ariaLabel: 'YouTube Channel' }
     ]
   }
