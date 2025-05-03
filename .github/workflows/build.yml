@@ -55,6 +55,12 @@ jobs:
       id: compileZip
       run: bash .github/scripts/compile_zip.sh
 
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: encore-build
+        path: ${{ steps.compileZip.outputs.zipName }}
+
     - name: Upload To Telegram
       env:
         CHAT_ID: ${{ secrets.CHAT_ID }}
