@@ -31,6 +31,11 @@ if [ -n "$MAGISKTMP" ]; then
 		am start -n "com.dergoogler.mmrl/.ui.activity.webui.WebUIActivity" -e MOD_ID "encore"
 		exit 0
 	}
+	pm path com.dergoogler.mmrl.webuix >/dev/null 2>&1 && {
+		echo "- Launching WebUI in WebUI X..."
+		am start -n "com.dergoogler.mmrl.webuix/.ui.activity.webui.WebUIActivity" -e MOD_ID "encore"
+		exit 0
+	}
 fi
 
 echo "! Install KsuWebUI for WebUI access"
