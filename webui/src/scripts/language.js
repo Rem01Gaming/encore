@@ -653,19 +653,19 @@ const translations = {
   pl: {
     moduleTitle: "Encore Tweaks",
     profileTitle: "Aktualny Profil",
-    kernelTitle: "Kernel",
+    kernelTitle: "Jądro",
     chipsetTitle: "Chipset",
     androidSDKTitle: "Android SDK",
     settingsTitle: "Ustawienia",
-    killLogger: "Wyłącz Logger",
+    killLogger: "Wyłącz rejestrowanie",
     dndGameplay: "DND podczas Gry",
     defaultCpuGov: "Domyślny Governor CPU",
     powersaveCpuGov: "Oszczędny Governor CPU",
     actionsTitle: "Akcje",
-    supportTitle: "Wspieraj Mnie",
+    supportTitle: "Wesprzyj Mnie",
     supportDescription: "Encore Tweaks jest i zawsze będzie darmowy dla wszystkich. Możesz jednak okazać swoje wsparcie, dokonując darowizny.",
-    killLoggerTitle: "Wyłącz Logger",
-    killLoggerDesc: "Ta opcja zatrzyma usługi logowania i wyciszy logi, zmniejszając obciążenie wydajności.",
+    killLoggerTitle: "Wyłącz rejestrowanie",
+    killLoggerDesc: "Ta opcja zatrzyma usługi rejestrowania i wyciszy dzienniki, zmniejszając obciążenie wydajności.",
     killLoggerWarning: "OSTRZEŻENIE: Oprogramowanie zależne od usługi logd może nie działać poprawnie!",
     dndTitle: "Nie Przeszkadzać",
     dndDesc: "Włącza tryb 'Nie Przeszkadzać' podczas grania. Ogranicza zakłócenia ze strony powiadomień i połączeń, umożliwiając grę bez rozpraszania uwagi.",
@@ -679,7 +679,7 @@ const translations = {
     editGamelistDesc: "Profil wydajności zostanie aktywowany po uruchomieniu dowolnej gry lub aplikacji z tej listy.",
     saveChanges: "Zapisz Zmiany",
     cancelChanges: "Anuluj Zmiany",
-    saveLogs: "Zapisz Logi Modułu"
+    saveLogs: "Zapisz Dzienniki Modułu"
   },
   tl: {
     moduleTitle: "Encore Tweaks",
