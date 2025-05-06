@@ -4,4 +4,4 @@ version=
 versionCode=
 author=Rem01Gaming
 description=Special performance module for your Device.
-updateJson=https://raw.githubusercontent.com/Rem01Gaming/encore/main/update.json
+updateJson=https://encore.rem01gaming.dev/api/update.json
