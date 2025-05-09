@@ -1,6 +1,6 @@
 ---
 title: "Encore Tweaks Addon"
-description: ""
+description: "Explore the Encore Tweaks Addon for dynamic performance optimization, API integration, and seamless module collaboration."
 ---
 
 # Encore Tweaks Addon
@@ -35,6 +35,8 @@ Other module can watch current profile on Encore Tweaks and then apply their own
 
 **Special Values**:
 - `NULL 0 0` when no game is active
+
+---
 
 If you find that the existing API doesn't meet your needs or is inconvenient to use, you're welcome to give us suggestions [here](https://github.com/Rem01Gaming/encore/issues)!
 

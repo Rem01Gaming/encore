@@ -5,9 +5,9 @@ description: "Learn how to configure Encore Tweaks settings via Module WebUI for
 
 # Module WebUI and Configuration
 
-The Encore Tweaks module provides a range of settings accessible through [Module WebUI](https://kernelsu.org/guide/module-webui.html), a KernelSU feature that lets modules build interactive HTML, CSS, and JavaScript interfaces. Through this WebUI, users can conveniently configure Encore Tweaks and adjust performance options.
+The **Encore Tweaks** module offers a variety of performance-tuning settings accessible through the [Module WebUI](https://kernelsu.org/guide/module-webui.html)—a feature of **KernelSU** that allows modules to build interactive HTML, CSS, and JavaScript interfaces. This WebUI makes it easy for users to configure Encore Tweaks without needing to manually edit configuration files.
 
-While KernelSU and APatch integrate WebUI natively in their managers, Magisk does not support WebUI natively. To use WebUI in Magisk, you can use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
+While **KernelSU** and **APatch** support WebUI natively in their managers, **Magisk** does not. If you're using Magisk, you can still access the WebUI using the [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
 
 ::: details Preview of Encore Tweaks WebUI
 ![Encore Tweaks WebUI](/Screenshot_20250206-175121_MMRL.png)
@@ -16,23 +16,23 @@ While KernelSU and APatch integrate WebUI natively in their managers, Magisk doe
 ## Configuration Options
 
 ### Kill Logger
-This option will stops the logger services and silence logs. Enable this option to reduces performance overhead.
+Stops system logging services to reduce background activity and performance overhead.
 
 ::: warning
-Do NOT enable this option if you're testing ROMs or apps as it will completely disable system logging. Software that depends on `logd` service will not working properly!
+Do **NOT** enable this if you're debugging ROMs or apps. It disables system logging entirely, which may cause issues with apps that rely on `logd`.
 :::
 
 ### DND on Gameplay
-Enable do not disturb mode when playing games. limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.
+Automatically enables **Do Not Disturb** mode while gaming to block notifications and interruptions, ensuring an uninterrupted experience.
 
 ### Default CPU Governor
-Default CPU governor to be used on Normal profile. The CPU governor determines power and performance trade-offs.
+Sets the CPU governor used in the **Normal** profile. The governor determines how the CPU scales frequency based on system load, affecting both power efficiency and performance.
 
 ### Powersave CPU Governor
-Choose the CPU governor specifically for the Powersave profile, which is optimized for battery life, by default this option will follow default CPU governor.
+Defines the CPU governor for the **Powersave** profile, optimized for battery life. If not explicitly set, it will use the default CPU governor.
 
 ### Edit Gamelist
-Edit the list of games and other performance-intensive applications. When these apps are active, Encore Tweaks will automatically apply the "Performance" profile.
+Allows you to manage a list of games and performance-demanding apps. When any listed app is launched, Encore Tweaks automatically switches to the **Performance** profile.
 
 ### Save Logs
-Save Encore daemon logs to internal storage, this log can help with troubleshooting.
+Stores Encore daemon logs in internal storage for troubleshooting purposes. These logs can help diagnose issues or confirm profile behavior.

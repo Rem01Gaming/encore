@@ -36,10 +36,10 @@ Some games attend to run on background hence causing random boosts. to prevent r
 - **Magisk Users**: Native WebUI support isn't available in Magisk. Use [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL) to access the WebUI if needed.
 
 ## What should I do if I find a bug or issue in Encore Tweaks?
-Report any issues or bugs in our [Telegram chat group](https://t.me/rem01shideout).
+Report any issues or bugs [here](https://github.com/Rem01Gaming/encore/issues).
 
 ## Can I use Encore Tweaks with other performance modules?
 We do not recommend using Encore Tweaks alongside other performance modules, as they are likely to conflict. This includes modules like YAKT, Magnetar, RiProG AI, Mtkfest, and Mtkvest. However, Thermal Killer and Thermal mod modules can be safely used alongside Encore Tweaks.
 
 ## How can I add games to the Gamelist?
-You can add games to the Gamelist either via the WebUI or by editing the file directly at <code>/data/encore/gamelist.txt</code>.
+You can add games to the Gamelist via the WebUI, you can find the guide [here](/guide/webui-and-configuration).
