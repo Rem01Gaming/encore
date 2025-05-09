@@ -87,6 +87,7 @@ export default defineConfig({
         items: [
           { text: 'What is Encore Tweaks?', link: '/guide/what-is-encore-tweaks' },
           { text: 'Module WebUI and Configuration', link: '/guide/webui-and-configuration' },
+          { text: 'Encore Tweaks Addon', link: '/guide/addon' },
           { text: 'FAQ', link: '/guide/faq' }
         ]
       },
