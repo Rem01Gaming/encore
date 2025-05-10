@@ -41,12 +41,6 @@ custom_gov="/data/encore/custom_default_cpu_gov"
 echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 [ ! -f /data/encore/powersave_cpu_gov ] && echo "$default_gov" >/data/encore/powersave_cpu_gov
 
-# Touch log file
-touch /dev/encore_log
-
-# Expose ProfileMode from here
-touch /dev/encore_mode
-
 # Copy gamelist to tmpfs
 cp /data/encore/gamelist.txt /dev/encore_gamelist
 
