@@ -54,23 +54,32 @@ void notify(const char* message) {
  * Returns            : char * - pointer to a statically allocated string
  *                      with the formatted time.
  * Description        : Generates a timestamp with the format
- *                      [Day Mon DD HH:MM:SS YYYY].
+ *                      [YYYY-MM-DD HH:MM:SS.milliseconds].
  ***********************************************************************************/
 char* timern(void) {
     static char timestamp[64];
-    time_t current_time = time(NULL);
-    struct tm* local_time = localtime(&current_time);
+    struct timeval tv;
+    time_t current_time;
+    struct tm* local_time;
+
+    gettimeofday(&tv, NULL);
+    current_time = tv.tv_sec;
+    local_time = localtime(&current_time);
 
     if (local_time == NULL) [[clang::unlikely]] {
         strcpy(timestamp, "[TimeError]");
         return timestamp;
     }
 
-    size_t format_result = strftime(timestamp, sizeof(timestamp), "%c", local_time);
+    size_t format_result = strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", local_time);
     if (format_result == 0) [[clang::unlikely]] {
         strcpy(timestamp, "[TimeFormatError]");
+        return timestamp;
     }
 
+    // Append milliseconds
+    snprintf(timestamp + strlen(timestamp), sizeof(timestamp) - strlen(timestamp), ".%03ld", tv.tv_usec / 1000);
+    
     return timestamp;
 }
 

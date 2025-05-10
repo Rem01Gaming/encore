@@ -19,6 +19,8 @@
 #define MAX_OUTPUT_LENGTH 256
 #define MAX_PATH_LENGTH 256
 
+#define LOG_TAG "EncoreTweaks"
+
 #define LOCK_FILE "/dev/encore_lockfile"
 #define LOG_FILE "/dev/encore_log"
 #define PROFILE_MODE "/dev/encore_mode"
