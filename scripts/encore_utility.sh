@@ -33,13 +33,26 @@ set_dnd() {
 save_logs() {
 	[ ! -d /sdcard/Download ] && mkdir /sdcard/Download
 	log_file="/sdcard/Download/encore_bugreport_$(date +"%Y-%m-%d_%H_%M").txt"
+	SOC="Unknown"
+
+	case $(</data/encore/soc_recognition) in
+	1) SOC="MediaTek" ;;
+	2) SOC="Snapdragon" ;;
+	3) SOC="Exynos" ;;
+	4) SOC="Unisoc" ;;
+	5) SOC="Tensor" ;;
+	6) SOC="Intel" ;;
+	7) SOC="Tegra" ;;
+	8) SOC="Kirin" ;;
+	esac
+
 	echo "$log_file"
 	cat <<EOF >"$log_file"
 *****************************************************
 Encore Tweaks Log
 
 Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
-Chipset: $(getprop ro.board.platform) ($(</data/encore/soc_recognition))
+Chipset: $SOC $(getprop ro.board.platform)
 Fingerprint: $(getprop ro.build.fingerprint)
 Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
