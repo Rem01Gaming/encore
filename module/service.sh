@@ -26,7 +26,7 @@ done
 
 # Handle case when 'default_gov' is performance
 if [ "$default_gov" == "performance" ]; then
-	for gov in schedhorizon walt sugov_ext uag schedutil schedplus interactive conservative powersave; do
+	for gov in schedhorizon walt sugov_ext uag schedplus energy_step schedutil interactive conservative powersave; do
 		grep -q "$gov" "$CPUFREQ/scaling_available_governors" && {
 			echo "$gov" >/data/encore/default_cpu_gov
 			default_gov="$gov"
