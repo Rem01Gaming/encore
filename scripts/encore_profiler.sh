@@ -185,10 +185,15 @@ snapdragon_performance() {
 	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_max_perf "$path"
 	done &
-
-	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
-	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
+	
 	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
+
+	# Workaround for game freezes in peridot
+	# Skip LLCC and L3 tweaks
+	[ $(getprop ro.board.platform) != "pineapple" ] && {
+		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
+	}
 
 	# GPU, memory and bus frequency tweak
 	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
@@ -330,9 +335,14 @@ snapdragon_normal() {
 		devfreq_unlock "$path"
 	done &
 
-	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/LLCC
-	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
 	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
+
+	# Workaround for game freezes in peridot
+	# Skip LLCC and L3 tweaks
+	[ $(getprop ro.board.platform) != "pineapple" ] && {
+		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/LLCC
+		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
+	}
 
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
