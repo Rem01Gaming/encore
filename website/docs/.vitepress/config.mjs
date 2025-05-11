@@ -30,9 +30,9 @@ export default defineConfig({
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '')
     const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.webp`;
-    
+
     pageData.frontmatter.head ??= []
-    
+
     pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "favicon.png", sizes: "64x64"}])
     pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "android-chrome.png", sizes: "192x192"}])
     pageData.frontmatter.head.push(['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", sizes: "180x180"}])
@@ -100,15 +100,14 @@ export default defineConfig({
       },
       { text: 'Download', link: '/download' }
     ],
-    
+
     footer: {
       message: 'Released under the Apache License 2.0.',
       copyright: 'Copyright © 2024-present Rem01Gaming'
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Rem01Gaming/encore', ariaLabel: 'GitHub' },
-      { icon: 'youtube', link: 'https://youtube.com/@rem01gaming', ariaLabel: 'YouTube Channel' }
+      { icon: 'github', link: 'https://github.com/Rem01Gaming/encore', ariaLabel: 'GitHub' }
     ]
   }
 })
