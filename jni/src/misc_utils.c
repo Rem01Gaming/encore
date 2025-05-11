@@ -41,7 +41,7 @@
  * Description        : Push a notification.
  ***********************************************************************************/
 void notify(const char* message) {
-    int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' '%s'\" >/dev/null", message);
+    int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t '%s' '%s' '%s'\" >/dev/null", NOTIFY_TITLE, LOG_TAG, message);
 
     if (exit != 0) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "Unable to post push notification, message: %s", message);

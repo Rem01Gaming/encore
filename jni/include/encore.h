@@ -19,6 +19,7 @@
 #define MAX_OUTPUT_LENGTH 256
 #define MAX_PATH_LENGTH 256
 
+#define NOTIFY_TITLE "Encore Tweaks"
 #define LOG_TAG "EncoreTweaks"
 
 #define LOCK_FILE "/dev/encore_lockfile"
