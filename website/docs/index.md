@@ -1,5 +1,6 @@
 ---
 title: "Encore Tweaks"
+titleTemplate: Special performance module for your device
 description: "Boost your device's performance with Encore Tweaks! Featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU. Compatible with any Android device."
 layout: home
 
