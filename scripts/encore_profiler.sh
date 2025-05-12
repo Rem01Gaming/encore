@@ -494,12 +494,9 @@ perfcommon() {
 	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'encore' 'Tweaks successfully applied'" >/dev/null &
 
 	# I/O Tweaks
-	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
+	for dir in /sys/block/*; do
 		# Disable I/O statistics accounting
 		apply 0 "$dir/queue/iostats"
-
-		# Reduce the maximum number of I/O requests in exchange for latency
-		apply 64 "$dir/queue/nr_requests"
 
 		# Don't use I/O as random spice
 		apply 0 "$dir/queue/add_random"
@@ -653,6 +650,9 @@ performance_profile() {
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
 		# Reduce heuristic read-ahead in exchange for I/O latency
 		apply 32 "$dir/queue/read_ahead_kb"
+
+		# Reduce the maximum number of I/O requests in exchange for latency
+		apply 32 "$dir/queue/nr_requests"
 	done &
 
 	case $SOC in
@@ -750,6 +750,9 @@ normal_profile() {
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
 		# Reduce heuristic read-ahead in exchange for I/O latency
 		apply 128 "$dir/queue/read_ahead_kb"
+
+		# Reduce the maximum number of I/O requests in exchange for latency
+		apply 64 "$dir/queue/nr_requests"
 	done &
 
 	case $SOC in
