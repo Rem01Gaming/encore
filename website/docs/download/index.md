@@ -3,19 +3,22 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 4.1
+# Encore Tweaks 4.2
 
 ## Changelog
-- Fix CPU governor defaulted as performance
-- Fix overheating after startup
-- Expose game information through /dev/encore_game_info
-- Reintroduce cpu_dcvs tweaks (LLCC, L3 and DDR)
-- Add more TCP congestion algo to use
+
+- Disable MTK PBM on performance profile
+- Update Vietnamese and Polish WebUI translation
+- Use `energy_step` for default CPU governor candidate
+- Remove unnecessary file creation on late_start service
+- Workaround for game freezes in Xiaomi peridot
+- Globally disable `iostats` and `add_random`
+- Reduce `nr_requests` to 32 on performance profile
 - Other misc changes and optimizations
 
 ## Download
-- [Download](https://github.com/Rem01Gaming/encore/releases/tag/4.1)
-- [Download (Alternative link)](https://dl.rem01gaming.dev/releases/encore/4.1/encore-4.1-862-cc92fbc-release.zip)
+- [Download](https://github.com/Rem01Gaming/encore/releases/tag/4.2)
+- [Download (Alternative link)](https://dl.rem01gaming.dev/releases/encore/4.2/encore-4.2-899-84bbcb5-release.zip)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
