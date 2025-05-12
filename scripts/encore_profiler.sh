@@ -48,6 +48,25 @@ which_minfreq() {
 	tr ' ' '\n' <"$1" | grep -v '^[[:space:]]*$' | sort -n | head -n 1
 }
 
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+set_dnd() {
+	case $1 in
+	# Turn off DND mode
+	0) cmd notification set_dnd off ;;
+	# Turn on DND mode
+	1) cmd notification set_dnd priority ;;
+	esac
+}
+
+###################################
+# Frequency Settings
+###################################
+
 devfreq_max_perf() {
 	[ ! -f "$1/available_frequencies" ] && return 1
 	freq=$(which_maxfreq "$1/available_frequencies")
@@ -92,19 +111,84 @@ qcom_cpudcvs_min_perf() {
 	apply "$freq" "$1/hw_max_freq"
 }
 
-change_cpu_gov() {
-	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
-	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+###################################
+# Scheduler Settings
+###################################
+
+balance_sched() {
+	# Duration in nanoseconds of one scheduling period
+	SCHED_PERIOD="$((4 * 1000 * 1000))"
+	
+	# How many tasks should we have at a maximum in one scheduling period
+	SCHED_TASKS="8"
+
+	# Disable schedstats
+	apply 0 /proc/sys/kernel/sched_schedstats
+
+	# Group tasks for less stutter but less throughput
+	apply 1 /proc/sys/kernel/sched_autogroup_enabled
+
+	# Execute parent process before child after fork
+	apply 0 /proc/sys/kernel/sched_child_runs_first
+
+	# Preliminary requirement for the following values
+	apply 0 /proc/sys/kernel/sched_tunable_scaling
+
+	# Reduce the maximum scheduling period for lower latency
+	apply "$SCHED_PERIOD" /proc/sys/kernel/sched_latency_ns
+
+	# Schedule this ratio of tasks in the guarenteed sched period
+	apply "$((SCHED_PERIOD / SCHED_TASKS))" /proc/sys/kernel/sched_min_granularity_ns
+
+	# Require preeptive tasks to surpass half of a sched period in vmruntime
+	apply "$((SCHED_PERIOD / 2))" /proc/sys/kernel/sched_wakeup_granularity_ns
+
+	# Reduce the frequency of task migrations
+	apply 5000000 /proc/sys/kernel/sched_migration_cost_ns
+
+	# Improve real time latencies by reducing the scheduler migration time
+	apply 32 /proc/sys/kernel/sched_nr_migrate
+
+	# Always allow sched boosting on top-app tasks
+	apply 0 /proc/sys/kernel/sched_min_task_util_for_colocation
 }
 
-set_dnd() {
-	case $1 in
-	# Turn off DND mode
-	0) cmd notification set_dnd off ;;
-	# Turn on DND mode
-	1) cmd notification set_dnd priority ;;
-	esac
+latency_sched() {
+	# Duration in nanoseconds of one scheduling period
+	SCHED_PERIOD="$((1 * 1000 * 1000))"
+	
+	# How many tasks should we have at a maximum in one scheduling period
+	SCHED_TASKS="10"
+
+	# Disable schedstats
+	apply 0 /proc/sys/kernel/sched_schedstats
+
+	# Group tasks for less stutter but less throughput
+	apply 1 /proc/sys/kernel/sched_autogroup_enabled
+
+	# Execute child process before parent after fork
+	apply 1 /proc/sys/kernel/sched_child_runs_first
+
+	# Preliminary requirement for the following values
+	apply 0 /proc/sys/kernel/sched_tunable_scaling
+
+	# Reduce the maximum scheduling period for lower latency
+	apply "$SCHED_PERIOD" /proc/sys/kernel/sched_latency_ns
+
+	# Schedule this ratio of tasks in the guarenteed sched period
+	apply "$((SCHED_PERIOD / SCHED_TASKS))" /proc/sys/kernel/sched_min_granularity_ns
+
+	# Require preeptive tasks to surpass half of a sched period in vmruntime
+	apply "$((SCHED_PERIOD / 2))" /proc/sys/kernel/sched_wakeup_granularity_ns
+
+	# Reduce the frequency of task migrations
+	apply 5000000 /proc/sys/kernel/sched_migration_cost_ns
+
+	# Improve real time latencies by reducing the scheduler migration time
+	apply 32 /proc/sys/kernel/sched_nr_migrate
+
+	# Always allow sched boosting on top-app tasks
+	apply 0 /proc/sys/kernel/sched_min_task_util_for_colocation
 }
 
 ###################################
@@ -529,25 +613,8 @@ perfcommon() {
 		stop statsd
 	fi
 
-	# Disable schedstats
-	apply 0 /proc/sys/kernel/sched_schedstats
-
-	# Disable Oppo/Realme cpustats
-	apply 0 /proc/sys/kernel/task_cpustats_enable
-
-	# Disable Sched auto group
-	apply 0 /proc/sys/kernel/sched_autogroup_enabled
-
-	# Enable CRF
-	apply 1 /proc/sys/kernel/sched_child_runs_first
-
-	# Improve real time latencies by reducing the scheduler migration time
-	apply 32 /proc/sys/kernel/sched_nr_migrate
-
-	# Tweaking scheduler to reduce latency
-	apply 50000 /proc/sys/kernel/sched_migration_cost_ns
-	apply 1000000 /proc/sys/kernel/sched_min_granularity_ns
-	apply 1500000 /proc/sys/kernel/sched_wakeup_granularity_ns
+	# Disable SPI CRC
+	apply 0 /sys/module/mmc_core/parameters/use_spi_crc
 
 	# Disable read-ahead for swap devices
 	apply 0 /proc/sys/vm/page-cluster
@@ -558,13 +625,9 @@ perfcommon() {
 	# Disable compaction_proactiveness
 	apply 0 /proc/sys/vm/compaction_proactiveness
 
-	# Disable SPI CRC
-	apply 0 /sys/module/mmc_core/parameters/use_spi_crc
-
-	# Disable OnePlus opchain
-	apply 0 /sys/module/opchain/parameters/chain_on
-
 	# Disable Oplus bloats
+	apply 0 /proc/sys/kernel/task_cpustats_enable
+	apply 0 /sys/module/opchain/parameters/chain_on
 	apply 0 /sys/module/cpufreq_bouncing/parameters/enable
 	apply 0 /proc/task_info/task_sched_info/task_sched_info_enable
 	apply 0 /proc/oplus_scheduler/sched_assist/sched_assist_enabled
@@ -809,6 +872,12 @@ case "$1" in
 1) performance_profile ;;
 2) normal_profile ;;
 3) powersave_profile ;;
+esac
+
+case "$1" in
+1) latency_sched ;;
+2) balance_sched ;;
+3) balance_sched ;;
 esac
 
 wait
