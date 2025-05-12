@@ -26,6 +26,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 4.1](/download/version/4.1)
 - [Version 4.0](/download/version/4.0)
 - [Version 3.9](/download/version/3.9)
 - [Version 3.8](/download/version/3.8)
