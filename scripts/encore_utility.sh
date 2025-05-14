@@ -62,5 +62,59 @@ $(</dev/encore_log)
 EOF
 }
 
+logcat() {
+	# Clear screen
+	echo -ne "\e[H\e[2J\e[3J"
+
+	# Trap CTRL+C and exit gracefully
+	trap 'echo -ne "\e[H\e[2J\e[3J"; exit 0' INT
+
+	# Detect SoC
+	SOC="Unknown"
+	case $(</data/encore/soc_recognition) in
+	1) SOC="MediaTek" ;;
+	2) SOC="Snapdragon" ;;
+	3) SOC="Exynos" ;;
+	4) SOC="Unisoc" ;;
+	5) SOC="Tensor" ;;
+	6) SOC="Intel" ;;
+	7) SOC="Tegra" ;;
+	8) SOC="Kirin" ;;
+	esac
+
+	# Header
+	echo -e "\e[1;36m┌────────────────────────────────────────────┐"
+	echo -e "│          \e[1;37mEncore Tweaks Log Viewer\e[1;36m          │"
+	echo -e "└────────────────────────────────────────────┘\e[0m"
+
+	# Info block
+	echo -e "
+\e[1;32mModule Version:\e[0m $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
+\e[1;32mChipset:\e[0m        $SOC ($(getprop ro.board.platform))
+\e[1;32mFingerprint:\e[0m    $(getprop ro.build.fingerprint)
+\e[1;32mAndroid SDK:\e[0m    $(getprop ro.build.version.sdk)
+\e[1;32mKernel:\e[0m         $(uname -r -m)
+
+\e[1;33m[Log Stream Started — press CTRL+C to exit]\e[0m
+"
+
+	# Tail log
+	tail -f /dev/encore_log | while read -r line; do
+		timestamp="${line:0:23}"
+		level_char=$(echo "$line" | awk '{print $3}')
+		msg="${line:24}"
+
+		# Set color based on level
+		case "$level_char" in
+		W) level_color="\e[1;33m" ;; # Yellow
+		E) level_color="\e[1;31m" ;; # Red
+		F) level_color="\e[1;31m" ;; # Red
+		*) level_color="\e[0m" ;;    # Default
+		esac
+
+		echo -e "\e[1;32m$timestamp\e[0m ${level_color}${msg}\e[0m"
+	done
+}
+
 # shellcheck disable=SC2068
 $@

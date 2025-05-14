@@ -182,7 +182,7 @@ snapdragon_performance() {
 	for path in /sys/class/devfreq/*cpubw*; do
 		devfreq_max_perf "$path"
 	done &
-	
+
 	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
 
 	# Workaround for game freezes in peridot
