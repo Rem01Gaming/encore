@@ -37,7 +37,7 @@ void run_profiler(const int profile) {
         write2file(GAME_INFO, false, false, "NULL 0 0\n");
     }
 
-    write2file(PROFILE_MODE, false, false, "%d", profile);
+    write2file(PROFILE_MODE, false, false, "%d\n", profile);
     (void)systemv("encore_profiler %d", profile);
 }
 
