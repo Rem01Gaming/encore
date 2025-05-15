@@ -89,9 +89,17 @@ set_dnd() {
 
 devfreq_max_perf() {
 	[ ! -f "$1/available_frequencies" ] && return 1
-	freq=$(which_maxfreq "$1/available_frequencies")
-	apply "$freq" "$1/max_freq"
-	apply "$freq" "$1/min_freq"
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	apply "$max_freq" "$1/max_freq"
+	apply "$max_freq" "$1/min_freq"
+}
+
+devfreq_mid_perf() {
+	[ ! -f "$1/available_frequencies" ] && return 1
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	mid_freq=$(which_midfreq "$1/available_frequencies")
+	apply "$max_freq" "$1/max_freq"
+	apply "$mid_freq" "$1/min_freq"
 }
 
 devfreq_unlock() {
@@ -114,6 +122,14 @@ qcom_cpudcvs_max_perf() {
 	freq=$(which_maxfreq "$1/available_frequencies")
 	apply "$freq" "$1/hw_max_freq"
 	apply "$freq" "$1/hw_min_freq"
+}
+
+qcom_cpudcvs_mid_perf() {
+	[ ! -f "$1/available_frequencies" ] && return 1
+	max_freq=$(which_maxfreq "$1/available_frequencies")
+	mid_freq=$(which_midfreq "$1/available_frequencies")
+	apply "$max_freq" "$1/hw_max_freq"
+	apply "$mid_freq" "$1/hw_min_freq"
 }
 
 qcom_cpudcvs_unlock() {
@@ -157,11 +173,16 @@ mediatek_performance() {
 	apply 0 /sys/devices/system/cpu/eas/enable
 
 	# GPU Frequency
-	if [ -d /proc/gpufreq ]; then
-		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)
-		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
-	elif [ -d /proc/gpufreqv2 ]; then
-		apply 0 /proc/gpufreqv2/fix_target_opp_index
+	if [ $LITE_MODE -eq 0 ]; then
+		if [ -d /proc/gpufreq ]; then
+			gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)
+			apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
+		elif [ -d /proc/gpufreqv2 ]; then
+			apply 0 /proc/gpufreqv2/fix_target_opp_index
+		fi
+	else
+		write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		write -1 /proc/gpufreqv2/fix_target_opp_index
 	fi
 
 	# Disable GPU Power limiter
@@ -175,9 +196,15 @@ mediatek_performance() {
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	apply 0 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-	apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+	if [ $LITE_MODE -eq 0 ]; then
+		apply 0 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+		apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+		devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+	else
+		write -1 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+		write -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+		devfreq_mid_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+	fi
 
 	# Eara Thermal
 	apply 0 /sys/kernel/eara_thermal/enable
@@ -304,11 +331,8 @@ mediatek_normal() {
 	apply 1 /sys/devices/system/cpu/eas/enable
 
 	# GPU Frequency
-	if [ -d /proc/gpufreq ]; then
-		write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
-	elif [ -d /proc/gpufreqv2 ]; then
-		write -1 /proc/gpufreqv2/fix_target_opp_index
-	fi
+	write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+	write -1 /proc/gpufreqv2/fix_target_opp_index
 
 	# GPU Power limiter
 	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
