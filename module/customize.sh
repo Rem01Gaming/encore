@@ -30,7 +30,6 @@ abort_unsupported_arch() {
 	ui_print "*********************************************************"
 	ui_print "! Unsupported Architecture: $ARCH"
 	ui_print "! Your CPU architecture is not supported by Encore Tweaks."
-	ui_print "! If you believe this is an error, please report it to the maintainer."
 	abort "*********************************************************"
 }
 
