@@ -25,6 +25,9 @@ Encore Tweaks offers a user-friendly WebUI for adjusting settings and preference
 ## How do I activate Encore Tweaks?
 Encore Tweaks automatically runs on boot, so you don't need to start it manually.
 
+## Is Encore Tweaks a scheduler module similar to Uperf?
+No, Encore Tweaks works in more traditional way compared to Uperf, it's never meant to be a scheduler such as Uperf and Tritium nor integrated with Scene and other managers.
+
 ## Does Encore Tweaks require a BusyBox module?
 No, Encore Tweaks does not require a BusyBox module.
 
