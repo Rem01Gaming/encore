@@ -18,14 +18,18 @@
 # shellcheck disable=SC2013
 
 ###################################
-# Common Function
+# Variables
 ###################################
 
-# Fetch SoC recognition
+# SoC recognition
 SOC=$(</data/encore/soc_recognition)
 
-# Fetch PPM policies settings for MediaTek
+# PPM policies settings for MediaTek devices
 PPM_POLICY=$(</data/encore/ppm_policies_mediatek)
+
+###################################
+# Common Function
+###################################
 
 apply() {
 	[ ! -f "$2" ] && return 1
@@ -47,6 +51,31 @@ which_maxfreq() {
 which_minfreq() {
 	tr ' ' '\n' <"$1" | grep -v '^[[:space:]]*$' | sort -n | head -n 1
 }
+
+which_midfreq() {
+	total_opp=$(wc -w <"$1")
+	mid_opp=$(((total_opp + 1) / 2))
+	tr ' ' '\n' <"$1" | grep -v '^[[:space:]]*$' | sort -nr | head -n $mid_opp | tail -n 1
+}
+
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+set_dnd() {
+	case $1 in
+	# Turn off DND mode
+	0) cmd notification set_dnd off ;;
+	# Turn on DND mode
+	1) cmd notification set_dnd priority ;;
+	esac
+}
+
+###################################
+# Devfreq & other frequency settings
+###################################
 
 devfreq_max_perf() {
 	[ ! -f "$1/available_frequencies" ] && return 1
@@ -90,21 +119,6 @@ qcom_cpudcvs_min_perf() {
 	freq=$(which_minfreq "$1/available_frequencies")
 	apply "$freq" "$1/hw_min_freq"
 	apply "$freq" "$1/hw_max_freq"
-}
-
-change_cpu_gov() {
-	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
-	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-}
-
-set_dnd() {
-	case $1 in
-	# Turn off DND mode
-	0) cmd notification set_dnd off ;;
-	# Turn on DND mode
-	1) cmd notification set_dnd priority ;;
-	esac
 }
 
 ###################################
