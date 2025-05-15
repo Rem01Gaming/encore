@@ -24,8 +24,18 @@
 # SoC recognition
 SOC=$(</data/encore/soc_recognition)
 
+# Lite mode
+LITE_MODE=$(</data/encore/lite_mode)
+
 # PPM policies settings for MediaTek devices
 PPM_POLICY=$(</data/encore/ppm_policies_mediatek)
+
+# Default CPU Governor
+if [ -f /data/encore/custom_default_cpu_gov ]; then
+	DEFAULT_CPU_GOV="$(</data/encore/custom_default_cpu_gov)"
+else
+	DEFAULT_CPU_GOV="$(</data/encore/default_cpu_gov)"
+fi
 
 ###################################
 # Common Function
@@ -634,21 +644,36 @@ performance_profile() {
 		devfreq_max_perf "$path"
 	done &
 
-	# Force CPU to highest possible OPP
-	change_cpu_gov performance
+	# Force CPU to highest possible frequency
+	# Or if lite mode enabled, use the default governor
+	[ $LITE_MODE -eq 0 ] && change_cpu_gov performance || change_cpu_gov "$DEFAULT_CPU_GOV"
 
 	if [ -d /proc/ppm ]; then
-		cluster=0
+		cluster=-1
 		for path in /sys/devices/system/cpu/cpufreq/policy*; do
+			((cluster++))
 			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
 			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+
+			[ $LITE_MODE -eq 1 ] && {
+				cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
+				apply "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+				continue
+			}
+
 			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-			((cluster++))
 		done
 	else
 		for path in /sys/devices/system/cpu/*/cpufreq; do
 			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
 			apply "$cpu_maxfreq" "$path/scaling_max_freq"
+
+			[ $LITE_MODE -eq 1 ] && {
+				cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
+				apply "$cpu_midfreq" "$path/scaling_min_freq"
+				continue
+			}
+
 			apply "$cpu_maxfreq" "$path/scaling_min_freq"
 		done
 		chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
@@ -729,11 +754,7 @@ normal_profile() {
 	done &
 
 	# Restore min CPU frequency
-	if [ -f /data/encore/custom_default_cpu_gov ]; then
-		change_cpu_gov "$(</data/encore/custom_default_cpu_gov)"
-	else
-		change_cpu_gov "$(</data/encore/default_cpu_gov)"
-	fi
+	change_cpu_gov "$DEFAULT_CPU_GOV"
 
 	if [ -d /proc/ppm ]; then
 		cluster=0

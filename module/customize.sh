@@ -152,6 +152,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 ui_print "- Encore Tweaks configuration setup"
 make_dir /data/encore
 make_node 0 /data/encore/kill_logd
+make_node 0 /data/encore/lite_mode
 make_node 0 /data/encore/dnd_gameplay
 [ ! -f /data/encore/ppm_policies_mediatek ] && echo 'PWR_THRO|THERMAL' >/data/encore/ppm_policies_mediatek
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
