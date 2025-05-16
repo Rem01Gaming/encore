@@ -90,7 +90,7 @@ logcat() {
 	# Info block
 	echo -e "
 \e[1;32mModule Version:\e[0m $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
-\e[1;32mChipset:\e[0m        $SOC ($(getprop ro.board.platform))
+\e[1;32mChipset:\e[0m        $SOC $(getprop ro.board.platform)
 \e[1;32mFingerprint:\e[0m    $(getprop ro.build.fingerprint)
 \e[1;32mAndroid SDK:\e[0m    $(getprop ro.build.version.sdk)
 \e[1;32mKernel:\e[0m         $(uname -r -m)
