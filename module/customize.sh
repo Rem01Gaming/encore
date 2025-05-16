@@ -184,6 +184,19 @@ soc_recognition_extra
 
 echo $SOC >/data/encore/soc_recognition
 
+# LLCC and L3 tweaks blacklist due buggy behavior
+if [ $SOC -eq 2 ]; then
+	QCOM_CPU_DVCS_BLACKLIST=1
+
+	case $(getprop ro.board.platform) in
+	pineapple) ;;
+	sdm845) ;;
+	*) QCOM_CPU_DVCS_BLACKLIST=0 ;;
+	esac
+
+	echo $QCOM_CPU_DVCS_BLACKLIST >/data/encore/qcom_cpu_dvcs_blacklist
+fi
+
 # Easter Egg
 case "$((RANDOM % 8 + 1))" in
 1) ui_print "- Wooly's Fairy Tale" ;;
