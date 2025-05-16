@@ -213,44 +213,105 @@ mediatek_performance() {
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	for path in /sys/class/devfreq/*cpu*-lat; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*cpu*-bw; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*llccbw*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*bus_llcc*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*bus_ddr*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*memlat*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
+
 	for path in /sys/class/devfreq/*cpubw*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
 
-	qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
+	if [ $LITE_MODE -eq 0 ]; then
+		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
 
-	# Workaround for game freezes in peridot
-	# Skip LLCC and L3 tweaks
-	[ $(getprop ro.board.platform) != "pineapple" ] && {
-		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
-		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
-	}
+		# Workaround for game freezes in peridot
+		# Skip LLCC and L3 tweaks
+		[ $(getprop ro.board.platform) != "pineapple" ] && {
+			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
+		}
+	else
+		qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/DDR
+
+		# Workaround for game freezes in peridot
+		# Skip LLCC and L3 tweaks
+		[ $(getprop ro.board.platform) != "pineapple" ] && {
+			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/L3
+		}
+	fi
 
 	# GPU, memory and bus frequency tweak
-	devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
+	if [ $LITE_MODE -eq 0 ]; then
+		devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
+	else
+		devfreq_mid_perf /sys/class/kgsl/kgsl-3d0/devfreq
+	fi
 
 	# Commented due causing random reboot in Realme 5i
 	#for path in /sys/class/devfreq/*gpubw*; do
 	#	devfreq_max_perf "$path"
 	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
+		[ $LITE_MODE -eq 1 ] && {
+			devfreq_mid_perf "$path"
+			continue
+		}
+
 		devfreq_max_perf "$path"
 	done &
 
