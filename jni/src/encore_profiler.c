@@ -78,10 +78,10 @@ bool get_screenstate_normal(void) {
     }
 
     fetch_failed++;
-    log_encore(LOG_ERROR, "Unable to fetch current screenstate, assuming it was awake.");
+    log_encore(LOG_ERROR, "Unable to fetch current screenstate");
 
     if (fetch_failed == 6) {
-        log_encore(LOG_WARN, "Too much error, assume screenstate was awake anytime from now!");
+        log_encore(LOG_FATAL, "get_screenstate is out of order!");
 
         // Set default state after too many failures via function pointer
         get_screenstate = return_true;
@@ -117,10 +117,10 @@ bool get_low_power_state_normal(void) {
     }
 
     fetch_failed++;
-    log_encore(LOG_ERROR, "Unable to fetch low battery status, assuming it was false.");
+    log_encore(LOG_ERROR, "Unable to fetch low battery status");
 
     if (fetch_failed == 6) {
-        log_encore(LOG_WARN, "Too much error, assume low battery status was false anytime from now!");
+        log_encore(LOG_FATAL, "get_low_power_state is out of order!");
 
         // Set default state after too many failures via function pointer
         get_low_power_state = return_false;
