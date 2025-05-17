@@ -43,13 +43,13 @@ MLBBState handle_mlbb(const char* gamestart) {
     }
 
     // Concatenate gamestart with ':UnityKillsMe'
-    char mlbb_thread[40];
-    snprintf(mlbb_thread, sizeof(mlbb_thread), "%s%s", gamestart, ":UnityKillsMe");
+    char mlbb_proc[40];
+    snprintf(mlbb_proc, sizeof(mlbb_proc), "%s%s", gamestart, ":UnityKillsMe");
 
     // Fetch new PID if cache is invalid
-    mlbb_pid = pidof(mlbb_thread);
+    mlbb_pid = pidof(mlbb_proc);
     if (mlbb_pid != 0) {
-        log_encore(LOG_INFO, "Boosting MLBB thread %s", mlbb_thread);
+        log_encore(LOG_INFO, "Boosting MLBB process %s", mlbb_proc);
         return MLBB_RUNNING;
     }
 
