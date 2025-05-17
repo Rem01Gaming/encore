@@ -1,13 +1,13 @@
 ---
 title: "Encore Tweaks"
 titleTemplate: Special performance module for your device
-description: "Boost your device's performance with Encore Tweaks! Featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU. Compatible with any Android device."
+description: "Encore Tweaks is a performace Magisk module featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration. It's reliable, free and open source."
 layout: home
 
 hero:
   name: Encore Tweaks
   text: Special performance module for your device
-  tagline: ""
+  tagline: "A no-nonsense performance module"
   image:
     src: /logo.webp
     alt: Encore Tweaks

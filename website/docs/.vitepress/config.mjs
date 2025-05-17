@@ -3,14 +3,26 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Encore Tweaks",
-  description: "A powerful performance magisk module featuring advanced App Monitoring, universal SoC support, and a WebUI for seamless configuration with KernelSU.",
+  lang: "en-US",
   ignoreDeadLinks: true,
 
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
   },
-  
+
   head: [
+    ['link', { rel: "icon", type: "image/png", href: "favicon.png", sizes: "64x64"}],
+    ['link', { rel: "icon", type: "image/png", href: "android-chrome.png", sizes: "192x192"}],
+    ['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", sizes: "180x180"}],
+    ['meta', { name: "hostname", content: "encore.rem01gaming.dev"}],
+    ['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}],
+    ['meta', { name: "keywords", content: "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance" }],
+    ['meta', { property: "og:type", content: "website"}],
+    ['meta', { property: "og:locale", content: "en-US"}],
+    ['meta', { property: "og:site_name", content: "Encore Tweaks"}],
+    ['meta', { property: "twitter:card", content: "summary_large_image"}],
+
+    // Google Analytics
     [
       'script',
       { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-1962PRCX05' }
@@ -26,33 +38,29 @@ export default defineConfig({
   ],
 
   transformPageData(pageData) {
+    // Dynamic elements (keep these unless moved to frontmatter)
     const canonicalUrl = `${this.sitemap.hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
-      .replace(/\.md$/, '')
-    const ogImage = pageData.frontmatter.ogp ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}` : `${this.sitemap.hostname}/ogp/default.webp`;
+      .replace(/\.md$/, '');
+    const ogImage = pageData.frontmatter.ogp
+      ? `${this.sitemap.hostname}${pageData.frontmatter.ogp}`
+      : `${this.sitemap.hostname}/ogp/default.webp`;
 
-    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head ??= [];
 
-    pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "favicon.png", sizes: "64x64"}])
-    pageData.frontmatter.head.push(['link', { rel: "icon", type: "image/png", href: "android-chrome.png", sizes: "192x192"}])
-    pageData.frontmatter.head.push(['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", sizes: "180x180"}])
-    pageData.frontmatter.head.push(['link', { rel: "canonical", href: canonicalUrl }])
-    pageData.frontmatter.head.push(['meta', { name: "hostname", content: "encore.rem01gaming.dev"}])
-    pageData.frontmatter.head.push(['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}])
-    pageData.frontmatter.head.push(['meta', { name: "keywords", content: "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance" }])
-    pageData.frontmatter.head.push(['meta', { property: "og:type", content: "website"}])
-    pageData.frontmatter.head.push(['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
-    pageData.frontmatter.head.push(['meta', { property: "og:locale", content: "en_US"}])
-    pageData.frontmatter.head.push(['meta', { property: "og:url", content: canonicalUrl }])
-    pageData.frontmatter.head.push(['meta', { property: "og:image", content: ogImage }])
-    pageData.frontmatter.head.push(['meta', { property: "og:site_name", content: "Encore Tweaks"}])
-    pageData.frontmatter.head.push(['meta', { property: "og:description", content: pageData.description }])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:card", content: "summary_large_image"}])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:image", content: ogImage }])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }])
-    pageData.frontmatter.head.push(['meta', { property: "twitter:description", content: pageData.description }])
+    // Add dynamic meta tags
+    pageData.frontmatter.head.push(
+      ['link', { rel: "canonical", href: canonicalUrl }],
+      ['meta', { property: "og:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }],
+      ['meta', { property: "og:url", content: canonicalUrl }],
+      ['meta', { property: "og:image", content: ogImage }],
+      ['meta', { property: "og:description", content: pageData.description }],
+      ['meta', { property: "twitter:image", content: ogImage }],
+      ['meta', { property: "twitter:title", content: pageData.frontmatter.layout === 'home' ? pageData.title : `${pageData.title} | Encore Tweaks` }],
+      ['meta', { property: "twitter:description", content: pageData.description }]
+    );
 
-    // Add structured data for the home page only
+    // Structured data (homepage only)
     if (pageData.relativePath === 'index.md') {
       pageData.frontmatter.head.push([
         'script',
@@ -103,7 +111,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the Apache License 2.0.',
-      copyright: 'Copyright © 2024-present Rem01Gaming'
+      copyright: 'Copyright &copy 2024-present Rem01Gaming'
     },
 
     socialLinks: [

@@ -21,7 +21,7 @@ Encore Tweaks are compatible with any Android device, no matter how weird it is.
 Encore Tweaks prioritizes gaming performance by allocating maximum CPU and I/O resources, ensuring lag-free gameplay.
 
 ### Safe and Reliable
-With zero reported incidents of bootloops or bricked devices, Encore Tweaks is a trusted solution for performance optimization.
+Zero brick or bootloop related incidents was reported from the beginning of release, Encore Tweaks also have been tested in multiple devices to ensure its reliability across different devices.
 
 ## How Encore Tweaks Works
 Encore Tweaks works like a automated profiling system, it's dynamically adjusts your device's performance based on real-time data, such as the currently running app, screen state (awake or not), and battery saver mode. Using this information, it seamlessly switches between different profiles to optimize performance or save power as needed.
