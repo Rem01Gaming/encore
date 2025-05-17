@@ -117,7 +117,7 @@ bool get_low_power_state_normal(void) {
     }
 
     fetch_failed++;
-    log_encore(LOG_ERROR, "Unable to fetch low battery status");
+    log_encore(LOG_ERROR, "Unable to fetch battery saver status");
 
     if (fetch_failed == 6) {
         log_encore(LOG_FATAL, "get_low_power_state is out of order!");
