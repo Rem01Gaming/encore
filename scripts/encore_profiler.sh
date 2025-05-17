@@ -184,8 +184,8 @@ mediatek_performance() {
 			apply 0 /proc/gpufreqv2/fix_target_opp_index
 		fi
 	else
-		write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
-		write -1 /proc/gpufreqv2/fix_target_opp_index
+		apply 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		apply -1 /proc/gpufreqv2/fix_target_opp_index
 	fi
 
 	# Disable GPU Power limiter
@@ -204,8 +204,8 @@ mediatek_performance() {
 		apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 		devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
 	else
-		write -1 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
-		write -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+		apply -1 /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_req_ddr_opp
+		apply -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 		devfreq_mid_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
 	fi
 
