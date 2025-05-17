@@ -69,13 +69,26 @@ soc_recognition_extra() {
 	return 1
 }
 
+get_soc_getprop() {
+	local SOC_PROP="
+ro.board.platform
+ro.soc.model
+ro.hardware
+ro.hardware.chipname
+"
+
+	for prop in $SOC_PROP; do
+		getprop "$prop"
+	done
+}
+
 recognize_soc() {
 	case "$1" in
 	*mt* | *MT*) SOC=1 ;;
-	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 ;;
+	*sdm* | *qcom* | *SDM* | *QCOM* | *Qualcomm*) SOC=2 ;;
 	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 ;;
 	*Unisoc* | *unisoc* | *ums*) SOC=4 ;;
-	*gs*) SOC=5 ;;
+	*gs* | *Tensor* | *tensor*) SOC=5 ;;
 	*Intel* | *intel*) SOC=6 ;;
 	*kirin*) SOC=8 ;;
 	esac
@@ -176,7 +189,7 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 soc_recognition_extra
 [ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')" # Try normal way
 [ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"           # Try Intel (or X86) way
-[ $SOC -eq 0 ] && recognize_soc "$(getprop ro.board.platform) $(getprop ro.hardware) $(getprop ro.hardware.chipname)"        # Try Android way
+[ $SOC -eq 0 ] && recognize_soc "$(get_soc_getprop)"                                                                         # Try getprop way
 [ $SOC -eq 0 ] && {
 	ui_print "! Unknown SoC, skipping some tweaks"
 	ui_print "! If you think this is wrong, please report to maintainer"
