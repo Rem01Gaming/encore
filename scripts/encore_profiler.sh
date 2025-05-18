@@ -175,6 +175,9 @@ mediatek_performance() {
 	# EAS/HMP Switch
 	apply 0 /sys/devices/system/cpu/eas/enable
 
+	# Disable GED KPI
+	apply 0 /sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
+
 	# GPU Frequency
 	if [ $LITE_MODE -eq 0 ]; then
 		if [ -d /proc/gpufreq ]; then
@@ -411,6 +414,9 @@ mediatek_normal() {
 
 	# EAS/HMP Switch
 	apply 1 /sys/devices/system/cpu/eas/enable
+
+	# Enable GED KPI
+	apply 1 /sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
 
 	# GPU Frequency
 	write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
