@@ -57,6 +57,25 @@ write() {
 	echo "$1" >"$2" 2>/dev/null
 }
 
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+set_dnd() {
+	case $1 in
+	# Turn off DND mode
+	0) cmd notification set_dnd off ;;
+	# Turn on DND mode
+	1) cmd notification set_dnd priority ;;
+	esac
+}
+
+###################################
+# Frequency fetching
+###################################
+
 which_maxfreq() {
 	tr ' ' '\n' <"$1" | sort -nr | head -n 1
 }
@@ -71,19 +90,17 @@ which_midfreq() {
 	tr ' ' '\n' <"$1" | grep -v '^[[:space:]]*$' | sort -nr | head -n $mid_opp | tail -n 1
 }
 
-change_cpu_gov() {
-	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
-	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+# MediaTek gpufreq
+# Returns OPP index of the frequency
+
+mtk_gpufreq_minfreq_index() {
+	awk -F'[][]' '{print $2}' "$1" | tail -n 1
 }
 
-set_dnd() {
-	case $1 in
-	# Turn off DND mode
-	0) cmd notification set_dnd off ;;
-	# Turn on DND mode
-	1) cmd notification set_dnd priority ;;
-	esac
+mtk_gpufreq_midfreq_index() {
+	total_opp=$(wc -l <"$1")
+	mid_opp=$(((total_opp + 1) / 2))
+	awk -F'[][]' '{print $2}' "$1" | head -n $mid_opp | tail -n 1
 }
 
 ###################################
@@ -180,15 +197,24 @@ mediatek_performance() {
 
 	# GPU Frequency
 	if [ $LITE_MODE -eq 0 ]; then
-		if [ -d /proc/gpufreq ]; then
-			gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -nr | head -n 1)
-			apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
-		elif [ -d /proc/gpufreqv2 ]; then
+		if [ -d /proc/gpufreqv2 ]; then
 			apply 0 /proc/gpufreqv2/fix_target_opp_index
+		else
+			gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | head -n 1)
+			apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 		fi
 	else
-		apply 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+		apply 0 /proc/gpufreq/gpufreq_opp_freq
 		apply -1 /proc/gpufreqv2/fix_target_opp_index
+
+		# Set min freq via GED
+		if [ -d /proc/gpufreqv2 ]; then
+			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreqv2/gpu_working_opp_table)
+		else
+			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreq/gpufreq_opp_dump)
+		fi
+
+		apply $mid_oppfreq /sys/kernel/ged/hal/custom_boost_gpu_freq
 	fi
 
 	# Disable GPU Power limiter
@@ -419,8 +445,17 @@ mediatek_normal() {
 	apply 1 /sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
 
 	# GPU Frequency
-	write 0 /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+	write 0 /proc/gpufreq/gpufreq_opp_freq
 	write -1 /proc/gpufreqv2/fix_target_opp_index
+
+	# Reset min freq via GED
+	if [ -d /proc/gpufreqv2 ]; then
+		mid_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreqv2/gpu_working_opp_table)
+	else
+		min_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreq/gpufreq_opp_dump)
+	fi
+
+	apply $min_oppfreq /sys/kernel/ged/hal/custom_boost_gpu_freq
 
 	# GPU Power limiter
 	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
@@ -544,12 +579,12 @@ mediatek_powersave() {
 	apply 1 /proc/cpufreq/cpufreq_power_mode
 
 	# GPU Frequency
-	if [ -d /proc/gpufreq ]; then
-		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | sort -n | head -n 1)
-		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
-	elif [ -d /proc/gpufreqv2 ]; then
-		min_gpufreq_index=$(awk -F'[][]' '{print $2}' /proc/gpufreqv2/gpu_working_opp_table | sort -n | tail -1)
+	if [ -d /proc/gpufreqv2 ]; then
+		min_gpufreq_index=$(mtk_gpufreq_minfreq_index /proc/gpufreqv2/gpu_working_opp_table)
 		apply "$min_gpufreq_index" /proc/gpufreqv2/fix_target_opp_index
+	else
+		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | tail -n 1)
+		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 	fi
 }
 
