@@ -395,7 +395,7 @@ const translations = {
     dndTitle: "Jangan Ganggu",
     dndDesc: "Aktifkan mod Jangan Ganggu semasa bermain permainan. Menghadkan gangguan daripada notifikasi dan panggilan, membolehkan anda bermain tanpa gangguan.",
     liteModeTitle: "Mode Lite",
-    liteModeDesc: "Pilihan ini mengurangkan kepanasan berlebihan dan penggunaan tenaga semasa bermain permainan dengan membenarkan CPU dan komponen lain beroperasi pada frekuensi lebih rendah daripada sentiasa pada frekuensi tertinggi. Ini akan memberi kesan kepada prestasi keseluruhan permainan.",
+    liteModeDesc: "Pilihan ni kurangin sikit kepanasan berlebihan dan penggunaan tenaga masa main game dengan bagi CPU dan komponen lain jalan kat frekuensi lebih rendah dari selalu kat frekuensi tertinggi. Tapi ia boleh bagi kesan sikit pada kelancaran game.",
     permissionDeniedTitle: "Kebenaran Ditolak",
     permissionDeniedDesc: "Sila aktifkan API JavaScript untuk Encore Tweaks dalam tetapan MMRL; WebUI ini tidak akan berfungsi tanpanya.",
     breadcrumbsSettings: "Tetapan",
