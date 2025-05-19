@@ -768,7 +768,7 @@ const translations = {
     dndTitle: "Do Not Disturb",
     dndDesc: "I-enable ang mode na 'Do Not Disturb' kapag naglalaro ng mga laro. Nililimitahan ang mga pagpapatigil mula sa mga notification at tawag, na nagpapahintulot sa iyo na maglaro ng iyong mga paboritong laro nang walang anumang pagkaabala.",
     liteModeTitle: "Lite Mode",
-    liteModeDesc: "Pinipigilan ng opsyong ito ang sobrang init at labis na paggamit ng kuryente habang naglalaro sa pamamagitan ng pagpapahintulot sa CPU at iba pang mga bahagi na gumana sa mas mababang frequency kaysa palaging nasa pinakamataas na frequency. Maaaring makaapekto ito sa kabuuang performance ng laro.",
+    liteModeDesc: "Ang opsyong ito ay pinipigil ang paggamit ng labis na kuryente, at paginit ng sobra sa paraan ng pagtuluan ang CPU at iba pang piyesa sa mababaang frequency. Maaring makaapekto sa performance.",
     permissionDeniedTitle: "Pahintulot Tinanggihan",
     permissionDeniedDesc: "Paki-activate ang JavaScript API para sa Encore Tweaks sa mga setting ng MMRL; ang WebUI na ito ay hindi gagana nang wala ito.",
     breadcrumbsSettings: "Mga Setting",
