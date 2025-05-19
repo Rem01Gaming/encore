@@ -58,7 +58,7 @@ Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
 *****************************************************
 
-$(</dev/encore_log)
+$(</proc/encore_log)
 EOF
 }
 
@@ -99,7 +99,7 @@ logcat() {
 "
 
 	# Tail log
-	tail -f /dev/encore_log | while read -r line; do
+	tail -f /proc/encore_log | while read -r line; do
 		timestamp="${line:0:23}"
 		level_char=$(echo "$line" | awk '{print $3}')
 		msg="${line:24}"

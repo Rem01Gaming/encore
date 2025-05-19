@@ -46,7 +46,7 @@ const getModuleVersion = async () => {
 };
 
 const getCurrentProfile = async () => {
-  const output = await runCommand('cat /dev/encore_mode');
+  const output = await runCommand('cat /proc/encore_mode');
   let profile = "Unknown";
 
   switch(output) {
@@ -155,9 +155,9 @@ setupSwitch('dnd_switch', 'dnd_gameplay');
 const changeCPUGovernor = async (governor, config) => {
   await runCommand(`echo ${governor} >${configPath}/${config}`);
   if (config === "powersave_cpu_gov") {
-    await runCommand(`[ "$(</dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(</proc/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
   } else if (config === "custom_default_cpu_gov") {
-    await runCommand(`[ "$(</dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(</proc/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
   }
 };
 
@@ -176,7 +176,7 @@ const fetchCPUGovernors = async () => {
 /* ======================== GAMELIST MANAGEMENT ======================== */
 const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const output = await runCommand(`cat /dev/encore_gamelist`);
+  const output = await runCommand(`cat /proc/encore_gamelist`);
   if (output.error) {
     showErrorModal("Unable to fetch Gamelist", output.error);
   } else {
@@ -187,7 +187,7 @@ const fetchGamelist = async () => {
 const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const formattedList = input.value.trim().replace(/\n+/g, '|');
-  const result = await runCommand(`echo "${formattedList}" | tee /data/encore/gamelist.txt /dev/encore_gamelist >/dev/null`);
+  const result = await runCommand(`echo "${formattedList}" | tee /data/encore/gamelist.txt /proc/encore_gamelist >/dev/null`);
   result.error ? showErrorModal("Unable to save Gamelist", result.error) : toast('Gamelist saved successfully.');
 };
 

@@ -22,11 +22,11 @@
 #define NOTIFY_TITLE "Encore Tweaks"
 #define LOG_TAG "EncoreTweaks"
 
-#define LOCK_FILE "/dev/encore_lockfile"
-#define LOG_FILE "/dev/encore_log"
-#define PROFILE_MODE "/dev/encore_mode"
-#define GAME_INFO "/dev/encore_game_info"
-#define GAMELIST "/dev/encore_gamelist"
+#define LOCK_FILE "/proc/encore_lockfile"
+#define LOG_FILE "/proc/encore_log"
+#define PROFILE_MODE "/proc/encore_mode"
+#define GAME_INFO "/proc/encore_game_info"
+#define GAMELIST "/proc/encore_gamelist"
 #define MODULE_PROP "/data/adb/modules/encore/module.prop"
 #define MODULE_UPDATE "/data/adb/modules/encore/update"
 

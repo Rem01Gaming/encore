@@ -42,7 +42,7 @@ echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 [ ! -f /data/encore/powersave_cpu_gov ] && echo "$default_gov" >/data/encore/powersave_cpu_gov
 
 # Copy gamelist to tmpfs
-cp /data/encore/gamelist.txt /dev/encore_gamelist
+cp /data/encore/gamelist.txt /proc/encore_gamelist
 
 # Start Encore Daemon
 encored
