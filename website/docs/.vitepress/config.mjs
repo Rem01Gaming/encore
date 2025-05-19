@@ -11,9 +11,9 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: "icon", type: "image/png", href: "favicon.png", sizes: "64x64"}],
-    ['link', { rel: "icon", type: "image/png", href: "android-chrome.png", sizes: "192x192"}],
-    ['link', { rel: "apple-touch-icon", type: "image/png", href: "apple-touch-icon.png", sizes: "180x180"}],
+    ['link', { rel: "icon", type: "image/png", href: "/favicon.png", sizes: "64x64"}],
+    ['link', { rel: "icon", type: "image/png", href: "/android-chrome.png", sizes: "192x192"}],
+    ['link', { rel: "apple-touch-icon", type: "image/png", href: "/apple-touch-icon.png", sizes: "180x180"}],
     ['meta', { name: "hostname", content: "encore.rem01gaming.dev"}],
     ['meta', { name: "expected-hostname", content: "encore.rem01gaming.dev"}],
     ['meta', { name: "keywords", content: "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance" }],
