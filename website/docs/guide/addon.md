@@ -11,7 +11,7 @@ Other module can watch current profile on Encore Tweaks and then apply their own
 
 ## File Interface
 
-### `/dev/encore_mode`
+### `/proc/encore_mode`
 
 **Description**: Contains the current performance profile state as a numeric value
 
@@ -24,7 +24,7 @@ Other module can watch current profile on Encore Tweaks and then apply their own
 | 2     | Normal          | Default operating mode                     |
 | 3     | PowerSave       | Battery saving mode                        |
 
-### `/dev/encore_game_info`
+### `/proc/encore_game_info`
 
 **Description**: Contains active game session information when games from the Encore Tweaks gamelist are running
 
@@ -42,5 +42,5 @@ If you find that the existing API doesn't meet your needs or is inconvenient to 
 
 ## Some tips
 
-1. Even though we could use same log file as Encore Tweaks (`/dev/encore_log`) for convenience, Addon modules should handles how the log is being written on the file to prevent write conflicts.
+1. Even though we could use same log file as Encore Tweaks (`/proc/encore_log`) for convenience, Addon modules should handles how the log is being written on the file to prevent write conflicts.
 2. We recommend using `inotify` to monitor file changes, there's also **[x-watcher](https://github.com/nikp123/x-watcher)** Library that conveniently handles `inotify` for you.
