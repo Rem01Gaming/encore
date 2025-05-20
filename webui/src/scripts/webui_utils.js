@@ -147,7 +147,6 @@ const setupSwitch = async (id, file, rebootMessage = false) => {
 };
 
 // Initialize switches
-setupSwitch('kill_logd_switch', 'kill_logd', true);
 setupSwitch('lite_mode_switch', 'lite_mode');
 setupSwitch('dnd_switch', 'dnd_gameplay');
 

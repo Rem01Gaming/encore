@@ -83,22 +83,6 @@
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            <span data-i18n="killLogger"></span>
-            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="kill_logger.showModal()">
-              <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </button>
-          </div>
-          <label class="relative inline-flex cursor-pointer items-center">
-            <input id="kill_logd_switch" type="checkbox" class="peer sr-only" />
-            <label for="kill_logd_switch" class="hidden"></label>
-            <div class="peer h-6 w-11 rounded-full border border-outline bg-surface-variant after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-4 after:border-surface-variant after:bg-outline after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-on-primary peer-checked:after:bg-on-primary"></div>
-          </label>
-        </div>
-
-        <div class="flex items-center justify-between py-1 mb-2">
-          <div>
             <span data-i18n="dndGameplay"></span>
             <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="dnd_gameplay.showModal()">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
@@ -158,22 +142,6 @@
       </button>
 
       <!-- Modals -->
-      <dialog id="kill_logger" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <h3 data-i18n="killLoggerTitle" class="text-lg font-bold"></h3>
-          <p data-i18n="killLoggerDesc" class="py-4"></p>
-          <div role="alert" class="alert bg-primary text-on-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg>
-            <span data-i18n="killLoggerWarning"></span>
-          </div>
-        </div>
-      </dialog>
-
       <dialog id="dnd_gameplay" class="modal">
         <div class="modal-box bg-surface-container text-on-surface">
           <form method="dialog">

@@ -657,18 +657,8 @@ perfcommon() {
 	apply 1 /proc/sys/net/ipv4/tcp_sack
 	apply 0 /proc/sys/net/ipv4/tcp_timestamps
 
-	# Stop tracing and debugging
-	if [ "$(</data/encore/kill_logd)" -eq 1 ]; then
-		apply 0 /sys/kernel/ccci/debug
-		apply 0 /sys/kernel/tracing/tracing_on
-		apply 0 /proc/sys/kernel/perf_event_paranoid
-		apply 0 /proc/sys/kernel/debug_locks
-		apply 0 /proc/sys/kernel/perf_cpu_time_max_percent
-		apply off /proc/sys/kernel/printk_devkmsg
-		stop logd
-		stop traced
-		stop statsd
-	fi
+	# Limit max perf event processing time to this much CPU usage
+	apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
 
 	# Disable schedstats
 	apply 0 /proc/sys/kernel/sched_schedstats
