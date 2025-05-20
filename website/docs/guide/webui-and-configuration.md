@@ -10,7 +10,7 @@ The **Encore Tweaks** module offers a variety of performance-tuning settings acc
 While **KernelSU** and **APatch** support WebUI natively in their managers, **Magisk** does not. If you're using Magisk, you can still access the WebUI using the [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20250206-175121_MMRL.png)
+![Encore Tweaks WebUI](/Screenshot_20250520-161223_MMRL.png)
 :::
 
 ## Configuration Options
@@ -18,12 +18,19 @@ While **KernelSU** and **APatch** support WebUI natively in their managers, **Ma
 ### Kill Logger
 Stops system logging services to reduce background activity and performance overhead.
 
+::: tip Deprecated
+This feature has been removed from the 4.3 release.
+:::
+
 ::: warning
 Do **NOT** enable this if you're debugging ROMs or apps. It disables system logging entirely, which may cause issues with apps that rely on `logd`.
 :::
 
 ### DND on Gameplay
 Automatically enables **Do Not Disturb** mode while gaming to block notifications and interruptions, ensuring an uninterrupted experience.
+
+### Lite Mode
+This setting will minimize overheating and reduce power usage while gaming by allowing the CPU and other parts to operate at lower frequencies instead of always running at peak performance; however, this choice will impact the overall performance of the game.
 
 ### Default CPU Governor
 Sets the CPU governor used in the **Normal** profile. The governor determines how the CPU scales frequency based on system load, affecting both power efficiency and performance.
