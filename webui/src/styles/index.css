@@ -1,8 +1,11 @@
+@import url('https://mui.kernelsu.org/mmrl/insets.css');
+@import url('https://mui.kernelsu.org/mmrl/colors.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .root_layout {
-  padding-top: var(--window-inset-top);
-  padding-bottom: var(--window-inset-bottom);
+  padding-top: var(--window-inset-top, 0px);
+  padding-bottom: var(--window-inset-bottom, 0px);
 }
