@@ -9,11 +9,11 @@ description: "Download the latest version of Encore Tweaks Magisk Module here"
 
 - Introducing Lite Mode
 - Improve SoC recognition logic
-- Revert MTK PBM implement due random reboot issue
+- Revert MTK PBM implementation due random reboot issue
 - Fix system instability in some Snapdragon devices
 - Fix SoC recognition on some Google Tensor devices
 - Fix Monet color theme in the latest MMRL build
-- Update default color theme to "purpleish"
+- Update default WebUI color theme to "purpleish"
 - Disable GED KPI on performance profile
 - Drop kill logger feature
 - Other misc changes and optimizations
