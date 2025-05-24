@@ -74,7 +74,12 @@ get_soc_getprop() {
 ro.board.platform
 ro.soc.model
 ro.hardware
+ro.chipname
 ro.hardware.chipname
+ro.vendor.soc.model.external_name
+ro.vendor.qti.soc_name
+ro.vendor.soc.model.part_name
+ro.vendor.soc.model
 "
 
 	for prop in $SOC_PROP; do
@@ -85,7 +90,7 @@ ro.hardware.chipname
 recognize_soc() {
 	case "$1" in
 	*mt* | *MT*) SOC=1 ;;
-	*sdm* | *qcom* | *SDM* | *QCOM* | *Qualcomm*) SOC=2 ;;
+	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 ;;
 	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 ;;
 	*Unisoc* | *unisoc* | *ums*) SOC=4 ;;
 	*gs* | *Tensor* | *tensor*) SOC=5 ;;
@@ -186,9 +191,9 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 
 # Recognize Chipset
 soc_recognition_extra
-[ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')" # Try normal way
-[ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"           # Try Intel (or X86) way
-[ $SOC -eq 0 ] && recognize_soc "$(get_soc_getprop)"                                                                         # Try getprop way
+[ $SOC -eq 0 ] && recognize_soc "$(get_soc_getprop)"
+[ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"
+[ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"
 [ $SOC -eq 0 ] && {
 	ui_print "! Unknown SoC, skipping some tweaks"
 	ui_print "! If you think this is wrong, please report to maintainer"
