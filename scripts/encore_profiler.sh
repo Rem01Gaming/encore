@@ -377,12 +377,8 @@ unisoc_performance() {
 	[ -n "$gpu_path" ] && {
 		if [ $LITE_MODE -eq 0 ]; then
 			devfreq_max_perf "$gpu_path"
-			# DDR
-			devfreq_max_perf /sys/class/devfreq/scene-frequency
 		else
 			devfreq_mid_perf "$gpu_path"
-			# DDR
-			devfreq_mid_perf /sys/class/devfreq/scene-frequency
 		fi
 	}
 }
@@ -539,9 +535,6 @@ unisoc_normal() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
 	[ -n "$gpu_path" ] && devfreq_unlock "$gpu_path"
-
-	# DDR
-	devfreq_unlock /sys/class/devfreq/scene-frequency
 }
 
 tensor_normal() {
