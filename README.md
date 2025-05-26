@@ -8,6 +8,8 @@
 </p>
 
 ## About Encore Tweaks
+[English](/README.md)|[简体中文](/READMEs/README_zh-CN.md)
+
 **Encore Tweaks** is a dynamic Magisk module designed to maximize your device's gaming performance while intelligently preserving battery life during everyday use. Perfect for gamers who demand smooth gameplay without compromising daily usability!
 
 More info about this project on [Official Encore Tweaks website](https://encore.rem01gaming.dev/)
@@ -20,8 +22,20 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ### Also Supported on
 
-- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>🌐</sup>
+- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>▶ 🌐</sup>
 - [MMRL](https://github.com/DerGoogler/MMRL)   <sup>▶ 🌐</sup>
+
+## Contributing Translations
+
+To contribute translations for the Encore project:
+
+### README Documentation Translation
+- Create a new file in the `READMEs` folder following the naming convention `README_<language-code>.md` (e.g.,
+  - Simplified Chinese: `README_zh-CN.md`
+  - Japanese: `README_ja-JP.md`
+  - French: `README_fr-FR.md`
+  - Indonesian: `README_id-ID.md`
+- Submit a pull request to the `main` branch.
 
 ## Resources
 
