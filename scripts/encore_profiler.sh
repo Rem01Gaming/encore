@@ -37,6 +37,9 @@ else
 	DEFAULT_CPU_GOV="$(</data/encore/default_cpu_gov)"
 fi
 
+# Device specific bug workaround
+QCOM_CPU_DVCS_BLACKLIST="$(</data/encore/qcom_cpu_dvcs_blacklist)"
+
 ###################################
 # Common Function
 ###################################
@@ -306,8 +309,18 @@ snapdragon_performance() {
 
 	if [ $LITE_MODE -eq 0 ]; then
 		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
+
+		[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
+		}
 	else
 		qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/DDR
+
+		[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/LLCC
+			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/L3
+		}
 	fi
 
 	# GPU, memory and bus frequency tweak
@@ -488,6 +501,11 @@ snapdragon_normal() {
 	done &
 
 	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
+
+	[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/LLCC
+		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
+	}
 
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
