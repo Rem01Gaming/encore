@@ -22,7 +22,7 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ### Also Supported on
 
-- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>🌐</sup>
+- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>▶ 🌐</sup>
 - [MMRL](https://github.com/DerGoogler/MMRL)   <sup>▶ 🌐</sup>
 
 ## Resources
