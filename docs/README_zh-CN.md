@@ -8,7 +8,7 @@
 </p>
 
 ## 关于 Encore Tweaks
-[English](/README.md)|[简体中文](/READMEs/README_zh-CN.md)
+[English](/README.md) | [简体中文](/docs/README_zh-CN.md)
 
 **Encore Tweaks** 是一个动态的 Magisk 模块，旨在最大化您设备的游戏性能，同时在日常使用中智能地节省电池电量。非常适合那些要求流畅游戏体验而又不牺牲日常可用性的玩家！
 
@@ -22,18 +22,6 @@
 ## 也支持在
 - [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>▶ 🌐</sup>
 - [MMRL](https://github.com/DerGoogler/MMRL)   <sup>▶ 🌐</sup>
-
-## 贡献翻译
-
-为 encore 项目贡献翻译：
-
-### README 文档翻译
-- 在 `READMEs` 文件夹中创建新文件，命名格式为 `README_<语言代码>.md`（例如：
-  - 简体中文：`README_zh-CN.md`
-  - 日本語：`README_ja-JP.md`
-  - Français：`README_fr-FR.md`
-  - Bahasa Indonesia：`README_id-ID.md`
-- 提交拉取请求至 `main` 分支。
 
 ## 资源
 - [常见问题解答](https://encore.rem01gaming.dev/guide/faq.html) - 常见问题解答
