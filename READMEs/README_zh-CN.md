@@ -20,7 +20,7 @@
 - [Magisk](https://github.com/topjohnwu/Magisk)  <sup>([无 WebUI](https://github.com/topjohnwu/Magisk/issues/8609#event-15568590949)👀)</sup>
 
 ### 也支持在
-- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>🌐</sup>
+- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>▶ 🌐</sup>
 - [MMRL](https://github.com/DerGoogler/MMRL)   <sup>▶ 🌐</sup>
 
 ## 资源
