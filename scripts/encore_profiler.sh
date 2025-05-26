@@ -38,7 +38,7 @@ else
 fi
 
 # Device specific bug workaround
-QCOM_CPU_DVCS_BLACKLIST="$(</data/encore/qcom_cpu_dvcs_blacklist)"
+DEVICE_MITIGATION="$(</data/encore/device_mitigation)"
 
 ###################################
 # Common Function
@@ -307,21 +307,17 @@ snapdragon_performance() {
 		devfreq_max_perf "$path"
 	done &
 
-	if [ $LITE_MODE -eq 0 ]; then
-		qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
-
-		[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		if [ $LITE_MODE -eq 0 ]; then
+			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/DDR
 			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/LLCC
 			qcom_cpudcvs_max_perf /sys/devices/system/cpu/bus_dcvs/L3
-		}
-	else
-		qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/DDR
-
-		[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+		else
+			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/DDR
 			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/LLCC
 			qcom_cpudcvs_mid_perf /sys/devices/system/cpu/bus_dcvs/L3
-		}
-	fi
+		fi
+	}
 
 	# GPU, memory and bus frequency tweak
 	if [ $LITE_MODE -eq 0 ]; then
@@ -330,10 +326,6 @@ snapdragon_performance() {
 		devfreq_mid_perf /sys/class/kgsl/kgsl-3d0/devfreq
 	fi
 
-	# Commented due causing random reboot in Realme 5i
-	#for path in /sys/class/devfreq/*gpubw*; do
-	#	devfreq_max_perf "$path"
-	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
 		[ $LITE_MODE -eq 1 ] && {
 			devfreq_mid_perf "$path"
@@ -500,9 +492,8 @@ snapdragon_normal() {
 		devfreq_unlock "$path"
 	done &
 
-	qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
-
-	[ $QCOM_CPU_DVCS_BLACKLIST -eq 0 ] && {
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
 		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/LLCC
 		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
 	}
@@ -510,10 +501,6 @@ snapdragon_normal() {
 	# GPU, memory and bus frequency tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
 
-	# Commented due causing random reboot in Realme 5i
-	#for path in /sys/class/devfreq/*gpubw*; do
-	#	devfreq_unlock "$path"
-	#done &
 	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
 		devfreq_unlock "$path"
 	done &

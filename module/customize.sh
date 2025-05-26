@@ -170,6 +170,7 @@ ui_print "- Encore Tweaks configuration setup"
 make_dir /data/encore
 make_node 0 /data/encore/lite_mode
 make_node 0 /data/encore/dnd_gameplay
+make_node 0 /data/encore/device_mitigation
 [ ! -f /data/encore/ppm_policies_mediatek ] && echo 'PWR_THRO|THERMAL' >/data/encore/ppm_policies_mediatek
 [ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
 extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
@@ -200,19 +201,6 @@ soc_recognition_extra
 }
 
 echo $SOC >/data/encore/soc_recognition
-
-# LLCC and L3 tweaks blacklist due buggy behavior
-if [ $SOC -eq 2 ]; then
-	QCOM_CPU_DVCS_BLACKLIST=1
-
-	case $(getprop ro.board.platform) in
-	pineapple) ;;
-	sdm845) ;;
-	*) QCOM_CPU_DVCS_BLACKLIST=0 ;;
-	esac
-
-	echo $QCOM_CPU_DVCS_BLACKLIST >/data/encore/qcom_cpu_dvcs_blacklist
-fi
 
 # Easter Egg
 case "$((RANDOM % 8 + 1))" in

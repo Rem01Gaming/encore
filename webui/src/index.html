@@ -113,6 +113,22 @@
           </label>
         </div>
 
+        <div class="flex items-center justify-between py-1 mb-2">
+          <div>
+            <span data-i18n="deviceMitigation"></span>
+            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="device_mitigation.showModal()">
+              <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </button>
+          </div>
+          <label class="relative inline-flex cursor-pointer items-center">
+            <input id="device_mitigation_switch" type="checkbox" class="peer sr-only" />
+            <label for="device_mitigation_switch" class="hidden"></label>
+            <div class="peer h-6 w-11 rounded-full border border-outline bg-surface-variant after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-4 after:border-surface-variant after:bg-outline after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-on-primary peer-checked:after:bg-on-primary"></div>
+          </label>
+        </div>
+
         <div class="py-1 mb-2">
           <p class="mb-2" data-i18n="defaultCpuGov"></p>
           <select id="default_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
@@ -159,6 +175,16 @@
           </form>
           <h3 data-i18n="liteModeTitle" class="text-lg font-bold"></h3>
           <p data-i18n="liteModeDesc" class="py-4"></p>
+        </div>
+      </dialog>
+
+      <dialog id="device_mitigation" class="modal">
+        <div class="modal-box bg-surface-container text-on-surface">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 data-i18n="deviceMitigationTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="deviceMitigationDesc" class="py-4"></p>
         </div>
       </dialog>
 
