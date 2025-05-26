@@ -8,7 +8,7 @@
 </p>
 
 ## About Encore Tweaks
-[English](/READMEs/README_zh-CN.md)|[简体中文](/READMEs/README_zh-CN.md)
+[English](/README.md)|[简体中文](/READMEs/README_zh-CN.md)
 
 **Encore Tweaks** is a dynamic Magisk module designed to maximize your device's gaming performance while intelligently preserving battery life during everyday use. Perfect for gamers who demand smooth gameplay without compromising daily usability!
 
