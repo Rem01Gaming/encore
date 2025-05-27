@@ -117,7 +117,8 @@ int uidof(pid_t pid);
 MLBBState handle_mlbb(const char* gamestart);
 
 // Encore Profiler
-char* get_gamestart(void);
+char* get_gamestart_method1(void);
+char* get_gamestart_method2(void);
 bool get_screenstate_normal(void);
 bool get_low_power_state_normal(void);
 void run_profiler(const int profile);

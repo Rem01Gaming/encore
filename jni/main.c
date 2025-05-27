@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    if (argc => 2 && strcmp(argv[1], "--sanity-check") == 0) {
+    if (argc >= 2 && strcmp(argv[1], "--sanity-check") == 0) {
         return 0;
     }
 
