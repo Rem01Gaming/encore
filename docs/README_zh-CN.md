@@ -8,7 +8,7 @@
 </p>
 
 ## 关于 Encore Tweaks
-[English](/README.md) | [简体中文](/docs/README_zh-CN.md)
+[English](/README.md) | [Bahasa Indonesia](/docs/README_id-ID.md) | [简体中文](/docs/README_zh-CN.md)
 
 **Encore Tweaks** 是一个动态的 Magisk 模块，旨在最大化您设备的游戏性能，同时在日常使用中智能地节省电池电量。非常适合那些要求流畅游戏体验而又不牺牲日常可用性的玩家！
 

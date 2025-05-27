@@ -1,14 +1,14 @@
 <p align="center"><a href="https://encore.rem01gaming.dev" target="_blank"><img src="https://encore.rem01gaming.dev/logo.webp" width="200" alt="Encore Tweaks Logo"></a></p>
 
 <p align="center">
-<a href="https://t.me/rem01schannel"><img src="https://img.shields.io/badge/Follow-Telegram-white.svg?style=for-the-badge&logo=telegram&logoColor=white&labelColor=222" alt="Join Our Telegram Vhannel"></a>
+<a href="https://t.me/rem01schannel"><img src="https://img.shields.io/badge/Follow-Telegram-white.svg?style=for-the-badge&logo=telegram&logoColor=white&labelColor=222" alt="Join Our Telegram Channel"></a>
 <a href="https://encore.rem01gaming.dev/download"><img src="https://img.shields.io/github/downloads/rem01gaming/encore/total?style=for-the-badge&logoColor=white&labelColor=222" alt="Total Downloads"></a>
 <a href="https://github.com/Rem01Gaming/encore/releases"><img src="https://img.shields.io/github/v/release/rem01gaming/encore?label=Release&style=for-the-badge&logo=github&logoColor=white&labelColor=222" alt="Latest Stable Version"></a>
 <a href="https://encore.rem01gaming.dev"><img src="https://img.shields.io/badge/Apache-white?style=for-the-badge&logo=andela&logoColor=white&label=License&labelColor=222" alt="License"></a>
 </p>
 
 ## About Encore Tweaks
-[English](/README.md) | [简体中文](/docs/README_zh-CN.md)
+[English](/README.md) | [Bahasa Indonesia](/docs/README_id-ID.md) | [简体中文](/docs/README_zh-CN.md)
 
 **Encore Tweaks** is a dynamic Magisk module designed to maximize your device's gaming performance while intelligently preserving battery life during everyday use. Perfect for gamers who demand smooth gameplay without compromising daily usability!
 
