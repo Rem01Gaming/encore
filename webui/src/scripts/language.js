@@ -454,7 +454,10 @@ const translations = {
     editGamelistDesc: "启动列表中的游戏或应用时，将自动应用性能配置。",
     saveChanges: "保存更改",
     cancelChanges: "取消更改",
-    saveLogs: "保存模块日志"
+    saveLogs: "保存模块日志",
+    deviceMitigation: "设备兼容模式",
+    deviceMitigationTitle: "设备兼容模式",
+    deviceMitigationDesc: "通过应用特定的调整来修复某些设备特有的问题，提升兼容性与稳定性。除非设备在关闭该选项后出现问题，否则建议保持该选项关闭。"
   },
   th: {
     moduleTitle: "Encore Tweaks",
