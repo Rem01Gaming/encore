@@ -244,68 +244,79 @@ mediatek_performance() {
 
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	for path in /sys/class/devfreq/*cpu*-lat; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*cpu*-lat; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*cpu*-bw; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*cpu*-bw; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*llccbw*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*llccbw*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*bus_llcc*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*bus_llcc*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*bus_ddr*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*bus_ddr*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*memlat*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*memlat*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
 
-	for path in /sys/class/devfreq/*cpubw*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
+		for path in /sys/class/devfreq/*cpubw*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
 
-		devfreq_max_perf "$path"
-	done &
+			devfreq_max_perf "$path"
+		done &
+
+		for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
+			[ $LITE_MODE -eq 1 ] && {
+				devfreq_mid_perf "$path"
+				continue
+			}
+
+			devfreq_max_perf "$path"
+		done &
+	}
 
 	[ $DEVICE_MITIGATION -eq 0 ] && {
 		if [ $LITE_MODE -eq 0 ]; then
@@ -319,21 +330,12 @@ snapdragon_performance() {
 		fi
 	}
 
-	# GPU, memory and bus frequency tweak
+	# GPU tweak
 	if [ $LITE_MODE -eq 0 ]; then
 		devfreq_max_perf /sys/class/kgsl/kgsl-3d0/devfreq
 	else
 		devfreq_mid_perf /sys/class/kgsl/kgsl-3d0/devfreq
 	fi
-
-	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
-		[ $LITE_MODE -eq 1 ] && {
-			devfreq_mid_perf "$path"
-			continue
-		}
-
-		devfreq_max_perf "$path"
-	done &
 
 	# Disable GPU Bus split
 	apply 0 /sys/class/kgsl/kgsl-3d0/bus_split
@@ -470,27 +472,32 @@ mediatek_normal() {
 
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	for path in /sys/class/devfreq/*cpu*-lat; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*cpu*-bw; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*llccbw*; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*bus_llcc*; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*bus_ddr*; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*memlat*; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/*cpubw*; do
-		devfreq_unlock "$path"
-	done &
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*cpu*-lat; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*cpu*-bw; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*llccbw*; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*bus_llcc*; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*bus_ddr*; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*memlat*; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*cpubw*; do
+			devfreq_unlock "$path"
+		done &
+		for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
+			devfreq_unlock "$path"
+		done &
+	}
 
 	[ $DEVICE_MITIGATION -eq 0 ] && {
 		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/DDR
@@ -498,12 +505,8 @@ snapdragon_normal() {
 		qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/L3
 	}
 
-	# GPU, memory and bus frequency tweak
+	# Revert GPU tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
-
-	for path in /sys/class/devfreq/*kgsl-ddr-qos*; do
-		devfreq_unlock "$path"
-	done &
 
 	# Enable back GPU Bus split
 	apply 1 /sys/class/kgsl/kgsl-3d0/bus_split
