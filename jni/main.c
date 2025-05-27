@@ -19,12 +19,21 @@
 char* gamestart = NULL;
 pid_t game_pid = 0;
 
-int main(void) {
+int main(int argc, char *argv[]) {
     // Handle case when not running on root
     // Try grant KSU ROOT via prctl
     if (getuid() != 0 && ksu_grant_root() != true) {
         fprintf(stderr, "\033[31mERROR:\033[0m Please run this daemon as root\n");
         exit(EXIT_FAILURE);
+    }
+
+    // Sanity check
+    if (sanity_check() != 0) {
+        return 1;
+    }
+
+    if (argc => 2 && strcmp(argv[1], "--sanity-check") == 0) {
+        return 0;
     }
 
     // Make sure only one instance is running

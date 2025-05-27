@@ -62,13 +62,27 @@ typedef enum : char {
     MLBB_RUNNING
 } MLBBState;
 
+// Contains currently running game pkgname
 extern char* gamestart;
+
+// Contains currently running game PID
 extern pid_t game_pid;
+
+// Contains MLBB PID for check caching
+extern pid_t mlbb_pid;
+
+// Function pointers for failover
+extern char* (*get_gamestart)(void);
+extern bool (*get_screenstate)(void);
+extern bool (*get_low_power_state)(void);
 
 /*
  * If you're here for function comments, you
  * are in the wrong place.
  */
+
+// Sanity check
+int sanity_check(void);
 
 // Misc Utilities
 void sighandler(const int signal);
@@ -100,12 +114,9 @@ pid_t pidof(const char* name);
 int uidof(pid_t pid);
 
 // MLBB Handler
-extern pid_t mlbb_pid;
 MLBBState handle_mlbb(const char* gamestart);
 
 // Encore Profiler
-extern bool (*get_screenstate)(void);
-extern bool (*get_low_power_state)(void);
 char* get_gamestart(void);
 bool get_screenstate_normal(void);
 bool get_low_power_state_normal(void);

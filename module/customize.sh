@@ -33,6 +33,14 @@ abort_unsupported_arch() {
 	abort "*********************************************************"
 }
 
+abort_sanity_check_fail() {
+	ui_print "*********************************************************"
+	ui_print "! Sanity check failed!"
+	ui_print "! Something is wrong with your ROM..."
+	ui_print "! Save the installation log and report to the maintainer."
+	abort "*********************************************************"
+}
+
 abort_corrupted() {
 	ui_print "*********************************************************"
 	ui_print "! Unable to extract verify.sh!"
@@ -179,6 +187,10 @@ touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__pleas
 # Permission settings
 ui_print "- Permission setup"
 set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
+
+# Sanity check
+"$MODPATH/system/bin/encored" --sanity-check
+[ $? -gt 0 ] && abort_sanity_check_fail
 
 # SOC CODE:
 # 1 = MediaTek
