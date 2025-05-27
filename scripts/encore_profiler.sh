@@ -257,14 +257,14 @@ snapdragon_performance() {
 			[ $LITE_MODE -eq 1 ] &&
 				devfreq_mid_perf "$path" ||
 				devfreq_max_perf "$path"
-		done
+		done &
 
 		for component in DDR LLCC L3; do
 			path="/sys/devices/system/cpu/bus_dcvs/$component"
 			[ "$LITE_MODE" -eq 1 ] &&
 				qcom_cpudcvs_mid_perf "$path" ||
 				qcom_cpudcvs_max_perf "$path"
-		done
+		done &
 	}
 
 	# GPU tweak
