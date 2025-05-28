@@ -734,7 +734,10 @@ performance_profile() {
 	# eMMC and UFS frequency
 	for path in /sys/class/devfreq/*.ufshc \
 		/sys/class/devfreq/mmc*; do
-		devfreq_max_perf "$path"
+
+		[ $LITE_MODE -eq 1 ] &&
+			devfreq_mid_perf "$path" ||
+			devfreq_max_perf "$path"
 	done &
 
 	# Set CPU governor to performance.
