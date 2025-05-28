@@ -104,7 +104,7 @@ mtk_gpufreq_midfreq_index() {
 }
 
 ###################################
-# Devfreq & other frequency settings
+# Frequency settings
 ###################################
 
 devfreq_max_perf() {
@@ -684,9 +684,15 @@ performance_profile() {
 		devfreq_max_perf "$path"
 	done &
 
-	# Force CPU to highest possible frequency
-	# Or if lite mode enabled, use the default governor
-	[ $LITE_MODE -eq 0 ] && change_cpu_gov performance || change_cpu_gov "$DEFAULT_CPU_GOV"
+	# Force CPU to highest possible frequency.
+	# performance governor in this case is only used to "flex"
+	# since the frequencies already maxed out (ifykyk).
+	# If lite mode enabled, use the default governor instead,
+	# device mitigation also will prevent performance gov to be
+	# applied (some device hates performance governor).
+	[ $LITE_MODE -eq 0 && $DEVICE_MITIGATION -eq 0 ] &&
+		change_cpu_gov performance ||
+		change_cpu_gov "$DEFAULT_CPU_GOV"
 
 	if [ -d /proc/ppm ]; then
 		cluster=-1
