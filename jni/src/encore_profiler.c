@@ -16,8 +16,6 @@
 
 #include <encore.h>
 
-// Function pointer for failover
-char* (*get_gamestart)(void) = get_gamestart_method1;
 bool (*get_screenstate)(void) = get_screenstate_normal;
 bool (*get_low_power_state)(void) = get_low_power_state_normal;
 
@@ -44,7 +42,7 @@ void run_profiler(const int profile) {
 }
 
 /***********************************************************************************
- * Function Name      : get_gamestart_method*
+ * Function Name      : get_gamestart
  * Inputs             : None
  * Returns            : char* (dynamically allocated string with the game package name)
  * Description        : Searches for the currently visible application that matches
@@ -54,12 +52,8 @@ void run_profiler(const int profile) {
  *                      listed in Gamelist.
  * Note               : Caller is responsible for freeing the returned string.
  ***********************************************************************************/
-char* get_gamestart_method1(void) {
+char* get_gamestart(void) {
     return execute_command("dumpsys window visible-apps | grep 'package=.* ' | grep -Eo -f %s", GAMELIST);
-}
-
-char* get_gamestart_method2(void) {
-    return execute_command("dumpsys activity recents | grep 'Recent #' | grep -Eo -f %s | head -n 1", GAMELIST);
 }
 
 /***********************************************************************************
@@ -100,7 +94,7 @@ bool get_screenstate_normal(void) {
  * Function Name      : get_low_power_state_normal
  * Inputs             : None
  * Returns            : bool - true if Battery Saver is enabled
- *                             false if Battery Saver is disabled
+ *                             false otherwise
  * Description        : Checks if the device's Battery Saver mode is enabled by using
  *                      global db or dumpsys power.
  * Note               : In repeated failures up to 6, this function will skip fetch routine

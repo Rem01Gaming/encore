@@ -10,7 +10,6 @@ LOCAL_SRC_FILES := \
     src/file_utils.c \
     src/ksu_utils.c \
     src/process_utils.c \
-    src/sanity_check.c \
     src/misc_utils.c \
     src/mlbb_handler.c
 
