@@ -107,6 +107,60 @@ mtk_gpufreq_midfreq_index() {
 # Frequency settings
 ###################################
 
+cpufreq_ppm_max_perf() {
+	cluster=-1
+	for path in /sys/devices/system/cpu/cpufreq/policy*; do
+		((cluster++))
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+
+		[ $LITE_MODE -eq 1 ] && {
+			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
+			apply "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+			continue
+		}
+
+		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+	done
+}
+
+cpufreq_max_perf() {
+	for path in /sys/devices/system/cpu/*/cpufreq; do
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		apply "$cpu_maxfreq" "$path/scaling_max_freq"
+
+		[ $LITE_MODE -eq 1 ] && {
+			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
+			apply "$cpu_midfreq" "$path/scaling_min_freq"
+			continue
+		}
+
+		apply "$cpu_maxfreq" "$path/scaling_min_freq"
+	done
+	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+}
+
+cpufreq_ppm_unlock() {
+	cluster=0
+	for path in /sys/devices/system/cpu/cpufreq/policy*; do
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		cpu_minfreq=$(<"$path/cpuinfo_min_freq")
+		write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+		write "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+		((cluster++))
+	done
+}
+
+cpufreq_unlock() {
+	for path in /sys/devices/system/cpu/*/cpufreq; do
+		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+		cpu_minfreq=$(<"$path/cpuinfo_min_freq")
+		write "$cpu_maxfreq" "$path/scaling_max_freq"
+		write "$cpu_minfreq" "$path/scaling_min_freq"
+	done
+	chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+}
+
 devfreq_max_perf() {
 	[ ! -f "$1/available_frequencies" ] && return 1
 	max_freq=$(which_maxfreq "$1/available_frequencies")
@@ -633,6 +687,7 @@ perfcommon() {
 }
 
 performance_profile() {
+	# Enable Do not Disturb
 	[ "$(</data/encore/dnd_gameplay)" -eq 1 ] && set_dnd 1
 
 	# Disable battery saver module
@@ -677,53 +732,23 @@ performance_profile() {
 	apply 80 /proc/sys/vm/vfs_cache_pressure
 
 	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_max_perf "$path"
-	done &
-	for path in /sys/class/devfreq/mmc*; do
+	for path in /sys/class/devfreq/*.ufshc \
+		/sys/class/devfreq/mmc*; do
 		devfreq_max_perf "$path"
 	done &
 
-	# Force CPU to highest possible frequency.
-	# performance governor in this case is only used to "flex"
+	# Set CPU governor to performance.
+	# performance governor in this case is only used for "flex"
 	# since the frequencies already maxed out (ifykyk).
-	# If lite mode enabled, use the default governor instead,
+	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
 	# applied (some device hates performance governor).
 	[ $LITE_MODE -eq 0 && $DEVICE_MITIGATION -eq 0 ] &&
 		change_cpu_gov performance ||
 		change_cpu_gov "$DEFAULT_CPU_GOV"
 
-	if [ -d /proc/ppm ]; then
-		cluster=-1
-		for path in /sys/devices/system/cpu/cpufreq/policy*; do
-			((cluster++))
-			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
-
-			[ $LITE_MODE -eq 1 ] && {
-				cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-				apply "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-				continue
-			}
-
-			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-		done
-	else
-		for path in /sys/devices/system/cpu/*/cpufreq; do
-			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-			apply "$cpu_maxfreq" "$path/scaling_max_freq"
-
-			[ $LITE_MODE -eq 1 ] && {
-				cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-				apply "$cpu_midfreq" "$path/scaling_min_freq"
-				continue
-			}
-
-			apply "$cpu_maxfreq" "$path/scaling_min_freq"
-		done
-		chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
-	fi
+	# Force CPU to highest possible frequency.
+	[ -d /proc/ppm ] && cpufreq_ppm_max_perf || cpufreq_max_perf
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -792,34 +817,14 @@ normal_profile() {
 	apply 120 /proc/sys/vm/vfs_cache_pressure
 
 	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_unlock "$path"
-	done &
-	for path in /sys/class/devfreq/mmc*; do
+	for path in /sys/class/devfreq/*.ufshc \
+		/sys/class/devfreq/mmc*; do
 		devfreq_unlock "$path"
 	done &
 
 	# Restore min CPU frequency
 	change_cpu_gov "$DEFAULT_CPU_GOV"
-
-	if [ -d /proc/ppm ]; then
-		cluster=0
-		for path in /sys/devices/system/cpu/cpufreq/policy*; do
-			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-			cpu_minfreq=$(<"$path/cpuinfo_min_freq")
-			write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
-			write "$cluster $cpu_minfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-			((cluster++))
-		done
-	else
-		for path in /sys/devices/system/cpu/*/cpufreq; do
-			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-			cpu_minfreq=$(<"$path/cpuinfo_min_freq")
-			write "$cpu_maxfreq" "$path/scaling_max_freq"
-			write "$cpu_minfreq" "$path/scaling_min_freq"
-		done
-		chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
-	fi
+	[ -d /proc/ppm ] && cpufreq_ppm_unlock || cpufreq_unlock
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -854,10 +859,8 @@ powersave_profile() {
 	}
 
 	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc; do
-		devfreq_min_perf "$path"
-	done &
-	for path in /sys/class/devfreq/mmc*; do
+	for path in /sys/class/devfreq/*.ufshc \
+		/sys/class/devfreq/mmc*; do
 		devfreq_min_perf "$path"
 	done &
 
