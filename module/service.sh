@@ -17,7 +17,9 @@
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
 # Parse Governor to use
-default_gov=$(cat /data/encore/default_cpu_gov)
+chmod 644 "$CPUFREQ/scaling_governor"
+default_gov=$(cat "$CPUFREQ/scaling_governor")
+echo "$default_gov" >/data/encore/default_cpu_gov
 
 # Wait until boot completed
 while [ -z "$(getprop sys.boot_completed)" ]; do
