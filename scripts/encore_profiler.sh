@@ -751,7 +751,7 @@ performance_profile() {
 	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
 	# applied (some device hates performance governor).
-	[ $LITE_MODE -eq 0 && $DEVICE_MITIGATION -eq 0 ] &&
+	[ $LITE_MODE -eq 0 ] && [ $DEVICE_MITIGATION -eq 0 ] &&
 		change_cpu_gov performance ||
 		change_cpu_gov "$DEFAULT_CPU_GOV"
 
