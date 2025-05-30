@@ -421,7 +421,7 @@ mediatek_normal() {
 	apply 0 /sys/devices/platform/boot_dramboost/dramboost/dramboost
 
 	# EAS/HMP Switch
-	apply 1 /sys/devices/system/cpu/eas/enable
+	apply 2 /sys/devices/system/cpu/eas/enable
 
 	# Enable GED KPI
 	apply 1 /sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
