@@ -19,5 +19,5 @@ LOCAL_CFLAGS := -DNDEBUG -Wall -Wextra -Werror \
                 -pedantic-errors -Wpedantic \
                 -O2 -std=c23 -fPIC -flto
 
-LOCAL_LDFLAGS := -static -flto
+LOCAL_LDFLAGS := -flto
 include $(BUILD_EXECUTABLE)
