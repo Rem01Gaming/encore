@@ -505,9 +505,6 @@ sh.ppy.osulazer
 skyline.emu
 skyline.purple
 skynet.cputhrottlingtest
-supercell.brawlstars
-supercell.clashofclans
-supercell.squad
 tw.sonet.allbw
 tw.sonet.princessconnect
 uk.co.powdertoy.tpt
