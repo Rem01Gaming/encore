@@ -167,8 +167,8 @@ ui_print "- Extracting webroot"
 unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 
 # Mitigate root detection
-[ -d /data/encore ] && mv /data/encore "$MODULE_CONFIG"
-[ -f /data/local/tmp/encore_logo.png ] && rm /data/local/tmp/encore_logo.png
+[ -d /data/encore ] && rm -rf /data/encore
+[ -f /data/local/tmp/encore_logo.png ] && rm -f /data/local/tmp/encore_logo.png
 
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
