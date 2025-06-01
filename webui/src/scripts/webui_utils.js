@@ -46,7 +46,7 @@ const getModuleVersion = async () => {
 };
 
 const getCurrentProfile = async () => {
-  const output = await runCommand('cat ${configPath}/current_profile');
+  const output = await runCommand(`cat ${configPath}/current_profile`);
   let profile = "Unknown";
 
   switch(output) {
