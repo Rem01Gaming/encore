@@ -29,6 +29,9 @@ Do **NOT** enable this if you're debugging ROMs or apps. It disables system logg
 ### DND on Gameplay
 Automatically enables **Do Not Disturb** mode while gaming to block notifications and interruptions, ensuring an uninterrupted experience.
 
+### Device Mitigation
+Mitigate some device specific bugs by applying certain adjustments to enhance compatibility and reliability, keep this feature disabled unless your device experiences problems when it is switched off.
+
 ### Lite Mode
 This setting will minimize overheating and reduce power usage while gaming by allowing the CPU and other parts to operate at lower frequencies instead of always running at peak performance; however, this choice will impact the overall performance of the game.
 
