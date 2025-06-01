@@ -25,7 +25,7 @@ make_node() {
 }
 
 make_dir() {
-	[ ! -d "$1" ] && mkdir "$1"
+	[ ! -d "$1" ] && mkdir -p "$1"
 }
 
 abort_unsupported_arch() {
