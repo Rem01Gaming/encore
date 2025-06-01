@@ -14,10 +14,11 @@
 # limitations under the License.
 #
 
-# Config dir
 MODULE_CONFIG="/data/adb/.config/encore"
-
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
+
+# Clear old logs
+rm -f "$MODULE_CONFIG/encore.log"
 
 # Parse Governor to use
 chmod 644 "$CPUFREQ/scaling_governor"
