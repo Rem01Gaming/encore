@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 
+# Config dir
+MODULE_CONFIG="/data/adb/.config/encore"
+
 change_cpu_gov() {
 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
@@ -35,7 +38,7 @@ save_logs() {
 	log_file="/sdcard/Download/encore_bugreport_$(date +"%Y-%m-%d_%H_%M").txt"
 	SOC="Unknown"
 
-	case $(</data/encore/soc_recognition) in
+	case $(<$MODULE_CONFIG/soc_recognition) in
 	1) SOC="MediaTek" ;;
 	2) SOC="Snapdragon" ;;
 	3) SOC="Exynos" ;;
@@ -58,7 +61,7 @@ Android SDK: $(getprop ro.build.version.sdk)
 Kernel: $(uname -r -m)
 *****************************************************
 
-$(</dev/encore_log)
+$(<$MODULE_CONFIG/encore.log)
 EOF
 }
 
@@ -71,7 +74,7 @@ logcat() {
 
 	# Detect SoC
 	SOC="Unknown"
-	case $(</data/encore/soc_recognition) in
+	case $(<$MODULE_CONFIG/soc_recognition) in
 	1) SOC="MediaTek" ;;
 	2) SOC="Snapdragon" ;;
 	3) SOC="Exynos" ;;
@@ -99,7 +102,7 @@ logcat() {
 "
 
 	# Tail log
-	tail -f /dev/encore_log | while read -r line; do
+	tail -f $MODULE_CONFIG/encore_log | while read -r line; do
 		timestamp="${line:0:23}"
 		level_char=$(echo "$line" | awk '{print $3}')
 		msg="${line:24}"

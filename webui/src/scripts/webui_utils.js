@@ -18,7 +18,7 @@ import { exec, toast } from 'kernelsu';
 import encoreHappy from '../assets/encore_happy.webp';
 import encoreSleeping from '../assets/encore_sleeping.webp';
 
-const configPath = '/data/encore';
+const configPath = '/data/adb/.config/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
 
 // Helper function for executing shell commands
@@ -46,7 +46,7 @@ const getModuleVersion = async () => {
 };
 
 const getCurrentProfile = async () => {
-  const output = await runCommand('cat /dev/encore_mode');
+  const output = await runCommand('cat ${configPath}/current_profile');
   let profile = "Unknown";
 
   switch(output) {
@@ -72,7 +72,7 @@ const getCurrentProfile = async () => {
 
 const getChipset = async () => {
   const chipset = await runCommand(`getprop ro.board.platform`);
-  const soc = await runCommand(`cat /data/encore/soc_recognition`);
+  const soc = await runCommand(`cat ${configPath}/soc_recognition`);
   let brand = "Unknown";
   
   switch(soc) {
@@ -155,14 +155,14 @@ setupSwitch('device_mitigation_switch', 'device_mitigation');
 const changeCPUGovernor = async (governor, config) => {
   await runCommand(`echo ${governor} >${configPath}/${config}`);
   if (config === "powersave_cpu_gov") {
-    await runCommand(`[ "$(</dev/encore_mode)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(<${configPath}/current_profile)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
   } else if (config === "custom_default_cpu_gov") {
-    await runCommand(`[ "$(</dev/encore_mode)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
+    await runCommand(`[ "$(<${configPath}/current_profile)" -eq 2 ] && encore_utility change_cpu_gov ${governor}`);
   }
 };
 
 const fetchCPUGovernors = async () => {
-  const governors = (await runCommand('cat scaling_available_governors', '/sys/devices/system/cpu/cpu0/cpufreq')).split(/\s+/);
+  const governors = (await runCommand('cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors')).split(/\s+/);
   ['default_cpu_gov', 'powersave_cpu_gov'].forEach(id => {
     const select = document.getElementById(id);
     select.innerHTML = governors.map(gov => `<option value="${gov}">${gov}</option>`).join('');
@@ -176,7 +176,7 @@ const fetchCPUGovernors = async () => {
 /* ======================== GAMELIST MANAGEMENT ======================== */
 const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const output = await runCommand(`cat /dev/encore_gamelist`);
+  const output = await runCommand(`cat ${configPath}/gamelist.txt`);
   if (output.error) {
     showErrorModal("Unable to fetch Gamelist", output.error);
   } else {
@@ -187,7 +187,7 @@ const fetchGamelist = async () => {
 const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const formattedList = input.value.trim().replace(/\n+/g, '|');
-  const result = await runCommand(`echo "${formattedList}" | tee /data/encore/gamelist.txt /dev/encore_gamelist >/dev/null`);
+  const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
   result.error ? showErrorModal("Unable to save Gamelist", result.error) : toast('Gamelist saved successfully.');
 };
 

@@ -46,7 +46,7 @@ void run_profiler(const int profile) {
  * Inputs             : None
  * Returns            : char* (dynamically allocated string with the game package name)
  * Description        : Searches for the currently visible application that matches
- *                      any package name listed in /data/encore/gamelist.txt.
+ *                      any package name listed in gamelist.
  *                      This helps identify if a specific game is running in the foreground.
  *                      Uses dumpsys to retrieve visible apps and filters by packages
  *                      listed in Gamelist.

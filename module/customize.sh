@@ -18,6 +18,8 @@
 SKIPUNZIP=1
 SOC=0
 
+MODULE_CONFIG="/data/adb/.config/encore"
+
 make_node() {
 	[ ! -f "$2" ] && echo "$1" >"$2"
 }
@@ -164,16 +166,18 @@ fi
 ui_print "- Extracting webroot"
 unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 
+# Mitigate root detection
+[ -d /data/encore ] && mv /data/encore "$MODULE_CONFIG"
+[ -f /data/local/tmp/encore_logo.png ] && rm /data/local/tmp/encore_logo.png
+
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
-make_dir /data/encore
-make_node 0 /data/encore/lite_mode
-make_node 0 /data/encore/dnd_gameplay
-make_node 0 /data/encore/device_mitigation
-[ ! -f /data/encore/ppm_policies_mediatek ] && echo 'PWR_THRO|THERMAL' >/data/encore/ppm_policies_mediatek
-[ ! -f /data/encore/gamelist.txt ] && extract "$ZIPFILE" 'gamelist.txt' "/data/encore"
-extract "$ZIPFILE" 'encore_logo.png' "/data/local/tmp"
-touch /data/encore/_files_on_this_directory_is_critical_for_encore_module__please_DO_NOT_REMOVE_OR_MODIFY
+make_dir "$MODULE_CONFIG"
+make_node 0 "$MODULE_CONFIG/lite_mode"
+make_node 0 "$MODULE_CONFIG/dnd_gameplay"
+make_node 0 "$MODULE_CONFIG/device_mitigation"
+[ ! -f "$MODULE_CONFIG/ppm_policies_mediatek" ] && echo 'PWR_THRO|THERMAL' >"$MODULE_CONFIG/ppm_policies_mediatek"
+[ ! -f "$MODULE_CONFIG/gamelist.txt" ] && extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
 
 # Permission settings
 ui_print "- Permission setup"
@@ -199,7 +203,7 @@ soc_recognition_extra
 	ui_print "! If you think this is wrong, please report to maintainer"
 }
 
-echo $SOC >/data/encore/soc_recognition
+echo $SOC >"$MODULE_CONFIG/soc_recognition"
 
 # Easter Egg
 case "$((RANDOM % 8 + 1))" in

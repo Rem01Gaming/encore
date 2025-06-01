@@ -21,24 +21,27 @@
 # Variables
 ###################################
 
+# Config dir
+MODULE_CONFIG="/data/adb/.config/encore"
+
 # SoC recognition
-SOC=$(</data/encore/soc_recognition)
+SOC=$(<$MODULE_CONFIG/soc_recognition)
 
 # Lite mode
-LITE_MODE=$(</data/encore/lite_mode)
+LITE_MODE=$(<$MODULE_CONFIG/lite_mode)
 
 # PPM policies settings for MediaTek devices
-PPM_POLICY=$(</data/encore/ppm_policies_mediatek)
+PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
 
 # Default CPU Governor
-if [ -f /data/encore/custom_default_cpu_gov ]; then
-	DEFAULT_CPU_GOV="$(</data/encore/custom_default_cpu_gov)"
+if [ -f $MODULE_CONFIG/custom_default_cpu_gov ]; then
+	DEFAULT_CPU_GOV="$(<$MODULE_CONFIG/custom_default_cpu_gov)"
 else
-	DEFAULT_CPU_GOV="$(</data/encore/default_cpu_gov)"
+	DEFAULT_CPU_GOV="$(<$MODULE_CONFIG/default_cpu_gov)"
 fi
 
 # Device specific bug workaround
-DEVICE_MITIGATION="$(</data/encore/device_mitigation)"
+DEVICE_MITIGATION="$(<$MODULE_CONFIG/device_mitigation)"
 
 ###################################
 # Common Function
@@ -613,7 +616,7 @@ perfcommon() {
 	sync
 
 	# Push Notification
-	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'encore' 'Tweaks successfully applied'" >/dev/null &
+	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'Tweaks successfully applied' </dev/null 2>&1 | cat" >/dev/null
 
 	# I/O Tweaks
 	for dir in /sys/block/*; do
@@ -693,7 +696,7 @@ perfcommon() {
 
 performance_profile() {
 	# Enable Do not Disturb
-	[ "$(</data/encore/dnd_gameplay)" -eq 1 ] && set_dnd 1
+	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 1
 
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
@@ -781,7 +784,7 @@ performance_profile() {
 }
 
 normal_profile() {
-	[ "$(</data/encore/dnd_gameplay)" -eq 1 ] && set_dnd 0
+	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 0
 
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
@@ -873,7 +876,7 @@ powersave_profile() {
 	done &
 
 	# CPU governor
-	change_cpu_gov "$(</data/encore/powersave_cpu_gov)"
+	change_cpu_gov "$(<$MODULE_CONFIG/powersave_cpu_gov)"
 
 	case $SOC in
 	1) mediatek_powersave ;;

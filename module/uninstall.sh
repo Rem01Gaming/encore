@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-rm -rf /data/local/tmp/encore_logo.png /data/encore
+rm -rf /data/adb/.config/encore
 need_gone="encored encore_profiler encore_utility"
 manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
 

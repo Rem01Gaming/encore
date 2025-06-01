@@ -14,12 +14,15 @@
 # limitations under the License.
 #
 
+# Config dir
+MODULE_CONFIG="/data/adb/.config/encore"
+
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
 # Parse Governor to use
 chmod 644 "$CPUFREQ/scaling_governor"
 default_gov=$(cat "$CPUFREQ/scaling_governor")
-echo "$default_gov" >/data/encore/default_cpu_gov
+echo "$default_gov" >$MODULE_CONFIG/default_cpu_gov
 
 # Wait until boot completed
 while [ -z "$(getprop sys.boot_completed)" ]; do
@@ -30,7 +33,7 @@ done
 if [ "$default_gov" == "performance" ]; then
 	for gov in schedhorizon walt sugov_ext uag schedplus energy_step schedutil interactive conservative powersave; do
 		grep -q "$gov" "$CPUFREQ/scaling_available_governors" && {
-			echo "$gov" >/data/encore/default_cpu_gov
+			echo "$gov" >$MODULE_CONFIG/default_cpu_gov
 			default_gov="$gov"
 			break
 		}
@@ -38,13 +41,10 @@ if [ "$default_gov" == "performance" ]; then
 fi
 
 # Revert to normal CPU governor
-custom_gov="/data/encore/custom_default_cpu_gov"
+custom_gov="$MODULE_CONFIG/custom_default_cpu_gov"
 [ -f "$custom_gov" ] && default_gov=$(cat "$custom_gov")
 echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-[ ! -f /data/encore/powersave_cpu_gov ] && echo "$default_gov" >/data/encore/powersave_cpu_gov
-
-# Copy gamelist to tmpfs
-cp /data/encore/gamelist.txt /dev/encore_gamelist
+[ ! -f $MODULE_CONFIG/powersave_cpu_gov ] && echo "$default_gov" >$MODULE_CONFIG/powersave_cpu_gov
 
 # Start Encore Daemon
 encored
