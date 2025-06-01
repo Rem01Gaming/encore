@@ -704,9 +704,6 @@ performance_profile() {
 		fi
 	}
 
-	# Disable Oplus CPU limit
-	apply 1 /proc/game_opt/disable_cpufreq_limit
-
 	# Disable split lock mitigation
 	apply 0 /proc/sys/kernel/split_lock_mitigate
 
@@ -794,9 +791,6 @@ normal_profile() {
 			apply N /sys/module/battery_saver/parameters/enabled
 		fi
 	}
-
-	# Enable Oplus CPU limit
-	apply 0 /proc/game_opt/disable_cpufreq_limit
 
 	# Enable split lock mitigation
 	apply 1 /proc/sys/kernel/split_lock_mitigate
