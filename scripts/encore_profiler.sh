@@ -616,7 +616,9 @@ perfcommon() {
 	sync
 
 	# Push Notification
-	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'Tweaks successfully applied' </dev/null 2>&1 | cat" >/dev/null
+	cp "$MODULE_CONFIG/encore_logo.png" /data/local/tmp
+	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' -i file:///data/local/tmp/encore_logo.png -I file:///data/local/tmp/encore_logo.png 'encore' 'Tweaks successfully applied' </dev/null 2>&1 | cat" >/dev/null
+	rm -f /data/local/tmp/encore_logo.png
 
 	# I/O Tweaks
 	for dir in /sys/block/*; do

@@ -125,6 +125,7 @@ extract "$ZIPFILE" 'module.prop' "$MODPATH"
 extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"
+extract "$ZIPFILE" 'encore_logo.png' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_profiler' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_utility' "$MODPATH"
 
