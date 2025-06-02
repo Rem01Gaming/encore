@@ -21,7 +21,6 @@ need_integrity=(
 	"module/uninstall.sh"
 	"module/action.sh"
 	"module/module.prop"
-	"module/encore_logo.png"
 	"module/gamelist.txt"
 )
 
