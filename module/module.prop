@@ -5,3 +5,4 @@ versionCode=
 author=Rem01Gaming
 description=Special performance module for your Device.
 updateJson=https://encore.rem01gaming.dev/api/update.json
+banner=https://encore.rem01gaming.dev/ogp/default.webp
