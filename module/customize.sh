@@ -176,7 +176,6 @@ make_dir "$MODULE_CONFIG"
 make_node 0 "$MODULE_CONFIG/lite_mode"
 make_node 0 "$MODULE_CONFIG/dnd_gameplay"
 make_node 0 "$MODULE_CONFIG/device_mitigation"
-extract "$ZIPFILE" 'encore_logo.png' "$MODULE_CONFIG"
 [ ! -f "$MODULE_CONFIG/ppm_policies_mediatek" ] && echo 'PWR_THRO|THERMAL' >"$MODULE_CONFIG/ppm_policies_mediatek"
 [ ! -f "$MODULE_CONFIG/gamelist.txt" ] && extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
 
