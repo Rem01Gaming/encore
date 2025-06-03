@@ -31,6 +31,9 @@ No, Encore Tweaks works in more traditional way compared to Uperf, it's never me
 ## Does Encore Tweaks require a BusyBox module?
 No, Encore Tweaks does not require a BusyBox module.
 
+## Why I can't open Encore Tweaks WebUI? (only showing white page or inoperable)
+This mainly caused by your ROM WebView version is too old, to fix this [update your WebView](https://play.google.com/store/apps/details?id=com.google.android.webview) to the latest version.
+
 ## Why are some games randomly boosting even when they’re closed?
 Some games attend to run on background hence causing random boosts. to prevent random boosts, force stop the affected games and restrict them from running in the background. If needed, you can also remove them from gamelist.
 
