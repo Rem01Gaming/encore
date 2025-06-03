@@ -19,7 +19,6 @@ import encoreHappy from '../assets/encore_happy.webp';
 import encoreSleeping from '../assets/encore_sleeping.webp';
 
 const moduleInterface = window.$encore;
-
 const configPath = '/data/adb/.config/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
 
@@ -205,7 +204,11 @@ const openWebsite = async (link) => {
 };
 
 const createShortcut = async () => {
-  moduleInterface.createShortcut();
+  if (Object.keys($encore).length > 0) {
+    moduleInterface.createShortcut();
+  } else {
+    showErrorModal("Shortcut is not available", "WebUI shortcut API is only available in WebUI X engine, please use manager which have WebUI X support such as MMRL and KernelSU Next.");
+  }
 };
 
 /* ======================== EVENT LISTENERS ======================== */
