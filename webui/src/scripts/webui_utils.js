@@ -204,7 +204,7 @@ const openWebsite = async (link) => {
 };
 
 const createShortcut = async () => {
-  if (Object.keys($encore).length > 0) {
+  if (moduleInterface) {
     moduleInterface.createShortcut();
   } else {
     showErrorModal("Shortcut is not available", "WebUI shortcut API is only available in WebUI X engine, please use manager which have WebUI X support such as MMRL and KernelSU Next.");
