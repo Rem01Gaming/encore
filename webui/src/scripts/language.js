@@ -31,7 +31,8 @@ const translations = {
     editGamelistDesc: "The performance profile will be activated when any of the games and apps listed here are launched.",
     saveChanges: "Save Changes",
     cancelChanges: "Cancel Changes",
-    saveLogs: "Save Module Logs"
+    saveLogs: "Save Module Logs",
+    createShortcut: "Create WebUI Shortcut"
   },
   id: {
     moduleTitle: "Encore Tweaks",
@@ -64,7 +65,8 @@ const translations = {
     editGamelistDesc: "Profil kinerja akan diaktifkan ketika salah satu permainan dan aplikasi yang tercantum di sini diluncurkan.",
     saveChanges: "Simpan Perubahan",
     cancelChanges: "Batalkan Perubahan",
-    saveLogs: "Simpan Log Modul"
+    saveLogs: "Simpan Log Modul",
+    createShortcut: "Buat Pintasan WebUI"
   },
   jv: {
     moduleTitle: "Encore Tweaks",
@@ -813,9 +815,9 @@ function translatePage(lang) {
     editGamelistBtn.innerText = translations[lang]?.editGamelistTitle || translations.en.editGamelistTitle;
   }
 
-  const restartDaemonBtn = document.getElementById('restart_daemon_btn');
-  if (restartDaemonBtn) {
-    restartDaemonBtn.innerText = translations[lang]?.restartDaemon || translations.en.restartDaemon;
+  const createShortcutBtn = document.getElementById('create_shortcut_btn');
+  if (createShortcutBtn) {
+    createShortcutBtn.innerText = translations[lang]?.createShortcut || translations.en.createShortcut;
   }
 
   const saveLogBtn = document.getElementById('save_log_btn');

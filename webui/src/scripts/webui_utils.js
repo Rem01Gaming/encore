@@ -18,6 +18,8 @@ import { exec, toast } from 'kernelsu';
 import encoreHappy from '../assets/encore_happy.webp';
 import encoreSleeping from '../assets/encore_sleeping.webp';
 
+const moduleInterface = window.$encore;
+
 const configPath = '/data/adb/.config/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
 
@@ -202,10 +204,15 @@ const openWebsite = async (link) => {
   if (result.error) showErrorModal("Unable to open browser", result.error);
 };
 
+const createShortcut = async () => {
+  moduleInterface.createShortcut();
+};
+
 /* ======================== EVENT LISTENERS ======================== */
 document.getElementById('save_log_btn').addEventListener('click', saveLog);
 document.getElementById('edit_gamelist_btn').addEventListener('click', fetchGamelist);
 document.getElementById('save_gamelist_btn').addEventListener('click', saveGamelist);
+document.getElementById('create_shortcut_btn').addEventListener('click', createShortcut);
 document.getElementById('donate_btn').addEventListener('click', () => openWebsite("https://t.me/rem01schannel/670"));
 document.getElementById('encore_logo').addEventListener('click', () => openWebsite("https://encore.rem01gaming.dev/"));
 
