@@ -100,7 +100,7 @@ const translations = {
     saveChanges: "Simpen Owahan",
     cancelChanges: "Batalake Owahan",
     saveLogs: "Simpen Log Modul",
-    createShortcut: "Mbukak Pintasan WebUI"
+    createShortcut: "Gawe Pintasan WebUI"
   },
   da: {
     moduleTitle: "Encore Tweaks",
@@ -134,7 +134,7 @@ const translations = {
     saveChanges: "Gem ændringer",
     cancelChanges: "Annuller ændringer",
     saveLogs: "Gem Modul-Logger",
-    createShortcut: "Åbn WebUI-genvej"
+    createShortcut: "Opret WebUI-genvej"
   },
   pt: {
     moduleTitle: "Encore Tweaks",
@@ -168,7 +168,7 @@ const translations = {
     saveChanges: "Salvar Alterações",
     cancelChanges: "Cancelar Alterações",
     saveLogs: "Salvar Logs do Módulo",
-    createShortcut: "Abrir atalho do WebUI"
+    createShortcut: "Criar Atalho do WebUI"
   },
   tr: {
     moduleTitle: "Encore Tweaks",
@@ -202,7 +202,7 @@ const translations = {
     saveChanges: "Değişiklikleri Kaydet",
     cancelChanges: "Değişiklikleri İptal Et",
     saveLogs: "Modül Günlüklerini Kaydet",
-    createShortcut: "WebUI Kısayolunu Aç"
+    createShortcut: "WebUI Kısayolu Oluştur"
   },
   fr: {
     moduleTitle: "Encore Tweaks",
@@ -236,7 +236,7 @@ const translations = {
     saveChanges: "Enregistrer les Modifications",
     cancelChanges: "Annuler les Modifications",
     saveLogs: "Enregistrer les Journaux du Module",
-    createShortcut: "Ouvrir le raccourci WebUI"
+    createShortcut: "Créer un raccourci WebUI"
   },
   de: {
     moduleTitle: "Encore Tweaks",
@@ -270,7 +270,7 @@ const translations = {
     saveChanges: "Änderungen Speichern",
     cancelChanges: "Änderungen Abbrechen",
     saveLogs: "Modul-Logs Speichern",
-    createShortcut: "WebUI-Verknüpfung öffnen"
+    createShortcut: "WebUI-Verknüpfung erstellen"
   },
   it: {
     moduleTitle: "Encore Tweaks",
@@ -304,7 +304,7 @@ const translations = {
     saveChanges: "Salva Modifiche",
     cancelChanges: "Annulla Modifiche",
     saveLogs: "Salva Log del Modulo",
-    createShortcut: "Apri Collegamento WebUI"
+    createShortcut: "Crea collegamento WebUI"
   },
   nl: {
     moduleTitle: "Encore Tweaks",
@@ -338,7 +338,7 @@ const translations = {
     saveChanges: "Wijzigingen Opslaan",
     cancelChanges: "Wijzigingen Annuleren",
     saveLogs: "Module Logs Opslaan",
-    createShortcut: "WebUI-snelkoppeling openen"
+    createShortcut: "Maak WebUI-snelkoppeling"
   },
   hu: {
     moduleTitle: "Encore Tweaks",
@@ -372,7 +372,7 @@ const translations = {
     saveChanges: "Változások mentése",
     cancelChanges: "Változások visszavonása",
     saveLogs: "Modul naplók mentése",
-    createShortcut: "WebUI parancsikon megnyitása"
+    createShortcut: "WebUI parancsikon létrehozása"
   },
   ms: {
     moduleTitle: "Encore Tweaks",
@@ -406,7 +406,7 @@ const translations = {
     saveChanges: "Simpan Perubahan",
     cancelChanges: "Batal Perubahan",
     saveLogs: "Simpan Log Modul",
-    createShortcut: "Bukak Pintasan WebUI"
+    createShortcut: "Buat Pintasan WebUI"
   },
   ru: {
     moduleTitle: "Encore Tweaks",
@@ -440,7 +440,7 @@ const translations = {
     saveChanges: "Сохранить изменения",
     cancelChanges: "Отменить изменения",
     saveLogs: "Сохранить логи модуля",
-    createShortcut: "Открыть ярлык WebUI"
+    createShortcut: "Создать ярлык WebUI"
   },
   ja: {
     moduleTitle: "Encore Tweaks",
@@ -474,7 +474,7 @@ const translations = {
     saveChanges: "変更を保存",
     cancelChanges: "変更をキャンセル",
     saveLogs: "モジュールログを保存",
-    createShortcut: "WebUIショートカットを開く"
+    createShortcut: "WebUIショートカットを作成"
   },
   zh: {
     moduleTitle: "Encore Tweaks",
@@ -540,7 +540,7 @@ const translations = {
     editGamelistDesc: "โปรไฟล์ประสิทธิภาพจะเปิดใช้งานเมื่อเปิดเกมหรือแอปใด ๆ ในรายการนี้",
     saveChanges: "บันทึกการเปลี่ยนแปลง",
     saveLogs: "บันทึกล็อกของโมดูล",
-    createShortcut: "เปิดทางลัด WebUI"
+    createShortcut: "สร้างทางลัด WebUI"
   },
   ko: {
     moduleTitle: "Encore Tweaks",
@@ -574,7 +574,7 @@ const translations = {
     saveChanges: "변경 사항 저장",
     cancelChanges: "변경 사항 취소",
     saveLogs: "모듈 로그 저장",
-    createShortcut: "WebUI 바로가기 열기"
+    createShortcut: "WebUI 바로가기 만들기"
   },
   vi: {
     moduleTitle: "Encore Tweaks",
@@ -608,7 +608,7 @@ const translations = {
     saveChanges: "Lưu thay đổi",
     cancelChanges: "Hủy thay đổi",
     saveLogs: "Lưu nhật ký module",
-    createShortcut: "Mở Shortcut WebUI"
+    createShortcut: "Tạo lối tắt WebUI"
   },
   hi: {
     moduleTitle: "Encore Tweaks",
@@ -642,7 +642,7 @@ const translations = {
     saveChanges: "परिवर्तन सहेजें",
     cancelChanges: "परिवर्तन रद्द करें",
     saveLogs: "मॉड्यूल लॉग सहेजें",
-    createShortcut: "WebUI शॉर्टकट खोलें"
+    createShortcut: "WebUI शॉर्टकट बनाएं"
   },
   ar: {
     moduleTitle: "Encore Tweaks",
@@ -676,7 +676,7 @@ const translations = {
     saveChanges: "حفظ التغييرات",
     cancelChanges: "إلغاء التغييرات",
     saveLogs: "حفظ سجلات الوحدة",
-    createShortcut: "افتح اختصار WebUI"
+    createShortcut: "إنشاء اختصار WebUI"
   },
   es: {
     moduleTitle: "Encore Tweaks",
@@ -710,7 +710,7 @@ const translations = {
     saveChanges: "Guardar Cambios",
     cancelChanges: "Cancelar Cambios",
     saveLogs: "Guardar Registros del Módulo",
-    createShortcut: "Abrir acceso directo de WebUI"
+    createShortcut: "Crear acceso directo de WebUI"
   },
   pl: {
     moduleTitle: "Encore Tweaks",
@@ -744,7 +744,7 @@ const translations = {
     saveChanges: "Zapisz Zmiany",
     cancelChanges: "Anuluj Zmiany",
     saveLogs: "Zapisz Dzienniki Modułu",
-    createShortcut: "Otwórz skrót WebUI"
+    createShortcut: "Utwórz skrót WebUI"
   },
   tl: {
     moduleTitle: "Encore Tweaks",
@@ -778,7 +778,7 @@ const translations = {
     saveChanges: "I-save ang mga Pagbabago",
     cancelChanges: "Kanselahin ang mga Pagbabago",
     saveLogs: "I-save ang mga Log ng Module",
-    createShortcut: "Buksan ang Shortcut ng WebUI"
+    createShortcut: "Gumawa ng Shortcut ng WebUI"
   },
   ro: {
     moduleTitle: "Encore Tweaks",
@@ -812,7 +812,7 @@ const translations = {
     saveChanges: "Salvează Modificările",
     cancelChanges: "Anulează Modificările",
     saveLogs: "Salvează Logurile Modulului",
-    createShortcut: "Deschide scurtătura WebUI"
+    createShortcut: "Creează scurtătură WebUI"
   }
 };
 
