@@ -370,9 +370,13 @@ exynos_performance() {
 	apply always_on "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf "$path"
-	done &
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*devfreq_mif*; do
+			[ $LITE_MODE -eq 1 ] &&
+				devfreq_mid_perf "$path" ||
+				devfreq_max_perf "$path"
+		done &
+	}
 }
 
 unisoc_performance() {
@@ -402,10 +406,14 @@ tensor_performance() {
 		fi
 	}
 
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_max_perf "$path"
-	done &
+	# DRAM frequency
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*devfreq_mif*; do
+			[ $LITE_MODE -eq 1 ] &&
+				devfreq_mid_perf "$path" ||
+				devfreq_max_perf "$path"
+		done &
+	}
 }
 
 intel_performance() {
@@ -525,10 +533,12 @@ exynos_normal() {
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
 	apply coarse_demand "$mali_sysfs/power_policy"
 
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock "$path"
-	done &
+	# DRAM frequency
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*devfreq_mif*; do
+			devfreq_unlock "$path"
+		done &
+	}
 }
 
 unisoc_normal() {
@@ -547,10 +557,12 @@ tensor_normal() {
 		write "$min_freq" "$gpu_path/scaling_min_freq"
 	}
 
-	# DRAM and Buses Frequency
-	for path in /sys/class/devfreq/*{bci,mif,dsu,int}; do
-		devfreq_unlock "$path"
-	done &
+	# DRAM frequency
+	[ $DEVICE_MITIGATION -eq 0 ] && {
+		for path in /sys/class/devfreq/*devfreq_mif*; do
+			devfreq_unlock "$path"
+		done &
+	}
 }
 
 intel_normal() {
