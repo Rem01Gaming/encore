@@ -18,22 +18,20 @@
 # Config dir
 MODULE_CONFIG="/data/adb/.config/encore"
 
-# Isn't those already in encore_profiler?
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
 
-# change_cpu_gov() {
-# 	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-# 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-# 	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-# }
-
-# set_dnd() {
-# 	case $1 in
-# 	# Turn off DND mode
-# 	0) cmd notification set_dnd off ;;
-# 	# Turn on DND mode
-# 	1) cmd notification set_dnd priority ;;
-# 	esac
-# }
+set_dnd() {
+	case $1 in
+	# Turn off DND mode
+	0) cmd notification set_dnd off ;;
+	# Turn on DND mode
+	1) cmd notification set_dnd priority ;;
+	esac
+}
 
 save_logs() {
 	[ ! -d /sdcard/Download ] && mkdir /sdcard/Download
