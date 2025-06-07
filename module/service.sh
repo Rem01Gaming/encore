@@ -56,5 +56,21 @@ if [ -f "$ENABLE_PPM" ]; then
 	echo 1 >"$ENABLE_PPM"
 fi
 
+# Test 
+# Sandevistan Boot
+
+change_cpu_gov() {
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
+	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+change_cpu_gov performance
+
+sleep 10
+
+change_cpu_gov schedutil
+change_cpu_gov schedhorizon
+
 # Start Encore Daemon
 encored
