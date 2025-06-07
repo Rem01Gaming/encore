@@ -67,7 +67,7 @@ change_cpu_gov() {
 
 change_cpu_gov performance
 
-sleep 10
+sleep 20
 
 change_cpu_gov schedutil
 change_cpu_gov schedhorizon
