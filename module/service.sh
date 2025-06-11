@@ -47,7 +47,7 @@ custom_gov="$MODULE_CONFIG/custom_default_cpu_gov"
 echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 [ ! -f $MODULE_CONFIG/powersave_cpu_gov ] && echo "$default_gov" >$MODULE_CONFIG/powersave_cpu_gov
 
-# Mitigate buggy thermal throttling on startup
+# Mitigate buggy thermal throttling on post-startup
 # in old MediaTek devices.
 ENABLE_PPM="/proc/ppm/enabled"
 if [ -f "$ENABLE_PPM" ]; then
