@@ -9,7 +9,7 @@ hero:
   text: Special performance module for your device
   tagline: "A no-nonsense performance module"
   image:
-    src: /logo.webp
+    src: /logo.avif
     alt: Encore Tweaks
   actions:
     - theme: brand

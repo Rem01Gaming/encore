@@ -7,10 +7,10 @@ description: "Learn how to configure Encore Tweaks settings via Module WebUI for
 
 The **Encore Tweaks** module offers a variety of performance-tuning settings accessible through the [Module WebUI](https://kernelsu.org/guide/module-webui.html)—a feature of **KernelSU** that allows modules to build interactive HTML, CSS, and JavaScript interfaces. This WebUI makes it easy for users to configure Encore Tweaks without needing to manually edit configuration files.
 
-While **KernelSU** and **APatch** support WebUI natively in their managers, **Magisk** does not. If you're using Magisk, you can still access the WebUI using the [KSU WebUI APK](https://t.me/rem01schannel/636) or [MMRL](https://github.com/DerGoogler/MMRL).
+While **KernelSU** and **APatch** support WebUI natively in their managers, **Magisk** does not. If you're using Magisk, you can still access the WebUI using the [KSU WebUI APK](https://t.me/rem01schannel/636) or [WebUI X](https://play.google.com/store/apps/details?id=com.dergoogler.mmrl.wx).
 
 ::: details Preview of Encore Tweaks WebUI
-![Encore Tweaks WebUI](/Screenshot_20250520-161223_MMRL.png)
+![Encore Tweaks WebUI](/Screenshot_20250520-161223_MMRL.avif)
 :::
 
 ## Configuration Options
@@ -19,7 +19,7 @@ While **KernelSU** and **APatch** support WebUI natively in their managers, **Ma
 Stops system logging services to reduce background activity and performance overhead.
 
 ::: tip Deprecated
-This feature has been removed from the 4.3 release.
+This feature has been removed in version 4.3 and later due to root detection issues.
 :::
 
 ::: warning
@@ -43,6 +43,9 @@ Defines the CPU governor for the **Powersave** profile, optimized for battery li
 
 ### Edit Gamelist
 Allows you to manage a list of games and performance-demanding apps. When any listed app is launched, Encore Tweaks automatically switches to the **Performance** profile.
+
+### Create WebUI Shortcut
+Allows you to create a shortcut to Encore Tweaks WebUI, WebUI X is required.
 
 ### Save Logs
 Stores Encore daemon logs in internal storage for troubleshooting purposes. These logs can help diagnose issues or confirm profile behavior.
