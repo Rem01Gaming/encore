@@ -9,3 +9,7 @@
   padding-top: var(--window-inset-top, 0px);
   padding-bottom: var(--window-inset-bottom, 0px);
 }
+
+.card_border {
+  border: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+}

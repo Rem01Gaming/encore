@@ -44,7 +44,7 @@
       </div>
 
       <!-- Daemon Status -->
-      <div class="bg-secondary-container mb-4 p-4 rounded-lg flex items-start justify-between text-on-secondary-container">
+      <div class="bg-secondary-container mb-4 p-4 rounded-xl flex items-start justify-between text-on-secondary-container card_border">
         <div>
           <span id="daemon_status" class="text-lg font-semibold">Loading</span>
           <span id="daemon_pid" class="text-xs mt-3 block">One moment please...</span>
@@ -53,7 +53,7 @@
       </div>
 
       <!-- Device & Module Info -->
-      <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
+      <div class="bg-surface-container mb-4 p-4 rounded-xl text-on-surface card_border">
         <div class="py-2">
           <h3 data-i18n="moduleTitle" class="text-sm font-medium mb-1"></h3>
           <span id="module_version" class="text-on-surface-variant text-xs"></span>
@@ -77,7 +77,7 @@
       </div>
 
       <!-- Settings -->
-      <div class="bg-surface-container mb-4 p-4 rounded-lg text-on-surface">
+      <div class="bg-surface-container mb-4 p-4 rounded-xl text-on-surface card_border">
         <h2 data-i18n="settingsTitle" class="text-base font-semibold mb-2"></h2>
 
         <div class="flex items-center justify-between py-1 mb-2">
@@ -144,7 +144,7 @@
       </div>
 
       <!-- Actions -->
-      <div class="bg-surface-container mb-4 p-4 rounded-lg">
+      <div class="bg-surface-container mb-4 p-4 rounded-xl card_border">
         <h2 data-i18n="actionsTitle" class="text-base font-semibold mb-4 text-on-surface"></h2>
         <button id="edit_gamelist_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2" onclick="edit_gamelist.showModal()"></button>
         <button id="create_shortcut_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
@@ -152,14 +152,14 @@
       </div>
 
       <!-- Donate Button -->
-      <button id="donate_btn" class="text-left text-on-surface bg-surface-container mb-4 p-4 rounded-lg w-full active:bg-secondary-container transition duration-300">
+      <button id="donate_btn" class="text-left text-on-surface bg-surface-container mb-4 p-4 rounded-xl w-full active:bg-secondary-container transition duration-300 card_border">
         <h2 data-i18n="supportTitle" class="text-base font-semibold px-2 mb-1"></h2>
         <p data-i18n="supportDescription" class="text-sm text-on-surface-variant px-2 mb-1"></p>
       </button>
 
       <!-- Modals -->
       <dialog id="dnd_gameplay" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
+        <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -169,7 +169,7 @@
       </dialog>
 
       <dialog id="lite_mode" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
+        <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -179,7 +179,7 @@
       </dialog>
 
       <dialog id="device_mitigation" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
+        <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -189,7 +189,7 @@
       </dialog>
 
       <dialog id="edit_gamelist" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
+        <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -204,7 +204,7 @@
       </dialog>
 
       <dialog id="error_modal" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface">
+        <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
