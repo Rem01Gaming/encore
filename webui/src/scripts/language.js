@@ -1,6 +1,7 @@
 // Add your translation here, use ISO 639-1 standard for IDs
 const translations = {
   en: {
+    languageName: "English",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Current Profile",
     kernelTitle: "Kernel",
@@ -29,6 +30,7 @@ const translations = {
     createShortcut: "Create WebUI Shortcut"
   },
   id: {
+    languageName: "Bahasa Indonesia",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profil saat ini",
     kernelTitle: "Kernel",
@@ -57,6 +59,7 @@ const translations = {
     createShortcut: "Buat Pintasan WebUI"
   },
   jv: {
+    languageName: "Basa Jawa",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profil Saiki",
     kernelTitle: "Kernel",
@@ -85,6 +88,7 @@ const translations = {
     createShortcut: "Gawe Pintasan WebUI"
   },
   da: {
+    languageName: "Dansk",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Aktuel Profil",
     kernelTitle: "Kernel",
@@ -113,6 +117,7 @@ const translations = {
     createShortcut: "Opret WebUI-genvej"
   },
   pt: {
+    languageName: "Português",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Perfil Atual",
     kernelTitle: "Kernel",
@@ -141,6 +146,7 @@ const translations = {
     createShortcut: "Criar Atalho do WebUI"
   },
   tr: {
+    languageName: "Türkçe",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Mevcut Profil",
     kernelTitle: "Kernel",
@@ -169,6 +175,7 @@ const translations = {
     createShortcut: "WebUI Kısayolu Oluştur"
   },
   fr: {
+    languageName: "Français",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profil Actuel",
     kernelTitle: "Kernel",
@@ -197,6 +204,7 @@ const translations = {
     createShortcut: "Créer un raccourci WebUI"
   },
   de: {
+    languageName: "Deutsch",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Aktuelles Profil",
     kernelTitle: "Kernel",
@@ -225,6 +233,7 @@ const translations = {
     createShortcut: "WebUI-Verknüpfung erstellen"
   },
   it: {
+    languageName: "Italiano",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profilo Attuale",
     kernelTitle: "Kernel",
@@ -253,6 +262,7 @@ const translations = {
     createShortcut: "Crea collegamento WebUI"
   },
   nl: {
+    languageName: "Nederlands",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Huidig Profiel",
     kernelTitle: "Kernel",
@@ -281,6 +291,7 @@ const translations = {
     createShortcut: "Maak WebUI-snelkoppeling"
   },
   hu: {
+    languageName: "Magyar",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Aktuális Profil",
     kernelTitle: "Kernel",
@@ -309,6 +320,7 @@ const translations = {
     createShortcut: "WebUI parancsikon létrehozása"
   },
   ms: {
+    languageName: "Bahasa Melayu",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profil Kini",
     kernelTitle: "Kernel",
@@ -337,6 +349,7 @@ const translations = {
     createShortcut: "Buat Pintasan WebUI"
   },
   ru: {
+    languageName: "Русский",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Текущий профиль",
     kernelTitle: "Kernel",
@@ -365,6 +378,7 @@ const translations = {
     createShortcut: "Создать ярлык WebUI"
   },
   ja: {
+    languageName: "日本語",
     moduleTitle: "Encore Tweaks",
     profileTitle: "現在のプロファイル",
     kernelTitle: "Kernel",
@@ -393,6 +407,7 @@ const translations = {
     createShortcut: "WebUIショートカットを作成"
   },
   zh: {
+    languageName: "简体中文",
     moduleTitle: "Encore Tweaks",
     profileTitle: "当前配置",
     kernelTitle: "内核",
@@ -421,6 +436,7 @@ const translations = {
     createShortcut: "创建快捷方式"
   },
   th: {
+    languageName: "ภาษาไทย",
     moduleTitle: "Encore Tweaks",
     profileTitle: "โปรไฟล์ปัจจุบัน",
     kernelTitle: "Kernel",
@@ -448,6 +464,7 @@ const translations = {
     createShortcut: "สร้างทางลัด WebUI"
   },
   ko: {
+    languageName: "한국어",
     moduleTitle: "Encore Tweaks",
     profileTitle: "현재 프로필",
     kernelTitle: "Kernel",
@@ -476,6 +493,7 @@ const translations = {
     createShortcut: "WebUI 바로가기 만들기"
   },
   vi: {
+    languageName: "Tiếng Việt",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Cấu hình hiện tại",
     kernelTitle: "Kernel",
@@ -504,6 +522,7 @@ const translations = {
     createShortcut: "Tạo lối tắt WebUI"
   },
   hi: {
+    languageName: "हिन्दी",
     moduleTitle: "Encore Tweaks",
     profileTitle: "वर्तमान प्रोफ़ाइल",
     kernelTitle: "Kernel",
@@ -532,6 +551,7 @@ const translations = {
     createShortcut: "WebUI शॉर्टकट बनाएं"
   },
   ar: {
+    languageName: "اَلْعَرَبِيَّةُ",
     moduleTitle: "Encore Tweaks",
     profileTitle: "الملف الشخصي الحالي",
     kernelTitle: "Kernel",
@@ -560,6 +580,7 @@ const translations = {
     createShortcut: "إنشاء اختصار WebUI"
   },
   es: {
+    languageName: "Español",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Perfil Actual",
     kernelTitle: "Kernel",
@@ -588,6 +609,7 @@ const translations = {
     createShortcut: "Crear acceso directo de WebUI"
   },
   pl: {
+    languageName: "Polski",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Aktualny Profil",
     kernelTitle: "Jądro",
@@ -616,6 +638,7 @@ const translations = {
     createShortcut: "Utwórz skrót WebUI"
   },
   tl: {
+    languageName: "Tagalog",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Kasalukuyang Profile",
     kernelTitle: "Kernel",
@@ -644,6 +667,7 @@ const translations = {
     createShortcut: "Gumawa ng Shortcut ng WebUI"
   },
   ro: {
+    languageName: "Română",
     moduleTitle: "Encore Tweaks",
     profileTitle: "Profil Curent",
     kernelTitle: "Kernel",
@@ -672,6 +696,27 @@ const translations = {
     createShortcut: "Creează scurtătură WebUI"
   }
 };
+
+function populateLanguageSelector() {
+  const selector = document.getElementById('languageSelector');
+  if (!selector) return;
+  
+  // Clear existing options
+  selector.innerHTML = '';
+  
+  // Add options for each available language
+  for (const langCode in translations) {
+    if (translations.hasOwnProperty(langCode)) {
+      const option = document.createElement('option');
+      option.value = langCode;
+      
+      // Use languageName from translations, fallback to code
+      option.textContent = translations[langCode].languageName || langCode;
+      
+      selector.appendChild(option);
+    }
+  }
+}
 
 /**
  * Function to update the translation of all elements with data-i18n attribute
@@ -703,6 +748,8 @@ function translatePage(lang) {
     saveLogBtn.innerText = translations[lang]?.saveLogs || translations.en.saveLogs;
   }
 }
+
+populateLanguageSelector();
 
 // Check localStorage for saved language
 let savedLang = localStorage.getItem('selectedLanguage');
