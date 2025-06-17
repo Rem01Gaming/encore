@@ -1,0 +1,42 @@
+{
+  "common": {
+    "module": "Encore Tweaks"
+  },
+  "devinfo": {
+    "module": "Encore Tweaks",
+    "profile": "Profil saat ini",
+    "kernel": "Kernel",
+    "chipset": "Chipset",
+    "androidSDK": "Android SDK"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "dndGameplay": "DND Saat Bermain",
+    "liteMode": "Mode Lite",
+    "deviceMitigation": "Mitigasi Device",
+    "defaultCpuGov": "CPU Governor Default",
+    "powersaveCpuGov": "CPU Governor Hemat Daya"
+  },
+  "actions": {
+    "title": "Aksi",
+    "editGamelist": "Edit Daftar Permainan",
+    "createShortcut": "Buat Pintasan WebUI",
+    "saveLogs": "Simpan Log Modul"
+  },
+  "support": {
+    "title": "Dukung Saya",
+    "description": "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi."
+  },
+  "modal": {
+    "dndTitle": "Mode Jangan Ganggu",
+    "dndDesc": "Aktifkan mode jangan ganggu saat bermain game. Batasi gangguan dari notifikasi dan panggilan, sehingga Anda dapat memainkan game favorit tanpa gangguan apa pun.",
+    "liteModeTitle": "Mode Lite",
+    "liteModeDesc": "Pilihan ini akan mengurangi panas berlebih dan konsumsi daya selama bermain game dengan memungkinkan CPU dan komponen lainnya berjalan pada frekuensi yang lebih daripada terus-menerus pada frekuensi tertinggi. Ini akan memengaruhi performa game secara keseluruhan.",
+    "deviceMitigationTitle": "Mitigasi Perangkat",
+    "deviceMitigationDesc": "Memitigasi beberapa bug khusus perangkat dengan menerapkan penyesuaian tertentu untuk meningkatkan kompatibilitas dan keandalan, tetap nonaktifkan fitur ini kecuali jika perangkat Anda mengalami masalah saat dimatikan.",
+    "editGamelistTitle": "Edit Daftar Permainan",
+    "editGamelistDesc": "Profil kinerja akan diaktifkan ketika salah satu permainan dan aplikasi yang tercantum di sini diluncurkan.",
+    "saveChanges": "Simpan Perubahan",
+    "cancelChanges": "Batalkan Perubahan"
+  }
+}

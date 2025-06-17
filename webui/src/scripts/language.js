@@ -1,782 +1,93 @@
-// Add your translation here, use ISO 639-1 standard for IDs
-const translations = {
-  en: {
-    languageName: "English",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Current Profile",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Settings",
-    dndGameplay: "DND on Gameplay",
-    liteMode: "Lite Mode",
-    deviceMitigation: "Device Mitigation",
-    defaultCpuGov: "Default CPU Governor",
-    powersaveCpuGov: "Powersave CPU Governor",
-    actionsTitle: "Actions",
-    supportTitle: "Support Me",
-    supportDescription: "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation.",
-    dndTitle: "Do Not Disturb",
-    dndDesc: "Enable do not disturb mode when playing games. Limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.",
-    liteModeTitle: "Lite Mode",
-    liteModeDesc: "This option will reduces overheating and power consumption during gameplay by allowing CPU and other components to run at lower frequency rather than constantly at the highest frequency, this will affect overall game performance.",
-    deviceMitigationTitle: "Device Mitigation",
-    deviceMitigationDesc: "Mitigate some device specific bugs by applying certain adjustments to enhance compatibility and reliability, keep this feature disabled unless your device experiences problems when it is switched off.",
-    editGamelistTitle: "Edit Gamelist",
-    editGamelistDesc: "The performance profile will be activated when any of the games and apps listed here are launched.",
-    saveChanges: "Save Changes",
-    cancelChanges: "Cancel Changes",
-    saveLogs: "Save Module Logs",
-    createShortcut: "Create WebUI Shortcut"
-  },
-  id: {
-    languageName: "Bahasa Indonesia",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profil saat ini",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Pengaturan",
-    dndGameplay: "DND Saat Bermain",
-    liteMode: "Mode Lite",
-    deviceMitigation: "Mitigasi Perangkat",
-    defaultCpuGov: "CPU Governor Default",
-    powersaveCpuGov: "CPU Governor Hemat Daya",
-    actionsTitle: "Aksi",
-    supportTitle: "Dukung Saya",
-    supportDescription: "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi.",
-    dndTitle: "Mode Jangan Ganggu",
-    dndDesc: "Aktifkan mode jangan ganggu saat bermain game. Batasi gangguan dari notifikasi dan panggilan, sehingga Anda dapat memainkan game favorit tanpa gangguan apa pun.",
-    liteModeTitle: "Mode Lite",
-    liteModeDesc: "Pilihan ini akan mengurangi panas berlebih dan konsumsi daya selama bermain game dengan memungkinkan CPU dan komponen lainnya berjalan pada frekuensi yang lebih rendah daripada terus-menerus pada frekuensi tertinggi. Ini akan memengaruhi performa game secara keseluruhan.",
-    deviceMitigationTitle: "Mitigasi Perangkat",
-    deviceMitigationDesc: "Memitigasi beberapa bug khusus perangkat dengan menerapkan penyesuaian tertentu untuk meningkatkan kompatibilitas dan keandalan, tetap nonaktifkan fitur ini kecuali jika perangkat Anda mengalami masalah saat dimatikan.",
-    editGamelistTitle: "Edit Daftar Permainan",
-    editGamelistDesc: "Profil kinerja akan diaktifkan ketika salah satu permainan dan aplikasi yang tercantum di sini diluncurkan.",
-    saveChanges: "Simpan Perubahan",
-    cancelChanges: "Batalkan Perubahan",
-    saveLogs: "Simpan Log Modul",
-    createShortcut: "Buat Pintasan WebUI"
-  },
-  jv: {
-    languageName: "Basa Jawa",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profil Saiki",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Setelan",
-    dndGameplay: "DND nalika Main",
-    liteMode: "Mode Lite",
-    deviceMitigation: "Mitigasi piranti",
-    defaultCpuGov: "Gubernur CPU Gawan",
-    powersaveCpuGov: "Gubernur CPU Irit Daya",
-    actionsTitle: "Tindakan",
-    supportTitle: "Dukung Aku",
-    supportDescription: "Encore Tweaks gratis lan bakal tetep gratis kanggo sapa wae. Nanging, sampeyan bisa nuduhake rasa peduli kanthi nyumbang.",
-    dndTitle: "Ora Gangguan",
-    dndDesc: "Aktifake mode ora gangguan nalika dolanan game. Ngalang-alangi notifikasi lan telpon supaya sampeyan bisa fokus dolanan tanpa gangguan.",
-    liteModeTitle: "Mode Lite",
-    liteModeDesc: "Opsi iki bakal nyuda overheating lan konsumsi daya sajrone game kanthi ngidini CPU lan komponen liyane bisa mlaku kanthi frekuensi sing luwih murah tinimbang terus-terusan ing frekuensi paling dhuwur, iki bakal mengaruhi kinerja game sakabèhé.",
-    deviceMitigationTitle: "Mitigasi piranti",
-    deviceMitigationDesc: "Ngilangi sawetara bug khusus piranti kanthi ngetrapake pangaturan tartamtu kanggo nambah kompatibilitas lan linuwih, tetepake fitur iki dipateni kajaba piranti sampeyan ngalami masalah nalika dipateni.",
-    editGamelistTitle: "Sunting Dhaptar Game",
-    editGamelistDesc: "Profil kinerja bakal diaktifake nalika game utawa aplikasi sing kadhaptar ing kene dibukak.",
-    saveChanges: "Simpen Owahan",
-    cancelChanges: "Batalake Owahan",
-    saveLogs: "Simpen Log Modul",
-    createShortcut: "Gawe Pintasan WebUI"
-  },
-  da: {
-    languageName: "Dansk",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Aktuel Profil",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Indstillinger",
-    dndGameplay: "Forstyr ikke under spil",
-    liteMode: "Lite tilstand",
-    deviceMitigation: "Enhedsafhjælpning",
-    defaultCpuGov: "Standard CPU Governor",
-    powersaveCpuGov: "Energibesparende CPU Governor",
-    actionsTitle: "Handlinger",
-    supportTitle: "Støt Mig",
-    supportDescription: "Encore Tweaks er og vil altid være gratis for alle. Du kan dog vise din støtte ved at donere.",
-    dndTitle: "Forstyr ikke",
-    dndDesc: "Aktiver 'Forstyr ikke'-tilstand under spil. Begrænser forstyrrelser fra notifikationer og opkald, så du kan spille uden afbrydelser.",
-    liteModeTitle: "Lite tilstand",
-    liteModeDesc: "Denne indstilling reducerer overophedning og energiforbrug under spil ved at tillade CPU'en og andre komponenter at køre ved en lavere frekvens i stedet for konstant at køre ved højeste frekvens. Det påvirker den samlede spilpræstation.",
-    deviceMitigationTitle: "Enhedsafhjælpning",
-    deviceMitigationDesc: "Afhjælper visse enhedsspecifikke fejl ved at bruge tilpasninger, der forbedrer kompatibilitet og pålidelighed. Lad denne funktion være slået fra, medmindre din enhed har problemer ved slukning.",
-    editGamelistTitle: "Rediger Spilleliste",
-    editGamelistDesc: "Ydelsesprofilen aktiveres, når et af spillene eller appsene på denne liste startes.",
-    saveChanges: "Gem ændringer",
-    cancelChanges: "Annuller ændringer",
-    saveLogs: "Gem Modul-Logger",
-    createShortcut: "Opret WebUI-genvej"
-  },
-  pt: {
-    languageName: "Português",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Perfil Atual",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Configurações",
-    dndGameplay: "DND no Jogo",
-    liteMode: "Modo Lite",
-    deviceMitigation: "Mitigação de Dispositivo",
-    defaultCpuGov: "Governador Padrão da CPU",
-    powersaveCpuGov: "Governador de CPU Economia de Energia",
-    actionsTitle: "Ações",
-    supportTitle: "Apoie-me",
-    supportDescription: "O Encore Tweaks é e sempre será gratuito para você e todos. No entanto, você pode demonstrar seu apoio fazendo uma doação.",
-    dndTitle: "Não Perturbe",
-    dndDesc: "Ativar o modo 'Não Perturbe' ao jogar. Isso limita interrupções de notificações e chamadas, permitindo que você jogue sem distrações.",
-    liteModeTitle: "Modo Lite",
-    liteModeDesc: "Essa opção reduz o superaquecimento e o consumo de energia durante os jogos, permitindo que a CPU e outros componentes operem em uma frequência mais baixa em vez de manterem a frequência máxima constantemente. Isso afetará o desempenho geral do jogo.",
-    deviceMitigationTitle: "Mitigação de Dispositivo",
-    deviceMitigationDesc: "Mitiga alguns bugs específicos de dispositivos aplicando ajustes para melhorar a compatibilidade e a confiabilidade. Mantenha esta função desativada, a menos que seu dispositivo apresente problemas ao desligar.",
-    editGamelistTitle: "Editar Lista de Jogos",
-    editGamelistDesc: "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
-    saveChanges: "Salvar Alterações",
-    cancelChanges: "Cancelar Alterações",
-    saveLogs: "Salvar Logs do Módulo",
-    createShortcut: "Criar Atalho do WebUI"
-  },
-  tr: {
-    languageName: "Türkçe",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Mevcut Profil",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Yonga Seti",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Ayarlar",
-    dndGameplay: "Oyun Sırasında DND",
-    liteMode: "Lite Modu",
-    deviceMitigation: "Cihaz Azaltma",
-    defaultCpuGov: "Varsayılan CPU Yöneticisi",
-    powersaveCpuGov: "Güç Tasarrufu CPU Yöneticisi",
-    actionsTitle: "Eylemler",
-    supportTitle: "Beni Destekle",
-    supportDescription: "Encore Tweaks her zaman ücretsiz olacak. Ancak, bağış yaparak desteğinizi gösterebilirsiniz.",
-    dndTitle: "Rahatsız Etme",
-    dndDesc: "Oyun oynarken 'Rahatsız Etmeyin' modunu etkinleştirir. Bildirimleri ve aramaları sınırlandırarak kesintisiz oyun deneyimi sağlar.",
-    liteModeTitle: "Lite Modu",
-    liteModeDesc: "Bu seçenek, oyun oynarken aşırı ısınmayı ve güç tüketimini azaltır. CPU ve diğer bileşenlerin sürekli en yüksek frekansta çalışmak yerine daha düşük bir frekansta çalışmasına izin verir. Bu, oyun performansını genel olarak etkileyebilir.",
-    deviceMitigationTitle: "Cihaz Azaltma",
-    deviceMitigationDesc: "Uyumluluğu ve güvenilirliği artırmak için bazı cihazlara özel hataları belirli ayarlarla giderir. Cihazınız kapandığında sorun yaşamıyorsa bu özelliği kapalı tutun.",
-    editGamelistTitle: "Oyun Listesini Düzenle",
-    editGamelistDesc: "Burada listelenen oyunlar veya uygulamalar başlatıldığında performans profili etkinleştirilecektir.",
-    saveChanges: "Değişiklikleri Kaydet",
-    cancelChanges: "Değişiklikleri İptal Et",
-    saveLogs: "Modül Günlüklerini Kaydet",
-    createShortcut: "WebUI Kısayolu Oluştur"
-  },
-  fr: {
-    languageName: "Français",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profil Actuel",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Paramètres",
-    dndGameplay: "DND en Jeu",
-    liteMode: "Mode Lite",
-    deviceMitigation: "Atténuation de l'appareil",
-    defaultCpuGov: "Gouverneur CPU Par Défaut",
-    powersaveCpuGov: "Gouverneur CPU Économie d'Énergie",
-    actionsTitle: "Actions",
-    supportTitle: "Soutenez-moi",
-    supportDescription: "Encore Tweaks est et sera toujours gratuit pour tout le monde. Cependant, vous pouvez me montrer votre soutien en faisant un don.",
-    dndTitle: "Ne Pas Déranger",
-    dndDesc: "Activez le mode 'Ne Pas Déranger' pendant que vous jouez. Cela limite les interruptions dues aux notifications et aux appels, vous permettant ainsi de jouer sans distraction.",
-    liteModeTitle: "Mode Lite",
-    liteModeDesc: "Cette option réduit la surchauffe et la consommation d'énergie pendant le jeu en permettant au processeur et aux autres composants de fonctionner à une fréquence plus basse au lieu de tourner en permanence à la fréquence maximale. Cela affectera les performances globales du jeu.",
-    deviceMitigationTitle: "Atténuation de l'appareil",
-    deviceMitigationDesc: "Corrige certains bugs spécifiques à l'appareil en appliquant des ajustements pour améliorer la compatibilité et la fiabilité. Gardez cette fonction désactivée, sauf si votre appareil rencontre des problèmes lors de l'arrêt.",
-    editGamelistTitle: "Modifier la Liste des Jeux",
-    editGamelistDesc: "Le profil de performance sera activé lorsque l'un des jeux ou applications listés ici sera lancé.",
-    saveChanges: "Enregistrer les Modifications",
-    cancelChanges: "Annuler les Modifications",
-    saveLogs: "Enregistrer les Journaux du Module",
-    createShortcut: "Créer un raccourci WebUI"
-  },
-  de: {
-    languageName: "Deutsch",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Aktuelles Profil",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Einstellungen",
-    dndGameplay: "Nicht stören im Spiel",
-    liteMode: "Lite Modus",
-    deviceMitigation: "Geräteminderung",
-    defaultCpuGov: "Standard-CPU-Governor",
-    powersaveCpuGov: "Energiespar-CPU-Governor",
-    actionsTitle: "Aktionen",
-    supportTitle: "Unterstütze mich",
-    supportDescription: "Encore Tweaks ist und wird immer kostenlos sein. Du kannst mich jedoch mit einer Spende unterstützen.",
-    dndTitle: "Nicht Stören",
-    dndDesc: "Aktiviert den 'Nicht Stören'-Modus beim Spielen. Reduziert Unterbrechungen durch Benachrichtigungen und Anrufe, sodass du ungestört spielen kannst.",
-    liteModeTitle: "Lite Modus",
-    liteModeDesc: "Diese Option reduziert Überhitzung und Energieverbrauch beim Spielen, indem sie der CPU und anderen Komponenten erlaubt, mit einer niedrigeren Frequenz zu arbeiten, anstatt ständig auf der höchsten Frequenz zu laufen. Dies kann die Gesamtleistung des Spiels beeinflussen.",
-    deviceMitigationTitle: "Geräteminderung",
-    deviceMitigationDesc: "Behebt bestimmte gerätespezifische Fehler durch Anpassungen zur Verbesserung der Kompatibilität und Zuverlässigkeit. Lass diese Funktion deaktiviert, es sei denn, dein Gerät hat Probleme beim Herunterfahren.",
-    editGamelistTitle: "Spieleliste Bearbeiten",
-    editGamelistDesc: "Das Leistungsprofil wird aktiviert, wenn eines der hier aufgeführten Spiele oder Apps gestartet wird.",
-    saveChanges: "Änderungen Speichern",
-    cancelChanges: "Änderungen Abbrechen",
-    saveLogs: "Modul-Logs Speichern",
-    createShortcut: "WebUI-Verknüpfung erstellen"
-  },
-  it: {
-    languageName: "Italiano",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profilo Attuale",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Impostazioni",
-    dndGameplay: "DND in Gioco",
-    liteMode: "Modalità Lite",
-    deviceMitigation: "Mitigazione del Dispositivo",
-    defaultCpuGov: "Governor CPU Predefinito",
-    powersaveCpuGov: "Governor CPU Risparmio Energetico",
-    actionsTitle: "Azioni",
-    supportTitle: "Supportami",
-    supportDescription: "Encore Tweaks è e sarà sempre gratuito per tutti. Tuttavia, puoi dimostrare il tuo supporto facendo una donazione.",
-    dndTitle: "Non Disturbare",
-    dndDesc: "Attiva la modalità 'Non Disturbare' mentre giochi. Limita le interruzioni da notifiche e chiamate, permettendoti di giocare senza distrazioni.",
-    liteModeTitle: "Modalità Lite",
-    liteModeDesc: "Questa opzione riduce il surriscaldamento e il consumo energetico durante il gioco, permettendo alla CPU e agli altri componenti di funzionare a una frequenza più bassa invece di operare costantemente alla massima frequenza. Questo può influire sulle prestazioni complessive del gioco.",
-    deviceMitigationTitle: "Mitigazione del Dispositivo",
-    deviceMitigationDesc: "Attenua alcuni bug specifici del dispositivo applicando modifiche per migliorare compatibilità e affidabilità. Tieni questa funzione disattivata, a meno che il dispositivo non abbia problemi durante lo spegnimento.",
-    editGamelistTitle: "Modifica Lista Giochi",
-    editGamelistDesc: "Il profilo prestazioni verrà attivato quando uno dei giochi o delle app elencati qui verrà avviato.",
-    saveChanges: "Salva Modifiche",
-    cancelChanges: "Annulla Modifiche",
-    saveLogs: "Salva Log del Modulo",
-    createShortcut: "Crea collegamento WebUI"
-  },
-  nl: {
-    languageName: "Nederlands",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Huidig Profiel",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Instellingen",
-    dndGameplay: "DND tijdens Gamen",
-    liteMode: "Lite modus",
-    deviceMitigation: "Apparaatmitigatie",
-    defaultCpuGov: "Standaard CPU Governor",
-    powersaveCpuGov: "Energiezuinige CPU Governor",
-    actionsTitle: "Acties",
-    supportTitle: "Steun Mij",
-    supportDescription: "Encore Tweaks is en blijft altijd gratis voor iedereen. Je kunt me echter steunen door een donatie te doen.",
-    dndTitle: "Niet Storen",
-    dndDesc: "Schakel de modus 'Niet Storen' in tijdens het gamen. Beperkt onderbrekingen door meldingen en oproepen, zodat je ongestoord kunt spelen.",
-    liteModeTitle: "Lite modus",
-    liteModeDesc: "Deze optie vermindert oververhitting en energieverbruik tijdens het gamen door de CPU en andere componenten toe te staan op een lagere frequentie te draaien in plaats van constant op de hoogste frequentie. Dit kan de algehele gameprestaties beïnvloeden.",
-    deviceMitigationTitle: "Apparaatmitigatie",
-    deviceMitigationDesc: "Verhelpt bepaalde apparaatspecifieke bugs door aanpassingen toe te passen om de compatibiliteit en betrouwbaarheid te verbeteren. Laat deze functie uitgeschakeld, tenzij je apparaat problemen heeft bij het uitschakelen.",
-    editGamelistTitle: "Spellenlijst Bewerken",
-    editGamelistDesc: "Het prestatieprofiel wordt geactiveerd wanneer een van de hier vermelde spellen of apps wordt gestart.",
-    saveChanges: "Wijzigingen Opslaan",
-    cancelChanges: "Wijzigingen Annuleren",
-    saveLogs: "Module Logs Opslaan",
-    createShortcut: "Maak WebUI-snelkoppeling"
-  },
-  hu: {
-    languageName: "Magyar",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Aktuális Profil",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipkészlet",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Beállítások",
-    dndGameplay: "Ne zavarjanak játék közben",
-    liteMode: "Lite mód",
-    deviceMitigation: "Eszközcsökkentés",
-    defaultCpuGov: "Alapértelmezett CPU Governor",
-    powersaveCpuGov: "Energiatakarékos CPU Governor",
-    actionsTitle: "Műveletek",
-    supportTitle: "Támogass Engem",
-    supportDescription: "Az Encore Tweaks mindig ingyenes lesz mindenki számára. Ha szeretnéd támogatni a munkámat, adományozhatsz.",
-    dndTitle: "Ne zavarjanak",
-    dndDesc: "Játék közben aktiválja a Ne zavarjanak módot. Korlátozza az értesítéseket és a hívásokat, lehetővé téve a zavartalan játékot.",
-    liteModeTitle: "Lite mód",
-    liteModeDesc: "Ez a beállítás csökkenti a túlmelegedést és az energiafogyasztást játék közben azáltal, hogy lehetővé teszi a CPU és más alkatrészek számára, hogy alacsonyabb frekvencián működjenek a folyamatos legmagasabb frekvencia helyett. Ez befolyásolhatja a játék teljesítményét.",
-    deviceMitigationTitle: "Eszközcsökkentés",
-    deviceMitigationDesc: "Bizonyos eszközspecifikus hibák enyhítésére szolgál beállítások alkalmazásával, amelyek javítják a kompatibilitást és a megbízhatóságot. Hagyd kikapcsolva ezt a funkciót, kivéve, ha a készüléked leállításkor problémákat tapasztal.",
-    editGamelistTitle: "Játékkönyvtár szerkesztése",
-    editGamelistDesc: "A teljesítményprofil aktiválódik, amikor bármelyik játék vagy alkalmazás ezen a listán elindul.",
-    saveChanges: "Változások mentése",
-    cancelChanges: "Változások visszavonása",
-    saveLogs: "Modul naplók mentése",
-    createShortcut: "WebUI parancsikon létrehozása"
-  },
-  ms: {
-    languageName: "Bahasa Melayu",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profil Kini",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Cipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Tetapan",
-    dndGameplay: "Jangan Ganggu Semasa Bermain",
-    liteMode: "Mode Lite",
-    deviceMitigation: "Mitigasi Peranti",
-    defaultCpuGov: "Default CPU Governor",
-    powersaveCpuGov: "CPU Governor Hemat Daya",
-    actionsTitle: "Tindakan",
-    supportTitle: "Sokong Saya",
-    supportDescription: "Encore Tweaks sentiasa percuma untuk semua orang. Namun, anda boleh menunjukkan sokongan dengan membuat sumbangan.",
-    dndTitle: "Jangan Ganggu",
-    dndDesc: "Aktifkan mod Jangan Ganggu semasa bermain permainan. Menghadkan gangguan daripada notifikasi dan panggilan, membolehkan anda bermain tanpa gangguan.",
-    liteModeTitle: "Mode Lite",
-    liteModeDesc: "Pilihan ni kurangin sikit kepanasan berlebihan dan penggunaan tenaga masa main game dengan bagi CPU dan komponen lain jalan kat frekuensi lebih rendah dari selalu kat frekuensi tertinggi. Tapi ia boleh bagi kesan sikit pada kelancaran game.",
-    deviceMitigationTitle: "Mitigasi Peranti",
-    deviceMitigationDesc: "Kurangkan beberapa isu khusus peranti dengan pelarasan tertentu untuk tingkatkan keserasian dan kestabilan. Biarkan fungsi ini dimatikan kecuali peranti anda alami masalah semasa ditutup.",
-    editGamelistTitle: "Sunting Senarai Permainan",
-    editGamelistDesc: "Profil prestasi akan diaktifkan apabila mana-mana permainan atau aplikasi dalam senarai ini dilancarkan.",
-    saveChanges: "Simpan Perubahan",
-    cancelChanges: "Batal Perubahan",
-    saveLogs: "Simpan Log Modul",
-    createShortcut: "Buat Pintasan WebUI"
-  },
-  ru: {
-    languageName: "Русский",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Текущий профиль",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Чипсет",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Настройки",
-    dndGameplay: "Не беспокоить во время игры",
-    liteMode: "Режим Lite",
-    deviceMitigation: "Смягчение проблем устройства",
-    defaultCpuGov: "CPU Governor по умолчанию",
-    powersaveCpuGov: "Энергосберегающий CPU Governor",
-    actionsTitle: "Действия",
-    supportTitle: "Поддержите меня",
-    supportDescription: "Encore Tweaks всегда был и будет бесплатным для вас и для всех. Однако вы можете показать свою поддержку, сделав пожертвование.",
-    dndTitle: "Не беспокоить",
-    dndDesc: "Включает режим «Не беспокоить» во время игры, что ограничивает прерывания от уведомлений и звонков, позволяя вам наслаждаться любимыми играми без отвлекающих факторов.",
-    liteModeTitle: "Режим Lite",
-    liteModeDesc: "Эта опция снижает перегрев и энергопотребление во время игры, позволяя процессору и другим компонентам работать на более низкой частоте, а не постоянно на максимальной. Это может повлиять на общую производительность игры.",
-    deviceMitigationTitle: "Смягчение проблем устройства",
-    deviceMitigationDesc: "Устраняет некоторые ошибки, специфичные для устройства, применяя определённые настройки для улучшения совместимости и надежности. Оставьте эту функцию выключенной, если ваше устройство не испытывает проблем при выключении.",
-    editGamelistTitle: "Редактировать список игр",
-    editGamelistDesc: "Профиль производительности будет активирован при запуске любой из указанных игр и приложений.",
-    saveChanges: "Сохранить изменения",
-    cancelChanges: "Отменить изменения",
-    saveLogs: "Сохранить логи модуля",
-    createShortcut: "Создать ярлык WebUI"
-  },
-  ja: {
-    languageName: "日本語",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "現在のプロファイル",
-    kernelTitle: "Kernel",
-    chipsetTitle: "チップセット",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "設定",
-    dndGameplay: "プレイ中はおやすみモード",
-    liteMode: "ライトモード",
-    deviceMitigation: "デバイス軽減",
-    defaultCpuGov: "デフォルトのCPUガバナー",
-    powersaveCpuGov: "省電力CPUガバナー",
-    actionsTitle: "アクション",
-    supportTitle: "サポートする",
-    supportDescription: "Encore Tweaksは無料で提供されており、これからもそうです。ただし、寄付を通じてサポートを示すことができます。",
-    dndTitle: "おやすみモード",
-    dndDesc: "ゲームをプレイ中におやすみモードを有効にします。通知や通話による中断を制限し、快適にゲームを楽しめます。",
-    liteModeTitle: "ライトモード",
-    liteModeDesc: "この設定は、ゲーム中の過熱と消費電力を減らすため、CPUやその他のコンポーネントが最高周波数で常に動作するのではなく、低い周波数で動作できるようにします。これにより、ゲームの全体的なパフォーマンスに影響を与える可能性があります。",
-    deviceMitigationTitle: "デバイス軽減",
-    deviceMitigationDesc: "特定のデバイスに特有の不具合を、互換性と信頼性を向上させるための調整を適用して軽減します。デバイスがシャットダウン時に問題を起こさない場合は、この機能をオフにしてください。",
-    editGamelistTitle: "ゲームリストを編集",
-    editGamelistDesc: "ここにリストされたゲームやアプリが起動すると、パフォーマンスプロファイルが有効になります。",
-    saveChanges: "変更を保存",
-    cancelChanges: "変更をキャンセル",
-    saveLogs: "モジュールログを保存",
-    createShortcut: "WebUIショートカットを作成"
-  },
-  zh: {
-    languageName: "简体中文",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "当前配置",
-    kernelTitle: "内核",
-    chipsetTitle: "芯片组",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "设置",
-    dndGameplay: "游戏勿扰模式",
-    liteMode: "轻量模式",
-    defaultCpuGov: "默认 CPU 调速器",
-    powersaveCpuGov: "省电 CPU 调速器",
-    actionsTitle: "操作",
-    supportTitle: "支持我",
-    supportDescription: "Encore Tweaks 永久免费，若您愿意，可通过捐赠支持开发。",
-    dndTitle: "勿扰模式",
-    dndDesc: "在玩游戏时启用勿扰模式，限制通知和电话的干扰，让您可以专心享受游戏。",
-    liteModeTitle: "轻量模式",
-    liteModeDesc: "此选项通过允许CPU和其他组件以较低频率运行（而非持续最高频率），减少游戏过程中的过热和功耗，但可能影响整体游戏性能。",
-    editGamelistTitle: "编辑游戏列表",
-    editGamelistDesc: "启动列表中的游戏或应用时，将自动应用性能配置。",
-    saveChanges: "保存更改",
-    cancelChanges: "取消更改",
-    saveLogs: "保存模块日志",
-    deviceMitigation: "设备兼容模式",
-    deviceMitigationTitle: "设备兼容模式",
-    deviceMitigationDesc: "通过应用特定的调整来修复某些设备特有的问题，提升兼容性与稳定性。除非设备在关闭该选项后出现问题，否则建议保持该选项关闭。",
-    createShortcut: "创建快捷方式"
-  },
-  th: {
-    languageName: "ภาษาไทย",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "โปรไฟล์ปัจจุบัน",
-    kernelTitle: "Kernel",
-    chipsetTitle: "ชิปเซ็ต",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "การตั้งค่า",
-    dndGameplay: "ห้ามรบกวนขณะเล่นเกม",
-    liteMode: "โหมด Lite",
-    deviceMitigation: "การลดปัญหาอุปกรณ์",
-    defaultCpuGov: "โหมด CPU มาตรฐาน",
-    powersaveCpuGov: "โหมดประหยัดพลังงาน CPU",
-    actionsTitle: "การดำเนินการ",
-    supportTitle: "สนับสนุนฉัน",
-    supportDescription: "Encore Tweaks ให้บริการฟรีเสมอสำหรับทุกคน อย่างไรก็ตาม คุณสามารถแสดงการสนับสนุนได้โดยการบริจาค",
-    dndTitle: "โหมดห้ามรบกวน",
-    dndDesc: "เปิดใช้งานโหมดห้ามรบกวนขณะเล่นเกม จำกัดการแจ้งเตือนและสายเรียกเข้า เพื่อให้คุณสามารถเล่นเกมได้โดยไม่ถูกรบกวน",
-    liteModeTitle: "โหมด Lite",
-    liteModeDesc: "ตัวเลือกนี้จะช่วยลดความร้อนและการใช้พลังงานในขณะเล่นเกม โดยอนุญาตให้ CPU และชิ้นส่วนอื่น ๆ ทำงานที่ความถี่ต่ำ แทนที่จะทำงานที่ความถี่สูงสุดตลอดเวลา ซึ่งอาจส่งผลต่อประสิทธิภาพของเกมโดยรวมได้",
-    deviceMitigationTitle: "การลดปัญหาอุปกรณ์",
-    deviceMitigationDesc: "แก้ไขบั๊กเฉพาะของอุปกรณ์บางรุ่นด้วยการปรับแต่งเพื่อเพิ่มความเข้ากันได้และความเสถียร กรุณาปิดฟีเจอร์นี้ไว้ เว้นแต่จะมีปัญหาเมื่ออุปกรณ์ปิดเครื่อง",
-    editGamelistTitle: "แก้ไขรายการเกม",
-    editGamelistDesc: "โปรไฟล์ประสิทธิภาพจะเปิดใช้งานเมื่อเปิดเกมหรือแอปใด ๆ ในรายการนี้",
-    saveChanges: "บันทึกการเปลี่ยนแปลง",
-    saveLogs: "บันทึกล็อกของโมดูล",
-    createShortcut: "สร้างทางลัด WebUI"
-  },
-  ko: {
-    languageName: "한국어",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "현재 프로필",
-    kernelTitle: "Kernel",
-    chipsetTitle: "칩셋",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "설정",
-    dndGameplay: "게임 중 방해 금지",
-    liteMode: "라이트 모드",
-    deviceMitigation: "장치 완화",
-    defaultCpuGov: "기본 CPU 거버너",
-    powersaveCpuGov: "절전 CPU 거버너",
-    actionsTitle: "작업",
-    supportTitle: "후원하기",
-    supportDescription: "Encore Tweaks는 항상 무료로 제공됩니다. 하지만 기부를 통해 응원을 표시할 수 있습니다.",
-    dndTitle: "방해 금지 모드",
-    dndDesc: "게임 중 방해 금지 모드를 활성화하여 알림 및 통화 방해를 제한합니다.",
-    liteModeTitle: "라이트 모드",
-    liteModeDesc: "이 옵션은 게임 중 과열과 전력 소모를 줄이기 위해 CPU와 다른 구성 요소들이 항상 최고 주파수로 작동하는 대신 더 낮은 주파수로 작동할 수 있도록 합니다. 이로 인해 게임의 전반적인 성능에 영향을 줄 수 있습니다.",
-    deviceMitigationTitle: "장치 완화",
-    deviceMitigationDesc: "특정 장치에서 발생하는 일부 버그를 호환성과 안정성을 높이기 위한 조정을 적용해 완화합니다. 장치 종료 시 문제가 없다면 이 기능을 꺼 두세요.",
-    editGamelistTitle: "게임 목록 수정",
-    editGamelistDesc: "여기에 등록된 게임 또는 앱이 실행될 때 성능 프로필이 활성화됩니다.",
-    saveChanges: "변경 사항 저장",
-    cancelChanges: "변경 사항 취소",
-    saveLogs: "모듈 로그 저장",
-    createShortcut: "WebUI 바로가기 만들기"
-  },
-  vi: {
-    languageName: "Tiếng Việt",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Cấu hình hiện tại",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Cài đặt",
-    dndGameplay: "DND khi chơi game",
-    liteMode: "Chế độ Lite",
-    deviceMitigation: "Sửa lỗi thiết bị",
-    defaultCpuGov: "Bộ điều chỉnh CPU mặc định",
-    powersaveCpuGov: "Bộ điều chỉnh CPU tiết kiệm năng lượng",
-    actionsTitle: "Hành động",
-    supportTitle: "Hỗ trợ tôi",
-    supportDescription: "Encore Tweaks luôn miễn phí cho tất cả mọi người. Tuy nhiên, bạn có thể ủng hộ tôi bằng cách quyên góp.",
-    dndTitle: "Không làm phiền",
-    dndDesc: "Bật chế độ không làm phiền khi chơi game. Hạn chế thông báo và cuộc gọi để bạn có thể chơi mà không bị gián đoạn.",
-    liteModeTitle: "Chế độ Lite",
-    liteModeDesc: "Tùy chọn này giúp giảm nhiệt và tiết kiệm năng lượng trong khi chơi game bằng cách cho phép CPU và các thành phần khác hoạt động ở tần số thấp hơn thay vì luôn ở tần số cao nhất. Điều này có thể ảnh hưởng đến hiệu suất tổng thể của trò chơi.",
-    deviceMitigationTitle: "Sửa lỗi thiết bị",
-    deviceMitigationDesc: "Sửa một số lỗi của một số thiết bị đặc biệt bằng cách chỉnh vài cài đặt để tăng độ tương thích và tin cậy. Giữ tùy chọn này tắt trừ phi thiết bị của bạn gặp vấn đề.",
-    editGamelistTitle: "Chỉnh sửa danh sách trò chơi",
-    editGamelistDesc: "Cấu hình hiệu suất sẽ được kích hoạt khi bất kỳ trò chơi hoặc ứng dụng nào trong danh sách này được mở.",
-    saveChanges: "Lưu thay đổi",
-    cancelChanges: "Hủy thay đổi",
-    saveLogs: "Lưu nhật ký module",
-    createShortcut: "Tạo lối tắt WebUI"
-  },
-  hi: {
-    languageName: "हिन्दी",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "वर्तमान प्रोफ़ाइल",
-    kernelTitle: "Kernel",
-    chipsetTitle: "चिपसेट",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "सेटिंग्स",
-    dndGameplay: "गेमप्ले के दौरान DND",
-    liteMode: "मोड Lite",
-    deviceMitigation: "डिवाइस शमन",
-    defaultCpuGov: "डिफ़ॉल्ट CPU गवर्नर",
-    powersaveCpuGov: "पावर सेविंग CPU गवर्नर",
-    actionsTitle: "क्रियाएँ",
-    supportTitle: "मुझे समर्थन दें",
-    supportDescription: "Encore Tweaks पूरी तरह से मुफ्त है और हमेशा रहेगा। लेकिन आप दान करके अपना समर्थन दिखा सकते हैं।",
-    dndTitle: "डिस्टर्ब न करें",
-    dndDesc: "गेम खेलते समय 'डू नॉट डिस्टर्ब' मोड सक्षम करें। यह नोटिफिकेशन और कॉल को सीमित करता है, जिससे आप बिना रुकावट के अपने पसंदीदा गेम खेल सकते हैं।",
-    liteModeTitle: "मोड Lite",
-    liteModeDesc: "यह विकल्प गेम खेलते समय अत्यधिक गर्मी और ऊर्जा की खपत को कम करता है, क्योंकि यह CPU और अन्य घटकों को लगातार उच्चतम फ़्रीक्वेंसी पर चलने के बजाय कम फ़्रीक्वेंसी पर चलने की अनुमति देता है। इससे गेम की कुल प्रदर्शन क्षमता प्रभावित हो सकती है।",
-    deviceMitigationTitle: "डिवाइस शमन",
-    deviceMitigationDesc: "कुछ डिवाइस-विशिष्ट बग को सुधारने के लिए समायोजन लागू करता है जिससे संगतता और विश्वसनीयता बढ़ती है। जब तक आपके डिवाइस को बंद करते समय समस्या न हो, इसे बंद रखें।",
-    editGamelistTitle: "गेम सूची संपादित करें",
-    editGamelistDesc: "जब यहां सूचीबद्ध गेम या ऐप्स चालू किए जाते हैं, तो प्रदर्शन प्रोफ़ाइल सक्रिय हो जाएगी।",
-    saveChanges: "परिवर्तन सहेजें",
-    cancelChanges: "परिवर्तन रद्द करें",
-    saveLogs: "मॉड्यूल लॉग सहेजें",
-    createShortcut: "WebUI शॉर्टकट बनाएं"
-  },
-  ar: {
-    languageName: "اَلْعَرَبِيَّةُ",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "الملف الشخصي الحالي",
-    kernelTitle: "Kernel",
-    chipsetTitle: "مجموعة الشرائح",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "الإعدادات",
-    dndGameplay: "عدم الإزعاج أثناء اللعب",
-    liteMode: "وضع Lite",
-    deviceMitigation: "تخفيف الجهاز",
-    defaultCpuGov: "المنظم الافتراضي للمعالج",
-    powersaveCpuGov: "منظم توفير الطاقة للمعالج",
-    actionsTitle: "الإجراءات",
-    supportTitle: "ادعمني",
-    supportDescription: "Encore Tweaks مجاني وسيبقى دائمًا مجانيًا. لكن يمكنك إظهار دعمك من خلال التبرع.",
-    dndTitle: "عدم الإزعاج",
-    dndDesc: "تفعيل وضع عدم الإزعاج أثناء اللعب. يحد من مقاطعات الإشعارات والمكالمات، مما يسمح لك باللعب بدون تشتيت.",
-    liteModeTitle: "وضع Lite",
-    liteModeDesc: "يقلل هذا الخيار من ارتفاع درجة الحرارة واستهلاك الطاقة أثناء اللعب، من خلال السماح لوحدة المعالجة المركزية والمكونات الأخرى بالعمل بتردد أقل بدلاً من التشغيل المستمر على أعلى تردد. قد يؤثر ذلك على أداء اللعبة بشكل عام.",
-    deviceMitigationTitle: "تخفيف الجهاز",
-    deviceMitigationDesc: "يعالج بعض الأخطاء الخاصة بالجهاز من خلال تطبيق تعديلات لتحسين التوافق والموثوقية. يُرجى إبقاء هذه الميزة معطلة إلا إذا واجه جهازك مشاكل عند إيقاف التشغيل.",
-    editGamelistTitle: "تحرير قائمة الألعاب",
-    editGamelistDesc: "سيتم تنشيط ملف الأداء عند تشغيل أي من الألعاب والتطبيقات المدرجة هنا.",
-    saveChanges: "حفظ التغييرات",
-    cancelChanges: "إلغاء التغييرات",
-    saveLogs: "حفظ سجلات الوحدة",
-    createShortcut: "إنشاء اختصار WebUI"
-  },
-  es: {
-    languageName: "Español",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Perfil Actual",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Configuración",
-    dndGameplay: "No Molestar en Juego",
-    liteMode: "Modo Lite",
-    deviceMitigation: "Mitigación del dispositivo",
-    defaultCpuGov: "Governor de CPU Predeterminado",
-    powersaveCpuGov: "Governor CPU Ahorro de Energía",
-    actionsTitle: "Acciones",
-    supportTitle: "Apóyame",
-    supportDescription: "Encore Tweaks es y siempre será gratuito para todos. Sin embargo, puedes demostrar tu apoyo con una donación.",
-    dndTitle: "No Molestar",
-    dndDesc: "Activa el modo 'No Molestar' al jugar. Reduce interrupciones de notificaciones y llamadas, permitiéndote jugar sin distracciones.",
-    liteModeTitle: "Modo Lite",
-    liteModeDesc: "Esta opción reduce el sobrecalentamiento y el consumo de energía mientras juegas, permitiendo que la CPU y otros componentes funcionen a una frecuencia más baja en lugar de siempre a la máxima. Esto puede afectar el rendimiento general del juego.",
-    deviceMitigationTitle: "Mitigación del dispositivo",
-    deviceMitigationDesc: "Corrige algunos errores específicos del dispositivo aplicando ajustes para mejorar la compatibilidad y la fiabilidad. Mantén esta función desactivada a menos que tu dispositivo tenga problemas al apagarse.",
-    editGamelistTitle: "Editar Lista de Juegos",
-    editGamelistDesc: "El perfil de rendimiento se activará cuando se inicie cualquiera de los juegos o aplicaciones listados aquí.",
-    saveChanges: "Guardar Cambios",
-    cancelChanges: "Cancelar Cambios",
-    saveLogs: "Guardar Registros del Módulo",
-    createShortcut: "Crear acceso directo de WebUI"
-  },
-  pl: {
-    languageName: "Polski",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Aktualny Profil",
-    kernelTitle: "Jądro",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Ustawienia",
-    dndGameplay: "DND podczas Gry",
-    liteMode: "Tryb Lite",
-    deviceMitigation: "Łagodzenie problemów urządzenia",
-    defaultCpuGov: "Domyślny Governor CPU",
-    powersaveCpuGov: "Oszczędny Governor CPU",
-    actionsTitle: "Akcje",
-    supportTitle: "Wesprzyj Mnie",
-    supportDescription: "Encore Tweaks jest i zawsze będzie darmowy dla wszystkich. Możesz jednak okazać swoje wsparcie, dokonując darowizny.",
-    dndTitle: "Nie Przeszkadzać",
-    dndDesc: "Włącza tryb 'Nie Przeszkadzać' podczas grania. Ogranicza zakłócenia ze strony powiadomień i połączeń, umożliwiając grę bez rozpraszania uwagi.",
-    liteModeTitle: "Tryb Lite",
-    liteModeDesc: "Ta opcja zmniejsza przegrzewanie i zużycie energii podczas grania, pozwalając CPU i innym komponentom działać na niższej częstotliwości zamiast ciągłego działania na najwyższej. Może to wpłynąć na ogólną wydajność gry.",
-    deviceMitigationTitle: "Łagodzenie problemów urządzenia",
-    deviceMitigationDesc: "Rozwiązuje niektóre błędy specyficzne dla urządzenia poprzez zastosowanie poprawek poprawiających kompatybilność i niezawodność. Pozostaw tę funkcję wyłączoną, chyba że Twoje urządzenie ma problemy z wyłączaniem.",
-    editGamelistTitle: "Edytuj Listę Gier",
-    editGamelistDesc: "Profil wydajności zostanie aktywowany po uruchomieniu dowolnej gry lub aplikacji z tej listy.",
-    saveChanges: "Zapisz Zmiany",
-    cancelChanges: "Anuluj Zmiany",
-    saveLogs: "Zapisz Dzienniki Modułu",
-    createShortcut: "Utwórz skrót WebUI"
-  },
-  tl: {
-    languageName: "Tagalog",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Kasalukuyang Profile",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Mga Setting",
-    dndGameplay: "DND sa Paglalaro",
-    liteMode: "Lite Mode",
-    deviceMitigation: "Pag-ayos ng Device",
-    defaultCpuGov: "Default na CPU Governor",
-    powersaveCpuGov: "Powersave na CPU Governor",
-    actionsTitle: "Mga Aksyon",
-    supportTitle: "Suportahan Mo Ako",
-    supportDescription: "Ang Encore Tweaks ay, at palaging magiging, libre para sa iyo, at sa lahat. Gayunpaman, maaari mong ipakita na nagmamalasakit ka sa pamamagitan ng pagbibigay ng donasyon.",
-    dndTitle: "Do Not Disturb",
-    dndDesc: "I-enable ang mode na 'Do Not Disturb' kapag naglalaro ng mga laro. Nililimitahan ang mga pagpapatigil mula sa mga notification at tawag, na nagpapahintulot sa iyo na maglaro ng iyong mga paboritong laro nang walang anumang pagkaabala.",
-    liteModeTitle: "Lite Mode",
-    liteModeDesc: "Ang opsyong ito ay pinipigil ang paggamit ng labis na kuryente, at paginit ng sobra sa paraan ng pagtuluan ang CPU at iba pang piyesa sa mababaang frequency. Maaring makaapekto sa performance.",
-    deviceMitigationTitle: "Pag-ayos ng Device",
-    deviceMitigationDesc: "Nilulutas ang ilang partikular na bug sa device sa pamamagitan ng pag-aayos na nagpapabuti sa compatibility at pagiging maaasahan. Huwag i-enable ang feature na ito maliban kung may problema ang device mo kapag pinapatay.",
-    editGamelistTitle: "I-edit ang Gamelist",
-    editGamelistDesc: "Ang performance profile ay maa-activate kapag ang alinman sa mga laro at apps na nakalista dito ay inilunsad.",
-    saveChanges: "I-save ang mga Pagbabago",
-    cancelChanges: "Kanselahin ang mga Pagbabago",
-    saveLogs: "I-save ang mga Log ng Module",
-    createShortcut: "Gumawa ng Shortcut ng WebUI"
-  },
-  ro: {
-    languageName: "Română",
-    moduleTitle: "Encore Tweaks",
-    profileTitle: "Profil Curent",
-    kernelTitle: "Kernel",
-    chipsetTitle: "Chipset",
-    androidSDKTitle: "Android SDK",
-    settingsTitle: "Setări",
-    dndGameplay: "DND în Jocuri",
-    liteMode: "Mod Lite",
-    deviceMitigation: "Atenuarea dispozitivului",
-    defaultCpuGov: "Guvernator CPU Implicit",
-    powersaveCpuGov: "Guvernator CPU Economisire Energie",
-    actionsTitle: "Acțiuni",
-    supportTitle: "Susține-mă",
-    supportDescription: "Encore Tweaks este și va fi întotdeauna gratuit pentru tine și pentru toată lumea. Totuși, poți arăta că îți pasă făcând o donație.",
-    dndTitle: "Nu Deranja",
-    dndDesc: "Activează modul „Nu deranja” în timpul jocurilor. Limitează întreruperile cauzate de notificări și apeluri, permițându-ți să te bucuri de jocuri fără distrageri.",
-    liteModeTitle: "Mod Lite",
-    liteModeDesc: "Această opțiune reduce supraîncălzirea și consumul de energie în timpul jocului, permițând CPU-ului și altor componente să funcționeze la o frecvență mai mică în loc să fie mereu la frecvența maximă. Acest lucru poate afecta performanța generală a jocului.",
-    deviceMitigationTitle: "Atenuarea dispozitivului",
-    deviceMitigationDesc: "Corectează unele erori specifice dispozitivului prin aplicarea unor ajustări pentru a îmbunătăți compatibilitatea și fiabilitatea. Lasă această funcție dezactivată decât dacă dispozitivul tău întâmpină probleme la închidere.",
-    editGamelistTitle: "Editează Lista de Jocuri",
-    editGamelistDesc: "Profilul de performanță va fi activat când oricare dintre jocurile sau aplicațiile listate aici este lansat.",
-    saveChanges: "Salvează Modificările",
-    cancelChanges: "Anulează Modificările",
-    saveLogs: "Salvează Logurile Modulului",
-    createShortcut: "Creează scurtătură WebUI"
+async function loadTranslations(lang) {
+  try {
+    const response = await fetch(`locales/strings/${lang}.json`);
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to load translations:', error);
+    // Fallback to English
+    const enResponse = await fetch('locales/strings/en.json');
+    return await enResponse.json();
   }
-};
+}
 
-function populateLanguageSelector() {
+function applyTranslations(translations) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const keys = el.getAttribute('data-i18n').split('.');
+    let value = translations;
+    
+    keys.forEach(key => {
+      value = value?.[key];
+    });
+    
+    if (value) el.textContent = value;
+  });
+}
+
+async function initI18n() {
   const selector = document.getElementById('languageSelector');
   if (!selector) return;
   
-  // Clear existing options
-  selector.innerHTML = '';
+  // Load languages list
+  let languages = { en: "English" }; // Default fallback
+  try {
+    const response = await fetch('locales/languages.json');
+    languages = await response.json();
+  } catch (error) {
+    console.error('Failed to load languages list, using fallback:', error);
+  }
   
-  // Add options for each available language
-  for (const langCode in translations) {
-    if (translations.hasOwnProperty(langCode)) {
-      const option = document.createElement('option');
-      option.value = langCode;
+  // Populate selector
+  selector.innerHTML = '';
+  for (const [code, name] of Object.entries(languages)) {
+    const option = document.createElement('option');
+    option.value = code;
+    option.textContent = name;
+    selector.appendChild(option);
+  }
+  
+  // Load saved or browser language with better matching
+  const savedLang = localStorage.getItem('selectedLanguage');
+  const browserLangs = [
+    ...(navigator.languages || []),
+    navigator.language,
+    navigator.userLanguage
+  ].filter(Boolean);
+  
+  let lang = savedLang;
+  
+  // Find best matching language
+  if (!lang) {
+    for (const browserLang of browserLangs) {
+      // Try full language code
+      if (languages[browserLang]) {
+        lang = browserLang;
+        break;
+      }
       
-      // Use languageName from translations, fallback to code
-      option.textContent = translations[langCode].languageName || langCode;
-      
-      selector.appendChild(option);
+      // Try base language code
+      const baseLang = browserLang.split('-')[0];
+      if (languages[baseLang]) {
+        lang = baseLang;
+        break;
+      }
     }
+    
+    // Final fallback to English
+    if (!lang) lang = 'en';
   }
-}
-
-/**
- * Function to update the translation of all elements with data-i18n attribute
- * @param {string} lang - language code (e.g., 'en' or 'ru')
- */
-function translatePage(lang) {
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    // Fallback to English if key is missing
-    const text = translations[lang]?.[key] || translations.en[key] || key;
-    el.innerText = text;
-  });
-
-  // Update buttons with fallback
-  const editGamelistBtn = document.getElementById('edit_gamelist_btn');
-  if (editGamelistBtn) {
-    editGamelistBtn.innerText = translations[lang]?.editGamelistTitle || translations.en.editGamelistTitle;
-  }
-
-  const createShortcutBtn = document.getElementById('create_shortcut_btn');
-  if (createShortcutBtn) {
-    createShortcutBtn.innerText = translations[lang]?.createShortcut || translations.en.createShortcut;
-  }
-
-  const saveLogBtn = document.getElementById('save_log_btn');
-  if (saveLogBtn) {
-    saveLogBtn.innerText = translations[lang]?.saveLogs || translations.en.saveLogs;
-  }
-}
-
-populateLanguageSelector();
-
-// Check localStorage for saved language
-let savedLang = localStorage.getItem('selectedLanguage');
-let pageLang;
-
-if (savedLang && translations.hasOwnProperty(savedLang)) {
-  pageLang = savedLang;
-} else {
-  // Fallback to browser language or English
-  const browserLang = navigator.language.split('-')[0];
-  pageLang = translations.hasOwnProperty(browserLang) ? browserLang : 'en';
-}
-
-// Set the selected language in the language selector
-const languageSelector = document.getElementById('languageSelector');
-if (languageSelector) {
-  languageSelector.value = pageLang;
-}
-
-// Apply translation on page load
-translatePage(pageLang);
-
-// Handle language change by the user
-if (languageSelector) {
-  languageSelector.addEventListener('change', (e) => {
-    const lang = e.target.value;
-    localStorage.setItem('selectedLanguage', lang); // Save to localStorage
-    translatePage(lang);
+  
+  selector.value = lang;
+  const translations = await loadTranslations(lang);
+  applyTranslations(translations);
+  
+  // Handle language change
+  selector.addEventListener('change', async (e) => {
+    const newLang = e.target.value;
+    localStorage.setItem('selectedLanguage', newLang);
+    const newTranslations = await loadTranslations(newLang);
+    applyTranslations(newTranslations);
   });
 }
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', initI18n);

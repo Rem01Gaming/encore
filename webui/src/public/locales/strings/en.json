@@ -1,0 +1,42 @@
+{
+  "common": {
+    "module": "Encore Tweaks"
+  },
+  "devinfo": {
+    "module": "Encore Tweaks",
+    "profile": "Current Profile",
+    "kernel": "Kernel",
+    "chipset": "Chipset",
+    "androidSDK": "Android SDK"
+  },
+  "settings": {
+    "title": "Settings",
+    "dndGameplay": "DND on Gameplay",
+    "liteMode": "Lite Mode",
+    "deviceMitigation": "Device Mitigation",
+    "defaultCpuGov": "Default CPU Governor",
+    "powersaveCpuGov": "Powersave CPU Governor"
+  },
+  "actions": {
+    "title": "Actions",
+    "editGamelist": "Edit Gamelist",
+    "createShortcut": "Create WebUI Shortcut",
+    "saveLogs": "Save Module Logs"
+  },
+  "support": {
+    "title": "Support Me",
+    "description": "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation."
+  },
+  "modal": {
+    "dndTitle": "Do Not Disturb",
+    "dndDesc": "Enable do not disturb mode when playing games. Limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.",
+    "liteModeTitle": "Lite Mode",
+    "liteModeDesc": "This option will reduces overheating and power consumption during gameplay by allowing CPU and other components to run at lower frequency rather than constantly at the highest frequency, this will affect overall game performance.",
+    "deviceMitigationTitle": "Device Mitigation",
+    "deviceMitigationDesc": "Mitigate some device specific bugs by applying certain adjustments to enhance compatibility and reliability, keep this feature disabled unless your device experiences problems when it is switched off.",
+    "editGamelistTitle": "Edit Gamelist",
+    "editGamelistDesc": "The performance profile will be activated when any of the games and apps listed here are launched.",
+    "saveChanges": "Save Changes",
+    "cancelChanges": "Cancel Changes"
+  }
+}

@@ -13,7 +13,7 @@
     <main class="p-3 text-sm w-full max-w-2xl">
       <!-- Header -->
       <div class="flex justify-between items-center mb-6 text-on-surface">
-        <h1 class="text-lg font-semibold">Encore Tweaks</h1>
+        <h1 data-i18n="common.module" class="text-lg font-semibold"></h1>
         <div>
           <select id="languageSelector" class="select select-sm bg-surface-container text-on-surface"></select>
         </div>
@@ -35,7 +35,7 @@
            <path d="M12 3L14.0357 8.16153C14.2236 8.63799 14.3175 8.87622 14.4614 9.0771C14.5889 9.25516 14.7448 9.41106 14.9229 9.53859C15.1238 9.68245 15.362 9.77641 15.8385 9.96432L21 12L15.8385 14.0357C15.362 14.2236 15.1238 14.3175 14.9229 14.4614C14.7448 14.5889 14.5889 14.7448 14.4614 14.9229C14.3175 15.1238 14.2236 15.362 14.0357 15.8385L12 21L9.96432 15.8385C9.77641 15.362 9.68245 15.1238 9.53859 14.9229C9.41106 14.7448 9.25516 14.5889 9.0771 14.4614C8.87622 14.3175 8.63799 14.2236 8.16153 14.0357L3 12L8.16153 9.96432C8.63799 9.77641 8.87622 9.68245 9.0771 9.53859C9.25516 9.41106 9.41106 9.25516 9.53859 9.0771C9.68245 8.87622 9.77641 8.63799 9.96432 8.16153L12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
          </svg>
          <div>
-           <h3 data-i18n="moduleTitle" class="text-sm font-medium text-on-surface"></h3>
+           <h3 data-i18n="devinfo.module" class="text-sm font-medium text-on-surface"></h3>
            <span id="module_version" class="text-xs text-on-surface-variant block mt-1"></span>
          </div>
        </div>
@@ -45,7 +45,7 @@
            <path d="M17.41,6.59L15,5.5l2.41-1.09L18.5,2l1.09,2.41L22,5.5l-2.41,1.09L18.5,9L17.41,6.59z M21.28,12.72L20.5,11l-0.78,1.72 L18,13.5l1.72,0.78L20.5,16l0.78-1.72L23,13.5L21.28,12.72z M16.24,14.37l1.94,1.47l-2.5,4.33l-2.24-0.94 c-0.2,0.13-0.42,0.26-0.64,0.37L12.5,22h-5l-0.3-2.41c-0.22-0.11-0.43-0.23-0.64-0.37l-2.24,0.94l-2.5-4.33l1.94-1.47 C3.75,14.25,3.75,14.12,3.75,14s0-0.25,0.01-0.37l-1.94-1.47l2.5-4.33l2.24,0.94c0.2-0.13,0.42-0.26,0.64-0.37L7.5,6h5l0.3,2.41 c0.22,0.11,0.43,0.23,0.64,0.37l2.24-0.94l2.5,4.33l-1.94,1.47c0.01,0.12,0.01,0.24,0.01,0.37S16.25,14.25,16.24,14.37z M13,14 c0-1.66-1.34-3-3-3s-3,1.34-3,3s1.34,3,3,3S13,15.66,13,14z"/>
          </svg>
          <div>
-           <h3 data-i18n="profileTitle" class="text-sm font-medium text-on-surface"></h3>
+           <h3 data-i18n="devinfo.profile" class="text-sm font-medium text-on-surface"></h3>
            <span id="encore_profile" class="text-xs text-on-surface-variant block mt-1"></span>
          </div>
        </div>
@@ -56,7 +56,7 @@
            <path d="M12 18H20" stroke-miterlimit="10" />
          </svg>
          <div>
-           <h3 data-i18n="kernelTitle" class="text-sm font-medium text-on-surface"></h3>
+           <h3 data-i18n="devinfo.kernel" class="text-sm font-medium text-on-surface"></h3>
            <span id="kernel_version" class="text-xs text-on-surface-variant block mt-1"></span>
          </div>
        </div>
@@ -77,7 +77,7 @@
            <path d="M18.4205 17C18.4205 17.95 17.6505 18.72 16.7005 18.72C15.7505 18.72 14.9805 17.95 14.9805 17C14.9805 16.05 15.7505 15.28 16.7005 15.28C17.6505 15.28 18.4205 16.05 18.4205 17Z" fill="currentColor"/>
          </svg>
          <div>
-           <h3 data-i18n="chipsetTitle" class="text-sm font-medium text-on-surface"></h3>
+           <h3 data-i18n="devinfo.chipset" class="text-sm font-medium text-on-surface"></h3>
            <span id="chipset_name" class="text-xs text-on-surface-variant block mt-1"></span>
          </div>
        </div>
@@ -87,7 +87,7 @@
            <path d="M23.35 12.653l2.496-4.323c0.044-0.074 0.07-0.164 0.07-0.26 0-0.287-0.232-0.519-0.519-0.519-0.191 0-0.358 0.103-0.448 0.257l-0.001 0.002-2.527 4.377c-1.887-0.867-4.094-1.373-6.419-1.373s-4.532 0.506-6.517 1.413l0.098-0.04-2.527-4.378c-0.091-0.156-0.259-0.26-0.45-0.26-0.287 0-0.519 0.232-0.519 0.519 0 0.096 0.026 0.185 0.071 0.262l-0.001-0.002 2.496 4.323c-4.286 2.367-7.236 6.697-7.643 11.744l-0.003 0.052h29.991c-0.41-5.099-3.36-9.429-7.57-11.758l-0.076-0.038zM9.098 20.176c-0.69 0-1.249-0.559-1.249-1.249s0.559-1.249 1.249-1.249 1.249 0.559 1.249 1.249-0.559 1.249-1.249 1.249zM22.902 20.176c-0.69 0-1.249-0.559-1.249-1.249s0.559-1.249 1.249-1.249 1.249 0.559 1.249 1.249-0.559 1.249-1.249 1.249z"/>
          </svg>
          <div>
-           <h3 data-i18n="androidSDKTitle" class="text-sm font-medium text-on-surface"></h3>
+           <h3 data-i18n="devinfo.androidSDK" class="text-sm font-medium text-on-surface"></h3>
            <span id="android_sdk" class="text-xs text-on-surface-variant block mt-1"></span>
          </div>
        </div>
@@ -95,11 +95,11 @@
 
       <!-- Settings -->
       <div class="bg-surface-container mb-4 p-4 rounded-xl text-on-surface card_border">
-        <h2 data-i18n="settingsTitle" class="text-base font-semibold mb-2"></h2>
+        <h2 data-i18n="settings.title" class="text-base font-semibold mb-2"></h2>
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            <span data-i18n="dndGameplay"></span>
+            <span data-i18n="settings.dndGameplay"></span>
             <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="dnd_gameplay.showModal()">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -115,7 +115,7 @@
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            <span data-i18n="liteMode"></span>
+            <span data-i18n="settings.liteMode"></span>
             <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="lite_mode.showModal()">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -131,7 +131,7 @@
 
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
-            <span data-i18n="deviceMitigation"></span>
+            <span data-i18n="settings.deviceMitigation"></span>
             <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="device_mitigation.showModal()">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -146,14 +146,14 @@
         </div>
 
         <div class="py-1 mb-2">
-          <p class="mb-2" data-i18n="defaultCpuGov"></p>
+          <p class="mb-2" data-i18n="settings.defaultCpuGov"></p>
           <select id="default_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
             <option value="schedutil" selected>schedutil</option>
           </select>
         </div>
 
         <div class="py-1 mb-2">
-          <p class="mb-2" data-i18n="powersaveCpuGov"></p>
+          <p class="mb-2" data-i18n="settings.powersaveCpuGov"></p>
           <select id="powersave_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
             <option value="powersave" selected>powersave</option>
           </select>
@@ -162,16 +162,16 @@
 
       <!-- Actions -->
       <div class="bg-surface-container mb-4 p-4 rounded-xl card_border">
-        <h2 data-i18n="actionsTitle" class="text-base font-semibold mb-4 text-on-surface"></h2>
-        <button id="edit_gamelist_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2" onclick="edit_gamelist.showModal()"></button>
-        <button id="create_shortcut_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
-        <button id="save_log_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
+        <h2 data-i18n="actions.title" class="text-base font-semibold mb-4 text-on-surface"></h2>
+        <button data-i18n="actions.editGamelist" id="edit_gamelist_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2" onclick="edit_gamelist.showModal()"></button>
+        <button data-i18n="actions.createShortcut" id="create_shortcut_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
+        <button data-i18n="actions.saveLogs" id="save_log_btn" class="btn btn-block bg-primary hover:bg-primary text-on-primary py-1 mb-2"></button>
       </div>
 
       <!-- Donate Button -->
       <button id="donate_btn" class="text-left text-on-surface bg-surface-container mb-4 p-4 rounded-xl w-full active:bg-secondary-container transition duration-300 card_border">
-        <h2 data-i18n="supportTitle" class="text-base font-semibold px-2 mb-1"></h2>
-        <p data-i18n="supportDescription" class="text-sm text-on-surface-variant px-2 mb-1"></p>
+        <h2 data-i18n="support.title" class="text-base font-semibold px-2 mb-1"></h2>
+        <p data-i18n="support.description" class="text-sm text-on-surface-variant px-2 mb-1"></p>
       </button>
 
       <!-- Modals -->
@@ -180,8 +180,8 @@
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 data-i18n="dndTitle" class="text-lg font-bold"></h3>
-          <p data-i18n="dndDesc" class="py-4"></p>
+          <h3 data-i18n="modal.dndTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="modal.dndDesc" class="py-4"></p>
         </div>
       </dialog>
 
@@ -190,8 +190,8 @@
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 data-i18n="liteModeTitle" class="text-lg font-bold"></h3>
-          <p data-i18n="liteModeDesc" class="py-4"></p>
+          <h3 data-i18n="modal.liteModeTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="modal.liteModeDesc" class="py-4"></p>
         </div>
       </dialog>
 
@@ -200,8 +200,8 @@
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 data-i18n="deviceMitigationTitle" class="text-lg font-bold"></h3>
-          <p data-i18n="deviceMitigationDesc" class="py-4"></p>
+          <h3 data-i18n="modal.deviceMitigationTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="modal.deviceMitigationDesc" class="py-4"></p>
         </div>
       </dialog>
 
@@ -210,12 +210,12 @@
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 data-i18n="editGamelistTitle" class="text-lg font-bold"></h3>
-          <p data-i18n="editGamelistDesc" class="py-4"></p>
+          <h3 data-i18n="modal.editGamelistTitle" class="text-lg font-bold"></h3>
+          <p data-i18n="modal.editGamelistDesc" class="py-4"></p>
           <textarea id="gamelist_textarea" class="w-full p-2 text-sm text-on-surface bg-surface-dim border border-primary outline-none shadow-none rounded-md resize-none mb-2" rows="14"></textarea>
           <form method="dialog">
-            <button id="save_gamelist_btn" class="btn btn-block btn-sm bg-primary text-on-primary font-normal mb-2 hover:bg-primary duration-300" data-i18n="saveChanges"></button>
-            <button class="btn btn-block btn-sm bg-secondary-container text-on-secondary-container font-normal hover:bg-secondary-container duration-300" data-i18n="cancelChanges"></button>
+            <button data-i18n="modal.saveChanges" id="save_gamelist_btn" class="btn btn-block btn-sm bg-primary text-on-primary font-normal mb-2 hover:bg-primary duration-300"></button>
+            <button data-i18n="modal.cancelChanges" class="btn btn-block btn-sm bg-secondary-container text-on-secondary-container font-normal hover:bg-secondary-container duration-300"></button>
           </form>
         </div>
       </dialog>

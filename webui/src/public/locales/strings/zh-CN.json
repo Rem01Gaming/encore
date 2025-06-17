@@ -1,0 +1,42 @@
+{
+  "common": {
+    "module": "Encore Tweaks"
+  },
+  "devinfo": {
+    "module": "Encore Tweaks",
+    "profile": "当前配置",
+    "kernel": "内核",
+    "chipset": "芯片组",
+    "androidSDK": "Android SDK"
+  },
+  "settings": {
+    "title": "设置",
+    "dndGameplay": "游戏勿扰模式",
+    "liteMode": "轻量模式",
+    "deviceMitigation": "设备兼容模式",
+    "defaultCpuGov": "默认 CPU 调速器",
+    "powersaveCpuGov": "省电 CPU 调速器"
+  },
+  "actions": {
+    "title": "操作",
+    "editGamelist": "编辑游戏列表",
+    "createShortcut": "创建快捷方式",
+    "saveLogs": "保存模块日志"
+  },
+  "support": {
+    "title": "支持我",
+    "description": "Encore Tweaks 永久免费，若您愿意，可通过捐赠支持开发。"
+  },
+  "modal": {
+    "dndTitle": "勿扰模式",
+    "dndDesc": "在玩游戏时启用勿扰模式，限制通知和电话的干扰，让您可以专心享受游戏。",
+    "liteModeTitle": "轻量模式",
+    "liteModeDesc": "此选项通过允许CPU和其他组件以较低频率运行（而非持续最高频率），减少游戏过程中的过热和功耗，但可能影响整体游戏性能。",
+    "deviceMitigationTitle": "设备兼容模式",
+    "deviceMitigationDesc": "通过应用特定的调整来修复某些设备特有的问题，提升兼容性与稳定性。除非设备在关闭该选项后出现问题，否则建议保持该选项关闭。",
+    "editGamelistTitle": "编辑游戏列表",
+    "editGamelistDesc": "启动列表中的游戏或应用时，将自动应用性能配置。",
+    "saveChanges": "保存更改",
+    "cancelChanges": "取消更改"
+  }
+}
