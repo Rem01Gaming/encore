@@ -1,1 +1,37 @@
-{}
+{
+    "devinfo": {
+        "profile": "Kasalukuyang Profile",
+        "kernel": "Kernel",
+        "chipset": "Chipset"
+    },
+    "settings": {
+        "title": "Mga Setting",
+        "dndGameplay": "DND sa Paglalaro",
+        "liteMode": "Lite Mode",
+        "deviceMitigation": "Pag-ayos ng Device",
+        "defaultCpuGov": "Default na CPU Governor",
+        "powersaveCpuGov": "Powersave na CPU Governor"
+    },
+    "actions": {
+        "editGamelist": "I-edit ang Gamelist",
+        "saveLogs": "I-save ang mga Log ng Module",
+        "title": "Mga Aksyon",
+        "createShortcut": "Gumawa ng Shortcut ng WebUI"
+    },
+    "support": {
+        "description": "Ang Encore Tweaks ay, at palaging magiging, libre para sa iyo, at sa lahat. Gayunpaman, maaari mong ipakita na nagmamalasakit ka sa pamamagitan ng pagbibigay ng donasyon.",
+        "title": "Suportahan Mo Ako"
+    },
+    "modal": {
+        "liteModeTitle": "Lite Mode",
+        "deviceMitigationTitle": "Pag-ayos ng Device",
+        "editGamelistTitle": "I-edit ang Gamelist",
+        "editGamelistDesc": "Ang performance profile ay maa-activate kapag ang alinman sa mga laro at apps na nakalista dito ay inilunsad.",
+        "saveChanges": "I-save ang mga Pagbabago",
+        "dndTitle": "Do Not Disturb",
+        "dndDesc": "I-enable ang mode na 'Do Not Disturb' kapag naglalaro ng mga laro. Nililimitahan ang mga pagpapatigil mula sa mga notification at tawag, na nagpapahintulot sa iyo na maglaro ng iyong mga paboritong laro nang walang anumang pagkaabala.",
+        "liteModeDesc": "Ang opsyong ito ay pinipigil ang paggamit ng labis na kuryente, at paginit ng sobra sa paraan ng pagtuluan ang CPU at iba pang piyesa sa mababaang frequency. Maaring makaapekto sa performance.",
+        "deviceMitigationDesc": "Nilulutas ang ilang partikular na bug sa device sa pamamagitan ng pag-aayos na nagpapabuti sa compatibility at pagiging maaasahan. Huwag i-enable ang feature na ito maliban kung may problema ang device mo kapag pinapatay.",
+        "cancelChanges": "Kanselahin ang mga Pagbabago"
+    }
+}
