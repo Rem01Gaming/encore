@@ -1,1 +1,37 @@
-{}
+{
+    "modal": {
+        "dndDesc": "Bật chế độ không làm phiền khi chơi game. Hạn chế thông báo và cuộc gọi để bạn có thể chơi mà không bị gián đoạn.",
+        "deviceMitigationDesc": "Sửa một số lỗi của một số thiết bị đặc biệt bằng cách chỉnh vài cài đặt để tăng độ tương thích và tin cậy. Giữ tùy chọn này tắt trừ phi thiết bị của bạn gặp vấn đề.",
+        "cancelChanges": "Hủy thay đổi",
+        "liteModeTitle": "Chế độ Lite",
+        "deviceMitigationTitle": "Sửa lỗi thiết bị",
+        "editGamelistTitle": "Chỉnh sửa danh sách trò chơi",
+        "editGamelistDesc": "Cấu hình hiệu suất sẽ được kích hoạt khi bất kỳ trò chơi hoặc ứng dụng nào trong danh sách này được mở.",
+        "saveChanges": "Lưu thay đổi",
+        "dndTitle": "Không làm phiền",
+        "liteModeDesc": "Tùy chọn này giúp giảm nhiệt và tiết kiệm năng lượng trong khi chơi game bằng cách cho phép CPU và các thành phần khác hoạt động ở tần số thấp hơn thay vì luôn ở tần số cao nhất. Điều này có thể ảnh hưởng đến hiệu suất tổng thể của trò chơi."
+    },
+    "actions": {
+        "title": "Hành động",
+        "editGamelist": "Chỉnh sửa danh sách trò chơi",
+        "saveLogs": "Lưu nhật ký module",
+        "createShortcut": "Tạo lối tắt WebUI"
+    },
+    "settings": {
+        "deviceMitigation": "Sửa lỗi thiết bị",
+        "title": "Cài đặt",
+        "defaultCpuGov": "Bộ điều chỉnh CPU mặc định",
+        "powersaveCpuGov": "Bộ điều chỉnh CPU tiết kiệm năng lượng",
+        "liteMode": "Chế độ Lite",
+        "dndGameplay": "DND khi chơi game"
+    },
+    "support": {
+        "description": "Encore Tweaks luôn miễn phí cho tất cả mọi người. Tuy nhiên, bạn có thể ủng hộ tôi bằng cách quyên góp.",
+        "title": "Hỗ trợ tôi"
+    },
+    "devinfo": {
+        "kernel": "Kernel",
+        "profile": "Cấu hình hiện tại",
+        "chipset": "Chipset"
+    }
+}
