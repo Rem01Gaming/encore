@@ -1,1 +1,37 @@
-{}
+{
+    "settings": {
+        "deviceMitigation": "Mitigação de Dispositivo",
+        "defaultCpuGov": "Governador Padrão da CPU",
+        "liteMode": "Modo Lite",
+        "title": "Configurações",
+        "dndGameplay": "DND no Jogo",
+        "powersaveCpuGov": "Governador de CPU Economia de Energia"
+    },
+    "devinfo": {
+        "profile": "Perfil Atual",
+        "kernel": "Kernel",
+        "chipset": "Chipset"
+    },
+    "actions": {
+        "title": "Ações",
+        "editGamelist": "Editar Lista de Jogos",
+        "createShortcut": "Criar Atalho do WebUI",
+        "saveLogs": "Salvar Logs do Módulo"
+    },
+    "support": {
+        "title": "Apoie-me",
+        "description": "O Encore Tweaks é e sempre será gratuito para você e todos. No entanto, você pode demonstrar seu apoio fazendo uma doação."
+    },
+    "modal": {
+        "dndTitle": "Não Perturbe",
+        "dndDesc": "Ativar o modo 'Não Perturbe' ao jogar. Isso limita interrupções de notificações e chamadas, permitindo que você jogue sem distrações.",
+        "liteModeTitle": "Modo Lite",
+        "deviceMitigationTitle": "Mitigação de Dispositivo",
+        "deviceMitigationDesc": "Mitiga alguns bugs específicos de dispositivos aplicando ajustes para melhorar a compatibilidade e a confiabilidade. Mantenha esta função desativada, a menos que seu dispositivo apresente problemas ao desligar.",
+        "editGamelistTitle": "Editar Lista de Jogos",
+        "editGamelistDesc": "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
+        "saveChanges": "Salvar Alterações",
+        "cancelChanges": "Cancelar Alterações",
+        "liteModeDesc": "Essa opção reduz o superaquecimento e o consumo de energia durante os jogos, permitindo que a CPU e outros componentes operem em uma frequência mais baixa em vez de manterem a frequência máxima constantemente. Isso afetará o desempenho geral do jogo."
+    }
+}
