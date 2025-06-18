@@ -37,6 +37,16 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 - [Report Issues](https://github.com/rem01gaming/encore/issues) - Found a bug? Let us know!
 - [Contribute](https://github.com/rem01gaming/encore/pulls) - Submit improvements via PR
 
+## Translation
+
+Interested in translating Encore Tweaks? We use Weblate to crowdsource translations, so anyone can create an account and contribute!
+
+Visit our translation project [here](https://hosted.weblate.org/projects/encore-tweaks/).
+
+### Translation status
+
+![Weblate translation status](https://hosted.weblate.org/widget/encore-tweaks/webui/horizontal-auto.svg)
+
 ## License
 
 Encore Tweaks is open-sourced software licensed under the [Apache-2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
