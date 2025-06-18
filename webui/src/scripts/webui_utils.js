@@ -15,8 +15,8 @@
  */
 
 import { exec, toast } from 'kernelsu';
-import encoreHappy from '../assets/encore_happy.avif';
-import encoreSleeping from '../assets/encore_sleeping.avif';
+import encoreHappy from '/encore_happy.avif';
+import encoreSleeping from '/encore_sleeping.avif';
 
 const moduleInterface = window.$encore;
 const configPath = '/data/adb/.config/encore';
