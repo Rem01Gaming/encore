@@ -1,8 +1,5 @@
 {
     "common": {
-        "module": "Encore Tweaks"
-    },
-    "devinfo": {
         "module": "Encore Tweaks",
         "profile": "現在のプロファイル",
         "kernel": "カーネル",
@@ -11,32 +8,32 @@
     },
     "settings": {
         "title": "設定",
-        "dndGameplay": "プレイ中はおやすみモード",
-        "liteMode": "ライトモード",
-        "deviceMitigation": "デバイス軽減",
-        "defaultCpuGov": "デフォルトのCPUガバナー",
-        "powersaveCpuGov": "省電力CPUガバナー"
+        "dnd_gameplay": "プレイ中はおやすみモード",
+        "lite_mode": "ライトモード",
+        "device_mitigation": "デバイス軽減",
+        "default_cpu_gov": "デフォルトのCPUガバナー",
+        "powersave_cpu_gov": "省電力CPUガバナー"
     },
     "actions": {
         "title": "アクション",
-        "editGamelist": "ゲームリストを編集",
-        "createShortcut": "WebUIショートカットを作成",
-        "saveLogs": "モジュールログを保存"
+        "edit_gamelist": "ゲームリストを編集",
+        "create_shortcut": "WebUIショートカットを作成",
+        "save_logs": "モジュールログを保存"
     },
     "support": {
         "title": "サポートする",
         "description": "Encore Tweaksは無料で提供されており、これからもそうです。ただし、寄付を通じてサポートを示すことができます。"
     },
     "modal": {
-        "dndTitle": "おやすみモード",
-        "dndDesc": "ゲームをプレイ中におやすみモードを有効にします。通知や通話による中断を制限し、快適にゲームを楽しめます。",
-        "liteModeTitle": "ライトモード",
-        "liteModeDesc": "この設定は、ゲーム中の過熱と消費電力を減らすため、CPUやその他のコンポーネントが最高周波数で常に動作するのではなく、低い周波数で動作できるようにします。これにより、ゲームの全体的なパフォーマンスに影響を与える可能性があります。",
-        "deviceMitigationTitle": "デバイス軽減",
-        "deviceMitigationDesc": "特定のデバイスに特有の不具合を、互換性と信頼性を向上させるための調整を適用して軽減します。デバイスがシャットダウン時に問題を起こさない場合は、この機能をオフにしてください。",
-        "editGamelistTitle": "ゲームリストを編集",
-        "editGamelistDesc": "ここにリストされたゲームやアプリが起動すると、パフォーマンスプロファイルが有効になります。",
-        "saveChanges": "変更を保存",
-        "cancelChanges": "変更をキャンセル"
+        "dnd_title": "おやすみモード",
+        "dnd_desc": "ゲームをプレイ中におやすみモードを有効にします。通知や通話による中断を制限し、快適にゲームを楽しめます。",
+        "lite_mode_title": "ライトモード",
+        "lite_mode_desc": "この設定は、ゲーム中の過熱と消費電力を減らすため、CPUやその他のコンポーネントが最高周波数で常に動作するのではなく、低い周波数で動作できるようにします。これにより、ゲームの全体的なパフォーマンスに影響を与える可能性があります。",
+        "device_mitigation_title": "デバイス軽減",
+        "device_mitigation_desc": "特定のデバイスに特有の不具合を、互換性と信頼性を向上させるための調整を適用して軽減します。デバイスがシャットダウン時に問題を起こさない場合は、この機能をオフにしてください。",
+        "edit_gamelist_title": "ゲームリストを編集",
+        "edit_gamelist_desc": "ここにリストされたゲームやアプリが起動すると、パフォーマンスプロファイルが有効になります。",
+        "save_changes": "変更を保存",
+        "cancel_changes": "変更をキャンセル"
     }
 }

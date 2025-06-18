@@ -1,37 +1,39 @@
 {
-    "modal": {
-        "liteModeTitle": "Mode Lite",
-        "dndDesc": "Aktifake mode ora gangguan nalika dolanan game. Ngalang-alangi notifikasi lan telpon supaya sampeyan bisa fokus dolanan tanpa gangguan.",
-        "liteModeDesc": "Opsi iki bakal nyuda overheating lan konsumsi daya sajrone game kanthi ngidini CPU lan komponen liyane bisa mlaku kanthi frekuensi sing luwih murah tinimbang terus-terusan ing frekuensi paling dhuwur, iki bakal mengaruhi kinerja game sakabèhé.",
-        "dndTitle": "Ora Gangguan",
-        "deviceMitigationTitle": "Mitigasi Piranti",
-        "deviceMitigationDesc": "Ngilangi sawetara bug khusus piranti kanthi ngetrapake pangaturan tartamtu kanggo nambah kompatibilitas lan linuwih, tetepake fitur iki dipateni kajaba piranti sampeyan ngalami masalah nalika dipateni.",
-        "editGamelistTitle": "Sunting Dhaptar Game",
-        "editGamelistDesc": "Profil kinerja bakal diaktifake nalika game utawa aplikasi sing kadhaptar ing kene dibukak.",
-        "saveChanges": "Simpen Owahan",
-        "cancelChanges": "Batalake Owahan"
-    },
-    "devinfo": {
+    "common": {
+        "module": "Encore Tweaks",
         "profile": "Profil Saiki",
         "kernel": "Kernel",
-        "chipset": "Chipset"
+        "chipset": "Chipset",
+        "androidSDK": "Android SDK"
+    },
+    "modal": {
+        "dnd_title": "Ora Gangguan",
+        "dnd_desc": "Aktifake mode ora gangguan nalika dolanan game. Ngalang-alangi notifikasi lan telpon supaya sampeyan bisa fokus dolanan tanpa gangguan.",
+        "lite_mode_title": "Mode Lite",
+        "lite_mode_desc": "Opsi iki bakal nyuda overheating lan konsumsi daya sajrone game kanthi ngidini CPU lan komponen liyane bisa mlaku kanthi frekuensi sing luwih murah tinimbang terus-terusan ing frekuensi paling dhuwur, iki bakal mengaruhi kinerja game sakabèhé.",
+        "device_mitigation_title": "Mitigasi Piranti",
+        "device_mitigation_desc": "Ngilangi sawetara bug khusus piranti kanthi ngetrapake pangaturan tartamtu kanggo nambah kompatibilitas lan linuwih, tetepake fitur iki dipateni kajaba piranti sampeyan ngalami masalah nalika dipateni.",
+        "edit_gamelist_title": "Sunting Dhaptar Game",
+        "edit_gamelist_desc": "Profil kinerja bakal diaktifake nalika game utawa aplikasi sing kadhaptar ing kene dibukak.",
+        "save_changes": "Simpen Owahan",
+        "cancel_changes": "Batalake Owahan"
     },
     "actions": {
-        "saveLogs": "Simpen Log Modul",
-        "createShortcut": "Gawe Pintasan WebUI",
         "title": "Tindakan",
-        "editGamelist": "Sunting Dhaptar Game"
+        "edit_gamelist": "Sunting Dhaptar Game",
+        "create_shortcut": "Gawe Pintasan WebUI",
+        "save_logs": "Simpen Log Modul"
     },
     "support": {
         "description": "Encore Tweaks gratis lan bakal tetep gratis kanggo sapa wae. Nanging, sampeyan bisa nuduhake rasa peduli kanthi nyumbang.",
         "title": "Dukung Aku"
     },
     "settings": {
-        "defaultCpuGov": "Governor CPU Gawan",
-        "deviceMitigation": "Mitigasi Piranti",
         "title": "Setelan",
-        "dndGameplay": "DND Nalika Main",
-        "liteMode": "Mode Lite",
-        "powersaveCpuGov": "Governor CPU Irit Daya"
+        "dnd_gameplay": "DND Nalika Main",
+        "lite_mode": "Mode Lite",
+        "device_mitigation": "Mitigasi Piranti",
+        "default_cpu_gov": "Governor CPU Gawan",
+        "powersave_cpu_gov": "Governor CPU Irit Daya"
     }
 }

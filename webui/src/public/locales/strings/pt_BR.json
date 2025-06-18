@@ -1,37 +1,39 @@
 {
-    "settings": {
-        "deviceMitigation": "Mitigação de Dispositivo",
-        "defaultCpuGov": "Governador Padrão da CPU",
-        "liteMode": "Modo Lite",
-        "title": "Configurações",
-        "dndGameplay": "DND no Jogo",
-        "powersaveCpuGov": "Governador de CPU Economia de Energia"
-    },
-    "devinfo": {
+    "common": {
+        "module": "Encore Tweaks",
         "profile": "Perfil Atual",
         "kernel": "Kernel",
-        "chipset": "Chipset"
+        "chipset": "Chipset",
+        "androidSDK": "Android SDK"
+    },
+    "settings": {
+        "title": "Configurações",
+        "dnd_gameplay": "DND no Jogo",
+        "lite_mode": "Modo Lite",
+        "device_mitigation": "Mitigação de Dispositivo",
+        "default_cpu_gov": "Governador Padrão da CPU",
+        "powersave_cpu_gov": "Governador de CPU Economia de Energia"
     },
     "actions": {
         "title": "Ações",
-        "editGamelist": "Editar Lista de Jogos",
-        "createShortcut": "Criar Atalho do WebUI",
-        "saveLogs": "Salvar Logs do Módulo"
+        "edit_gamelist": "Editar Lista de Jogos",
+        "create_shortcut": "Criar Atalho do WebUI",
+        "save_logs": "Salvar Logs do Módulo"
     },
     "support": {
         "title": "Apoie-me",
         "description": "O Encore Tweaks é e sempre será gratuito para você e todos. No entanto, você pode demonstrar seu apoio fazendo uma doação."
     },
     "modal": {
-        "dndTitle": "Não Perturbe",
-        "dndDesc": "Ativar o modo 'Não Perturbe' ao jogar. Isso limita interrupções de notificações e chamadas, permitindo que você jogue sem distrações.",
-        "liteModeTitle": "Modo Lite",
-        "deviceMitigationTitle": "Mitigação de Dispositivo",
-        "deviceMitigationDesc": "Mitiga alguns bugs específicos de dispositivos aplicando ajustes para melhorar a compatibilidade e a confiabilidade. Mantenha esta função desativada, a menos que seu dispositivo apresente problemas ao desligar.",
-        "editGamelistTitle": "Editar Lista de Jogos",
-        "editGamelistDesc": "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
-        "saveChanges": "Salvar Alterações",
-        "cancelChanges": "Cancelar Alterações",
-        "liteModeDesc": "Essa opção reduz o superaquecimento e o consumo de energia durante os jogos, permitindo que a CPU e outros componentes operem em uma frequência mais baixa em vez de manterem a frequência máxima constantemente. Isso afetará o desempenho geral do jogo."
+        "dnd_title": "Não Perturbe",
+        "dnd_desc": "Ativar o modo 'Não Perturbe' ao jogar. Isso limita interrupções de notificações e chamadas, permitindo que você jogue sem distrações.",
+        "lite_mode_title": "Modo Lite",
+        "lite_mode_desc": "Essa opção reduz o superaquecimento e o consumo de energia durante os jogos, permitindo que a CPU e outros componentes operem em uma frequência mais baixa em vez de manterem a frequência máxima constantemente. Isso afetará o desempenho geral do jogo.",
+        "device_mitigation_title": "Mitigação de Dispositivo",
+        "device_mitigation_desc": "Mitiga alguns bugs específicos de dispositivos aplicando ajustes para melhorar a compatibilidade e a confiabilidade. Mantenha esta função desativada, a menos que seu dispositivo apresente problemas ao desligar.",
+        "edit_gamelist_title": "Editar Lista de Jogos",
+        "edit_gamelist_desc": "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
+        "save_changes": "Salvar Alterações",
+        "cancel_changes": "Cancelar Alterações"
     }
 }
