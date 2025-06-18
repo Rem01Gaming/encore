@@ -1,25 +1,47 @@
+// Cache for English translations
+let cachedEnglishTranslations = null;
+
 async function loadTranslations(lang) {
   try {
     const response = await fetch(`locales/strings/${lang}.json`);
-    return await response.json();
+    const translations = await response.json();
+    // Cache English translations
+    if (lang === 'en') cachedEnglishTranslations = translations;
+    return translations;
   } catch (error) {
     console.error('Failed to load translations:', error);
+    // Return cached English if available
+    if (cachedEnglishTranslations) return cachedEnglishTranslations;
+    
     // Fallback to English
     const enResponse = await fetch('locales/strings/en.json');
-    return await enResponse.json();
+    cachedEnglishTranslations = await enResponse.json();
+    return cachedEnglishTranslations;
   }
 }
 
-function applyTranslations(translations) {
+function applyTranslations(translations, enTranslations) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const keys = el.getAttribute('data-i18n').split('.');
     let value = translations;
     
-    keys.forEach(key => {
+    // Try to get translation from current language
+    for (const key of keys) {
       value = value?.[key];
-    });
+      if (value === undefined) break;
+    }
     
-    if (value) el.textContent = value;
+    // Fallback to English if missing
+    if (value === undefined) {
+      value = enTranslations;
+      for (const key of keys) {
+        value = value?.[key];
+        if (value === undefined) break;
+      }
+    }
+    
+    // Only update if translation found
+    if (value !== undefined) el.textContent = value;
   });
 }
 
@@ -27,8 +49,14 @@ async function initI18n() {
   const selector = document.getElementById('languageSelector');
   if (!selector) return;
   
+  // Preload English translations if not cached
+  if (!cachedEnglishTranslations) {
+    const enResponse = await fetch('locales/strings/en.json');
+    cachedEnglishTranslations = await enResponse.json();
+  }
+
   // Load languages list
-  let languages = { en: "English" }; // Default fallback
+  let languages = { en: "English" };
   try {
     const response = await fetch('locales/languages.json');
     languages = await response.json();
@@ -45,7 +73,7 @@ async function initI18n() {
     selector.appendChild(option);
   }
   
-  // Load saved or browser language with better matching
+  // Determine language
   const savedLang = localStorage.getItem('selectedLanguage');
   const browserLangs = [
     ...(navigator.languages || []),
@@ -54,40 +82,32 @@ async function initI18n() {
   ].filter(Boolean);
   
   let lang = savedLang;
-  
-  // Find best matching language
   if (!lang) {
     for (const browserLang of browserLangs) {
-      // Try full language code
       if (languages[browserLang]) {
         lang = browserLang;
         break;
       }
-      
-      // Try base language code
       const baseLang = browserLang.split('-')[0];
       if (languages[baseLang]) {
         lang = baseLang;
         break;
       }
     }
-    
-    // Final fallback to English
-    if (!lang) lang = 'en';
+    lang = lang || 'en';
   }
   
   selector.value = lang;
   const translations = await loadTranslations(lang);
-  applyTranslations(translations);
+  applyTranslations(translations, cachedEnglishTranslations);
   
   // Handle language change
   selector.addEventListener('change', async (e) => {
     const newLang = e.target.value;
     localStorage.setItem('selectedLanguage', newLang);
     const newTranslations = await loadTranslations(newLang);
-    applyTranslations(newTranslations);
+    applyTranslations(newTranslations, cachedEnglishTranslations);
   });
 }
 
-// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', initI18n);
