@@ -14,25 +14,63 @@
  * limitations under the License.
  */
 
-// Cache for English translations
+// Cache for translations
 let cachedEnglishTranslations = null;
+let currentTranslations = null;
+
+// Synchronous translation lookup
+function getTranslationSync(key) {
+  if (!currentTranslations || !cachedEnglishTranslations) {
+    console.warn('Translations not loaded');
+    return key; // Fallback to key
+  }
+
+  const keys = key.split('.');
+  let value = currentTranslations;
+  
+  // Try current language
+  for (const k of keys) {
+    value = value?.[k];
+    if (!value) break;
+  }
+  
+  // Fallback to English
+  if (!value) {
+    value = cachedEnglishTranslations;
+    for (const k of keys) {
+      value = value?.[k];
+      if (!value) break;
+    }
+  }
+  
+  return value || key; // Return key if no translation found
+}
+
+// Expose to global scope
+window.getTranslationGlobal = getTranslationSync;
 
 async function loadTranslations(lang) {
+  if (lang === 'en' && cachedEnglishTranslations) {
+    return cachedEnglishTranslations;
+  }
+
   try {
     const response = await fetch(`locales/strings/${lang}.json`);
     const translations = await response.json();
-    // Cache English translations
     if (lang === 'en') cachedEnglishTranslations = translations;
     return translations;
   } catch (error) {
     console.error('Failed to load translations:', error);
-    // Return cached English if available
     if (cachedEnglishTranslations) return cachedEnglishTranslations;
     
-    // Fallback to English
-    const enResponse = await fetch('locales/strings/en.json');
-    cachedEnglishTranslations = await enResponse.json();
-    return cachedEnglishTranslations;
+    try {
+      const enResponse = await fetch('locales/strings/en.json');
+      cachedEnglishTranslations = await enResponse.json();
+      return cachedEnglishTranslations;
+    } catch (fallbackError) {
+      console.error('Fallback English load failed:', fallbackError);
+      throw fallbackError;
+    }
   }
 }
 
@@ -64,66 +102,83 @@ function applyTranslations(translations, enTranslations) {
 async function initI18n() {
   const selector = document.getElementById('languageSelector');
   if (!selector) return;
-  
-  // Preload English translations if not cached
-  if (!cachedEnglishTranslations) {
-    const enResponse = await fetch('locales/strings/en.json');
-    cachedEnglishTranslations = await enResponse.json();
-  }
 
-  // Load languages list
-  let languages = { en: "English" };
   try {
-    const response = await fetch('locales/languages.json');
-    languages = await response.json();
-  } catch (error) {
-    console.error('Failed to load languages list, using fallback:', error);
-  }
-  
-  // Populate selector
-  selector.innerHTML = '';
-  for (const [code, name] of Object.entries(languages)) {
-    const option = document.createElement('option');
-    option.value = code;
-    option.textContent = name;
-    selector.appendChild(option);
-  }
-  
-  // Determine language
-  const savedLang = localStorage.getItem('selectedLanguage');
-  const browserLangs = [
-    ...(navigator.languages || []),
-    navigator.language,
-    navigator.userLanguage
-  ].filter(Boolean);
-  
-  let lang = savedLang;
-  if (!lang) {
-    for (const browserLang of browserLangs) {
-      if (languages[browserLang]) {
-        lang = browserLang;
-        break;
-      }
-      const baseLang = browserLang.split('-')[0];
-      if (languages[baseLang]) {
-        lang = baseLang;
-        break;
+    // Preload English with error handling
+    if (!cachedEnglishTranslations) {
+      try {
+        const enResponse = await fetch('locales/strings/en.json');
+        cachedEnglishTranslations = await enResponse.json();
+      } catch (error) {
+        console.error('Failed to preload English translations', error);
       }
     }
-    lang = lang || 'en';
+
+    // Load languages with fallback merge
+    let languages = { en: "English" };
+    try {
+      const response = await fetch('locales/languages.json');
+      const loadedLanguages = await response.json();
+      languages = { ...languages, ...loadedLanguages };
+    } catch (error) {
+      console.error('Failed loading languages, using fallback:', error);
+    }
+
+    // Populate selector
+    selector.innerHTML = '';
+    for (const [code, name] of Object.entries(languages)) {
+      const option = document.createElement('option');
+      option.value = code;
+      option.textContent = name;
+      selector.appendChild(option);
+    }
+
+    // Determine language
+    const savedLang = localStorage.getItem('selectedLanguage');
+    const browserLangs = [
+      ...(navigator.languages || []),
+      navigator.language,
+      navigator.userLanguage
+    ].filter(Boolean);
+    
+    let lang = savedLang;
+    if (!lang) {
+      for (const browserLang of browserLangs) {
+        if (languages[browserLang]) {
+          lang = browserLang;
+          break;
+        }
+        const baseLang = browserLang.split('-')[0];
+        if (languages[baseLang]) {
+          lang = baseLang;
+          break;
+        }
+      }
+      lang = lang || 'en';
+    }
+    
+    selector.value = lang;
+    const translations = await loadTranslations(lang);
+    currentTranslations = translations; // Set current translations
+    applyTranslations(translations, cachedEnglishTranslations);
+    
+    // Handle language change with revert-on-error
+    selector.addEventListener('change', async (e) => {
+      const oldLang = selector.value;
+      const newLang = e.target.value;
+      try {
+        localStorage.setItem('selectedLanguage', newLang);
+        const newTranslations = await loadTranslations(newLang);
+        currentTranslations = newTranslations; // Update current translations
+        applyTranslations(newTranslations, cachedEnglishTranslations);
+      } catch (error) {
+        selector.value = oldLang; // Revert selector
+        console.error('Language switch failed:', error);
+      }
+    });
+  } catch (error) {
+    console.error('i18n initialization failed:', error);
   }
-  
-  selector.value = lang;
-  const translations = await loadTranslations(lang);
-  applyTranslations(translations, cachedEnglishTranslations);
-  
-  // Handle language change
-  selector.addEventListener('change', async (e) => {
-    const newLang = e.target.value;
-    localStorage.setItem('selectedLanguage', newLang);
-    const newTranslations = await loadTranslations(newLang);
-    applyTranslations(newTranslations, cachedEnglishTranslations);
-  });
 }
 
 document.addEventListener('DOMContentLoaded', initI18n);

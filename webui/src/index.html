@@ -100,7 +100,7 @@
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
             <span data-i18n="settings.dnd_gameplay"></span>
-            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="dnd_gameplay.showModal()">
+            <button class="btn btn-circle btn-ghost btn-xs text-primary info-btn" data-title-key="modal.dnd_title" data-desc-key="modal.dnd_desc">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
@@ -116,7 +116,7 @@
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
             <span data-i18n="settings.lite_mode"></span>
-            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="lite_mode.showModal()">
+            <button class="btn btn-circle btn-ghost btn-xs text-primary info-btn" data-title-key="modal.lite_mode_title" data-desc-key="modal.lite_mode_desc">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
@@ -132,7 +132,7 @@
         <div class="flex items-center justify-between py-1 mb-2">
           <div>
             <span data-i18n="settings.device_mitigation"></span>
-            <button class="btn btn-circle btn-ghost btn-xs text-primary" onclick="device_mitigation.showModal()">
+            <button class="btn btn-circle btn-ghost btn-xs text-primary info-btn" data-title-key="modal.device_mitigation_title" data-desc-key="modal.device_mitigation_desc">
               <svg tabindex="0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-4 w-4 stroke-current">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
@@ -175,33 +175,13 @@
       </button>
 
       <!-- Modals -->
-      <dialog id="dnd_gameplay" class="modal">
+      <dialog id="info_modal" class="modal">
         <div class="modal-box bg-surface-container text-on-surface card_border">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 data-i18n="modal.dnd_title" class="text-lg font-bold"></h3>
-          <p data-i18n="modal.dnd_desc" class="py-4"></p>
-        </div>
-      </dialog>
-
-      <dialog id="lite_mode" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <h3 data-i18n="modal.lite_mode_title" class="text-lg font-bold"></h3>
-          <p data-i18n="modal.lite_mode_desc" class="py-4"></p>
-        </div>
-      </dialog>
-
-      <dialog id="device_mitigation" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <h3 data-i18n="modal.device_mitigation_title" class="text-lg font-bold"></h3>
-          <p data-i18n="modal.device_mitigation_desc" class="py-4"></p>
+          <h3 id="info_modal_title" class="text-lg font-bold"></h3>
+          <p id="info_modal_desc" class="py-4"></p>
         </div>
       </dialog>
 

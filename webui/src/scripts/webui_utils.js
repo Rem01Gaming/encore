@@ -35,6 +35,18 @@ const showErrorModal = (title, msg) => {
   error_modal.showModal();
 };
 
+function openInfoModal(button) {
+  const titleKey = button.getAttribute('data-title-key');
+  const descKey = button.getAttribute('data-desc-key');
+  
+  // Update modal content
+  document.getElementById('info_modal_title').textContent = getTranslationGlobal(titleKey);
+  document.getElementById('info_modal_desc').textContent = getTranslationGlobal(descKey);
+  
+  // Show modal
+  info_modal.showModal();
+}
+
 /* ======================== SYSTEM INFO ======================== */
 const getModuleVersion = async () => {
   const output = await runCommand(`[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`, '/data/adb/modules/encore');
@@ -218,6 +230,12 @@ document.getElementById('save_gamelist_btn').addEventListener('click', saveGamel
 document.getElementById('create_shortcut_btn').addEventListener('click', createShortcut);
 document.getElementById('donate_btn').addEventListener('click', () => openWebsite("https://t.me/rem01schannel/670"));
 document.getElementById('encore_logo').addEventListener('click', () => openWebsite("https://encore.rem01gaming.dev/"));
+
+document.querySelectorAll('.info-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    openInfoModal(this);
+  });
+});
 
 /* ======================== INITIALIZATION ======================== */
 getModuleVersion();
