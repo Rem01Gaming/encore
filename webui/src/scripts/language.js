@@ -57,7 +57,7 @@ function getTranslationSync(key) {
 }
 
 // Expose to global scope
-window.getTranslationGlobal = getTranslationSync;
+window.getTranslation = getTranslationSync;
 
 async function loadTranslations(lang) {
   // Use static import for English

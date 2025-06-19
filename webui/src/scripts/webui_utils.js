@@ -35,13 +35,14 @@ const showErrorModal = (title, msg) => {
   error_modal.showModal();
 };
 
+// Display an info modal
 function openInfoModal(button) {
   const titleKey = button.getAttribute('data-title-key');
   const descKey = button.getAttribute('data-desc-key');
   
   // Update modal content
-  document.getElementById('info_modal_title').textContent = getTranslationGlobal(titleKey);
-  document.getElementById('info_modal_desc').textContent = getTranslationGlobal(descKey);
+  document.getElementById('info_modal_title').textContent = getTranslation(titleKey);
+  document.getElementById('info_modal_desc').textContent = getTranslation(descKey);
   
   // Show modal
   info_modal.showModal();
@@ -217,10 +218,19 @@ const openWebsite = async (link) => {
 
 const createShortcut = async () => {
   if (moduleInterface) {
+    if (moduleInterface.hasShortcut()) {
+      const has_shortcut = getTranslation("toast.has_shortcut");
+      toast(has_shortcut);
+      return;
+    }
+
     moduleInterface.createShortcut();
-  } else {
-    showErrorModal("Shortcut is not available", "WebUI shortcut API is only available in WebUI X engine, please use manager which have WebUI X support such as MMRL and KernelSU Next.");
+    return;
   }
+
+  const shortcut_unavailable_title = getTranslation("modal.shortcut_unavailable_title");
+  const shortcut_unavailable_desc = getTranslation("modal.shortcut_unavailable_desc");
+  showErrorModal(shortcut_unavailable_title, shortcut_unavailable_desc);
 };
 
 /* ======================== EVENT LISTENERS ======================== */

@@ -24,6 +24,9 @@
         "title": "Support Me",
         "description": "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation."
     },
+    "toast": {
+        "has_shortcut": "Shortcut already exists."
+    },
     "modal": {
         "dnd_title": "Do Not Disturb",
         "dnd_desc": "Enable do not disturb mode when playing games. Limits interruptions from notifications and calls, allowing you to play your favorite games without any distraction.",
@@ -31,6 +34,8 @@
         "lite_mode_desc": "This option will reduces overheating and power consumption during gameplay by allowing CPU and other components to run at lower frequency rather than constantly at the highest frequency, this will affect overall game performance.",
         "device_mitigation_title": "Device Mitigation",
         "device_mitigation_desc": "Mitigate some device specific bugs by applying certain adjustments to enhance compatibility and reliability, keep this feature disabled unless your device experiences problems when it is switched off.",
+        "shortcut_unavailable_title": "Shortcut is not available",
+        "shortcut_unavailable_desc": "WebUI shortcut API is only available in WebUI X engine, please use manager which have WebUI X support such as MMRL and KernelSU Next.",
         "edit_gamelist_title": "Edit Gamelist",
         "edit_gamelist_desc": "The performance profile will be activated when any of the games and apps listed here are launched.",
         "save_changes": "Save Changes",
