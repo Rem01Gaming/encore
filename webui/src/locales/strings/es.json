@@ -1,1 +1,16 @@
-{}
+{
+    "common": {
+        "chipset": "Chipset",
+        "profile": "Perfil Actual",
+        "module": "Encore Tweaks",
+        "kernel": "Núcleo del sistema",
+        "androidSDK": "SDK de Android"
+    },
+    "settings": {
+        "device_mitigation": "Mitigación de Dispositivo",
+        "lite_mode": "Modo Lite",
+        "default_cpu_gov": "Gobernador de CPU Predeterminado",
+        "title": "Configuraciones",
+        "dnd_gameplay": "No Molestar en juegos"
+    }
+}
