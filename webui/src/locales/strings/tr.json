@@ -1,0 +1,52 @@
+{
+    "common": {
+        "module": "Encore Tweaks",
+        "profile": "Geçerli Profil",
+        "kernel": "Çekirdek",
+        "chipset": "Yonga Seti",
+        "androidSDK": "Android SDK"
+    },
+    "settings": {
+        "title": "Ayarlar",
+        "dnd_gameplay": "Oyun Sırasında Rahatsız Etme",
+        "lite_mode": "Hafif Mod",
+        "device_mitigation": "Cihaz Düzeltme",
+        "default_cpu_gov": "Varsayılan CPU Yöneticisi",
+        "powersave_cpu_gov": "Güç Tasarrufu CPU Yöneticisi"
+    },
+    "actions": {
+        "title": "Eylemler",
+        "edit_gamelist": "Oyun Listesini Düzenle",
+        "create_shortcut": "WebUI Kısayolu Oluştur",
+        "save_logs": "Modül Günlüklerini Kaydet"
+    },
+    "support": {
+        "title": "Beni Destekle",
+        "description": "Encore Tweaks, sizler ve herkes için her zaman ücretsizdir ve ücretsiz kalacaktır. Ancak, bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
+    },
+    "toast": {
+        "reboot_to_apply": "Değişiklikleri uygulamak için cihazınızı yeniden başlatın.",
+        "has_shortcut": "Kısayol zaten mevcut.",
+        "gamelist_save_success": "Oyun listesi başarıyla kaydedildi.",
+        "save_log_success": "Günlükler {0} konumuna kaydedildi."
+    },
+    "modal": {
+        "dnd_title": "Rahatsız Etme",
+        "dnd_desc": "Oyun oynarken rahatsız etmeme modunu etkinleştirin. Bildirimler ve aramalar nedeniyle kesintileri sınırlandırarak favori oyunlarınızı dikkatiniz dağılmadan oynayabilirsiniz.",
+        "lite_mode_title": "Hafif Mod",
+        "lite_mode_desc": "Bu seçenek, oyun sırasında aşırı ısınmayı ve güç tüketimini azaltmak için CPU ve diğer bileşenlerin sürekli en yüksek frekansta çalışmak yerine daha düşük frekansta çalışmasını sağlar. Bu, genel oyun performansını etkileyebilir.",
+        "device_mitigation_title": "Cihaz Düzeltme",
+        "device_mitigation_desc": "Bazı cihazlara özgü hataları azaltmak için belirli düzenlemeler uygulayarak uyumluluğu ve güvenilirliği artırır. Cihazınız kapalıyken sorun yaşamadıkça bu özelliği devre dışı bırakın.",
+        "shortcut_unavailable_title": "Kısayol Kullanılamıyor",
+        "shortcut_unavailable_desc": "WebUI kısayol API'si yalnızca WebUI X motorunda kullanılabilir. Lütfen MMRL veya KernelSU Next gibi WebUI X destekli bir yönetici kullanın.",
+        "unauthorized_mod_title": "Yetkisiz Değişiklik Tespit Edildi",
+        "unauthorized_mod_desc": "Bu modül, üçüncü bir taraf tarafından değiştirilmiş olabilir. Güvenliğiniz için lütfen resmi Encore Tweaks web sitesinden resmi sürümü indirin.",
+        "edit_gamelist_title": "Oyun Listesini Düzenle",
+        "edit_gamelist_desc": "Burada listelenen oyunlar veya uygulamalar başlatıldığında performans profili etkinleştirilecektir.",
+        "save_changes": "Değişiklikleri Kaydet",
+        "cancel_changes": "Değişiklikleri İptal Et",
+        "gamelist_fetch_fail": "Oyun listesi alınamadı.",
+        "gamelist_save_fail": "Oyun listesi kaydedilemedi.",
+        "save_log_fail": "Günlükler kaydedilemedi."
+    }
+}
