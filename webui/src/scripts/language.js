@@ -29,9 +29,10 @@ const translationModules = import.meta.glob(
 );
 
 // Synchronous translation lookup
-function getTranslationSync(key) {
+// This function also will parse args from it's input
+function getTranslationSync(key, ...args) {
   if (!currentTranslations) {
-    console.warn('Translations not loaded');
+    console.error('Translations not loaded!');
     return key;
   }
 
@@ -52,8 +53,19 @@ function getTranslationSync(key) {
       if (!value) break;
     }
   }
-  
-  return value || key;
+
+  // Return key if no translation found
+  if (!value) return key;
+
+  // Handle placeholder replacement
+  if (args.length > 0 && typeof value === 'string') {
+    return value.replace(/\{(\d+)\}/g, (match, index) => {
+      const idx = parseInt(index);
+      return args[idx] !== undefined ? args[idx] : match;
+    });
+  }
+
+  return value;
 }
 
 // Expose to global scope

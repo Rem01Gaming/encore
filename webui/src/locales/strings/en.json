@@ -25,7 +25,10 @@
         "description": "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation."
     },
     "toast": {
-        "has_shortcut": "Shortcut already exists."
+        "reboot_to_apply": "Reboot your device to apply changes.",
+        "has_shortcut": "Shortcut already exists.",
+        "gamelist_save_success": "Gamelist saved successfully.",
+        "save_log_success": "Logs saved at {0}"
     },
     "modal": {
         "dnd_title": "Do Not Disturb",
@@ -36,9 +39,14 @@
         "device_mitigation_desc": "Mitigate some device specific bugs by applying certain adjustments to enhance compatibility and reliability, keep this feature disabled unless your device experiences problems when it is switched off.",
         "shortcut_unavailable_title": "Shortcut is not available",
         "shortcut_unavailable_desc": "WebUI shortcut API is only available in WebUI X engine, please use manager which have WebUI X support such as MMRL and KernelSU Next.",
+        "unauthorized_mod_title": "Unauthorized modification detected",
+        "unauthorized_mod_desc": "This module may have been modified by a third party. For your security, please download the official version from the official Encore Tweaks website.",
         "edit_gamelist_title": "Edit Gamelist",
         "edit_gamelist_desc": "The performance profile will be activated when any of the games and apps listed here are launched.",
         "save_changes": "Save Changes",
-        "cancel_changes": "Cancel Changes"
+        "cancel_changes": "Cancel Changes",
+        "gamelist_fetch_fail": "Unable to fetch Gamelist",
+        "gamelist_save_fail": "Unable to save Gamelist",
+        "save_log_fail": "Unable to save logs"
     }
 }

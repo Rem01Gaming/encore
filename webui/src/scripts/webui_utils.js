@@ -21,6 +21,42 @@ import encoreSleeping from '/encore_sleeping.avif';
 const moduleInterface = window.$encore;
 const configPath = '/data/adb/.config/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
+const officialWebsite = 'https://encore.rem01gaming.dev/';
+const donateUrl = 'https://t.me/rem01schannel/670';
+
+/* ======================== UTILITIES ======================== */
+const saveLog = async () => {
+  const output = await runCommand(`${binPath}/encore_utility save_logs`);
+  if (output.error) {
+    const save_log_fail = getTranslation("modal.save_log_fail");
+    showErrorModal(save_log_fail, output.error);
+    return;
+  }
+
+  const save_log_success = getTranslation("toast.save_log_success", output);
+  toast(save_log_success);
+};
+
+const openWebsite = async (link) => {
+  await runCommand(`am start -a android.intent.action.VIEW -d ${link}`);
+};
+
+const createShortcut = async () => {
+  if (moduleInterface) {
+    if (moduleInterface.hasShortcut()) {
+      const has_shortcut = getTranslation("toast.has_shortcut");
+      toast(has_shortcut);
+      return;
+    }
+
+    moduleInterface.createShortcut();
+    return;
+  }
+
+  const shortcut_unavailable_title = getTranslation("modal.shortcut_unavailable_title");
+  const shortcut_unavailable_desc = getTranslation("modal.shortcut_unavailable_desc");
+  showErrorModal(shortcut_unavailable_title, shortcut_unavailable_desc);
+};
 
 // Helper function for executing shell commands
 const runCommand = async (cmd, cwd = null) => {
@@ -52,11 +88,15 @@ function openInfoModal(button) {
 const getModuleVersion = async () => {
   const output = await runCommand(`[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`, '/data/adb/modules/encore');
   if (output === 'null') {
-    showErrorModal("Unauthorized Modification", "This module may have been modified by a third party. For your security, please download the official version from https://encore.rem01gaming.dev/");
-    toast("Unauthorized modification detected.");
-  } else {
-    document.getElementById('module_version').textContent = output;
+    const unauthorized_mod_title = getTranslation("modal.unauthorized_mod_title");
+    const unauthorized_mod_desc = getTranslation("modal.unauthorized_mod_desc");
+
+    showErrorModal(unauthorized_mod_title, unauthorized_mod_desc);
+    openWebsite(officialWebsite);
+    return;
   }
+
+  document.getElementById('module_version').textContent = output;
 };
 
 const getCurrentProfile = async () => {
@@ -134,24 +174,28 @@ const getAndroidSDK = async () => {
 const getServiceState = async () => {
   const status = document.getElementById('daemon_status');
   const image = document.getElementById('encore_logo');
-  const pidElem = document.getElementById('daemon_pid');
+  const pidElement = document.getElementById('daemon_pid');
 
   const pid = await runCommand('/system/bin/toybox pidof encored || echo null');
-  pidElem.textContent = `Daemon PID: ${pid}`;
+  pidElement.textContent = `Daemon PID: ${pid}`;
 
   if (pid === "null") {
     status.textContent = "Stopped 💤";
     image.src = encoreSleeping;
-  } else {
-    status.textContent = "Working ✨";
-    image.src = encoreHappy;
+    return;
   }
+
+  status.textContent = "Working ✨";
+  image.src = encoreHappy;
 };
 
 /* ======================== CONFIGURATION ======================== */
-const toggleConfig = async (file, isChecked, rebootMessage = false) => {
+const toggleConfig = async (file, isChecked, requireReboot = false) => {
   await runCommand(`echo ${isChecked ? '1' : '0'} >${configPath}/${file}`);
-  if (rebootMessage) toast('Reboot your device to apply changes');
+  if (requireReboot) {
+    const reboot_to_apply = getTranslation("toast.reboot_to_apply");
+    toast(reboot_to_apply);
+  }
 };
 
 const setupSwitch = async (id, file, rebootMessage = false) => {
@@ -192,45 +236,27 @@ const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const output = await runCommand(`cat ${configPath}/gamelist.txt`);
   if (output.error) {
-    showErrorModal("Unable to fetch Gamelist", output.error);
-  } else {
-    input.value = output.replace(/\|/g, '\n');
+    const gamelist_fetch_fail = getTranslation("modal.gamelist_fetch_fail");
+    showErrorModal(gamelist_fetch_fail, output.error);
+    return;
   }
+
+  input.value = output.replace(/\|/g, '\n');
 };
 
 const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const formattedList = input.value.trim().replace(/\n+/g, '|');
   const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
-  result.error ? showErrorModal("Unable to save Gamelist", result.error) : toast('Gamelist saved successfully.');
-};
 
-/* ======================== UTILITIES ======================== */
-const saveLog = async () => {
-  const output = await runCommand(`${binPath}/encore_utility save_logs`);
-  output.error ? showErrorModal("Unable to save logs", output.error) : toast(`Logs saved at ${output}`);
-};
-
-const openWebsite = async (link) => {
-  const result = await runCommand(`am start -a android.intent.action.VIEW -d ${link}`);
-  if (result.error) showErrorModal("Unable to open browser", result.error);
-};
-
-const createShortcut = async () => {
-  if (moduleInterface) {
-    if (moduleInterface.hasShortcut()) {
-      const has_shortcut = getTranslation("toast.has_shortcut");
-      toast(has_shortcut);
-      return;
-    }
-
-    moduleInterface.createShortcut();
+  if (result.error) {
+    const gamelist_save_fail = getTranslation("modal.gamelist_fetch_fail");
+    showErrorModal(gamelist_save_fail, result.error);
     return;
   }
 
-  const shortcut_unavailable_title = getTranslation("modal.shortcut_unavailable_title");
-  const shortcut_unavailable_desc = getTranslation("modal.shortcut_unavailable_desc");
-  showErrorModal(shortcut_unavailable_title, shortcut_unavailable_desc);
+  const gamelist_save_success = getTranslation("toast.gamelist_save_success");
+  toast(gamelist_save_success);
 };
 
 /* ======================== EVENT LISTENERS ======================== */
@@ -238,8 +264,8 @@ document.getElementById('save_log_btn').addEventListener('click', saveLog);
 document.getElementById('edit_gamelist_btn').addEventListener('click', fetchGamelist);
 document.getElementById('save_gamelist_btn').addEventListener('click', saveGamelist);
 document.getElementById('create_shortcut_btn').addEventListener('click', createShortcut);
-document.getElementById('donate_btn').addEventListener('click', () => openWebsite("https://t.me/rem01schannel/670"));
-document.getElementById('encore_logo').addEventListener('click', () => openWebsite("https://encore.rem01gaming.dev/"));
+document.getElementById('donate_btn').addEventListener('click', () => openWebsite(donateUrl));
+document.getElementById('encore_logo').addEventListener('click', () => openWebsite(officialWebsite));
 
 document.querySelectorAll('.info-btn').forEach(btn => {
   btn.addEventListener('click', function() {
