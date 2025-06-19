@@ -11,6 +11,34 @@
         "lite_mode": "Modo Lite",
         "default_cpu_gov": "Gobernador de CPU Predeterminado",
         "title": "Configuraciones",
-        "dnd_gameplay": "No Molestar en juegos"
+        "dnd_gameplay": "No Molestar en juegos",
+        "powersave_cpu_gov": "Gobernador de CPU para Ahorro de Batería"
+    },
+    "modal": {
+        "lite_mode_title": "Modo Lite",
+        "dnd_title": "No Molestar",
+        "device_mitigation_title": "Mitigación de dispositivo",
+        "edit_gamelist_desc": "El perfil de rendimiento se activará cuando se inicie cualquiera de los juegos y aplicaciones listados aquí.",
+        "save_changes": "Guardar Cambios",
+        "cancel_changes": "Cancelar Cambios",
+        "edit_gamelist_title": "Modificar lista de juegos",
+        "shortcut_unavailable_title": "Atajo no disponible",
+        "dnd_desc": "Activa el modo No Molestar mientras juegas. Limita las interrupciones de notificaciones y llamadas, permitiéndote jugar a tus juegos favoritos sin distracciones.",
+        "lite_mode_desc": "Esta opción reducirá el sobrecalentamiento y el consumo de energía durante el juego al permitir que la CPU y otros componentes funcionen a una frecuencia más baja en lugar de frecuencia altas constantemente; esto afectará el rendimiento general de los juegos.",
+        "device_mitigation_desc": "Mitiga algunos errores específicos del dispositivo aplicando ciertos ajustes para mejorar la compatibilidad y confiabilidad. Mantén esta función deshabilitada a menos que tu dispositivo experimente problemas cuando esté apagado.",
+        "shortcut_unavailable_desc": "La API de atajos de WebUI solo está disponible en el motor WebUI X, utiliza un administrador que tenga soporte para WebUI X, como MMRL y KernelSU Next."
+    },
+    "actions": {
+        "edit_gamelist": "Modificar Lista de Juegos",
+        "title": "Acciones",
+        "save_logs": "Guardar Registros de Módulo",
+        "create_shortcut": "Crear Atajo para WebUI"
+    },
+    "support": {
+        "description": "Encore Tweaks es, y siempre será, gratuito para ti y para todos. Sin embargo, puedes demostrar interés haciendo una donación.",
+        "title": "Apóyame"
+    },
+    "toast": {
+        "has_shortcut": "Ya existe un atajo."
     }
 }
