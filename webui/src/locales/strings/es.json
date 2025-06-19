@@ -4,7 +4,7 @@
         "profile": "Perfil Actual",
         "module": "Encore Tweaks",
         "kernel": "Núcleo del sistema",
-        "androidSDK": "SDK de Android"
+        "androidSDK": "Android SDK"
     },
     "settings": {
         "device_mitigation": "Mitigación de Dispositivo",
