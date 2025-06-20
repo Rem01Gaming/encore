@@ -35,5 +35,8 @@
         "edit_gamelist_desc": "启动列表中的游戏或应用时，将自动应用性能配置。",
         "save_changes": "保存更改",
         "cancel_changes": "取消更改"
+    },
+    "toast": {
+        "reboot_to_apply": "重启设备使变更应用。"
     }
 }
