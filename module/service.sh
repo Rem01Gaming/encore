@@ -31,7 +31,8 @@ while [ -z "$(getprop sys.boot_completed)" ]; do
 done
 
 # Handle case when 'default_gov' is performance
-if [ "$default_gov" == "performance" ]; then
+# Skip this routine custom_default_cpu_gov is defined
+if [ "$default_gov" == "performance" ] && [ ! -f $MODULE_CONFIG/custom_default_cpu_gov ]; then
 	for gov in scx schedhorizon walt sched_pixel sugov_ext uag schedplus energy_step schedutil interactive conservative powersave; do
 		grep -q "$gov" "$CPUFREQ/scaling_available_governors" && {
 			echo "$gov" >$MODULE_CONFIG/default_cpu_gov
