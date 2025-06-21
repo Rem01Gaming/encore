@@ -15,7 +15,7 @@
 #
 
 rm -rf /data/adb/.config/encore
-need_gone="encored encore_profiler encore_utility"
+need_gone="encored encore_profiler encore_utility encore_log"
 manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
 
 for dir in $manager_paths; do

@@ -141,6 +141,7 @@ esac
 # Extract executables
 extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
 cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/system/bin"
+ln -sf "$MODPATH/system/bin/encored" "$MODPATH/system/bin/encore_log"
 rm -rf "$TMPDIR/libs"
 
 if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
@@ -156,6 +157,7 @@ if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
 		[ -d "$dir" ] && {
 			ui_print "- Creating symlink in $dir"
 			ln -sf "$BIN_PATH/encored" "$dir/encored"
+			ln -sf "$BIN_PATH/encored" "$dir/encore_log"
 			ln -sf "$BIN_PATH/encore_profiler" "$dir/encore_profiler"
 			ln -sf "$BIN_PATH/encore_utility" "$dir/encore_utility"
 		}
