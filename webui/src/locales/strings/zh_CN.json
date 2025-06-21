@@ -34,9 +34,19 @@
         "edit_gamelist_title": "编辑游戏列表",
         "edit_gamelist_desc": "启动列表中的游戏或应用时，将自动应用性能配置。",
         "save_changes": "保存更改",
-        "cancel_changes": "取消更改"
+        "cancel_changes": "取消更改",
+        "shortcut_unavailable_title": "快捷方式不可用",
+        "shortcut_unavailable_desc": "WebUI快捷方式API仅适用于WebUI X，请使用支持WebUI X的管理器（如MMRL和KernelSU Next）。",
+        "gamelist_save_fail": "无法获取游戏列表",
+        "save_log_fail": "无法保存日志",
+        "unauthorized_mod_title": "检测到未经授权的修改",
+        "unauthorized_mod_desc": "该模块可能已被第三方修改。为了您的安全，请从Encore Tweaks官方网站下载官方版本。",
+        "gamelist_fetch_fail": "无法获取游戏列表"
     },
     "toast": {
-        "reboot_to_apply": "重启设备使变更应用。"
+        "reboot_to_apply": "重启设备使变更应用。",
+        "has_shortcut": "快捷方式已存在",
+        "gamelist_save_success": "游戏列表已成功保存",
+        "save_log_success": "日志已保存至 {0}"
     }
 }
