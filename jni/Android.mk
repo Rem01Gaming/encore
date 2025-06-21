@@ -8,7 +8,6 @@ LOCAL_SRC_FILES := \
     src/encore_log.c \
     src/encore_profiler.c \
     src/file_utils.c \
-    src/ksu_utils.c \
     src/process_utils.c \
     src/misc_utils.c \
     src/mlbb_handler.c

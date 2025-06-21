@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/file.h>
-#include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <sys/wait.h>
 #include <time.h>
@@ -94,9 +93,6 @@ int write2file(const char* filename, const bool append, const bool use_flock, co
 // Logging system
 void log_encore(LogLevel level, const char* message, ...);
 void external_log(LogLevel level, const char* tag, const char* message);
-
-// KernelSU Utilities
-bool ksu_grant_root(void);
 
 // Process Utilities
 void set_priority(const pid_t pid);

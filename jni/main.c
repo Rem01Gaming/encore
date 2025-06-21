@@ -22,8 +22,7 @@ pid_t game_pid = 0;
 
 int main(int argc, char* argv[]) {
     // Handle case when not running on root
-    // Try grant KSU ROOT via prctl
-    if (getuid() != 0 && ksu_grant_root() != true) {
+    if (getuid() != 0) {
         fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
         exit(EXIT_FAILURE);
     }
