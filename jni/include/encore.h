@@ -41,6 +41,8 @@
 #define IS_AWAKE(state) (strcmp(state, "Awake") == 0 || strcmp(state, "true") == 0)
 #define IS_LOW_POWER(state) (strcmp(state, "true") == 0 || strcmp(state, "1") == 0)
 
+// Basic C knowledge: enum starts with 0
+
 typedef enum : char {
     LOG_DEBUG,
     LOG_INFO,
@@ -50,10 +52,10 @@ typedef enum : char {
 } LogLevel;
 
 typedef enum : char {
-    PERFCOMMON = 0,
-    PERFORMANCE_PROFILE = 1,
-    NORMAL_PROFILE = 2,
-    POWERSAVE_PROFILE = 3
+    PERFCOMMON,
+    PERFORMANCE_PROFILE,
+    NORMAL_PROFILE,
+    POWERSAVE_PROFILE
 } ProfileMode;
 
 typedef enum : char {
@@ -63,6 +65,7 @@ typedef enum : char {
 } MLBBState;
 
 extern char* gamestart;
+extern char* custom_log_tag;
 extern pid_t game_pid;
 
 /*
@@ -90,6 +93,7 @@ int write2file(const char* filename, const bool append, const bool use_flock, co
 
 // Logging system
 void log_encore(LogLevel level, const char* message, ...);
+void external_log(LogLevel level, const char* tag, const char* message);
 
 // KernelSU Utilities
 bool ksu_grant_root(void);

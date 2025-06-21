@@ -41,7 +41,8 @@
  * Description        : Push a notification.
  ***********************************************************************************/
 void notify(const char* message) {
-    int exit = systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t '%s' '%s' '%s'\" >/dev/null", NOTIFY_TITLE, LOG_TAG, message);
+    int exit =
+        systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t '%s' '%s' '%s'\" >/dev/null", NOTIFY_TITLE, LOG_TAG, message);
 
     if (exit != 0) [[clang::unlikely]] {
         log_encore(LOG_ERROR, "Unable to post push notification, message: %s", message);
@@ -79,7 +80,7 @@ char* timern(void) {
 
     // Append milliseconds
     snprintf(timestamp + strlen(timestamp), sizeof(timestamp) - strlen(timestamp), ".%03ld", tv.tv_usec / 1000);
-    
+
     return timestamp;
 }
 

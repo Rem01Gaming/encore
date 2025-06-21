@@ -16,6 +16,9 @@
 
 #include <encore.h>
 
+char* custom_log_tag = NULL;
+const char* level_str[] = {"D", "I", "W", "E", "F"};
+
 /***********************************************************************************
  * Function Name      : log_encore
  * Inputs             : level - Log level
@@ -26,8 +29,6 @@
  *                      to a log file.
  ***********************************************************************************/
 void log_encore(LogLevel level, const char* message, ...) {
-    const char* level_str[] = {"D", "I", "W", "E", "F"};
-
     char* timestamp = timern();
     char logMesg[MAX_OUTPUT_LENGTH];
     va_list args;
@@ -36,4 +37,17 @@ void log_encore(LogLevel level, const char* message, ...) {
     va_end(args);
 
     write2file(LOG_FILE, true, true, "%s %s %s: %s\n", timestamp, level_str[level], LOG_TAG, logMesg);
+}
+
+/***********************************************************************************
+ * Function Name      : external_log
+ * Inputs             : level - Log level (0-4)
+ *                      tag - Custom log tag
+ *                      message - Log message
+ * Returns            : None
+ * Description        : External logging interface for other applications
+ ***********************************************************************************/
+void external_log(LogLevel level, const char* tag, const char* message) {
+    char* timestamp = timern();
+    write2file(LOG_FILE, true, true, "%s %s %s: %s\n", timestamp, level_str[level], tag, message);
 }
