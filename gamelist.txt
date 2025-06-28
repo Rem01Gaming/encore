@@ -457,6 +457,7 @@ com.ea.game.pvzfree_row
 com.feralinteractive.gridautosport_edition_android
 com.miHoYo.bh3oversea_vn
 cyou.joiplay.joiplay
+hg.toriteling.neetchan
 game.qualiarts.idolypride
 gplay.punishing.grayraven
 id.rj01117883.liomeko
