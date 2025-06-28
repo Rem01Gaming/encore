@@ -482,6 +482,7 @@ net.kdt.pojavlaunch
 net.kdt.pojavlaunch.debug
 net.kdt.pojavlaunch.firefly
 net.wargaming.wot.blitz
+nlch.imouto.apk
 org.citra.emu
 org.dolphinemu.dolphinemu
 org.flos.phira
