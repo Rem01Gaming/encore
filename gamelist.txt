@@ -156,6 +156,7 @@ com.humo.yqqsqz.yw
 com.hypergryph.arknights
 com.hypergryph.exastris
 com.idreamsky.klbqm
+com.idreamsky.strinova
 com.igg.android.doomsdaylastsurvivors
 com.ignm.raspberrymash.jp
 com.ilongyuan.implosion
