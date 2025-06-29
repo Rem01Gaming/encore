@@ -8,25 +8,25 @@
     },
     "settings": {
         "title": "設定",
-        "dnd_gameplay": "プレイ中はおやすみモード",
+        "dnd_gameplay": "ゲームプレイ時にサイレントモード",
         "lite_mode": "ライトモード",
         "device_mitigation": "デバイス軽減",
-        "default_cpu_gov": "デフォルトのCPUガバナー",
-        "powersave_cpu_gov": "省電力CPUガバナー"
+        "default_cpu_gov": "デフォルトの CPU ガバナー",
+        "powersave_cpu_gov": "省電力 CPU ガバナー"
     },
     "actions": {
         "title": "アクション",
         "edit_gamelist": "ゲームリストを編集",
-        "create_shortcut": "WebUIショートカットを作成",
+        "create_shortcut": "WebUI ショートカットを作成",
         "save_logs": "モジュールログを保存"
     },
     "support": {
         "title": "サポートする",
-        "description": "Encore Tweaksは無料で提供されており、これからもそうです。ただし、寄付を通じてサポートを示すことができます。"
+        "description": "Encore Tweaks は無償で提供しています。これからもずっとです。ですが、寄付をすることで開発者への貢献に繋がります。"
     },
     "modal": {
-        "dnd_title": "おやすみモード",
-        "dnd_desc": "ゲームをプレイ中におやすみモードを有効にします。通知や通話による中断を制限し、快適にゲームを楽しめます。",
+        "dnd_title": "サイレントモード",
+        "dnd_desc": "ゲームのプレイ時にサイレントモードを有効化することで、通知や通話による阻害を抑制します。邪魔をされずにお気に入りのゲームをプレイすることができます。",
         "lite_mode_title": "ライトモード",
         "lite_mode_desc": "この設定は、ゲーム中の過熱と消費電力を減らすため、CPUやその他のコンポーネントが最高周波数で常に動作するのではなく、低い周波数で動作できるようにします。これにより、ゲームの全体的なパフォーマンスに影響を与える可能性があります。",
         "device_mitigation_title": "デバイス軽減",
@@ -34,6 +34,19 @@
         "edit_gamelist_title": "ゲームリストを編集",
         "edit_gamelist_desc": "ここにリストされたゲームやアプリが起動すると、パフォーマンスプロファイルが有効になります。",
         "save_changes": "変更を保存",
-        "cancel_changes": "変更をキャンセル"
+        "cancel_changes": "変更をキャンセル",
+        "shortcut_unavailable_title": "ショートカットは利用できません",
+        "shortcut_unavailable_desc": "WebUI ショートカット API は WebUI X エンジンでのみ使用できます。MMRL や KernelSU Next などの WebUI X をサポートするマネージャーを使用してください。",
+        "unauthorized_mod_title": "不正な変更が検出されました",
+        "unauthorized_mod_desc": "このモジュールは第三者によって改変されている可能性があります。安全性の確保のため、Encore Tweaks の公式ウェブサイトから公式バージョンをダウンロードしてください。",
+        "gamelist_fetch_fail": "ゲームリストを取得できません",
+        "gamelist_save_fail": "ゲームリストを保存できません",
+        "save_log_fail": "ログを保存できません"
+    },
+    "toast": {
+        "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
+        "has_shortcut": "ショートカットは既に存在します。",
+        "gamelist_save_success": "ゲームリストが正常に保存されました。",
+        "save_log_success": "ログは「{0}」に保存されました"
     }
 }
