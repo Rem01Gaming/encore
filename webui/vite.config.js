@@ -2,7 +2,6 @@ import { defineConfig } from "vite"
 import mkcert from "vite-plugin-mkcert";
 import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
-import Terminal from 'vite-plugin-terminal';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
 
 export default defineConfig({
@@ -10,10 +9,6 @@ export default defineConfig({
   plugins: [
     ViteMinifyPlugin({}),
     mkcert(),
-    Terminal({
-      console: 'terminal',
-      output: ['terminal', 'console'],
-    }),
   ],
   server : {
     https: true,
