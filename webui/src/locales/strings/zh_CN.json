@@ -41,12 +41,12 @@
         "save_log_fail": "无法保存日志",
         "unauthorized_mod_title": "检测到未经授权的修改",
         "unauthorized_mod_desc": "该模块可能已被第三方修改。为了您的安全，请从Encore Tweaks官方网站下载官方版本。",
-        "gamelist_fetch_fail": "无法获取游戏列表"
+        "gamelist_fetch_fail": "无法获取游戏列表",
+        "log_saved_desc": "日志已保存至 {0}。"
     },
     "toast": {
         "reboot_to_apply": "重启设备使变更应用。",
         "has_shortcut": "快捷方式已存在",
-        "gamelist_save_success": "游戏列表已成功保存",
-        "save_log_success": "日志已保存至 {0}"
+        "gamelist_save_success": "游戏列表已成功保存"
     }
 }

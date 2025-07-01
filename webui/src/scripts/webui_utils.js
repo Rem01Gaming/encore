@@ -25,16 +25,28 @@ const officialWebsite = 'https://encore.rem01gaming.dev/';
 const donateUrl = 'https://t.me/rem01schannel/670';
 
 /* ======================== UTILITIES ======================== */
+const runCommand = async (cmd, cwd = null) => {
+  const { errno, stdout, stderr } = await exec(cmd, cwd ? { cwd } : {});
+  return errno === 0 ? stdout.trim() : { error: stderr };
+};
+
+const showCustomModal = (title, msg) => {
+  document.getElementById('custom_modal_title').textContent = title;
+  document.getElementById('custom_modal_desc').textContent = msg;
+  custom_modal.showModal();
+};
+
 const saveLog = async () => {
   const output = await runCommand(`${binPath}/encore_utility save_logs`);
   if (output.error) {
     const save_log_fail = getTranslation("modal.save_log_fail");
-    showErrorModal(save_log_fail, output.error);
+    showCustomModal(save_log_fail, output.error);
     return;
   }
 
-  const save_log_success = getTranslation("toast.save_log_success", output);
-  toast(save_log_success);
+  const log_saved_title = getTranslation("modal.log_saved_title");
+  const log_saved_desc = getTranslation("modal.log_saved_desc", output);
+  showCustomModal(log_saved_title, log_saved_desc);
 };
 
 const openWebsite = async (link) => {
@@ -55,23 +67,9 @@ const createShortcut = async () => {
 
   const shortcut_unavailable_title = getTranslation("modal.shortcut_unavailable_title");
   const shortcut_unavailable_desc = getTranslation("modal.shortcut_unavailable_desc");
-  showErrorModal(shortcut_unavailable_title, shortcut_unavailable_desc);
+  showCustomModal(shortcut_unavailable_title, shortcut_unavailable_desc);
 };
 
-// Helper function for executing shell commands
-const runCommand = async (cmd, cwd = null) => {
-  const { errno, stdout, stderr } = await exec(cmd, cwd ? { cwd } : {});
-  return errno === 0 ? stdout.trim() : { error: stderr };
-};
-
-// Display an error modal
-const showErrorModal = (title, msg) => {
-  document.getElementById('error_title').textContent = title;
-  document.getElementById('error_msg').textContent = msg;
-  error_modal.showModal();
-};
-
-// Display an info modal
 function openInfoModal(button) {
   const titleKey = button.getAttribute('data-title-key');
   const descKey = button.getAttribute('data-desc-key');
@@ -91,7 +89,7 @@ const getModuleVersion = async () => {
     const unauthorized_mod_title = getTranslation("modal.unauthorized_mod_title");
     const unauthorized_mod_desc = getTranslation("modal.unauthorized_mod_desc");
 
-    showErrorModal(unauthorized_mod_title, unauthorized_mod_desc);
+    showCustomModal(unauthorized_mod_title, unauthorized_mod_desc);
     openWebsite(officialWebsite);
     return;
   }
@@ -237,7 +235,7 @@ const fetchGamelist = async () => {
   const output = await runCommand(`cat ${configPath}/gamelist.txt`);
   if (output.error) {
     const gamelist_fetch_fail = getTranslation("modal.gamelist_fetch_fail");
-    showErrorModal(gamelist_fetch_fail, output.error);
+    showCustomModal(gamelist_fetch_fail, output.error);
     return;
   }
 
@@ -251,7 +249,7 @@ const saveGamelist = async () => {
 
   if (result.error) {
     const gamelist_save_fail = getTranslation("modal.gamelist_fetch_fail");
-    showErrorModal(gamelist_save_fail, result.error);
+    showCustomModal(gamelist_save_fail, result.error);
     return;
   }
 

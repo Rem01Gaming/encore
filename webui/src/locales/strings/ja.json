@@ -41,12 +41,12 @@
         "unauthorized_mod_desc": "このモジュールは第三者によって改変されている可能性があります。安全性の確保のため、Encore Tweaks の公式ウェブサイトから公式バージョンをダウンロードしてください。",
         "gamelist_fetch_fail": "ゲームリストを取得できません",
         "gamelist_save_fail": "ゲームリストを保存できません",
-        "save_log_fail": "ログを保存できません"
+        "save_log_fail": "ログを保存できません",
+        "log_saved_desc": "ログは「{0}」に保存されました。"
     },
     "toast": {
         "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
         "has_shortcut": "ショートカットは既に存在します。",
-        "gamelist_save_success": "ゲームリストが正常に保存されました。",
-        "save_log_success": "ログは「{0}」に保存されました"
+        "gamelist_save_success": "ゲームリストが正常に保存されました。"
     }
 }

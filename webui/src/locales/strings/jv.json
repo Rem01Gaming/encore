@@ -23,7 +23,9 @@
         "unauthorized_mod_desc": "Modul iki bisa uga wis diowahi dening pihak katelu. Kanggo keamanan sampeyan, mangga download versi resmi saka situs web Encore Tweaks resmi.",
         "gamelist_fetch_fail": "Ora bisa njupuk dhaptar game",
         "gamelist_save_fail": "Ora bisa nyimpen dhaptar game",
-        "save_log_fail": "Ora bisa nyimpen log"
+        "save_log_fail": "Ora bisa nyimpen log",
+        "log_saved_title": "Log Modul Disimpen",
+        "log_saved_desc": "Log disimpen ing {0}."
     },
     "actions": {
         "title": "Tindakan",
@@ -46,7 +48,6 @@
     "toast": {
         "has_shortcut": "Pintasan wis ana.",
         "reboot_to_apply": "Reboot piranti kanggo ngetrapake owah-owahan.",
-        "gamelist_save_success": "Dhaptar game kasil disimpen.",
-        "save_log_success": "Log disimpen ing {0}"
+        "gamelist_save_success": "Dhaptar game kasil disimpen."
     }
 }

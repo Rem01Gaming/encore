@@ -27,8 +27,7 @@
     "toast": {
         "reboot_to_apply": "Reboot your device to apply changes.",
         "has_shortcut": "Shortcut already exists.",
-        "gamelist_save_success": "Gamelist saved successfully.",
-        "save_log_success": "Logs saved at {0}"
+        "gamelist_save_success": "Gamelist saved successfully."
     },
     "modal": {
         "dnd_title": "Do Not Disturb",
@@ -47,6 +46,8 @@
         "cancel_changes": "Cancel Changes",
         "gamelist_fetch_fail": "Unable to fetch Gamelist",
         "gamelist_save_fail": "Unable to save Gamelist",
-        "save_log_fail": "Unable to save logs"
+        "save_log_fail": "Unable to save logs",
+        "log_saved_title": "Module Logs Saved",
+        "log_saved_desc": "Logs saved at {0}."
     }
 }

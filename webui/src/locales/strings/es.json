@@ -31,7 +31,8 @@
         "gamelist_fetch_fail": "No se pudieron obtener la Lista de juegos",
         "save_log_fail": "No se pudieron guardar los registros",
         "unauthorized_mod_title": "Modificación no autorizada detectada",
-        "unauthorized_mod_desc": "Este módulo pudo haber sido modificado por un tercero. Por tu seguridad, descarga la versión oficial del sitio web oficial de Encore Tweaks."
+        "unauthorized_mod_desc": "Este módulo pudo haber sido modificado por un tercero. Por tu seguridad, descarga la versión oficial del sitio web oficial de Encore Tweaks.",
+        "log_saved_desc": "Registros guardados en {0}."
     },
     "actions": {
         "edit_gamelist": "Modificar Lista de Juegos",
@@ -46,7 +47,6 @@
     "toast": {
         "has_shortcut": "Ya existe un atajo.",
         "gamelist_save_success": "Lista de juegos guardada satisfactoriamente.",
-        "save_log_success": "Registros guardados en {0}",
         "reboot_to_apply": "Reinicia tu dispositivo para aplicar los cambios."
     }
 }

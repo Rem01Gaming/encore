@@ -27,7 +27,6 @@
     "toast": {
         "has_shortcut": "Pintasan sudah ada.",
         "gamelist_save_success": "Daftar permainan berhasil disimpan.",
-        "save_log_success": "Log disimpan di {0}",
         "reboot_to_apply": "Reboot perangkat Anda untuk menerapkan perubahan."
     },
     "modal": {
@@ -47,6 +46,8 @@
         "gamelist_fetch_fail": "Tidak dapat mengambil daftar game",
         "gamelist_save_fail": "Tidak dapat menyimpan daftar game",
         "save_log_fail": "Tidak dapat menyimpan log",
-        "unauthorized_mod_title": "Modifikasi tidak sah terdeteksi"
+        "unauthorized_mod_title": "Modifikasi tidak sah terdeteksi",
+        "log_saved_title": "Log Modul Disimpan",
+        "log_saved_desc": "Log disimpan di {0}."
     }
 }

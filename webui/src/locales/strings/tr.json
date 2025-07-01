@@ -27,8 +27,7 @@
     "toast": {
         "reboot_to_apply": "Değişiklikleri uygulamak için cihazınızı yeniden başlatın.",
         "has_shortcut": "Kısayol zaten mevcut.",
-        "gamelist_save_success": "Oyun listesi başarıyla kaydedildi.",
-        "save_log_success": "Günlükler {0} konumuna kaydedildi"
+        "gamelist_save_success": "Oyun listesi başarıyla kaydedildi."
     },
     "modal": {
         "dnd_title": "Rahatsız Etme",
@@ -47,6 +46,7 @@
         "cancel_changes": "Değişiklikleri İptal Et",
         "gamelist_fetch_fail": "Oyun listesi alınamadı",
         "gamelist_save_fail": "Oyun listesi kaydedilemedi",
-        "save_log_fail": "Günlükler kaydedilemedi"
+        "save_log_fail": "Günlükler kaydedilemedi",
+        "log_saved_desc": "Günlükler {0} konumuna kaydedildi."
     }
 }

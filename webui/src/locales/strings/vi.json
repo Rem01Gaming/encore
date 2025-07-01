@@ -23,7 +23,8 @@
         "gamelist_save_fail": "Không thể lưu Gamelist",
         "save_log_fail": "Không thể lưu nhật kí",
         "shortcut_unavailable_desc": "Webui shortcut API chỉ có ở WebUI X engine, hãy dùng manager có hỗ trợ WebUI X như MMRL hay KernelSU Next.",
-        "unauthorized_mod_desc": "Module này có thể đã bị chỉnh sửa bởi một bên thứ ba. Vì an toàn của bạn, hãy tải bản chính thức từ trang web chính thức của Encore Tweaks."
+        "unauthorized_mod_desc": "Module này có thể đã bị chỉnh sửa bởi một bên thứ ba. Vì an toàn của bạn, hãy tải bản chính thức từ trang web chính thức của Encore Tweaks.",
+        "log_saved_desc": "Nhật kí được lưu tại {0}."
     },
     "actions": {
         "title": "Hành động",
@@ -46,7 +47,6 @@
     "toast": {
         "reboot_to_apply": "Khởi động lại thiết bị để áp dụng các thay đổi.",
         "has_shortcut": "Lối tắt đã tồn tại.",
-        "gamelist_save_success": "Đã lưu gamelist thành công.",
-        "save_log_success": "Nhật kí được lưu tại {0}"
+        "gamelist_save_success": "Đã lưu gamelist thành công."
     }
 }

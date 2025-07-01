@@ -41,12 +41,12 @@
         "unauthorized_mod_desc": "Esse módulo pode ter sido modificado por outrem. Para sua segurança, baixe a versão oficial através do site Encore Tweaks.",
         "gamelist_fetch_fail": "Não foi possível obter a lista de jogos",
         "gamelist_save_fail": "Não foi possível salvar a lista de jogos",
-        "save_log_fail": "Não foi possível salvar os logs"
+        "save_log_fail": "Não foi possível salvar os logs",
+        "log_saved_desc": "Logs salvos em {0}."
     },
     "toast": {
         "reboot_to_apply": "Reinicie seu aparelho pra aplicar as mudanças.",
         "has_shortcut": "Atalho já existe.",
-        "gamelist_save_success": "Gamelist salva com sucesso.",
-        "save_log_success": "Logs salvos em {0}"
+        "gamelist_save_success": "Gamelist salva com sucesso."
     }
 }
