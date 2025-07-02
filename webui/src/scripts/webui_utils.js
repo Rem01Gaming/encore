@@ -18,11 +18,13 @@ import { exec, toast } from 'kernelsu';
 import encoreHappy from '/encore_happy.avif';
 import encoreSleeping from '/encore_sleeping.avif';
 
-const moduleInterface = window.$encore;
 const configPath = '/data/adb/.config/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
 const officialWebsite = 'https://encore.rem01gaming.dev/';
 const donateUrl = 'https://t.me/rem01schannel/670';
+
+// WebUI X API
+const moduleInterface = window.$encore;
 
 /* ======================== UTILITIES ======================== */
 const runCommand = async (cmd, cwd = null) => {
@@ -165,7 +167,15 @@ const getKernelVersion = async () => {
 };
 
 const getAndroidSDK = async () => {
-  document.getElementById('android_sdk').textContent = await runCommand(`getprop ro.build.version.sdk`);
+  let android_sdk;
+
+  if (moduleInterface) {
+    android_sdk = moduleInterface.getSdk();
+  } else {
+    android_sdk = await runCommand(`getprop ro.build.version.sdk`);
+  }
+
+  document.getElementById('android_sdk').textContent = android_sdk;
 };
 
 /* ======================== SERVICE MANAGEMENT ======================== */
