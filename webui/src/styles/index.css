@@ -1,5 +1,5 @@
-@import url('https://mui.kernelsu.org/mmrl/insets.css');
-@import url('https://mui.kernelsu.org/mmrl/colors.css');
+@import url('https://mui.kernelsu.org/internal/insets.css');
+@import url('https://mui.kernelsu.org/internal/colors.css');
 
 @tailwind base;
 @tailwind components;
