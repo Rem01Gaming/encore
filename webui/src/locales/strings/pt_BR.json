@@ -35,12 +35,8 @@
         "edit_gamelist_desc": "O perfil de desempenho será ativado quando qualquer um dos jogos e aplicativos listados aqui for iniciado.",
         "save_changes": "Salvar Alterações",
         "cancel_changes": "Cancelar Alterações",
-        "shortcut_unavailable_title": "Atalho não disponível",
-        "shortcut_unavailable_desc": "Atalho API da WebUI só está presente na engine WebUI X, por favor use um gerenciador que suporte WebUI X, por exemplo MMRL e KernelSu Next.",
         "unauthorized_mod_title": "Modificação não autorizada detectada",
         "unauthorized_mod_desc": "Esse módulo pode ter sido modificado por outrem. Para sua segurança, baixe a versão oficial através do site Encore Tweaks.",
-        "gamelist_fetch_fail": "Não foi possível obter a lista de jogos",
-        "gamelist_save_fail": "Não foi possível salvar a lista de jogos",
         "save_log_fail": "Não foi possível salvar os logs",
         "log_saved_desc": "Logs salvos em {0}."
     },

@@ -35,12 +35,8 @@
         "edit_gamelist_desc": "ここにリストされたゲームやアプリを起動すると、パフォーマンスプロファイルが有効化されます。",
         "save_changes": "変更を保存",
         "cancel_changes": "変更をキャンセル",
-        "shortcut_unavailable_title": "ショートカットは利用できません",
-        "shortcut_unavailable_desc": "WebUI ショートカット API は WebUI X エンジンでのみ使用できます。MMRL や KernelSU Next などの WebUI X をサポートするマネージャーを使用してください。",
         "unauthorized_mod_title": "不正な変更が検出されました",
         "unauthorized_mod_desc": "このモジュールは第三者によって改変されている可能性があります。安全性の確保のため、Encore Tweaks の公式ウェブサイトから公式バージョンをダウンロードしてください。",
-        "gamelist_fetch_fail": "ゲームリストを取得できません",
-        "gamelist_save_fail": "ゲームリストを保存できません",
         "save_log_fail": "ログを保存できません",
         "log_saved_desc": "ログは「{0}」に保存されました。"
     },

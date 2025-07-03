@@ -17,12 +17,8 @@
         "edit_gamelist_desc": "Profil kinerja bakal diaktifake nalika game utawa aplikasi sing kadhaptar ing kene dibukak.",
         "save_changes": "Simpen Owahan",
         "cancel_changes": "Batalake Owahan",
-        "shortcut_unavailable_title": "Pintasan ora kasedhiya",
-        "shortcut_unavailable_desc": "API pintasan WebUI mung kasedhiya ing engine WebUI X, gunakake manajer sing duwe dhukungan WebUI X kayata MMRL lan KernelSU.",
         "unauthorized_mod_title": "Modifikasi tanpa wewenang dideteksi",
         "unauthorized_mod_desc": "Modul iki bisa uga wis diowahi dening pihak katelu. Kanggo keamanan sampeyan, mangga download versi resmi saka situs web Encore Tweaks resmi.",
-        "gamelist_fetch_fail": "Ora bisa njupuk dhaptar game",
-        "gamelist_save_fail": "Ora bisa nyimpen dhaptar game",
         "save_log_fail": "Ora bisa nyimpen log",
         "log_saved_title": "Log Modul Disimpen",
         "log_saved_desc": "Log disimpen ing {0}."

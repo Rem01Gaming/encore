@@ -17,12 +17,8 @@
         "edit_gamelist_desc": "Cấu hình hiệu suất sẽ được kích hoạt khi bất kỳ trò chơi hoặc ứng dụng nào trong danh sách này được mở.",
         "save_changes": "Lưu thay đổi",
         "cancel_changes": "Hủy thay đổi",
-        "shortcut_unavailable_title": "Lối tắt không có sẵn",
         "unauthorized_mod_title": "Đã phát hiện can thiệp bên ngoài",
-        "gamelist_fetch_fail": "Không thể tải Gamelist",
-        "gamelist_save_fail": "Không thể lưu Gamelist",
         "save_log_fail": "Không thể lưu nhật kí",
-        "shortcut_unavailable_desc": "Webui shortcut API chỉ có ở WebUI X engine, hãy dùng manager có hỗ trợ WebUI X như MMRL hay KernelSU Next.",
         "unauthorized_mod_desc": "Module này có thể đã bị chỉnh sửa bởi một bên thứ ba. Vì an toàn của bạn, hãy tải bản chính thức từ trang web chính thức của Encore Tweaks.",
         "log_saved_desc": "Nhật kí được lưu tại {0}."
     },
