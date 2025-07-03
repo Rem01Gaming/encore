@@ -58,23 +58,22 @@ const openWebsite = async (link) => {
 };
 
 const createShortcut = async () => {
-  if (moduleInterface) {
-    if (moduleInterface.hasShortcut()) {
-      const has_shortcut = getTranslation("toast.has_shortcut");
-      toast(has_shortcut);
-      return;
-    }
-
-    moduleInterface.createShortcut();
+  if (moduleInterface.hasShortcut()) {
+    const has_shortcut = getTranslation("toast.has_shortcut");
+    toast(has_shortcut);
     return;
   }
 
-  const shortcut_unavailable_title = getTranslation("modal.shortcut_unavailable_title");
-  const shortcut_unavailable_desc = getTranslation("modal.shortcut_unavailable_desc");
-  showCustomModal(shortcut_unavailable_title, shortcut_unavailable_desc);
+  moduleInterface.createShortcut();
 };
 
-function openInfoModal(button) {
+const setupShortcut = async () => {
+  if (moduleInterface) {
+    document.getElementById('create_shortcut_btn').classList.remove("hidden");
+  }
+}
+
+const openInfoModal = (button) => {
   const titleKey = button.getAttribute('data-title-key');
   const descKey = button.getAttribute('data-desc-key');
   
@@ -84,7 +83,7 @@ function openInfoModal(button) {
   
   // Show modal
   info_modal.showModal();
-}
+};
 
 /* ======================== SYSTEM INFO ======================== */
 const getModuleVersion = async () => {
@@ -359,3 +358,4 @@ getChipset();
 getAndroidSDK();
 getServiceState();
 fetchCPUGovernors();
+setupShortcut();
