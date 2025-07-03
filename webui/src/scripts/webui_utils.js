@@ -19,12 +19,14 @@ import encoreHappy from '/encore_happy.avif';
 import encoreSleeping from '/encore_sleeping.avif';
 
 const configPath = '/data/adb/.config/encore';
+const modPath = '/data/adb/modules/encore';
 const binPath = '/data/adb/modules/encore/system/bin';
 const officialWebsite = 'https://encore.rem01gaming.dev/';
 const donateUrl = 'https://t.me/rem01schannel/670';
 
 // WebUI X API
 const moduleInterface = window.$encore;
+const fileInterface = window.$EnFile;
 
 /* ======================== UTILITIES ======================== */
 const runCommand = async (cmd, cwd = null) => {
@@ -86,8 +88,23 @@ function openInfoModal(button) {
 
 /* ======================== SYSTEM INFO ======================== */
 const getModuleVersion = async () => {
-  const output = await runCommand(`[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`, '/data/adb/modules/encore');
-  if (output === 'null') {
+  let version = null;
+
+  if (fileInterface) {
+    const propPath = `${modPath}/module.prop`;
+    if (fileInterface.exists(propPath)) {
+      const content = fileInterface.read(propPath).trim();
+      const match = content.match(/^version=(.*)$/m);
+      if (match) {
+        version = match[1].trim();
+      }
+    }
+  } else {
+    version = await runCommand(`[ -f module.prop ] && awk -F'=' '/version=/ {print $2}' module.prop || echo null`, modPath);
+    version = version === 'null' ? null : version.trim();
+  }
+
+  if (version === 'null') {
     const unauthorized_mod_title = getTranslation("modal.unauthorized_mod_title");
     const unauthorized_mod_desc = getTranslation("modal.unauthorized_mod_desc");
 
@@ -96,12 +113,18 @@ const getModuleVersion = async () => {
     return;
   }
 
-  document.getElementById('module_version').textContent = output;
+  document.getElementById('module_version').textContent = version;
 };
 
 const getCurrentProfile = async () => {
-  const output = await runCommand(`cat ${configPath}/current_profile`);
   let profile = "Unknown";
+  let output;
+
+  if (fileInterface) {
+    output = fileInterface.read(`${configPath}/current_profile`).trim();
+  } else {
+    output = await runCommand(`cat ${configPath}/current_profile`);
+  }
 
   switch(output) {
     case "0":
@@ -126,8 +149,14 @@ const getCurrentProfile = async () => {
 
 const getChipset = async () => {
   const chipset = await runCommand(`getprop ro.board.platform`);
-  const soc = await runCommand(`cat ${configPath}/soc_recognition`);
   let brand = "Unknown";
+  let soc;
+
+  if (fileInterface) {
+    soc = fileInterface.read(`${configPath}/soc_recognition`).trim();
+  } else {
+    soc = await runCommand(`cat ${configPath}/soc_recognition`);
+  }
   
   switch(soc) {
     case "1":
@@ -199,7 +228,13 @@ const getServiceState = async () => {
 
 /* ======================== CONFIGURATION ======================== */
 const toggleConfig = async (file, isChecked, requireReboot = false) => {
-  await runCommand(`echo ${isChecked ? '1' : '0'} >${configPath}/${file}`);
+  const value = isChecked ? '1' : '0';
+  if (fileInterface) {
+    fileInterface.write(`${configPath}/${file}`, value);
+  } else {
+    await runCommand(`echo ${value} >${configPath}/${file}`);
+  }
+
   if (requireReboot) {
     const reboot_to_apply = getTranslation("toast.reboot_to_apply");
     toast(reboot_to_apply);
@@ -208,7 +243,15 @@ const toggleConfig = async (file, isChecked, requireReboot = false) => {
 
 const setupSwitch = async (id, file, rebootMessage = false) => {
   const switchElement = document.getElementById(id);
-  switchElement.checked = await runCommand(`cat ${configPath}/${file}`) === '1';
+  let value;
+
+  if (fileInterface) {
+    value = fileInterface.read(`${configPath}/${file}`).trim();
+  } else {
+    value = await runCommand(`cat ${configPath}/${file}`);
+  }
+
+  switchElement.checked = value === '1';
   switchElement.addEventListener('change', () => toggleConfig(file, switchElement.checked, rebootMessage));
 };
 
@@ -219,7 +262,12 @@ setupSwitch('device_mitigation_switch', 'device_mitigation');
 
 /* ======================== CPU GOVERNOR MANAGEMENT ======================== */
 const changeCPUGovernor = async (governor, config) => {
-  await runCommand(`echo ${governor} >${configPath}/${config}`);
+  if (fileInterface) {
+    fileInterface.write(`${configPath}/${config}`, governor);
+  } else {
+    await runCommand(`echo ${governor} >${configPath}/${config}`);
+  }
+
   if (config === "powersave_cpu_gov") {
     await runCommand(`[ "$(<${configPath}/current_profile)" -eq 3 ] && encore_utility change_cpu_gov ${governor}`);
   } else if (config === "custom_default_cpu_gov") {
@@ -228,25 +276,48 @@ const changeCPUGovernor = async (governor, config) => {
 };
 
 const fetchCPUGovernors = async () => {
-  const governors = (await runCommand('cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors')).split(/\s+/);
+  let governors;
+  if (fileInterface) {
+    governors = fileInterface.read('/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors').trim().split(/\s+/);
+  } else {
+    governors = (await runCommand('cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors')).split(/\s+/);
+  }
+
   ['default_cpu_gov', 'powersave_cpu_gov'].forEach(id => {
     const select = document.getElementById(id);
     select.innerHTML = governors.map(gov => `<option value="${gov}">${gov}</option>`).join('');
     select.addEventListener('change', () => changeCPUGovernor(select.value, id.includes('powersave') ? "powersave_cpu_gov" : "custom_default_cpu_gov"));
   });
 
-  document.getElementById('default_cpu_gov').value = await runCommand(`[ -f ${configPath}/custom_default_cpu_gov ] && cat ${configPath}/custom_default_cpu_gov || cat ${configPath}/default_cpu_gov`);
-  document.getElementById('powersave_cpu_gov').value = await runCommand(`cat ${configPath}/powersave_cpu_gov`);
+  let default_cpu_gov;
+  let powersave_cpu_gov;
+
+  if (fileInterface) {
+    if (fileInterface.exists(`${configPath}/custom_default_cpu_gov`)) {
+      default_cpu_gov = fileInterface.read(`${configPath}/custom_default_cpu_gov`).trim();
+    } else {
+      default_cpu_gov = fileInterface.read(`${configPath}/default_cpu_gov`).trim();
+    }
+
+    powersave_cpu_gov = fileInterface.read(`${configPath}/powersave_cpu_gov`).trim();
+  } else {
+    default_cpu_gov = await runCommand(`[ -f ${configPath}/custom_default_cpu_gov ] && cat ${configPath}/custom_default_cpu_gov || cat ${configPath}/default_cpu_gov`);
+    powersave_cpu_gov = await runCommand(`cat ${configPath}/powersave_cpu_gov`);
+  }
+
+  document.getElementById('default_cpu_gov').value = default_cpu_gov;
+  document.getElementById('powersave_cpu_gov').value = powersave_cpu_gov;
 };
 
 /* ======================== GAMELIST MANAGEMENT ======================== */
 const fetchGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
-  const output = await runCommand(`cat ${configPath}/gamelist.txt`);
-  if (output.error) {
-    const gamelist_fetch_fail = getTranslation("modal.gamelist_fetch_fail");
-    showCustomModal(gamelist_fetch_fail, output.error);
-    return;
+  let output;
+
+  if (fileInterface) {
+    output = fileInterface.read(`${configPath}/gamelist.txt`).trim();
+  } else {
+    output = await runCommand(`cat ${configPath}/gamelist.txt`);
   }
 
   input.value = output.replace(/\|/g, '\n');
@@ -255,12 +326,11 @@ const fetchGamelist = async () => {
 const saveGamelist = async () => {
   const input = document.getElementById('gamelist_textarea');
   const formattedList = input.value.trim().replace(/\n+/g, '|');
-  const result = await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
 
-  if (result.error) {
-    const gamelist_save_fail = getTranslation("modal.gamelist_fetch_fail");
-    showCustomModal(gamelist_save_fail, result.error);
-    return;
+  if (fileInterface) {
+    fileInterface.write(`${configPath}/gamelist.txt`, formattedList);
+  } else {
+    await runCommand(`echo "${formattedList}" >${configPath}/gamelist.txt`);
   }
 
   const gamelist_save_success = getTranslation("toast.gamelist_save_success");
