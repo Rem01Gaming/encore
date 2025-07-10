@@ -47,6 +47,7 @@
         "gamelist_fetch_fail": "Oyun listesi alınamadı",
         "gamelist_save_fail": "Oyun listesi kaydedilemedi",
         "save_log_fail": "Günlükler kaydedilemedi",
-        "log_saved_desc": "Günlükler {0} konumuna kaydedildi."
+        "log_saved_desc": "Günlükler {0} konumuna kaydedildi.",
+        "log_saved_title": "Modül Günlükleri Kaydedildi"
     }
 }
