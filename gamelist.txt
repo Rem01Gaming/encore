@@ -420,6 +420,7 @@ com.tipsworks.pascalswager
 com.trampolinetales.lbal
 com.tumuyan.ncnn.realsr
 com.tungsten.fcl
+com.cygames.umamusume
 com.ubisoft.rainbowsixmobile.r6.fps.pvp.shooter
 com.unity.mmd
 com.valvesoftware.cswgsm
