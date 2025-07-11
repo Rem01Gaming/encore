@@ -38,7 +38,9 @@ void run_profiler(const int profile) {
     }
 
     write2file(PROFILE_MODE, false, false, "%d\n", profile);
-    (void)systemv("encore_profiler %d", profile);
+    if (systemv("encore_profiler %d", profile)) {
+        log_encore(LOG_ERROR, "Unable to execute profiler changes to %d", profile);
+    }
 }
 
 /***********************************************************************************

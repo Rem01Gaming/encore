@@ -153,9 +153,7 @@ char* execute_direct(const char* path, const char* arg0, ...) {
  * Function Name      : systemv
  * Inputs             : format (const char *) - shell command to execute
  *                      variadic arguments - other arguments
- * Returns            : int - 0 if execution success
- *                           -1 if execution failed
- *                            * other if command returns an error
+ * Returns            : int - non zero are error, following system() returns.
  * Description        : Executes a shell command just like system() with additional format.
  ***********************************************************************************/
 int systemv(const char* format, ...) {
@@ -164,27 +162,5 @@ int systemv(const char* format, ...) {
     va_start(args, format);
     vsnprintf(command, sizeof(command), format, args);
     va_end(args);
-
-    pid_t pid = fork();
-    if (pid == -1) [[clang::unlikely]] {
-        log_encore(LOG_ERROR, "fork failed in systemv()");
-        return -1;
-    }
-
-    if (pid == 0) {
-        char* env[] = {MY_PATH, NULL};
-        execle("/system/bin/sh", "sh", "-c", command, NULL, env);
-
-        // If exec fails
-        _exit(127);
-    }
-
-    int status;
-    if (waitpid(pid, &status, 0) == -1)
-        return -1;
-
-    if (WIFEXITED(status))
-        return WEXITSTATUS(status);
-
-    return -1;
+    return system(command);
 }
