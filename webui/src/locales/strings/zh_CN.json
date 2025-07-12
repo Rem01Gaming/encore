@@ -38,7 +38,8 @@
         "save_log_fail": "无法保存日志",
         "unauthorized_mod_title": "检测到未经授权的修改",
         "unauthorized_mod_desc": "该模块可能已被第三方修改。为了您的安全，请从Encore Tweaks官方网站下载官方版本。",
-        "log_saved_desc": "日志已保存至 {0}。"
+        "log_saved_desc": "日志已保存至 {0}。",
+        "log_saved_title": "模块日志已保存"
     },
     "toast": {
         "reboot_to_apply": "重启设备使变更应用。",
