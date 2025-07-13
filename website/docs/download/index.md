@@ -3,21 +3,19 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 4.5
+# Encore Tweaks 4.6
 
 ## Changelog
 
-- Fix root detection issue on module files
-- Mitigate buggy thermal throttling on post-startup in old MediaTek devices
-- Fix random reboot and performance dip on some devices
-- Add module banner for KernelSU Next
-- Add option to create WebUI shortcut
-- Add back DDR tweaks for Exynos and Tensor devices
-- Remove MMRL from action redirect WebUI
-- Shrink module size even more
+- Refactor and design changes on the WebUI
+- Implement WebUI X API for file read/write
+- WebUI translation updates
+- Exposes Encore's logging system to other processes/module
+- Add sanity check for dumpsys
+- Other misc changes and optimizations
 
 ## Download
-- [Download](https://github.com/Rem01Gaming/encore/releases/tag/4.5)
+- [Download](https://github.com/Rem01Gaming/encore/releases/tag/4.6)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -25,6 +23,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 4.5](/download/version/4.5)
 - [Version 4.4](/download/version/4.4)
 - [Version 4.3](/download/version/4.3)
 - [Version 4.2](/download/version/4.2)

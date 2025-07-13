@@ -1,4 +1,4 @@
-## Encore Tweaks 4.5
+## Encore Tweaks 4.6
 
 **Thanks for using Encore Tweaks!**
 
@@ -6,11 +6,9 @@ Your continued support keeps this project going. If you enjoy the improvements a
 
 ### Changelog
 
-- Fix root detection issue on module files
-- Mitigate buggy thermal throttling on post-startup in old MediaTek devices
-- Fix random reboot and performance dip on some devices
-- Add module banner for KernelSU Next
-- Add option to create WebUI shortcut
-- Add back DDR tweaks for Exynos and Tensor devices
-- Remove MMRL from action redirect WebUI
-- Shrink module size even more
+- Refactor and design changes on the WebUI
+- Implement WebUI X API for file read/write
+- WebUI translation updates
+- Exposes Encore's logging system to other processes/module
+- Add sanity check for dumpsys
+- Other misc changes and optimizations
