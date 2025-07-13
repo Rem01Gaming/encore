@@ -430,6 +430,8 @@ com.vng.pubgmobile
 com.vng.speedvn
 com.wb.goog.scribblenauts3
 com.winlator
+com.winlator.cmod
+com.ludashi.benchmark
 com.wondergames.warpath.gp
 com.xd.TLglobal
 com.xd.dxlzz.taptap
