@@ -10,7 +10,7 @@
         "title": "Pengaturan",
         "dnd_gameplay": "DND Saat Bermain",
         "lite_mode": "Mode Lite",
-        "device_mitigation": "Mitigasi Device",
+        "device_mitigation": "Mitigasi Perangkat",
         "default_cpu_gov": "CPU Governor Default",
         "powersave_cpu_gov": "CPU Governor Hemat Daya"
     },
