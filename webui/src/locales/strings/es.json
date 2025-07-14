@@ -28,7 +28,8 @@
         "save_log_fail": "No se pudieron guardar los registros",
         "unauthorized_mod_title": "Modificación no autorizada detectada",
         "unauthorized_mod_desc": "Este módulo pudo haber sido modificado por un tercero. Por tu seguridad, descarga la versión oficial del sitio web oficial de Encore Tweaks.",
-        "log_saved_desc": "Registros guardados en {0}."
+        "log_saved_desc": "Registros guardados en {0}.",
+        "log_saved_title": "Registros del módulo guardados"
     },
     "actions": {
         "edit_gamelist": "Modificar Lista de Juegos",
