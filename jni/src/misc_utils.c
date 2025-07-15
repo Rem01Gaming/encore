@@ -105,6 +105,42 @@ char* timern(void) {
 }
 
 /***********************************************************************************
+ * Function Name      : check_dumpsys_sanity
+ * Inputs             : None
+ * Returns            : None
+ * Description        : Checks dumpsys sanity, in case tampered by other module or ENOENT.
+ ***********************************************************************************/
+void check_dumpsys_sanity(void) {
+    FILE* file = fopen("/system/bin/dumpsys", "rb");
+    if (!file) {
+        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys: %s\n", strerror(errno));
+        log_encore(LOG_FATAL, "/system/bin/dumpsys: %s", strerror(errno));
+        goto insane;
+    }
+
+    int ch = fgetc(file);
+    if (ch == EOF) {
+        if (feof(file)) {
+            fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys was tampered by kill logger module\n");
+            log_encore(LOG_FATAL, "/system/bin/dumpsys was tampered by kill logger module");
+            goto insane;
+        }
+
+        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys: %s\n", strerror(errno));
+        log_encore(LOG_FATAL, "/system/bin/dumpsys: %s", strerror(errno));
+        goto insane;
+    }
+
+    fclose(file);
+    return;
+
+insane:
+    fclose(file);
+    notify("Something wrong happening in the daemon, please check module log.");
+    exit(EXIT_FAILURE);
+}
+
+/***********************************************************************************
  * Function Name      : is_kanged
  * Inputs             : None
  * Returns            : None

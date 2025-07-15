@@ -77,6 +77,7 @@ extern pid_t game_pid;
 void sighandler(const int signal);
 char* trim_newline(char* string);
 void notify(const char* message);
+void check_dumpsys_sanity(void);
 void is_kanged(void);
 char* timern(void);
 bool return_true(void);
