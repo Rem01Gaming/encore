@@ -20,27 +20,34 @@
 char* gamestart = NULL;
 pid_t game_pid = 0;
 
-int is_file_empty(const char *filename) {
-    FILE *file = fopen(filename, "rb");
+void check_dumpsys_sanity(void) {
+    FILE* file = fopen("/system/bin/dumpsys", "rb");
     if (!file) {
-        perror("fopen failed");
-        return -1;
+        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys: %s\n", strerror(errno));
+        log_encore(LOG_FATAL, "/system/bin/dumpsys: %s", strerror(errno));
+        goto insane;
     }
-    
+
     int ch = fgetc(file);
     if (ch == EOF) {
         if (feof(file)) {
-            fclose(file);
-            return 1;
-        } else {
-            perror("fgetc failed");
-            fclose(file);
-            return -1;
+            fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys was tampered by kill logger module\n");
+            log_encore(LOG_FATAL, "/system/bin/dumpsys was tampered by kill logger module");
+            goto insane;
         }
+
+        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys: %s\n", strerror(errno));
+        log_encore(LOG_FATAL, "/system/bin/dumpsys: %s", strerror(errno));
+        goto insane;
     }
-    
+
     fclose(file);
-    return 0;
+    return;
+
+insane:
+    fclose(file);
+    notify("Something wrong happening in the daemon, please check module log.");
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char* argv[]) {
@@ -86,19 +93,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Sanity check for dumpsys
-    if (access("/system/bin/dumpsys", F_OK) != 0) {
-        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys: inaccessible or not found\n");
-        log_encore(LOG_FATAL, "/system/bin/dumpsys: inaccessible or not found");
-        notify("Something wrong happening in the daemon, please check module log.");
-        exit(EXIT_FAILURE);
-    }
-
-    if (is_file_empty("/system/bin/dumpsys") == 1) {
-        fprintf(stderr, "\033[31mFATAL ERROR:\033[0m /system/bin/dumpsys was tampered by kill logger module.\n");
-        log_encore(LOG_FATAL, "/system/bin/dumpsys was tampered by kill logger module");
-        notify("Please remove your stupid kill logger module.");
-        exit(EXIT_FAILURE);
-    }
+    check_dumpsys_sanity();
 
     // Make sure only one instance is running
     if (create_lock_file() != 0) {
