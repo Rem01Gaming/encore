@@ -19,4 +19,4 @@ All of those information fetched from dumpsys which you can see the logic [here]
 
 ## Workflow diagram
 
-![Workflow diagram of Encore Tweaks daemon](./diagram.webp)
+![Workflow diagram of Encore Tweaks daemon](./diagram.svg)
