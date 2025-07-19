@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Encore Tweaks",
   lang: "en-US",
   ignoreDeadLinks: true,
+  cleanUrls: true,
 
   sitemap: {
     hostname: 'https://encore.rem01gaming.dev'
@@ -108,10 +109,39 @@ export default defineConfig({
       },
       { text: 'Download', link: '/download' }
     ],
+    
+    search: {
+        provider: "local",
+        options: {
+            locales: {
+                root: {
+                    translations: {
+                        button: {
+                            buttonText: "Search Documents",
+                            buttonAriaLabel: "Search Documents",
+                        },
+                        modal: {
+                            noResultsText: "No results could be found",
+                            resetButtonTitle: "Clear the search criteria",
+                            footer: {
+                                selectText: "option",
+                                navigateText: "switchover",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    }, 
 
     footer: {
       message: 'Released under the Apache License 2.0.',
       copyright: 'Copyright &copy 2024-present Rem01Gaming'
+    },
+    
+    editLink: {
+        pattern: 'https://github.com/Rem01Gaming/encore/edit/main/website/docs/:path',
+        text: 'Edit this page in GitHub'
     },
 
     socialLinks: [
