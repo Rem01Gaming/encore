@@ -38,7 +38,8 @@
         "unauthorized_mod_title": "Modificação não autorizada detectada",
         "unauthorized_mod_desc": "Esse módulo pode ter sido modificado por outrem. Para sua segurança, baixe a versão oficial através do site Encore Tweaks.",
         "save_log_fail": "Não foi possível salvar os logs",
-        "log_saved_desc": "Logs salvos em {0}."
+        "log_saved_desc": "Logs salvos em {0}.",
+        "log_saved_title": "Registros Salvos"
     },
     "toast": {
         "reboot_to_apply": "Reinicie seu aparelho pra aplicar as mudanças.",
