@@ -59,3 +59,11 @@ fi
 
 # Start Encore Daemon
 encored
+
+# Handle rare case if Encore Daemon crashed
+# By: Kanagawa Yamada
+
+if ! pgrep -x encored > /dev/null; then # Change if incorrect 
+    /data/adb/modules/encore/service.sh # Change if path is not correct 
+fi
+    
