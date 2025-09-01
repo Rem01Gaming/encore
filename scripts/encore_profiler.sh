@@ -108,39 +108,64 @@ mtk_gpufreq_midfreq_index() {
 }
 
 ###################################
+# Yamada Line 
+###################################
+
+yamada_cpufreq_mid_perf() {
+    for path in /sys/devices/system/cpu/*/cpufreq; do
+	    mid_freq=$(which_midfreq "$path/scaling_available_frequencies")
+		apply "$mid_freq" "$path/scaling_min_freq"
+    done
+}
+
+yamada_cpufreq_ppm_mid_perf() {
+    cluster=0
+    for path in /sys/devices/system/cpu/cpufreq/policy*; do
+        mid_freq=$(which_midfreq "$path/scaling_available_frequencies")
+        apply "$cluster $mid_freq" "/proc/ppm/policy/hard_userlimit_min_cpu_freq"
+        ((cluster++))
+    done
+}
+
+###################################
 # Frequency settings
 ###################################
 
 cpufreq_ppm_max_perf() {
-	cluster=-1
-	for path in /sys/devices/system/cpu/cpufreq/policy*; do
-		((cluster++))
-		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
-
-		[ $LITE_MODE -eq 1 ] && {
-			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-			apply "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-			continue
-		}
-
-		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
-	done
+	if [ $LITE_MODE -eq 1 ]; then
+		yamada_cpufreq_ppm_mid_perf
+		cluster=-1
+		for path in /sys/devices/system/cpu/cpufreq/policy*; do
+			((cluster++))
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+		done
+	else
+		cluster=-1
+		for path in /sys/devices/system/cpu/cpufreq/policy*; do
+			((cluster++))
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+			apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+		done
+	fi
 }
 
+
 cpufreq_max_perf() {
-	for path in /sys/devices/system/cpu/*/cpufreq; do
-		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-		apply "$cpu_maxfreq" "$path/scaling_max_freq"
-
-		[ $LITE_MODE -eq 1 ] && {
-			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-			apply "$cpu_midfreq" "$path/scaling_min_freq"
-			continue
-		}
-
-		apply "$cpu_maxfreq" "$path/scaling_min_freq"
-	done
+	if [ $LITE_MODE -eq 1 ]; then
+		yamada_cpufreq_mid_perf
+		for path in /sys/devices/system/cpu/*/cpufreq; do
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			apply "$cpu_maxfreq" "$path/scaling_max_freq"
+		done
+	else
+		for path in /sys/devices/system/cpu/*/cpufreq; do
+			cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
+			apply "$cpu_maxfreq" "$path/scaling_max_freq"
+			apply "$cpu_maxfreq" "$path/scaling_min_freq"
+		done
+	fi
 	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 }
 
