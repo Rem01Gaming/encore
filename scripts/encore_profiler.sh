@@ -668,11 +668,13 @@ perfcommon() {
 		fi
 	done
 
-	apply 1 /proc/sys/net/ipv4/tcp_low_latency
-	apply 1 /proc/sys/net/ipv4/tcp_ecn
-	apply 3 /proc/sys/net/ipv4/tcp_fastopen
-	apply 1 /proc/sys/net/ipv4/tcp_sack
-	apply 0 /proc/sys/net/ipv4/tcp_timestamps
+	for ipv4 in /proc/sys/net/ipv4; do
+ 		apply 1 "$ipv4/tcp_low_latency"
+   		apply 1 "$ipv4/tcp_ecn"
+	 	apply 3 "$ipv4/tcp_fastopen"
+   		apply 1 "$ipv4/tcp_sack"
+	 	apply 0 "$ipv4/tcp_timestamps"
+ 	done
 
 	# Limit max perf event processing time to this much CPU usage
 	apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
