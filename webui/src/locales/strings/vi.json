@@ -30,6 +30,7 @@
     },
     "settings": {
         "title": "Cài đặt",
+        "language": "Ngôn ngữ",
         "dnd_gameplay": "DND khi chơi game",
         "lite_mode": "Chế độ Lite",
         "device_mitigation": "Sửa lỗi thiết bị",

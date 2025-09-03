@@ -35,6 +35,7 @@
     },
     "settings": {
         "title": "Setelan",
+        "language": "Basa",
         "dnd_gameplay": "DND Nalika Main",
         "lite_mode": "Mode Lite",
         "device_mitigation": "Mitigasi Piranti",

@@ -13,3 +13,7 @@
 .card_border {
   border: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
 }
+
+html.modal-open {
+  overflow: hidden;
+}

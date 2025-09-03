@@ -8,6 +8,7 @@
     },
     "settings": {
         "title": "設定",
+        "language": "言語",
         "dnd_gameplay": "ゲームプレイ時にサイレントモード",
         "lite_mode": "ライトモード",
         "device_mitigation": "デバイス軽減",
