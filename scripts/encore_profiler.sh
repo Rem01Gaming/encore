@@ -43,6 +43,8 @@ fi
 # Device specific bug workaround
 DEVICE_MITIGATION="$(<$MODULE_CONFIG/device_mitigation)"
 
+# IPv4 Path
+ipv4="/proc/sys/net/ipv4"
 ###################################
 # Common Function
 ###################################
@@ -668,11 +670,11 @@ perfcommon() {
 		fi
 	done
 
-	apply 1 /proc/sys/net/ipv4/tcp_low_latency
-	apply 1 /proc/sys/net/ipv4/tcp_ecn
-	apply 3 /proc/sys/net/ipv4/tcp_fastopen
-	apply 1 /proc/sys/net/ipv4/tcp_sack
-	apply 0 /proc/sys/net/ipv4/tcp_timestamps
+	apply 1 "$ipv4/tcp_low_latency"
+	apply 1 "$ipv4/tcp_ecn"
+	apply 3 "$ipv4/tcp_fastopen"
+	apply 1 "$ipv4/tcp_sack"
+	apply 0 "$ipv4/tcp_timestamps"
 
 	# Limit max perf event processing time to this much CPU usage
 	apply 3 /proc/sys/kernel/perf_cpu_time_max_percent
