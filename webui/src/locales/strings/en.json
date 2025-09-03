@@ -8,6 +8,7 @@
     },
     "settings": {
         "title": "Settings",
+        "cpu_governor_title": "CPU Governor",
         "dnd_gameplay": "DND on Gameplay",
         "lite_mode": "Lite Mode",
         "device_mitigation": "Device Mitigation",
