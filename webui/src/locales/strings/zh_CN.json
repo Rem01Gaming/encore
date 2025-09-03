@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "设置",
-        "language": "语言",
         "dnd_gameplay": "游戏勿扰模式",
         "lite_mode": "轻量模式",
         "device_mitigation": "设备兼容模式",

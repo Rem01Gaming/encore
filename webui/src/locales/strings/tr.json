@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "Ayarlar",
-        "language": "Dil",
         "dnd_gameplay": "Oyun Sırasında Rahatsız Etme",
         "lite_mode": "Hafif Mod",
         "device_mitigation": "Cihaz Düzeltme",

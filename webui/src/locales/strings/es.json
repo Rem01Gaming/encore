@@ -8,7 +8,6 @@
     },
     "settings": {
         "device_mitigation": "Mitigación de Dispositivo",
-        "language": "Idioma",
         "lite_mode": "Modo Lite",
         "default_cpu_gov": "Gobernador de CPU Predeterminado",
         "title": "Configuraciones",

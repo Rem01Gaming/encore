@@ -25,7 +25,6 @@
     },
     "settings": {
         "title": "الإعدادات",
-        "language": "اللغة",
         "dnd_gameplay": "عدم الإزعاج أثناء اللعب",
         "lite_mode": "وضع Lite",
         "device_mitigation": "تخفيف الجهاز",

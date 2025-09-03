@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "Configurações",
-        "language": "Idioma",
         "dnd_gameplay": "Não perturbar no jogo",
         "lite_mode": "Modo lite",
         "device_mitigation": "Mitigação de dispositivo",

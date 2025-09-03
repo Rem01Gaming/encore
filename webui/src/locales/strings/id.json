@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "Pengaturan",
-        "language": "Bahasa",
         "dnd_gameplay": "DND Saat Bermain",
         "lite_mode": "Mode Lite",
         "device_mitigation": "Mitigasi Perangkat",

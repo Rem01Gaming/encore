@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "Настройки",
-        "language": "Язык",
         "dnd_gameplay": "DND в геймплее",
         "lite_mode": "Режим Lite",
         "device_mitigation": "Смягчение проблем устройства",

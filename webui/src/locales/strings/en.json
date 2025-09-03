@@ -8,7 +8,6 @@
     },
     "settings": {
         "title": "Settings",
-        "language": "Language",
         "dnd_gameplay": "DND on Gameplay",
         "lite_mode": "Lite Mode",
         "device_mitigation": "Device Mitigation",
