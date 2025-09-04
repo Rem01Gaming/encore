@@ -265,15 +265,17 @@ mediatek_performance() {
 		apply 0 /proc/gpufreq/gpufreq_opp_freq
 		apply -1 /proc/gpufreqv2/fix_target_opp_index
 
-		# Set min freq via GED
-		if [ -d /proc/gpufreqv2 ]; then
-			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreqv2/gpu_working_opp_table)
-		else
-			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreq/gpufreq_opp_dump)
-		fi
-
-		apply $mid_oppfreq /sys/kernel/ged/hal/custom_boost_gpu_freq
+	# Set freq via GED
+	if [ "$LITE_MODE" -eq 1 ]; then
+    	if [ -d /proc/gpufreqv2 ]; then
+        	opp_freq_index=$(mtk_gpufreq_midfreq_index /proc/gpufreqv2/gpu_working_opp_table)
+    	else
+        	opp_freq_index=$(mtk_gpufreq_midfreq_index /proc/gpufreq/gpufreq_opp_dump)
+    fi
+	else
+		opp_freq_index=0
 	fi
+	apply "$opp_freq_index" /sys/kernel/ged/hal/custom_boost_gpu_freq
 
 	# Disable GPU Power limiter
 	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
