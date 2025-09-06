@@ -38,7 +38,8 @@
         "unauthorized_mod_title": "不正な変更が検出されました",
         "unauthorized_mod_desc": "このモジュールは第三者によって改変されている可能性があります。安全性の確保のため、Encore Tweaks の公式ウェブサイトから公式バージョンをダウンロードしてください。",
         "save_log_fail": "ログを保存できません",
-        "log_saved_desc": "ログは「{0}」に保存されました。"
+        "log_saved_desc": "ログは「{0}」に保存されました。",
+        "log_saved_title": "モジュールのログを保存しました"
     },
     "toast": {
         "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
