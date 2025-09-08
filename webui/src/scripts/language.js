@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// Import core translations statically
 import enTranslations from '../locales/strings/en.json';
 import languages from '../locales/languages.json';
 
@@ -108,11 +107,11 @@ function applyTranslations(translations) {
 }
 
 async function initI18n() {
-  const settingsBtn = document.getElementById('settings_btn');
-  const settingsModal = document.getElementById('settings_modal');
+  const languageBtn = document.getElementById('language_btn');
+  const languageModal = document.getElementById('language_modal');
   const languageSelection = document.getElementById('language_selection');
 
-  if (!settingsBtn || !settingsModal || !languageSelection) return;
+  if (!languageBtn || !languageModal || !languageSelection) return;
 
   try {
     // Merge languages with English as default
@@ -156,9 +155,9 @@ async function initI18n() {
     applyTranslations(currentTranslations);
     
     // Handle settings button click
-    settingsBtn.addEventListener('click', () => {
+    languageBtn.addEventListener('click', () => {
       document.documentElement.classList.add('modal-open');
-      settings_modal.showModal();
+      language_modal.showModal();
     });
 
     // Handle language selection
@@ -171,7 +170,7 @@ async function initI18n() {
             currentTranslations = await loadTranslations(newLang);
             applyTranslations(currentTranslations);
             localStorage.setItem('selectedLanguage', newLang);
-            settingsModal.close();
+            languageModal.close();
           } catch (error) {
             currentTranslations = oldTranslations;
             console.error('Language switch failed:', error);

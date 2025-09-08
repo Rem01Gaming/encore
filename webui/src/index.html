@@ -15,10 +15,9 @@
       <div class="flex justify-between items-center mb-6 text-on-surface">
         <h1 data-i18n="common.module" class="text-lg font-semibold"></h1>
         <div>
-          <button id="settings_btn" class="btn btn-circle btn-ghost btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 stroke-current">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.608 3.292 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          <button id="language_btn" class="btn btn-circle btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-5 w-5 stroke-current">
+              <path fill="none" stroke="currentColor" stroke-width="2" d="M12,23 C18.0751322,23 23,18.0751322 23,12 C23,5.92486775 18.0751322,1 12,1 C5.92486775,1 1,5.92486775 1,12 C1,18.0751322 5.92486775,23 12,23 Z M12,23 C15,23 16,18 16,12 C16,6 15,1 12,1 C9,1 8,6 8,12 C8,18 9,23 12,23 Z M2,16 L22,16 M2,8 L22,8"/>
             </svg>
           </button>
         </div>
@@ -209,16 +208,7 @@
         </div>
       </dialog>
 
-      <dialog id="custom_modal" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          <h3 id="custom_modal_title" class="text-lg font-bold"></h3>
-          <p id="custom_modal_desc" class="py-4"></p>
-        </div>
-      </dialog>
-    <dialog id="settings_modal" class="modal">
+      <dialog id="language_modal" class="modal">
         <div class="modal-box bg-surface-container text-on-surface card_border p-6">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -226,6 +216,16 @@
           <div id="language_selection" class="grid grid-cols-1 gap-2 mt-4">
              <!-- Language buttons will be inserted here -->
           </div>
+        </div>
+      </dialog>
+
+      <dialog id="custom_modal" class="modal">
+        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 id="custom_modal_title" class="text-lg font-bold"></h3>
+          <p id="custom_modal_desc" class="py-4"></p>
         </div>
       </dialog>
 
