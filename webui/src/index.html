@@ -15,7 +15,12 @@
       <div class="flex justify-between items-center mb-6 text-on-surface">
         <h1 data-i18n="common.module" class="text-lg font-semibold"></h1>
         <div>
-          <select id="languageSelector" class="select select-sm bg-surface-container text-on-surface"></select>
+          <button id="settings_btn" class="btn btn-circle btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.608 3.292 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -144,7 +149,11 @@
             <div class="peer h-6 w-11 rounded-full border border-outline bg-surface-variant after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-4 after:border-surface-variant after:bg-outline after:transition-all after:content-[''] peer-checked:border-primary peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-on-primary peer-checked:after:bg-on-primary"></div>
           </label>
         </div>
+      </div>
 
+      <!-- CPU Governor Settings -->
+      <div class="bg-surface-container mb-4 p-4 rounded-xl card_border">
+        <h2 data-i18n="settings.cpu_governor_title" class="text-base font-semibold mb-2 text-on-surface"></h2>
         <div class="py-1 mb-2">
           <p class="mb-2" data-i18n="settings.default_cpu_gov"></p>
           <select id="default_cpu_gov" class="select bg-primary text-xs text-on-primary w-full p-2">
@@ -176,7 +185,7 @@
 
       <!-- Modals -->
       <dialog id="info_modal" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border">
+        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -186,7 +195,7 @@
       </dialog>
 
       <dialog id="edit_gamelist" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border">
+        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -201,7 +210,7 @@
       </dialog>
 
       <dialog id="custom_modal" class="modal">
-        <div class="modal-box bg-surface-container text-on-surface card_border">
+        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -209,6 +218,17 @@
           <p id="custom_modal_desc" class="py-4"></p>
         </div>
       </dialog>
+    <dialog id="settings_modal" class="modal">
+        <div class="modal-box bg-surface-container text-on-surface card_border p-6">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <div id="language_selection" class="grid grid-cols-1 gap-2 mt-4">
+             <!-- Language buttons will be inserted here -->
+          </div>
+        </div>
+      </dialog>
+
     </main>
   </body>
 </html>

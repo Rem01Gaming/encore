@@ -37,6 +37,7 @@ const runCommand = async (cmd, cwd = null) => {
 const showCustomModal = (title, msg) => {
   document.getElementById('custom_modal_title').textContent = title;
   document.getElementById('custom_modal_desc').textContent = msg;
+  disableBodyScroll();
   custom_modal.showModal();
 };
 
@@ -82,7 +83,16 @@ const openInfoModal = (button) => {
   document.getElementById('info_modal_desc').textContent = getTranslation(descKey);
   
   // Show modal
+  disableBodyScroll();
   info_modal.showModal();
+};
+
+const disableBodyScroll = () => {
+  document.documentElement.classList.add('modal-open');
+};
+
+const enableBodyScroll = () => {
+  document.documentElement.classList.remove('modal-open');
 };
 
 /* ======================== SYSTEM INFO ======================== */
@@ -338,7 +348,10 @@ const saveGamelist = async () => {
 
 /* ======================== EVENT LISTENERS ======================== */
 document.getElementById('save_log_btn').addEventListener('click', saveLog);
-document.getElementById('edit_gamelist_btn').addEventListener('click', fetchGamelist);
+document.getElementById('edit_gamelist_btn').addEventListener('click', () => {
+  disableBodyScroll();
+  fetchGamelist();
+});
 document.getElementById('save_gamelist_btn').addEventListener('click', saveGamelist);
 document.getElementById('create_shortcut_btn').addEventListener('click', createShortcut);
 document.getElementById('donate_btn').addEventListener('click', () => openWebsite(donateUrl));
@@ -348,6 +361,10 @@ document.querySelectorAll('.info-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     openInfoModal(this);
   });
+});
+
+document.querySelectorAll('dialog').forEach(dialog => {
+  dialog.addEventListener('close', enableBodyScroll);
 });
 
 /* ======================== INITIALIZATION ======================== */

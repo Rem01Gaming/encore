@@ -8,6 +8,7 @@
     },
     "settings": {
         "title": "Pengaturan",
+        "cpu_governor_title": "CPU Governor",
         "dnd_gameplay": "DND Saat Bermain",
         "lite_mode": "Mode Lite",
         "device_mitigation": "Mitigasi Perangkat",

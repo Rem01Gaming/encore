@@ -108,20 +108,24 @@ function applyTranslations(translations) {
 }
 
 async function initI18n() {
-  const selector = document.getElementById('languageSelector');
-  if (!selector) return;
+  const settingsBtn = document.getElementById('settings_btn');
+  const settingsModal = document.getElementById('settings_modal');
+  const languageSelection = document.getElementById('language_selection');
+
+  if (!settingsBtn || !settingsModal || !languageSelection) return;
 
   try {
     // Merge languages with English as default
     const allLanguages = { en: "English", ...languages };
 
-    // Populate selector
-    selector.innerHTML = '';
+    // Populate language selection modal
+    languageSelection.innerHTML = '';
     for (const [code, name] of Object.entries(allLanguages)) {
-      const option = document.createElement('option');
-      option.value = code;
-      option.textContent = name;
-      selector.appendChild(option);
+      const button = document.createElement('button');
+      button.textContent = name;
+      button.dataset.lang = code;
+      button.className = 'btn btn-block bg-primary hover:bg-primary text-on-primary py-1';
+      languageSelection.appendChild(button);
     }
 
     // Determine initial language
@@ -148,27 +152,34 @@ async function initI18n() {
       }
     }
     
-    selector.value = lang;
     currentTranslations = await loadTranslations(lang);
     applyTranslations(currentTranslations);
     
-    // Handle language change
-    selector.addEventListener('change', async (e) => {
-      const newLang = e.target.value;
-      const oldTranslations = currentTranslations;
-      
-      try {
-        currentTranslations = await loadTranslations(newLang);
-        applyTranslations(currentTranslations);
-        localStorage.setItem('selectedLanguage', newLang);
-      } catch (error) {
-        currentTranslations = oldTranslations;
-        selector.value = lang;
-        console.error('Language switch failed:', error);
-      }
-      
-      lang = newLang;
+    // Handle settings button click
+    settingsBtn.addEventListener('click', () => {
+      document.documentElement.classList.add('modal-open');
+      settings_modal.showModal();
     });
+
+    // Handle language selection
+    languageSelection.addEventListener('click', async (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        const newLang = e.target.dataset.lang;
+        if (newLang) {
+          const oldTranslations = currentTranslations;
+          try {
+            currentTranslations = await loadTranslations(newLang);
+            applyTranslations(currentTranslations);
+            localStorage.setItem('selectedLanguage', newLang);
+            settingsModal.close();
+          } catch (error) {
+            currentTranslations = oldTranslations;
+            console.error('Language switch failed:', error);
+          }
+        }
+      }
+    });
+
   } catch (error) {
     console.error('i18n initialization failed:', error);
   }
