@@ -84,7 +84,7 @@ export default defineConfig({
         text: 'Donate',
         items: [
           { text: 'Saweria', link: 'https://saweria.co/Rem01Gaming' },
-          { text: 'Buymeacoffee', link: 'https://www.buymeacoffee.com/Rem01Gaming' }
+          { text: 'Sociabuzz', link: 'https://sociabuzz.com/Rem01Gaming' }
         ]
       },
       { text: 'Download', link: '/download' }
