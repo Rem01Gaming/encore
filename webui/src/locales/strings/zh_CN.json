@@ -12,7 +12,8 @@
         "lite_mode": "轻量模式",
         "device_mitigation": "设备兼容模式",
         "default_cpu_gov": "默认 CPU 调速器",
-        "powersave_cpu_gov": "省电 CPU 调速器"
+        "powersave_cpu_gov": "省电 CPU 调速器",
+        "cpu_governor_title": "CPU调速器"
     },
     "actions": {
         "title": "操作",
