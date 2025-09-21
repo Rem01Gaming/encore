@@ -12,7 +12,8 @@
         "lite_mode": "Режим Lite",
         "device_mitigation": "Смягчение проблем устройства",
         "default_cpu_gov": "CPU Governor по умолчанию",
-        "powersave_cpu_gov": "Энергосберегающий CPU Governor"
+        "powersave_cpu_gov": "Энергосберегающий CPU Governor",
+        "cpu_governor_title": "Управление процессором"
     },
     "actions": {
         "title": "Действия",
