@@ -7,8 +7,8 @@
         "androidSDK": "Android SDK"
     },
     "modal": {
-        "dnd_title": "Ora Gangguan",
-        "dnd_desc": "Aktifake mode ora gangguan nalika dolanan game. Ngalang-alangi notifikasi lan telpon supaya sampeyan bisa fokus dolanan tanpa gangguan.",
+        "dnd_title": "Mode Hening",
+        "dnd_desc": "Aktifake mode hening nalika dolanan game. Ngalang-alangi notifikasi lan telpon supaya sampeyan bisa fokus dolanan tanpa gangguan.",
         "lite_mode_title": "Mode Lite",
         "lite_mode_desc": "Opsi iki bakal nyuda overheating lan konsumsi daya sajrone game kanthi ngidini CPU lan komponen liyane bisa mlaku kanthi frekuensi sing luwih murah tinimbang terus-terusan ing frekuensi paling dhuwur, iki bakal mengaruhi kinerja game sakabèhé.",
         "device_mitigation_title": "Mitigasi Piranti",
@@ -39,7 +39,8 @@
         "lite_mode": "Mode Lite",
         "device_mitigation": "Mitigasi Piranti",
         "default_cpu_gov": "Governor CPU Gawan",
-        "powersave_cpu_gov": "Governor CPU Irit Daya"
+        "powersave_cpu_gov": "Governor CPU Irit Daya",
+        "cpu_governor_title": "CPU Governor"
     },
     "toast": {
         "has_shortcut": "Pintasan wis ana.",
