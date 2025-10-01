@@ -12,7 +12,8 @@
         "lite_mode": "Modo lite",
         "device_mitigation": "Mitigação de dispositivo",
         "default_cpu_gov": "Governador padrão da CPU",
-        "powersave_cpu_gov": "Governador de CPU economia de energia"
+        "powersave_cpu_gov": "Governador de CPU economia de energia",
+        "cpu_governor_title": "Governador de CPU"
     },
     "actions": {
         "title": "Ações",
