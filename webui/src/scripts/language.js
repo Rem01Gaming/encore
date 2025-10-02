@@ -30,21 +30,19 @@ const translationModules = import.meta.glob(
 // Synchronous translation lookup
 // This function also will parse args from it's input
 function getTranslationSync(key, ...args) {
-  if (!currentTranslations) {
-    console.error('Translations not loaded!');
-    return key;
-  }
-
   const keys = key.split('.');
-  let value = currentTranslations;
+  let value = null;
   
-  // Try current language
-  for (const k of keys) {
-    value = value?.[k];
-    if (!value) break;
+  // First try current language
+  if (currentTranslations) {
+    value = currentTranslations;
+    for (const k of keys) {
+      value = value?.[k];
+      if (!value) break;
+    }
   }
   
-  // Fallback to English
+  // If not found in current language, fallback to English
   if (!value) {
     value = cachedEnglishTranslations;
     for (const k of keys) {
@@ -53,7 +51,7 @@ function getTranslationSync(key, ...args) {
     }
   }
 
-  // Return key if no translation found
+  // Return key if no translation found in either language
   if (!value) return key;
 
   // Handle placeholder replacement
@@ -91,18 +89,13 @@ async function loadTranslations(lang) {
 }
 
 function applyTranslations(translations) {
+  // Update current translations reference
+  currentTranslations = translations;
+  
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const keys = el.getAttribute('data-i18n').split('.');
-    let value = translations;
-    
-    for (const key of keys) {
-      value = value?.[key];
-      if (value === undefined) break;
-    }
-    
-    if (value !== undefined) {
-      el.textContent = value;
-    }
+    const key = el.getAttribute('data-i18n');
+    const translation = getTranslationSync(key);
+    el.textContent = translation;
   });
 }
 
