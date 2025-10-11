@@ -18,6 +18,7 @@ com.LanPiaoPiao.PlantsVsZombiesRH
 com.MOBGames.PoppyMobileChap1
 com.OxGames.Pluvia
 com.PigeonGames.Phigros
+com.PigeonGames.Rizline
 com.ProjectMoon.LimbusCompany
 com.Psyonix.RL2D
 com.RickyG.DONTFORGET
@@ -39,6 +40,7 @@ com.YoStarEN.MahjongSoul
 com.YoStarJP.MajSoul
 com.YoStar.AetherGazer
 com.YostarJP.BlueArchive
+com.YoStarJP.Arknights
 com.ZeroCastleGameStudioINTL.StrikeBusterPrototype
 com.ZeroCastleGameStudio.StrikeBusterPrototype
 com.actgames.bbee
@@ -513,6 +515,7 @@ skyline.purple
 skynet.cputhrottlingtest
 tw.sonet.allbw
 tw.sonet.princessconnect
+tw.txwy.and.arknights
 uk.co.powdertoy.tpt
 vng.games.revelation.mobile
 www.townofmagic.com
