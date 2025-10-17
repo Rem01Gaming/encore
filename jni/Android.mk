@@ -2,21 +2,22 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := encored
-LOCAL_SRC_FILES := \
-    main.c \
-    src/cmd_utils.c \
-    src/encore_log.c \
-    src/encore_profiler.c \
-    src/file_utils.c \
-    src/process_utils.c \
-    src/misc_utils.c \
-    src/mlbb_handler.c
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_C_INCLUDES := \
+	$(LOCAL_PATH)/include \
+    $(LOCAL_PATH)/external/rapidjson/include \
+    $(LOCAL_PATH)/external/spdlog/include \
+    $(LOCAL_PATH)/external/x-watcher/include
 
-LOCAL_CFLAGS := -DNDEBUG -Wall -Wextra -Werror \
-                -pedantic-errors -Wpedantic \
-                -O2 -std=c23 -fPIC -flto
+LOCAL_STATIC_LIBRARIES := libdumpsys libencorecfg libencoreutil
 
-LOCAL_LDFLAGS := -flto
+LOCAL_SRC_FILES := Main.cpp
+
+LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O2 -flto
+LOCAL_CPPFLAGS += -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized
+
+LOCAL_LDFLAGS += -flto
+
 include $(BUILD_EXECUTABLE)
+
+include $(LOCAL_PATH)/src/Android.mk

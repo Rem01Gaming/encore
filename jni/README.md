@@ -7,16 +7,6 @@ Encore Tweaks works by using information such as:
 - Screen state, whenever it's awake or not and...
 - Battery saver state (yes the ones on your qs)
 
-All of those information fetched from dumpsys which you can see the logic [here](src/encore_profiler.c).
-
-## Project Structure
-
-- include/* -> headers
-- src/* -> Other functions (files named semantically)
-- main.c -> Main daemon code
-- Android.mk -> Android NDK thing
-- Application.mk -> Android NDK thing
-
 ## Workflow diagram
 
 ![Workflow diagram of Encore Tweaks daemon](./diagram.svg)
