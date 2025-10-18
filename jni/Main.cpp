@@ -169,6 +169,7 @@ void encore_main_daemon(void) {
 
            LOGI("Applying performance profile for {} (PID: {})", active_game->package_name, game_pid);
            apply_performance_profile(active_game->lite_mode, active_game->package_name, game_pid);
+           pid_tracker.set_pid(game_pid);
 
            if (active_game->enable_dnd) {
                game_requested_dnd = true;
