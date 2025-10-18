@@ -7,8 +7,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
     result.screen_awake = false;
     result.recent_app.clear();
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(
-        popen("/system/bin/dumpsys window displays", "r"), pclose);
+    auto pipe = popen_direct({"/system/bin/dumpsys", "window", "displays"});
 
     if (!pipe) {
         std::string error_msg = "popen failed: ";
@@ -102,8 +101,7 @@ void Power(DumpsysPower &result) {
     result.battery_saver = false;
     result.battery_saver_sticky = false;
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(
-        popen("/system/bin/dumpsys power", "r"), pclose);
+    auto pipe = popen_direct({"/system/bin/dumpsys", "power"});
 
     if (!pipe) {
         std::string error_msg = "popen failed: ";
@@ -175,8 +173,7 @@ void Power(DumpsysPower &result) {
 }
 
 pid_t GetAppPID(const std::string &package_name) {
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(
-        popen("/system/bin/dumpsys activity top", "r"), pclose);
+    auto pipe = popen_direct({"/system/bin/dumpsys", "activity", "top"});
 
     if (!pipe) {
         std::string error_msg = "popen failed: ";

@@ -1,11 +1,11 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+#include <ShellUtility.hpp>
 
 struct RecentAppList {
     std::string package_name;

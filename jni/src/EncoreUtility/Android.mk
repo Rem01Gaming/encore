@@ -12,8 +12,7 @@ LOCAL_SRC_FILES := \
 	FileUtility.cpp \
 	MiscUtility.cpp \
 	ProcessUtility.cpp \
-	Profiler.cpp \
-	ShellUtility.cpp
+	Profiler.cpp
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

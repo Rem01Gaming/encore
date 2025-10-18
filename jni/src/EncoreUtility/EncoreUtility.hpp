@@ -41,18 +41,6 @@ bool create_lock_file(void);
 bool check_dumpsys_sanity(void);
 
 /**
- * @brief Executes a shell command with formatted arguments.
- *
- * This function is a wrapper around the standard `system()` call, providing `printf`-like
- * formatting for constructing the command string.
- *
- * @param format A format string as you would use with `printf`.
- * @param ... Additional arguments to be formatted into the command string.
- * @return The return value of the `system()` call.
- */
-int systemv(const char* format, ...);
-
-/**
  * @brief Retrieves the UID of a given package name by checking its data directory.
  *
  * @param package_name The package name of the application (e.g., "com.termux").

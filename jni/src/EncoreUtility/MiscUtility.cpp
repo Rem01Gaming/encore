@@ -16,6 +16,8 @@
 
 #include "EncoreUtility.hpp"
 
+#include <ShellUtility.hpp>
+
 void set_do_not_disturb(bool do_not_disturb) {
     if (do_not_disturb) {
         system("cmd notification set_dnd priority");

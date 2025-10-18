@@ -22,6 +22,7 @@
 
 #include <Dumpsys.hpp>
 #include <PIDTracker.hpp>
+#include <ShellUtility.hpp>
 #include <Encore.hpp>
 #include <EncoreConfig.hpp>
 #include <EncoreLog.hpp>
@@ -68,8 +69,7 @@ void encore_main_daemon(void) {
        static bool use_settings_method = true;
 
        if (use_settings_method) {
-           std::unique_ptr<FILE, decltype(&pclose)> pipe(
-               popen("/system/bin/cmd settings get global low_power", "r"), pclose);
+           auto pipe = popen_direct({"/system/bin/cmd", "settings", "get", "global", "low_power"});
 
            if (pipe) {
                char buffer[16];

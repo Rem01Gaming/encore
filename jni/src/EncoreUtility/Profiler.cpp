@@ -17,7 +17,7 @@
 #include "EncoreUtility.hpp"
 
 void run_perfcommon(void) {
-    if (systemv("encore_profiler perfcommon")) {
+    if (system("encore_profiler perfcommon")) {
         LOGE("Unable to execute profiler changes to perfcommon");
     }
 }
