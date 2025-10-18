@@ -14,6 +14,8 @@
 * limitations under the License.
  */
 
+#include <vector>
+
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
 

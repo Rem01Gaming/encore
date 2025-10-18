@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <thread>
 #include <unordered_map>
+#include <vector>
 
 #include <Dumpsys.hpp>
 #include <PIDTracker.hpp>

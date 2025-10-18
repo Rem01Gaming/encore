@@ -18,6 +18,7 @@
 #define ENCORE_H
 
 #include <string>
+#include <vector>
 
 #define NOTIFY_TITLE "Encore Tweaks"
 #define LOG_TAG "EncoreTweaks"
