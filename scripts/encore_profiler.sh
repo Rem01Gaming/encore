@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-# shellcheck disable=SC2013
+# shellcheck disable=SC2317,SC3006,SC3018,SC3034,SC3057,SC3037
 
 ###################################
 # Variables
@@ -26,9 +26,6 @@ MODULE_CONFIG="/data/adb/.config/encore"
 
 # SoC recognition
 SOC=$(<$MODULE_CONFIG/soc_recognition)
-
-# Lite mode
-LITE_MODE=$(<$MODULE_CONFIG/lite_mode)
 
 # PPM policies settings for MediaTek devices
 PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
@@ -65,15 +62,6 @@ change_cpu_gov() {
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
 	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	chmod 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
-}
-
-set_dnd() {
-	case $1 in
-	# Turn off DND mode
-	0) cmd notification set_dnd off ;;
-	# Turn on DND mode
-	1) cmd notification set_dnd priority ;;
-	esac
 }
 
 ###################################
@@ -312,22 +300,30 @@ snapdragon_performance() {
 			/sys/class/devfreq/*cpubw* \
 			/sys/class/devfreq/*kgsl-ddr-qos*; do
 
-			[ $LITE_MODE -eq 1 ] &&
-				devfreq_mid_perf "$path" ||
+			if [ $LITE_MODE -eq 1 ]; then
+				devfreq_mid_perf "$path"
+			else
 				devfreq_max_perf "$path"
+			fi
 		done &
 
 		for component in DDR LLCC L3; do
 			path="/sys/devices/system/cpu/bus_dcvs/$component"
-			[ "$LITE_MODE" -eq 1 ] &&
-				qcom_cpudcvs_mid_perf "$path" ||
+			if [ "$LITE_MODE" -eq 1 ]; then
+				qcom_cpudcvs_mid_perf "$path"
+			else
 				qcom_cpudcvs_max_perf "$path"
+			fi
 		done &
 	}
 
 	# GPU tweak
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
-	[ "$LITE_MODE" -eq 0 ] && devfreq_max_perf "$gpu_path" || devfreq_mid_perf "$gpu_path"
+	if [ "$LITE_MODE" -eq 0 ]; then
+		devfreq_max_perf "$gpu_path"
+	else
+		devfreq_mid_perf "$gpu_path"
+	fi
 
 	# Disable GPU Bus split
 	apply 0 /sys/class/kgsl/kgsl-3d0/bus_split
@@ -372,9 +368,11 @@ exynos_performance() {
 	# DRAM and Buses Frequency
 	[ $DEVICE_MITIGATION -eq 0 ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
-			[ $LITE_MODE -eq 1 ] &&
-				devfreq_mid_perf "$path" ||
+			if [ $LITE_MODE -eq 1 ]; then
+				devfreq_mid_perf "$path"
+			else
 				devfreq_max_perf "$path"
+			fi
 		done &
 	}
 }
@@ -409,9 +407,11 @@ tensor_performance() {
 	# DRAM frequency
 	[ $DEVICE_MITIGATION -eq 0 ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
-			[ $LITE_MODE -eq 1 ] &&
-				devfreq_mid_perf "$path" ||
+			if [ $LITE_MODE -eq 1 ]; then
+				devfreq_mid_perf "$path"
+			else
 				devfreq_max_perf "$path"
+			fi
 		done &
 	}
 }
@@ -728,6 +728,9 @@ perfcommon() {
 }
 
 performance_profile() {
+  LITE_MODE=0
+  [ "$1" = "lite" ] && LITE_MODE=1
+
 	# Enable Do not Disturb
 	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 1
 
@@ -776,23 +779,29 @@ performance_profile() {
 	for path in /sys/class/devfreq/*.ufshc \
 		/sys/class/devfreq/mmc*; do
 
-		[ $LITE_MODE -eq 1 ] &&
-			devfreq_mid_perf "$path" ||
+		if [ $LITE_MODE -eq 1 ]; then
+			devfreq_mid_perf "$path"
+		else
 			devfreq_max_perf "$path"
+		fi
 	done &
 
 	# Set CPU governor to performance.
-	# performance governor in this case is only used for "flex"
-	# since the frequencies already maxed out (ifykyk).
 	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
 	# applied (some device hates performance governor).
-	[ $LITE_MODE -eq 0 ] && [ $DEVICE_MITIGATION -eq 0 ] &&
-		change_cpu_gov performance ||
+	if [ $LITE_MODE -eq 0 ] && [ $DEVICE_MITIGATION -eq 0 ]; then
+		change_cpu_gov performance
+	else
 		change_cpu_gov "$DEFAULT_CPU_GOV"
+	fi
 
 	# Force CPU to highest possible frequency.
-	[ -d /proc/ppm ] && cpufreq_ppm_max_perf || cpufreq_max_perf
+	if [ -d /proc/ppm ]; then
+	  cpufreq_ppm_max_perf
+	else
+	  cpufreq_max_perf
+	fi
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -816,9 +825,7 @@ performance_profile() {
 	echo 3 >/proc/sys/vm/drop_caches
 }
 
-normal_profile() {
-	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 0
-
+balance_profile() {
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
@@ -868,7 +875,12 @@ normal_profile() {
 
 	# Restore min CPU frequency
 	change_cpu_gov "$DEFAULT_CPU_GOV"
-	[ -d /proc/ppm ] && cpufreq_ppm_unlock || cpufreq_unlock
+
+	if [ -d /proc/ppm ]; then
+	  cpufreq_ppm_unlock
+	else
+	  cpufreq_unlock
+	fi
 
 	# I/O Tweaks
 	for dir in /sys/block/mmcblk0 /sys/block/mmcblk1 /sys/block/sd*; do
@@ -891,7 +903,7 @@ normal_profile() {
 }
 
 powersave_profile() {
-	normal_profile
+	balance_profile
 
 	# Enable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
@@ -927,10 +939,11 @@ powersave_profile() {
 ###################################
 
 case "$1" in
-0) perfcommon ;;
-1) performance_profile ;;
-2) normal_profile ;;
-3) powersave_profile ;;
+"perfcommon") perfcommon ;;
+"performance") performance_profile ;;
+"performance_lite") performance_profile lite ;;
+"balance") balance_profile ;;
+"powersave") powersave_profile ;;
 esac
 
 wait

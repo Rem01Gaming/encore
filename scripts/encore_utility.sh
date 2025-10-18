@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+# shellcheck disable=SC2317,SC3006,SC3018,SC3034,SC3057,SC3037
+
 # Config dir
 MODULE_CONFIG="/data/adb/.config/encore"
 
