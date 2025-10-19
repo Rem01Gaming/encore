@@ -24,8 +24,8 @@ void on_gamelist_modified(
     (void)additional_data;
 
     if (event == XWATCHER_FILE_MODIFIED || event == XWATCHER_FILE_CREATED) {
-        LOGI_TAG("JsonParser", "{} changed, reloading gamelist...", path);
-        load_gamelist_from_json(path, gamelist);
+        LOGI_TAG("XWatcher", "{} changed, reloading...", path);
+        load_gamelist_from_json(path, game_registry);
     }
 }
 

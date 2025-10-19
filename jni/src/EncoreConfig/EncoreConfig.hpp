@@ -16,6 +16,7 @@
 
 #include <vector>
 
+#include <GameRegistry.hpp>
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
 
@@ -27,4 +28,4 @@ bool init_file_watcher(void);
 
 void on_gamelist_modified(
     XWATCHER_FILE_EVENT event, const char *path, int context, void *additional_data);
-bool load_gamelist_from_json(const std::string &filename, std::vector<EncoreGameList> &gamelist);
+bool load_gamelist_from_json(const std::string &filename, GameRegistry& registry);

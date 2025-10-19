@@ -22,6 +22,7 @@
 
 #include <Dumpsys.hpp>
 #include <PIDTracker.hpp>
+#include <GameRegistry.hpp>
 #include <ShellUtility.hpp>
 #include <Encore.hpp>
 #include <EncoreConfig.hpp>
@@ -30,13 +31,13 @@
 
 static constexpr auto LOOP_INTERVAL = std::chrono::seconds(12);
 
-std::vector<EncoreGameList> gamelist;
+GameRegistry game_registry;
 
 void encore_main_daemon(void) {
    EncoreProfileMode cur_mode = PERFCOMMON;
    DumpsysWindowDisplays window_displays;
-   EncoreGameList *active_game = nullptr;
 
+   std::string active_package;
    bool battery_saver_state = false;
    bool battery_saver_state_oops = false;
    bool need_profile_checkup = false;
@@ -45,22 +46,16 @@ void encore_main_daemon(void) {
    PIDTracker pid_tracker;
 
    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist,
-                            std::vector<EncoreGameList> &gamelist) -> EncoreGameList * {
-       std::unordered_map<std::string, EncoreGameList *> game_packages;
-       for (auto &game : gamelist) {
-           game_packages[game.package_name] = &game;
-       }
-
+                            GameRegistry &registry) -> std::string {
        for (const auto &recent : recent_applist) {
            if (!recent.visible) continue;
 
-           auto it = game_packages.find(recent.package_name);
-           if (it != game_packages.end()) {
-               return it->second;
+           if (registry.is_game_registered(recent.package_name)) {
+               return recent.package_name;
            }
        }
 
-       return nullptr;
+       return "";
    };
 
    auto GetBatterySaverState = [&]() -> std::optional<bool> {
@@ -129,19 +124,19 @@ void encore_main_daemon(void) {
            break;
        }
 
-       if (active_game == nullptr) {
-           active_game = GetActiveGame(window_displays.recent_app, gamelist);
+       if (active_package.empty()) {
+           active_package = GetActiveGame(window_displays.recent_app, game_registry);
        } else if (!pid_tracker.is_valid()) [[unlikely]] {
-           LOGI("Game {} exited, resetting profile...", active_game->package_name);
-           active_game = nullptr;
+           LOGI("Game {} exited, resetting profile...", active_package);
+           active_package.clear();
            pid_tracker.invalidate();
 
            // Check for new game session
-           active_game = GetActiveGame(window_displays.recent_app, gamelist);
+           active_package = GetActiveGame(window_displays.recent_app, game_registry);
            need_profile_checkup = true;
        }
 
-       if (active_game == nullptr && !battery_saver_state_oops) {
+       if (active_package.empty() && !battery_saver_state_oops) {
            auto bs_state = GetBatterySaverState();
            battery_saver_state_oops = !bs_state.has_value();
            battery_saver_state = bs_state.value_or(false);
@@ -151,16 +146,23 @@ void encore_main_daemon(void) {
            }
        }
 
-       if (active_game != nullptr && window_displays.screen_awake) {
+       if (!active_package.empty() && window_displays.screen_awake) {
            // Bail out if we already on performance profile
-           // However we will pass this if need_profile_checkup was true
            if (!need_profile_checkup && cur_mode == PERFORMANCE_PROFILE)
                continue;
 
-           pid_t game_pid = pidof_game(active_game->package_name);
+           auto active_game = game_registry.find_game_ptr(active_package);
+           if (!active_game) {
+               LOGI("Game {} no longer in registry, resetting", active_package);
+               active_package.clear();
+               pid_tracker.invalidate();
+               continue;
+           }
+
+           pid_t game_pid = pidof_game(active_package);
            if (game_pid == 0) {
-               LOGE("Unable to fetch PID of {}", active_game->package_name);
-               active_game = nullptr;
+               LOGE("Unable to fetch PID of {}", active_package);
+               active_package.clear();
                pid_tracker.invalidate();
                continue;
            }
@@ -168,8 +170,8 @@ void encore_main_daemon(void) {
            need_profile_checkup = false;
            cur_mode = PERFORMANCE_PROFILE;
 
-           LOGI("Applying performance profile for {} (PID: {})", active_game->package_name, game_pid);
-           apply_performance_profile(active_game->lite_mode, active_game->package_name, game_pid);
+           LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
+           apply_performance_profile(active_game->lite_mode, active_package, game_pid);
            pid_tracker.set_pid(game_pid);
 
            if (active_game->enable_dnd) {
@@ -244,7 +246,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    if (!load_gamelist_from_json(ENCORE_GAMELIST, gamelist)) {
+    if (!load_gamelist_from_json(ENCORE_GAMELIST, game_registry)) {
         fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
         NotifyFatalError("Failed to parse gamelist.json");
         LOGC("Failed to parse {}", ENCORE_GAMELIST);

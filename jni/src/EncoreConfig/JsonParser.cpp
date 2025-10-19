@@ -20,7 +20,7 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/error/en.h>
 
-bool load_gamelist_from_json(const std::string &filename, std::vector<EncoreGameList> &gamelist) {
+bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry) {
     FILE *fp = fopen(filename.c_str(), "rb");
     if (!fp) {
         LOGE_TAG("JsonParser", "{}: {}", filename, strerror(errno));
@@ -80,7 +80,6 @@ bool load_gamelist_from_json(const std::string &filename, std::vector<EncoreGame
         new_list.push_back(game);
     }
 
-    gamelist = std::move(new_list);
-    LOGI_TAG("JsonParser", "Loaded {} games from gamelist", gamelist.size());
+    registry.update_gamelist(new_list);
     return true;
 }

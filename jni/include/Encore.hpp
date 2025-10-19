@@ -18,7 +18,6 @@
 #define ENCORE_H
 
 #include <string>
-#include <vector>
 
 #define NOTIFY_TITLE "Encore Tweaks"
 #define LOG_TAG "EncoreTweaks"
@@ -43,7 +42,5 @@ struct EncoreGameList {
     bool lite_mode;
     bool enable_dnd;
 };
-
-extern std::vector<EncoreGameList> gamelist;
 
 #endif // ENCORE_H
