@@ -31,6 +31,11 @@
  */
 class PIDTracker {
 private:
+    /// Loop interval when there's no PID is being tracked.
+    static constexpr auto LOOP_INTERVAL_IDLE = std::chrono::milliseconds(500);
+    /// Loop interval when there's PID is being tracked.
+    static constexpr auto LOOP_INTERVAL_BUSY = std::chrono::milliseconds(60);
+
     /// The current process ID being tracked.
     std::atomic<pid_t> current_pid{0};
     /// Flag to signal the tracking thread to stop.
@@ -56,16 +61,18 @@ private:
      * Marking PID as invalid as soon as the process terminates.
      */
     void tracking_loop() {
+        pthread_setname_np(pthread_self(), "PIDTracker");
+
         while (!stop_requested.load(std::memory_order_acquire)) {
             pid_t pid = current_pid.load(std::memory_order_acquire);
 
             if (pid == 0) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                std::this_thread::sleep_for(LOOP_INTERVAL_IDLE);
                 continue;
             }
 
             if (is_pid_running(pid)) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(60));
+                std::this_thread::sleep_for(LOOP_INTERVAL_BUSY);
                 continue;
             }
 
@@ -88,7 +95,6 @@ public:
      * @brief Destroys the PIDTracker, signals the tracking thread to stop.
      */
     ~PIDTracker() {
-        // Signal the thread to stop and wait for it to finish.
         stop_requested.store(true, std::memory_order_release);
         if (tracking_thread.joinable()) {
             tracking_thread.join();

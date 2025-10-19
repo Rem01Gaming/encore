@@ -28,7 +28,7 @@
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 
-#define LOOP_INTERVAL_SEC 12
+static constexpr auto LOOP_INTERVAL = std::chrono::seconds(12);
 
 std::vector<EncoreGameList> gamelist;
 
@@ -43,8 +43,6 @@ void encore_main_daemon(void) {
    bool game_requested_dnd = false;
 
    PIDTracker pid_tracker;
-
-   run_perfcommon();
 
    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist,
                             std::vector<EncoreGameList> &gamelist) -> EncoreGameList * {
@@ -111,8 +109,11 @@ void encore_main_daemon(void) {
        }
    };
 
+   run_perfcommon();
+   pthread_setname_np(pthread_self(), "MainThread");
+
    while(true) {
-       std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_INTERVAL_SEC * 1000));
+       std::this_thread::sleep_for(LOOP_INTERVAL);
 
        if (access(MODULE_UPDATE, F_OK) == 0) [[unlikely]] {
            LOGI("Module update detected, exiting");
