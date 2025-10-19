@@ -35,8 +35,8 @@ std::vector<EncoreGameList> gamelist;
 void encore_main_daemon(void) {
    EncoreProfileMode cur_mode = PERFCOMMON;
    DumpsysWindowDisplays window_displays;
-
    EncoreGameList *active_game = nullptr;
+
    bool battery_saver_state = false;
    bool battery_saver_state_oops = false;
    bool need_profile_checkup = false;
@@ -125,7 +125,7 @@ void encore_main_daemon(void) {
        } catch (const std::runtime_error &e) {
            std::string error_msg = e.what();
            LOGE_TAG("DumpsysWindowDisplays", "{}", error_msg);
-           return;
+           break;
        }
 
        if (active_game == nullptr) {
@@ -193,7 +193,7 @@ void encore_main_daemon(void) {
                game_requested_dnd = false;
            }
        } else {
-           // Bail out if we already on normal profile
+           // Bail out if we already on balance profile
            if (cur_mode == BALANCE_PROFILE)
                continue;
 
@@ -213,45 +213,59 @@ void encore_main_daemon(void) {
 }
 
 int main(void) {
-   if (getuid() != 0) {
-       fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
-       return EXIT_FAILURE;
-   }
+    auto NotifyFatalError = [](const std::string &error_msg) {
+        notify(("ERROR: " + error_msg).c_str());
+    };
 
-   if (!create_lock_file()) {
-       fprintf(stderr, "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n");
-       return EXIT_FAILURE;
-   }
+    if (getuid() != 0) {
+        fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
+        return EXIT_FAILURE;
+    }
 
-   if (access(ENCORE_GAMELIST, F_OK) != 0) {
-       fprintf(stderr, "\033[31mERROR:\033[0m %s is missing\n", ENCORE_GAMELIST);
-       return EXIT_FAILURE;
-   }
+    if (!create_lock_file()) {
+        fprintf(
+            stderr,
+            "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n");
+        return EXIT_FAILURE;
+    }
 
-   if (!check_dumpsys_sanity()) {
-       fprintf(stderr, "\033[31mERROR:\033[0m Dumpsys sanity check failed, it might be tampered by other module.\n");
-       return EXIT_FAILURE;
-   }
+    if (!check_dumpsys_sanity()) {
+        fprintf(stderr, "\033[31mERROR:\033[0m Dumpsys sanity check failed\n");
+        NotifyFatalError("Dumpsys sanity check failed");
+        LOGC("Dumpsys sanity check failed");
+        return EXIT_FAILURE;
+    }
 
-   if (!load_gamelist_from_json(ENCORE_GAMELIST, gamelist)) {
-       fprintf(stderr, "\033[31mERROR:\033[0m Failed to load initial gamelist\n");
-       return EXIT_FAILURE;
-   }
+    if (access(ENCORE_GAMELIST, F_OK) != 0) {
+        fprintf(stderr, "\033[31mERROR:\033[0m %s is missing\n", ENCORE_GAMELIST);
+        NotifyFatalError("gamelist.json is missing");
+        LOGC("{} is missing", ENCORE_GAMELIST);
+        return EXIT_FAILURE;
+    }
 
-   if (daemon(0, 0)) {
-       LOGC("Failed to daemonize service");
-       return EXIT_FAILURE;
-   }
+    if (!load_gamelist_from_json(ENCORE_GAMELIST, gamelist)) {
+        fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
+        NotifyFatalError("Failed to parse gamelist.json");
+        LOGC("Failed to parse {}", ENCORE_GAMELIST);
+        return EXIT_FAILURE;
+    }
 
-   if (!init_file_watcher()) {
-       LOGC("Failed to initialize file watcher");
-       return EXIT_FAILURE;
-   }
+    if (daemon(0, 0)) {
+        LOGC("Failed to daemonize service");
+        NotifyFatalError("Failed to daemonize service");
+        return EXIT_FAILURE;
+    }
 
-   LOGI("Encore Tweaks daemon started");
-   encore_main_daemon();
+    if (!init_file_watcher()) {
+        LOGC("Failed to initialize file watcher");
+        NotifyFatalError("Failed to initialize file watcher");
+        return EXIT_FAILURE;
+    }
 
-   if (json_watcher) {
-       xWatcher_destroy(json_watcher);
-   }
+    LOGI("Encore Tweaks daemon started");
+    encore_main_daemon();
+
+    if (json_watcher) {
+        xWatcher_destroy(json_watcher);
+    }
 }
