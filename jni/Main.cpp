@@ -121,7 +121,7 @@ void encore_main_daemon(void) {
        } catch (const std::runtime_error &e) {
            std::string error_msg = e.what();
            LOGE_TAG("DumpsysWindowDisplays", "{}", error_msg);
-           break;
+           continue;
        }
 
        if (active_package.empty()) {
