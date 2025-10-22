@@ -19,13 +19,7 @@
 #include <GameRegistry.hpp>
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
+#include <InotifyWatcher.hpp>
 
-#include <x-watcher/x-watcher.h>
-
-extern x_watcher *json_watcher;
-
-bool init_file_watcher(void);
-
-void on_gamelist_modified(
-    XWATCHER_FILE_EVENT event, const char *path, int context, void *additional_data);
+bool init_file_watcher(InotifyWatcher& watcher);
 bool load_gamelist_from_json(const std::string &filename, GameRegistry& registry);

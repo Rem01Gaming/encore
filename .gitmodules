@@ -1,6 +1,3 @@
-[submodule "jni/external/x-watcher"]
-	path = jni/external/x-watcher
-	url = https://github.com/nikp123/x-watcher.git
 [submodule "jni/external/spdlog"]
 	path = jni/external/spdlog
 	url = https://github.com/gabime/spdlog.git

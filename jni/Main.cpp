@@ -259,7 +259,8 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    if (!init_file_watcher()) {
+    InotifyWatcher file_watcher;
+    if (!init_file_watcher(file_watcher)) {
         LOGC("Failed to initialize file watcher");
         NotifyFatalError("Failed to initialize file watcher");
         return EXIT_FAILURE;
@@ -268,7 +269,6 @@ int main(void) {
     LOGI("Encore Tweaks daemon started");
     encore_main_daemon();
 
-    if (json_watcher) {
-        xWatcher_destroy(json_watcher);
-    }
+    // If we reach this, the daemon is dead
+    LOGW("Encore Tweaks daemon exited");
 }
