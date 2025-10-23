@@ -26,12 +26,28 @@ void set_do_not_disturb(bool do_not_disturb) {
     }
 }
 
-void notify(const char* message) {
-    int exit =
-        systemv("su -lp 2000 -c \"/system/bin/cmd notification post -t '%s' '%s' '%s'\" >/dev/null", NOTIFY_TITLE, LOG_TAG, message);
+void notify(const char *message) {
+    pid_t pid = fork();
 
-    if (exit != 0) [[unlikely]] {
-        LOGE("Unable to post push notification: {}", strerror(errno));
+    if (pid == 0) {
+        if (setgid(2000) != 0 || setuid(2000) != 0) {
+            _exit(126);
+        }
+
+        const char *args[] = {"cmd",        "notification", "post",  "-t",
+                              NOTIFY_TITLE, LOG_TAG,        message, NULL};
+
+        execvp("/system/bin/cmd", (char *const *)args);
+        _exit(127);
+    } else if (pid > 0) {
+        int status;
+        waitpid(pid, &status, 0);
+
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) [[unlikely]] {
+            LOGE_TAG("Notify", "Push notification failed with status: {}", WEXITSTATUS(status));
+        }
+    } else {
+        LOGE_TAG("Notify", "fork failed: {}", strerror(errno));
     }
 }
 
