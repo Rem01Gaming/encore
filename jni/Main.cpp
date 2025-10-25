@@ -23,196 +23,230 @@
 #include <Dumpsys.hpp>
 #include <PIDTracker.hpp>
 #include <GameRegistry.hpp>
+#include <InotifyWatcher.hpp>
 #include <ShellUtility.hpp>
 #include <Encore.hpp>
 #include <EncoreConfig.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 
-static constexpr auto LOOP_INTERVAL = std::chrono::seconds(12);
-
 GameRegistry game_registry;
 
 void encore_main_daemon(void) {
-   EncoreProfileMode cur_mode = PERFCOMMON;
-   DumpsysWindowDisplays window_displays;
+    constexpr static auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
+    constexpr static auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(12);
 
-   std::string active_package;
-   bool battery_saver_state = false;
-   bool battery_saver_state_oops = false;
-   bool need_profile_checkup = false;
-   bool game_requested_dnd = false;
+    static_assert(
+        NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
+        "NORMAL_LOOP_INTERVAL must be a multiple of INGAME_LOOP_INTERVAL");
 
-   PIDTracker pid_tracker;
+    EncoreProfileMode cur_mode = PERFCOMMON;
+    DumpsysWindowDisplays window_displays;
 
-   auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist,
-                            GameRegistry &registry) -> std::string {
-       for (const auto &recent : recent_applist) {
-           if (!recent.visible) continue;
+    std::string active_package;
+    auto last_full_check = std::chrono::steady_clock::now();
 
-           if (registry.is_game_registered(recent.package_name)) {
-               return recent.package_name;
-           }
-       }
+    bool in_game_session = false;
+    bool battery_saver_state = false;
+    bool battery_saver_state_oops = false;
+    bool need_profile_checkup = false;
+    bool game_requested_dnd = false;
 
-       return "";
-   };
+    PIDTracker pid_tracker;
 
-   auto GetBatterySaverState = [&]() -> std::optional<bool> {
-       static bool use_settings_method = true;
+    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist,
+                             GameRegistry &registry) -> std::string {
+        for (const auto &recent : recent_applist) {
+            if (!recent.visible) continue;
 
-       if (use_settings_method) {
-           auto pipe = popen_direct({"/system/bin/cmd", "settings", "get", "global", "low_power"});
+            if (registry.is_game_registered(recent.package_name)) {
+                return recent.package_name;
+            }
+        }
 
-           if (pipe) {
-               char buffer[16];
-               if (fgets(buffer, sizeof(buffer), pipe.get())) {
-                   std::string result = buffer;
-                   result.erase(
-                       std::remove_if(
-                           result.begin(), result.end(),
-                           [](unsigned char c) { return std::isspace(c); }),
-                       result.end());
+        return "";
+    };
 
-                   if (result == "1") return true;
-                   if (result == "0") return false;
-               }
-           }
+    auto GetBatterySaverState = [&]() -> std::optional<bool> {
+        static bool use_settings_method = true;
 
-           use_settings_method = false;
-       }
+        if (use_settings_method) {
+            auto pipe = popen_direct({"/system/bin/cmd", "settings", "get", "global", "low_power"});
 
-       try {
-           DumpsysPower dumpsys_power;
-           Dumpsys::Power(dumpsys_power);
-           return dumpsys_power.battery_saver;
-       } catch (const std::runtime_error &e) {
-           LOGE_TAG("DumpsysPower", "{}", e.what());
-           return std::nullopt;
-       }
-   };
+            if (pipe) {
+                char buffer[16];
+                if (fgets(buffer, sizeof(buffer), pipe.get())) {
+                    std::string result = buffer;
+                    result.erase(
+                        std::remove_if(
+                            result.begin(), result.end(),
+                            [](unsigned char c) { return std::isspace(c); }),
+                        result.end());
 
-   auto pidof_game = [&](const std::string &package_name) -> pid_t {
-       pid_t game_pid = 0;
-       try {
-           game_pid = Dumpsys::GetAppPID(package_name);
-           return game_pid;
-       } catch (const std::runtime_error& e) {
-           std::string error_msg = e.what();
-           LOGE_TAG("DumpsysGetAppPID", "{}", error_msg);
-           return 0;
-       }
-   };
+                    if (result == "1") return true;
+                    if (result == "0") return false;
+                }
+            }
 
-   run_perfcommon();
-   pthread_setname_np(pthread_self(), "MainThread");
+            use_settings_method = false;
+        }
 
-   while(true) {
-       std::this_thread::sleep_for(LOOP_INTERVAL);
+        try {
+            DumpsysPower dumpsys_power;
+            Dumpsys::Power(dumpsys_power);
+            return dumpsys_power.battery_saver;
+        } catch (const std::runtime_error &e) {
+            LOGE_TAG("DumpsysPower", "{}", e.what());
+            return std::nullopt;
+        }
+    };
 
-       if (access(MODULE_UPDATE, F_OK) == 0) [[unlikely]] {
-           LOGI("Module update detected, exiting");
-           notify("Please reboot your device to complete module update.");
-           break;
-       }
+    auto pidof_game = [&](const std::string &package_name) -> pid_t {
+        pid_t game_pid = 0;
+        try {
+            game_pid = Dumpsys::GetAppPID(package_name);
+            return game_pid;
+        } catch (const std::runtime_error &e) {
+            std::string error_msg = e.what();
+            LOGE_TAG("DumpsysGetAppPID", "{}", error_msg);
+            return 0;
+        }
+    };
 
-       try {
-           Dumpsys::WindowDisplays(window_displays);
-       } catch (const std::runtime_error &e) {
-           std::string error_msg = e.what();
-           LOGE_TAG("DumpsysWindowDisplays", "{}", error_msg);
-           continue;
-       }
+    run_perfcommon();
+    pthread_setname_np(pthread_self(), "MainThread");
 
-       if (active_package.empty()) {
-           active_package = GetActiveGame(window_displays.recent_app, game_registry);
-       } else if (!pid_tracker.is_valid()) [[unlikely]] {
-           LOGI("Game {} exited, resetting profile...", active_package);
-           active_package.clear();
-           pid_tracker.invalidate();
+    while (true) {
+        if (access(MODULE_UPDATE, F_OK) == 0) [[unlikely]] {
+            LOGI("Module update detected, exiting");
+            notify("Please reboot your device to complete module update.");
+            break;
+        }
 
-           // Check for new game session
-           active_package = GetActiveGame(window_displays.recent_app, game_registry);
-           need_profile_checkup = true;
-       }
+        auto now = std::chrono::steady_clock::now();
+        bool do_full_check = !in_game_session || (now - last_full_check) >= INGAME_LOOP_INTERVAL;
 
-       if (active_package.empty() && !battery_saver_state_oops) {
-           auto bs_state = GetBatterySaverState();
-           battery_saver_state_oops = !bs_state.has_value();
-           battery_saver_state = bs_state.value_or(false);
+        if (do_full_check) {
+            try {
+                Dumpsys::WindowDisplays(window_displays);
+                last_full_check = now;
+            } catch (const std::runtime_error &e) {
+                LOGE_TAG("DumpsysWindowDisplays", "{}", e.what());
+                std::this_thread::sleep_for(INGAME_LOOP_INTERVAL);
+                continue;
+            }
+        }
 
-           if (battery_saver_state_oops) {
-               LOGE("GetBatterySaverState is out of order!");
-           }
-       }
+        // PID check when in game session
+        if (in_game_session && !pid_tracker.is_valid()) [[unlikely]] {
+            LOGI("Game {} exited", active_package);
+            active_package.clear();
+            pid_tracker.invalidate();
+            in_game_session = false;
+            need_profile_checkup = true;
 
-       if (!active_package.empty() && window_displays.screen_awake) {
-           // Bail out if we already on performance profile
-           if (!need_profile_checkup && cur_mode == PERFORMANCE_PROFILE)
-               continue;
+            // Game exited, run dumpsys immediately
+            if (!do_full_check) {
+                try {
+                    Dumpsys::WindowDisplays(window_displays);
+                    last_full_check = now;
+                } catch (const std::runtime_error &e) {
+                    LOGE_TAG("DumpsysGetAppPID", "{}", e.what());
+                }
+            }
+        }
 
-           auto active_game = game_registry.find_game_ptr(active_package);
-           if (!active_game) {
-               LOGI("Game {} no longer in registry, resetting", active_package);
-               active_package.clear();
-               pid_tracker.invalidate();
-               continue;
-           }
+        // Fetch active game package name
+        if (active_package.empty()) {
+            active_package = GetActiveGame(window_displays.recent_app, game_registry);
+            if (!active_package.empty()) {
+                in_game_session = true;
+            }
+        }
 
-           pid_t game_pid = pidof_game(active_package);
-           if (game_pid == 0) {
-               LOGE("Unable to fetch PID of {}", active_package);
-               active_package.clear();
-               pid_tracker.invalidate();
-               continue;
-           }
+        // Battery saver check
+        if (active_package.empty() && !battery_saver_state_oops && do_full_check) {
+            auto bs_state = GetBatterySaverState();
+            battery_saver_state_oops = !bs_state.has_value();
+            battery_saver_state = bs_state.value_or(false);
 
-           need_profile_checkup = false;
-           cur_mode = PERFORMANCE_PROFILE;
+            if (battery_saver_state_oops) {
+                LOGE("GetBatterySaverState is out of order!");
+            }
+        }
 
-           LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
-           apply_performance_profile(active_game->lite_mode, active_package, game_pid);
-           pid_tracker.set_pid(game_pid);
+        // Profile selection logic
+        if (!active_package.empty() && window_displays.screen_awake) {
+            if (!need_profile_checkup && cur_mode == PERFORMANCE_PROFILE) goto take_me_to_the_bed;
 
-           if (active_game->enable_dnd) {
-               game_requested_dnd = true;
-               set_do_not_disturb(active_game->enable_dnd);
-           } else {
-               game_requested_dnd = false;
-               set_do_not_disturb(false);
-           }
-       } else if (battery_saver_state) {
-           // Bail out if we already on powersave profile
-           if (cur_mode == POWERSAVE_PROFILE)
-               continue;
+            auto active_game = game_registry.find_game_ptr(active_package);
+            if (!active_game) {
+                LOGI("Game {} are no longer listed in registry", active_package);
+                active_package.clear();
+                pid_tracker.invalidate();
+                in_game_session = false;
+                goto take_me_to_the_bed;
+            }
 
-           cur_mode = POWERSAVE_PROFILE;
-           need_profile_checkup = false;
-           LOGI("Applying powersave profile");
-           apply_powersave_profile();
+            pid_t game_pid = pidof_game(active_package);
+            if (game_pid == 0) {
+                LOGE("Unable to fetch PID of {}", active_package);
+                active_package.clear();
+                pid_tracker.invalidate();
+                in_game_session = false;
+                goto take_me_to_the_bed;
+            }
 
-           if (game_requested_dnd) {
-               set_do_not_disturb(false);
-               game_requested_dnd = false;
-           }
-       } else {
-           // Bail out if we already on balance profile
-           if (cur_mode == BALANCE_PROFILE)
-               continue;
+            need_profile_checkup = false;
+            cur_mode = PERFORMANCE_PROFILE;
 
-           cur_mode = BALANCE_PROFILE;
-           need_profile_checkup = false;
-           LOGI("Applying balance profile");
-           apply_balance_profile();
+            LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
+            apply_performance_profile(active_game->lite_mode, active_package, game_pid);
+            pid_tracker.set_pid(game_pid);
 
-           if (game_requested_dnd) {
-               set_do_not_disturb(false);
-               game_requested_dnd = false;
-           }
-       }
-   }
+            if (active_game->enable_dnd) {
+                game_requested_dnd = true;
+                set_do_not_disturb(active_game->enable_dnd);
+            } else {
+                game_requested_dnd = false;
+                set_do_not_disturb(false);
+            }
+        } else if (battery_saver_state && do_full_check) {
+            if (cur_mode == POWERSAVE_PROFILE) goto take_me_to_the_bed;
 
-   return;
+            cur_mode = POWERSAVE_PROFILE;
+            need_profile_checkup = false;
+            LOGI("Applying powersave profile");
+            apply_powersave_profile();
+
+            if (game_requested_dnd) {
+                set_do_not_disturb(false);
+                game_requested_dnd = false;
+            }
+        } else if (do_full_check) {
+            if (cur_mode == BALANCE_PROFILE) goto take_me_to_the_bed;
+
+            cur_mode = BALANCE_PROFILE;
+            need_profile_checkup = false;
+            LOGI("Applying balance profile");
+            apply_balance_profile();
+
+            if (game_requested_dnd) {
+                set_do_not_disturb(false);
+                game_requested_dnd = false;
+            }
+        }
+
+    take_me_to_the_bed:
+        if (in_game_session) {
+            std::this_thread::sleep_for(INGAME_LOOP_INTERVAL);
+        } else {
+            std::this_thread::sleep_for(NORMAL_LOOP_INTERVAL);
+        }
+    }
+
+    // If we reach this, the daemon is dead
+    return;
 }
 
 int main(void) {
