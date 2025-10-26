@@ -16,13 +16,18 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
-#include <GameRegistry.hpp>
-#include <Encore.hpp>
-#include <EncoreLog.hpp>
-#include <InotifyWatcher.hpp>
+struct CliCommand {
+    std::string name;
+    std::string description;
+    std::string usage;
+    int min_args;
+    int max_args;
+    int (*handler)(const std::vector<std::string> &args);
+};
 
-bool init_file_watcher(InotifyWatcher& watcher);
-bool load_gamelist_from_json(const std::string &filename, GameRegistry& registry);
-bool populate_gamelist_from_base(const std::string &gamelist, const std::string &baselist);
+void cli_usage(const char *program_name);
+void cli_usage_command(const CliCommand &cmd);
+int encore_cli(int argc, char *argv[]);

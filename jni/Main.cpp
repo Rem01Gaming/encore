@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Cli.hpp"
 #include <Dumpsys.hpp>
 #include <PIDTracker.hpp>
 #include <GameRegistry.hpp>
@@ -249,7 +250,7 @@ void encore_main_daemon(void) {
     return;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
     auto NotifyFatalError = [](const std::string &error_msg) {
         notify(("ERROR: " + error_msg).c_str());
     };
@@ -257,6 +258,11 @@ int main(void) {
     if (getuid() != 0) {
         fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
         return EXIT_FAILURE;
+    }
+
+    // Handle CLI
+    if (argc >= 2) {
+        return encore_cli(argc, argv);
     }
 
     if (!create_lock_file()) {

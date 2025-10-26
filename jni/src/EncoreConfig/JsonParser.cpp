@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
+#include <fstream>
+#include <sstream>
+
 #include "EncoreConfig.hpp"
 
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/error/en.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry) {
     FILE *fp = fopen(filename.c_str(), "rb");
@@ -81,5 +86,71 @@ bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry
     }
 
     registry.update_gamelist(new_list);
+    return true;
+}
+
+bool populate_gamelist_from_base(const std::string &gamelist, const std::string &baselist) {
+    auto IsAppInstalled = [](const std::string &package_name) -> bool {
+        return (access(("/data/data/" + package_name).c_str(), F_OK) == 0);
+    };
+
+    std::ifstream base_file(baselist);
+    if (!base_file.is_open()) {
+        printf("Failed to open base gamelist\n");
+        return false;
+    }
+
+    std::vector<EncoreGameList> game_list;
+    std::string package_name;
+
+    while (std::getline(base_file, package_name)) {
+        package_name.erase(package_name.find_last_not_of(" \t\r\n") + 1);
+        if (package_name.empty()) continue;
+
+        if (IsAppInstalled(package_name)) {
+            EncoreGameList game;
+            game.package_name = package_name;
+            game.lite_mode = false;
+            game.enable_dnd = false;
+            game_list.push_back(game);
+        }
+    }
+
+    base_file.close();
+
+    rapidjson::Document doc;
+    doc.SetArray();
+    rapidjson::Document::AllocatorType &allocator = doc.GetAllocator();
+
+    for (const auto &game : game_list) {
+        rapidjson::Value game_obj(rapidjson::kObjectType);
+
+        game_obj.AddMember(
+            "package_name", rapidjson::Value(game.package_name.c_str(), allocator).Move(),
+            allocator);
+        game_obj.AddMember("lite_mode", game.lite_mode, allocator);
+        game_obj.AddMember("enable_dnd", game.enable_dnd, allocator);
+
+        doc.PushBack(game_obj, allocator);
+    }
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    doc.Accept(writer);
+
+    std::ofstream output_file(gamelist);
+    if (!output_file.is_open()) {
+        printf("Failed to create gamelist.json");
+        return false;
+    }
+
+    output_file << buffer.GetString();
+    output_file.close();
+
+    printf("The following games are automatically added to the game list:\n");
+    for (const auto &game : game_list) {
+        printf(" - %s\n", game.package_name.c_str());
+    }
+
     return true;
 }

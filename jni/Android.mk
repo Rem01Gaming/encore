@@ -11,7 +11,7 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_STATIC_LIBRARIES := libdumpsys libencorecfg libencoreutil
 
-LOCAL_SRC_FILES := Main.cpp
+LOCAL_SRC_FILES := Main.cpp Cli.cpp
 
 LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O2 -flto
 LOCAL_CPPFLAGS += -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized
