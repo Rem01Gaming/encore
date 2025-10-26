@@ -4,6 +4,7 @@ This project, Encore Tweaks, incorporates code from the following open source pr
 
 ## Apache License 2.0
 This project, Encore Tweaks, is licensed under the Apache License, Version 2.0.
+
 Copyright (C) 2024-2025 Rem01Gaming
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +25,7 @@ The following third-party components are used in this project:
 
 ## KTweak (BSD 2-Clause License)
 **Component:** Base functionality derived from KTweak
+
 Copyright (c) 2022, Tyler Nijmeh
 
 Redistribution and use in source and binary forms, with or without
@@ -49,6 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## RapidJSON (MIT License)
 **Component:** JSON parsing
+
 Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -75,6 +78,7 @@ SOFTWARE.
 
 ## spdlog (MIT License)
 **Component:** Logging functionality
+
 Copyright (c) 2016 Gabi Melman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
