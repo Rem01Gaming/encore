@@ -36,6 +36,7 @@ cp -r ./libs module
 cp -r ./scripts/* module/system/bin
 cp gamelist.txt module
 cp LICENSE module
+cp NOTICE.md module
 
 # Remove .sh extension from scripts
 find module/system/bin -maxdepth 1 -type f -name "*.sh" -exec sh -c 'mv -- "$0" "${0%.sh}"' {} \;
