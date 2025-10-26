@@ -43,6 +43,13 @@ abort_corrupted() {
 	abort "*********************************************************"
 }
 
+abort_gamelist_error() {
+	ui_print "*********************************************************"
+	ui_print "! Failed to initialize gamelist!"
+	ui_print "! Installation aborted."
+	abort "*********************************************************"
+}
+
 soc_recognition_extra() {
 	[ -d /sys/class/kgsl/kgsl-3d0/devfreq ] && {
 		SOC=2
@@ -145,11 +152,10 @@ ln -sf "$MODPATH/system/bin/encored" "$MODPATH/system/bin/encore_log"
 rm -rf "$TMPDIR/libs"
 
 if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
-	# remove action on APatch / KernelSU
+  ui_print "- KSU/AP Detected, skipping module mount (skip_mount)"
 	rm "$MODPATH/action.sh"
-	# skip mount on APatch / KernelSU
 	touch "$MODPATH/skip_mount"
-	ui_print "- KSU/AP Detected, skipping module mount (skip_mount)"
+
 	# symlink ourselves on $PATH
 	manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
 	BIN_PATH="/data/adb/modules/encore/system/bin"
@@ -157,7 +163,6 @@ if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
 		[ -d "$dir" ] && {
 			ui_print "- Creating symlink in $dir"
 			ln -sf "$BIN_PATH/encored" "$dir/encored"
-			ln -sf "$BIN_PATH/encored" "$dir/encore_log"
 			ln -sf "$BIN_PATH/encore_profiler" "$dir/encore_profiler"
 			ln -sf "$BIN_PATH/encore_utility" "$dir/encore_utility"
 		}
@@ -175,8 +180,6 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 make_dir "$MODULE_CONFIG"
-make_node 0 "$MODULE_CONFIG/lite_mode"
-make_node 0 "$MODULE_CONFIG/dnd_gameplay"
 make_node 0 "$MODULE_CONFIG/device_mitigation"
 [ ! -f "$MODULE_CONFIG/ppm_policies_mediatek" ] && echo 'PWR_THRO|THERMAL' >"$MODULE_CONFIG/ppm_policies_mediatek"
 
@@ -191,11 +194,11 @@ if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then
 
   extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
   "$MODPATH/system/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
-  ui_print ""
   exit_code=$?
+  ui_print ""
 
   rm -f "$MODULE_CONFIG/gamelist.txt"
-  [ $exit_code -gt 0 ] && abort "Failed to initialize gamelist"
+  [ $exit_code -gt 0 ] && abort_gamelist_error
 fi
 
 # SOC CODE:
