@@ -197,6 +197,7 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 
 # Recognize Chipset
 soc_recognition_extra
+[ $SOC -eq 0 ] && recognize_soc "$(</proc/device-tree/model)"
 [ $SOC -eq 0 ] && recognize_soc "$(get_soc_getprop)"
 [ $SOC -eq 0 ] && recognize_soc "$(grep -E "Hardware|Processor" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"
 [ $SOC -eq 0 ] && recognize_soc "$(grep "model\sname" /proc/cpuinfo | uniq | cut -d ':' -f 2 | sed 's/^[ \t]*//')"
