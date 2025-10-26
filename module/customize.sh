@@ -179,11 +179,24 @@ make_node 0 "$MODULE_CONFIG/lite_mode"
 make_node 0 "$MODULE_CONFIG/dnd_gameplay"
 make_node 0 "$MODULE_CONFIG/device_mitigation"
 [ ! -f "$MODULE_CONFIG/ppm_policies_mediatek" ] && echo 'PWR_THRO|THERMAL' >"$MODULE_CONFIG/ppm_policies_mediatek"
-[ ! -f "$MODULE_CONFIG/gamelist.txt" ] && extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
 
 # Permission settings
 ui_print "- Permission setup"
 set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
+
+# Gamelist setup
+if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then
+  ui_print "- Initializing gamelist..."
+  ui_print ""
+
+  extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
+  "$MODPATH/system/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
+  ui_print ""
+  exit_code=$?
+
+  rm -f "$MODULE_CONFIG/gamelist.txt"
+  [ $exit_code -gt 0 ] && abort "Failed to initialize gamelist"
+fi
 
 # SOC CODE:
 # 1 = MediaTek

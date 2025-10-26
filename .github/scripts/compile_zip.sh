@@ -31,13 +31,11 @@ release_code="$(git rev-list HEAD --count)-$(git rev-parse --short HEAD)-release
 sed -i "s/version=.*/version=$version ($release_code)/" module/module.prop
 sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 
-# Compile Gamelist
-paste -sd '|' - <"$GITHUB_WORKSPACE/gamelist.txt" >"$GITHUB_WORKSPACE/module/gamelist.txt"
-
 # Copy module files
 cp -r ./libs module
 cp -r ./scripts/* module/system/bin
-cp LICENSE ./module
+cp gamelist.txt module
+cp LICENSE module
 
 # Remove .sh extension from scripts
 find module/system/bin -maxdepth 1 -type f -name "*.sh" -exec sh -c 'mv -- "$0" "${0%.sh}"' {} \;
