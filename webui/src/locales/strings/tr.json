@@ -12,7 +12,8 @@
         "lite_mode": "Hafif Mod",
         "device_mitigation": "Cihaz Düzeltme",
         "default_cpu_gov": "Varsayılan CPU Yöneticisi",
-        "powersave_cpu_gov": "Güç Tasarrufu CPU Yöneticisi"
+        "powersave_cpu_gov": "Güç Tasarrufu CPU Yöneticisi",
+        "cpu_governor_title": "CPU Denetleyici"
     },
     "actions": {
         "title": "Eylemler",
