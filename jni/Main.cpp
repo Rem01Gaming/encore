@@ -22,14 +22,14 @@
 
 #include "Cli.hpp"
 #include <Dumpsys.hpp>
-#include <PIDTracker.hpp>
-#include <GameRegistry.hpp>
-#include <InotifyWatcher.hpp>
-#include <ShellUtility.hpp>
 #include <Encore.hpp>
 #include <EncoreConfig.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
+#include <GameRegistry.hpp>
+#include <InotifyWatcher.hpp>
+#include <PIDTracker.hpp>
+#include <ShellUtility.hpp>
 
 GameRegistry game_registry;
 
@@ -66,6 +66,16 @@ void encore_main_daemon(void) {
         }
 
         return "";
+    };
+
+    auto IsGameStillActive = [&](const std::vector<RecentAppList> &recent_applist,
+                                 const std::string &package_name) -> bool {
+        for (const auto &recent : recent_applist) {
+            if (recent.package_name == package_name && recent.visible) {
+                return true;
+            }
+        }
+        return false;
     };
 
     auto GetBatterySaverState = [&]() -> std::optional<bool> {
@@ -138,8 +148,17 @@ void encore_main_daemon(void) {
             }
         }
 
+        // Check if active game is still in recent app list when in game session
+        // Fix profile stuck, especially in Mobile Legends: Bang Bang
+        if (in_game_session && !active_package.empty() && do_full_check) {
+            if (!IsGameStillActive(window_displays.recent_app, active_package)) {
+                goto game_exited;
+            }
+        }
+
         // PID check when in game session
         if (in_game_session && !pid_tracker.is_valid()) [[unlikely]] {
+        game_exited:
             LOGI("Game {} exited", active_package);
             active_package.clear();
             pid_tracker.invalidate();
@@ -293,7 +312,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (daemon(0, 0)) {
+    if (daemon(0, 0) != 0) {
         LOGC("Failed to daemonize service");
         NotifyFatalError("Failed to daemonize service");
         return EXIT_FAILURE;
