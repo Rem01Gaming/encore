@@ -20,7 +20,8 @@
         "unauthorized_mod_title": "Đã phát hiện can thiệp bên ngoài",
         "save_log_fail": "Không thể lưu nhật kí",
         "unauthorized_mod_desc": "Module này có thể đã bị chỉnh sửa bởi một bên thứ ba. Vì an toàn của bạn, hãy tải bản chính thức từ trang web chính thức của Encore Tweaks.",
-        "log_saved_desc": "Nhật kí được lưu tại {0}."
+        "log_saved_desc": "Nhật kí được lưu tại {0}.",
+        "log_saved_title": "Nhật ký của module đã được lưu"
     },
     "actions": {
         "title": "Hành động",
@@ -34,7 +35,8 @@
         "lite_mode": "Chế độ Lite",
         "device_mitigation": "Sửa lỗi thiết bị",
         "default_cpu_gov": "Bộ điều chỉnh CPU mặc định",
-        "powersave_cpu_gov": "Bộ điều chỉnh CPU tiết kiệm năng lượng"
+        "powersave_cpu_gov": "Bộ điều chỉnh CPU tiết kiệm năng lượng",
+        "cpu_governor_title": "Cơ chế tốc độ CPU"
     },
     "support": {
         "description": "Encore Tweaks luôn miễn phí cho tất cả mọi người. Tuy nhiên, bạn có thể ủng hộ tôi bằng cách quyên góp.",
