@@ -63,11 +63,6 @@ int version_handler(const std::vector<std::string> &args) {
 }
 
 int setup_gamelist_handler(const std::vector<std::string> &args) {
-    if (access(ENCORE_GAMELIST, F_OK) == 0) {
-        fprintf(stderr, "\033[31mERROR:\033[0m %s already exists!\n", ENCORE_GAMELIST);
-        return EXIT_FAILURE;
-    }
-
     bool success = GameRegistry::populate_from_base(ENCORE_GAMELIST, args[0]);
     if (!success) {
         fprintf(
