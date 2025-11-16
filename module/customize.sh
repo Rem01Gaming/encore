@@ -120,6 +120,15 @@ recognize_soc() {
 	esac
 }
 
+generate_gamelist() {
+  extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
+  "$MODPATH/system/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
+  exit_code=$?
+
+  rm -f "$MODULE_CONFIG/gamelist.txt"
+  [ $exit_code -gt 0 ] && abort_gamelist_error
+}
+
 # Flashable integrity checkup
 ui_print "- Extracting verify.sh"
 unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
@@ -190,15 +199,13 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 # Gamelist setup
 if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then
   ui_print "- Initializing gamelist..."
-  ui_print ""
-
-  extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
-  "$MODPATH/system/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
-  exit_code=$?
-  ui_print ""
-
-  rm -f "$MODULE_CONFIG/gamelist.txt"
-  [ $exit_code -gt 0 ] && abort_gamelist_error
+  generate_gamelist
+else
+  "$MODPATH/system/bin/encored" check_gamelist
+  [ $? -gt 0 ] && {
+    ui_print "! gamelist is malformed, rebuilding..."
+    generate_gamelist
+  }
 fi
 
 # SOC CODE:
