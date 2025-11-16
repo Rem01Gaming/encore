@@ -2,7 +2,9 @@
     "common": {
         "profile": "Поточний профіль",
         "kernel": "Ядро",
-        "chipset": "Чипсет"
+        "chipset": "Чипсет",
+        "module": "",
+        "androidSDK": ""
     },
     "settings": {
         "title": "Налаштування",
