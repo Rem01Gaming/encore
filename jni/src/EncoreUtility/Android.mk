@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 ROOT_PATH := $(call my-dir)/../..
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libencoreutil
+LOCAL_MODULE := EncoreUtility
 
 LOCAL_C_INCLUDES := \
 	$(ROOT_PATH)/include \

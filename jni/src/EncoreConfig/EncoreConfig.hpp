@@ -16,13 +16,9 @@
 
 #pragma once
 
-#include <vector>
-
-#include <GameRegistry.hpp>
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
+#include <GameRegistry.hpp>
 #include <InotifyWatcher.hpp>
 
-bool init_file_watcher(InotifyWatcher& watcher);
-bool load_gamelist_from_json(const std::string &filename, GameRegistry& registry);
-bool populate_gamelist_from_base(const std::string &gamelist, const std::string &baselist);
+bool init_file_watcher(InotifyWatcher &watcher);

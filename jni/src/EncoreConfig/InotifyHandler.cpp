@@ -27,13 +27,9 @@ void on_json_modified(
     (void)additional_data;
 
     auto OnGamelistModified = [&](const std::string &path) -> void {
-        LOGD_TAG("InotifyHandler", "Callback OnGamelistModified reached", path);
-        load_gamelist_from_json(path, game_registry);
+        LOGD_TAG("InotifyHandler", "Callback OnGamelistModified reached");
+        game_registry.load_from_json(path);
     };
-
-//    auto OnConfigModified = [&](const std::string &path) -> void {
-//
-//    };
 
     // After the JSON was closed for writing
     if (event->mask & IN_CLOSE_WRITE) {
@@ -45,14 +41,10 @@ void on_json_modified(
     }
 }
 
-bool init_file_watcher(InotifyWatcher& watcher) {
+bool init_file_watcher(InotifyWatcher &watcher) {
     try {
         InotifyWatcher::WatchReference gamelist_ref{
-            ENCORE_GAMELIST,
-            on_json_modified,
-            WATCH_CONTEXT_GAMELIST,
-            nullptr
-        };
+            ENCORE_GAMELIST, on_json_modified, WATCH_CONTEXT_GAMELIST, nullptr};
 
         watcher.addFile(gamelist_ref);
         watcher.start();

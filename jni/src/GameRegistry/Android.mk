@@ -2,11 +2,9 @@ LOCAL_PATH := $(call my-dir)
 ROOT_PATH := $(call my-dir)/../..
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := GameRegistry
 
-LOCAL_MODULE := EncoreConfig
-LOCAL_SRC_FILES := InotifyHandler.cpp
-
-LOCAL_STATIC_LIBRARIES := GameRegistry
+LOCAL_SRC_FILES := GameRegistry.cpp
 
 LOCAL_C_INCLUDES := \
 	$(ROOT_PATH)/include \

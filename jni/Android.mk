@@ -9,7 +9,7 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/external/spdlog/include \
     $(LOCAL_PATH)/external/x-watcher/include
 
-LOCAL_STATIC_LIBRARIES := libdumpsys libencorecfg libencoreutil
+LOCAL_STATIC_LIBRARIES := Dumpsys GameRegistry EncoreConfig EncoreUtility
 
 LOCAL_SRC_FILES := Main.cpp Cli.cpp
 

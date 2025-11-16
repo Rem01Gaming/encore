@@ -16,30 +16,14 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <vector>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include "Cli.hpp"
 
 #include <Encore.hpp>
-#include <EncoreConfig.hpp>
-
-int setup_gamelist_handler(const std::vector<std::string> &args) {
-    if (access(ENCORE_GAMELIST, F_OK) == 0) {
-        fprintf(stderr, "\033[31mERROR:\033[0m %s already exists!\n", ENCORE_GAMELIST);
-        return EXIT_FAILURE;
-    }
-
-    bool success = populate_gamelist_from_base(ENCORE_GAMELIST, args[0]);
-    if (!success) {
-        fprintf(
-            stderr, "\033[31mERROR:\033[0m Failed to setup gamelist from %s\n", args[0].c_str());
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
-}
+#include <GameRegistry.hpp>
 
 std::string get_module_version() {
     std::ifstream prop_file(MODULE_PROP);
@@ -78,6 +62,22 @@ int version_handler(const std::vector<std::string> &args) {
     return EXIT_SUCCESS;
 }
 
+int setup_gamelist_handler(const std::vector<std::string> &args) {
+    if (access(ENCORE_GAMELIST, F_OK) == 0) {
+        fprintf(stderr, "\033[31mERROR:\033[0m %s already exists!\n", ENCORE_GAMELIST);
+        return EXIT_FAILURE;
+    }
+
+    bool success = GameRegistry::populate_from_base(ENCORE_GAMELIST, args[0]);
+    if (!success) {
+        fprintf(
+            stderr, "\033[31mERROR:\033[0m Failed to setup gamelist from %s\n", args[0].c_str());
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 int check_gamelist_handler(const std::vector<std::string> &args) {
     (void)args;
 
@@ -87,7 +87,7 @@ int check_gamelist_handler(const std::vector<std::string> &args) {
     }
 
     GameRegistry registry;
-    if (!load_gamelist_from_json(ENCORE_GAMELIST, registry)) {
+    if (!registry.load_from_json(ENCORE_GAMELIST)) {
         fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
         return EXIT_FAILURE;
     }
@@ -99,31 +99,10 @@ int check_gamelist_handler(const std::vector<std::string> &args) {
 
 // Command definitions
 std::vector<CliCommand> commands = {
-    {
-        "setup_gamelist",
-        "Set up initial gamelist from base file",
-        "setup_gamelist <base_file_path>",
-        1,
-        1,
-        setup_gamelist_handler
-    },
-    {
-        "check_gamelist",
-        "Validate gamelist file",
-        "check_gamelist",
-        0,
-        0,
-        check_gamelist_handler
-    },
-    {
-        "version",
-        "Show version information",
-        "version",
-        0,
-        0,
-        version_handler
-    }
-};
+    {"setup_gamelist", "Set up initial gamelist from base file", "setup_gamelist <base_file_path>",
+     1, 1, setup_gamelist_handler},
+    {"check_gamelist", "Validate gamelist file", "check_gamelist", 0, 0, check_gamelist_handler},
+    {"version", "Show version information", "version", 0, 0, version_handler}};
 
 void cli_usage(const char *program_name) {
     printf("Encore Tweaks CLI\n\n");

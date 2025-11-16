@@ -16,19 +16,20 @@
 
 #include <fstream>
 #include <sstream>
+#include <unistd.h>
 
-#include "EncoreConfig.hpp"
+#include "GameRegistry.hpp"
 
 #include <rapidjson/document.h>
-#include <rapidjson/filereadstream.h>
 #include <rapidjson/error/en.h>
+#include <rapidjson/filereadstream.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry) {
+bool GameRegistry::load_from_json(const std::string &filename) {
     FILE *fp = fopen(filename.c_str(), "rb");
     if (!fp) {
-        LOGE_TAG("JsonParser", "{}: {}", filename, strerror(errno));
+        LOGE_TAG("GameRegistry", "{}: {}", filename, strerror(errno));
         return false;
     }
 
@@ -42,13 +43,13 @@ bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry
 
     if (doc.HasParseError()) {
         LOGE_TAG(
-            "JsonParser", "gamelist.json parse error: {} (Offset: {})",
+            "GameRegistry", "{} parse error: {} (Offset: {})", filename,
             rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
         return false;
     }
 
     if (!doc.IsArray()) {
-        LOGE_TAG("JsonParser", "gamelist.json root is not an array");
+        LOGE_TAG("GameRegistry", "{} root is not an array", filename);
         return false;
     }
 
@@ -58,12 +59,12 @@ bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry
         const rapidjson::Value &item = doc[i];
 
         if (!item.IsObject()) {
-            LOGE_TAG("JsonParser", "Item {} is not an object, skipping", i);
+            LOGE_TAG("GameRegistry", "Item {} is not an object, skipping", i);
             continue;
         }
 
         if (!item.HasMember("package_name") || !item["package_name"].IsString()) {
-            LOGE_TAG("JsonParser", "Missing or invalid package_name for item {}, skipping", i);
+            LOGE_TAG("GameRegistry", "Missing or invalid package_name for item {}, skipping", i);
             continue;
         }
 
@@ -85,18 +86,18 @@ bool load_gamelist_from_json(const std::string &filename, GameRegistry &registry
         new_list.push_back(game);
     }
 
-    registry.update_gamelist(new_list);
+    update_gamelist(new_list);
     return true;
 }
 
-bool populate_gamelist_from_base(const std::string &gamelist, const std::string &baselist) {
+bool GameRegistry::populate_from_base(const std::string &gamelist, const std::string &baselist) {
     auto IsAppInstalled = [](const std::string &package_name) -> bool {
         return (access(("/data/data/" + package_name).c_str(), F_OK) == 0);
     };
 
     std::ifstream base_file(baselist);
     if (!base_file.is_open()) {
-        printf("Failed to open base gamelist\n");
+        LOGE_TAG("GameRegistry", "Failed to open base gamelist: {}", baselist);
         return false;
     }
 
@@ -140,16 +141,80 @@ bool populate_gamelist_from_base(const std::string &gamelist, const std::string 
 
     std::ofstream output_file(gamelist);
     if (!output_file.is_open()) {
-        printf("Failed to create gamelist.json");
+        LOGE_TAG("GameRegistry", "Failed to create gamelist: {}", gamelist);
         return false;
     }
 
     output_file << buffer.GetString();
     output_file.close();
 
-    printf("The following games are automatically added to the game list:\n");
+    LOGI_TAG("GameRegistry", "Automatically added {} games to the game list", game_list.size());
     for (const auto &game : game_list) {
-        printf(" - %s\n", game.package_name.c_str());
+        LOGI_TAG("GameRegistry", " - {}", game.package_name.c_str());
+    }
+
+    return true;
+}
+
+void GameRegistry::update_gamelist(const std::vector<EncoreGameList> &new_list) {
+    std::unique_lock lock(mutex_);
+    game_packages_.clear();
+
+    for (const auto &game : new_list) {
+        if (validate_game_entry(game)) {
+            game_packages_[game.package_name] = game;
+        }
+    }
+
+    LOGI_TAG("GameRegistry", "Updated registry with {} games", game_packages_.size());
+}
+
+std::optional<EncoreGameList> GameRegistry::find_game(const std::string &package_name) const {
+    std::shared_lock lock(mutex_);
+    auto it = game_packages_.find(package_name);
+    if (it != game_packages_.end()) {
+        return it->second;
+    }
+
+    return std::nullopt;
+}
+
+const EncoreGameList *GameRegistry::find_game_ptr(const std::string &package_name) const {
+    std::shared_lock lock(mutex_);
+    auto it = game_packages_.find(package_name);
+    if (it != game_packages_.end()) {
+        return &it->second;
+    }
+
+    return nullptr;
+}
+
+bool GameRegistry::is_game_registered(const std::string &package_name) const {
+    std::shared_lock lock(mutex_);
+    return game_packages_.find(package_name) != game_packages_.end();
+}
+
+size_t GameRegistry::size() const {
+    std::shared_lock lock(mutex_);
+    return game_packages_.size();
+}
+
+std::vector<std::string> GameRegistry::get_all_package_names() const {
+    std::shared_lock lock(mutex_);
+    std::vector<std::string> packages;
+    packages.reserve(game_packages_.size());
+
+    for (const auto &[package_name, _] : game_packages_) {
+        packages.push_back(package_name);
+    }
+
+    return packages;
+}
+
+bool GameRegistry::validate_game_entry(const EncoreGameList &game) const {
+    if (game.package_name.empty()) {
+        LOGW_TAG("GameRegistry", "Skipping game with empty package name");
+        return false;
     }
 
     return true;

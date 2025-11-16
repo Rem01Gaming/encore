@@ -305,7 +305,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (!load_gamelist_from_json(ENCORE_GAMELIST, game_registry)) {
+    if (!game_registry.load_from_json(ENCORE_GAMELIST)) {
         fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
         NotifyFatalError("Failed to parse gamelist.json");
         LOGC("Failed to parse {}", ENCORE_GAMELIST);
