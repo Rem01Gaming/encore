@@ -87,8 +87,8 @@ int check_gamelist_handler(const std::vector<std::string> &args) {
         return EXIT_FAILURE;
     }
 
-    printf("%s is valid\n", ENCORE_GAMELIST);
-    printf("Registered games: %zu\n", registry.size());
+    fprintf(stderr, "%s is valid\n", ENCORE_GAMELIST);
+    fprintf(stderr, "Registered games: %zu\n", registry.size());
     return EXIT_SUCCESS;
 }
 
