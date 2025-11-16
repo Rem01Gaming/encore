@@ -48,37 +48,45 @@ bool GameRegistry::load_from_json(const std::string &filename) {
         return false;
     }
 
-    if (!doc.IsArray()) {
-        LOGE_TAG("GameRegistry", "{} root is not an array", filename);
+    if (!doc.IsObject()) {
+        LOGE_TAG("GameRegistry", "{} root is not an object", filename);
         return false;
     }
 
     std::vector<EncoreGameList> new_list;
 
-    for (rapidjson::SizeType i = 0; i < doc.Size(); i++) {
-        const rapidjson::Value &item = doc[i];
-
-        if (!item.IsObject()) {
-            LOGE_TAG("GameRegistry", "Item {} is not an object, skipping", i);
+    for (auto it = doc.MemberBegin(); it != doc.MemberEnd(); ++it) {
+        if (!it->name.IsString()) {
+            LOGE_TAG("GameRegistry", "Skipping non-string key in gamelist");
             continue;
         }
 
-        if (!item.HasMember("package_name") || !item["package_name"].IsString()) {
-            LOGE_TAG("GameRegistry", "Missing or invalid package_name for item {}, skipping", i);
+        if (!it->value.IsObject()) {
+            LOGE_TAG(
+                "GameRegistry", "Value for {} is not an object, skipping", it->name.GetString());
             continue;
         }
 
+        const rapidjson::Value &game_obj = it->value;
         EncoreGameList game;
-        game.package_name = item["package_name"].GetString();
+        game.package_name = it->name.GetString();
 
-        if (item.HasMember("lite_mode") && item["lite_mode"].IsBool()) {
-            game.lite_mode = item["lite_mode"].GetBool();
+        // Validate package name
+        if (game.package_name.empty()) {
+            LOGE_TAG("GameRegistry", "Empty package name found, skipping");
+            continue;
+        }
+
+        // Parse lite_mode with default to false
+        if (game_obj.HasMember("lite_mode") && game_obj["lite_mode"].IsBool()) {
+            game.lite_mode = game_obj["lite_mode"].GetBool();
         } else {
             game.lite_mode = false;
         }
 
-        if (item.HasMember("enable_dnd") && item["enable_dnd"].IsBool()) {
-            game.enable_dnd = item["enable_dnd"].GetBool();
+        // Parse enable_dnd with default to false
+        if (game_obj.HasMember("enable_dnd") && game_obj["enable_dnd"].IsBool()) {
+            game.enable_dnd = game_obj["enable_dnd"].GetBool();
         } else {
             game.enable_dnd = false;
         }
@@ -87,6 +95,7 @@ bool GameRegistry::load_from_json(const std::string &filename) {
     }
 
     update_gamelist(new_list);
+    LOGI_TAG("GameRegistry", "Loaded {} games from {}", new_list.size(), filename);
     return true;
 }
 
@@ -120,19 +129,16 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     base_file.close();
 
     rapidjson::Document doc;
-    doc.SetArray();
+    doc.SetObject();
     rapidjson::Document::AllocatorType &allocator = doc.GetAllocator();
 
     for (const auto &game : game_list) {
         rapidjson::Value game_obj(rapidjson::kObjectType);
-
-        game_obj.AddMember(
-            "package_name", rapidjson::Value(game.package_name.c_str(), allocator).Move(),
-            allocator);
         game_obj.AddMember("lite_mode", game.lite_mode, allocator);
         game_obj.AddMember("enable_dnd", game.enable_dnd, allocator);
 
-        doc.PushBack(game_obj, allocator);
+        rapidjson::Value key(game.package_name.c_str(), allocator);
+        doc.AddMember(key, game_obj, allocator);
     }
 
     rapidjson::StringBuffer buffer;
