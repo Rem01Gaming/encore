@@ -12,7 +12,8 @@
         "lite_mode": "ライトモード",
         "device_mitigation": "デバイス軽減",
         "default_cpu_gov": "デフォルトの CPU ガバナー",
-        "powersave_cpu_gov": "省電力 CPU ガバナー"
+        "powersave_cpu_gov": "省電力 CPU ガバナー",
+        "cpu_governor_title": ""
     },
     "actions": {
         "title": "アクション",
