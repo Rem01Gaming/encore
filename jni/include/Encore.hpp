@@ -21,13 +21,17 @@
 #define NOTIFY_TITLE "Encore Tweaks"
 #define LOG_TAG "EncoreTweaks"
 
-#define LOCK_FILE "/data/adb/.config/encore/.lock"
-#define LOG_FILE "/data/adb/.config/encore/encore.log"
-#define PROFILE_MODE "/data/adb/.config/encore/current_profile"
-#define GAME_INFO "/data/adb/.config/encore/gameinfo"
-#define ENCORE_GAMELIST "/data/adb/.config/encore/gamelist.json"
-#define MODULE_PROP "/data/adb/modules/encore/module.prop"
-#define MODULE_UPDATE "/data/adb/modules/encore/update"
+#define CONFIG_DIR "/data/adb/.config/encore"
+#define MODPATH "/data/adb/modules/encore"
+
+#define LOCK_FILE CONFIG_DIR "/.lock"
+#define LOG_FILE CONFIG_DIR "/encore.log"
+#define PROFILE_MODE CONFIG_DIR "/current_profile"
+#define GAME_INFO CONFIG_DIR "/gameinfo"
+#define ENCORE_GAMELIST CONFIG_DIR "/gamelist.json"
+
+#define MODULE_PROP MODPATH "/module.prop"
+#define MODULE_UPDATE MODPATH "/update"
 
 enum EncoreProfileMode : char {
     PERFCOMMON,

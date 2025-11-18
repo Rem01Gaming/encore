@@ -28,6 +28,7 @@
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
 #include <InotifyWatcher.hpp>
+#include <ModuleProperty.hpp>
 #include <PIDTracker.hpp>
 #include <ShellUtility.hpp>
 
@@ -270,8 +271,22 @@ void encore_main_daemon(void) {
 }
 
 int main(int argc, char *argv[]) {
-    auto NotifyFatalError = [](const std::string &error_msg) {
+    auto SetModule_DescriptionStatus = [](const std::string &status) {
+        static const std::string description_base = "Special performance module for your Device.";
+        std::string description_new = "[" + status + "] " + description_base;
+
+        std::vector<ModuleProperties> module_properties{{"description", description_new}};
+
+        try {
+            ModuleProperty::Change(MODULE_PROP, module_properties);
+        } catch (const std::runtime_error &e) {
+            LOGE("Failed to apply module properties: {}", e.what());
+        }
+    };
+
+    auto NotifyFatalError = [&SetModule_DescriptionStatus](const std::string &error_msg) {
         notify(("ERROR: " + error_msg).c_str());
+        SetModule_DescriptionStatus("\xE2\x9D\x8C " + error_msg);
     };
 
     if (getuid() != 0) {
@@ -326,6 +341,7 @@ int main(int argc, char *argv[]) {
     }
 
     LOGI("Encore Tweaks daemon started");
+    SetModule_DescriptionStatus("\xF0\x9F\x98\x8B Tweaks applied successfully");
     encore_main_daemon();
 
     // If we reach this, the daemon is dead
