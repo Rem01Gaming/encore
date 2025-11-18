@@ -648,9 +648,6 @@ perfcommon() {
 	# Sync to data in the rare case a device crashes
 	sync
 
-	# Push Notification
-	su -lp 2000 -c "/system/bin/cmd notification post -t 'Encore Tweaks' 'encore' 'Tweaks successfully applied' </dev/null 2>&1 | cat" >/dev/null
-
 	# I/O Tweaks
 	for dir in /sys/block/*; do
 		# Disable I/O statistics accounting
