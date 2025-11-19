@@ -15,6 +15,8 @@
 #
 
 rm -rf /data/adb/.config/encore
+rm -f /data/adb/service.d/.encore_cleanup.sh
+
 need_gone="encored encore_profiler encore_utility encore_log"
 manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
 

@@ -14,7 +14,9 @@
 # limitations under the License.
 #
 
+MODDIR=$(dirname "$0")
 MODULE_CONFIG="/data/adb/.config/encore"
+CLEANUP_SCRIPT="/data/adb/service.d/.encore_cleanup.sh"
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
 # Clear old logs
@@ -24,6 +26,13 @@ rm -f "$MODULE_CONFIG/encore.log"
 chmod 644 "$CPUFREQ/scaling_governor"
 default_gov=$(cat "$CPUFREQ/scaling_governor")
 echo "$default_gov" >$MODULE_CONFIG/default_cpu_gov
+
+# Create cleanup script
+[ ! -f "$CLEANUP_SCRIPT" ] && {
+  mkdir -p "$(dirname $MODULE_CONFIG)"
+  cp "$MODDIR/cleanup.sh" "$MODULE_CONFIG"
+  chmod +x "$CLEANUP_SCRIPT"
+}
 
 # Wait until boot completed
 while [ -z "$(getprop sys.boot_completed)" ]; do

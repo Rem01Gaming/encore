@@ -20,6 +20,7 @@ need_integrity=(
 	"module/service.sh"
 	"module/uninstall.sh"
 	"module/action.sh"
+	"module/cleanup.sh"
 	"module/module.prop"
 	"module/gamelist.txt"
 )

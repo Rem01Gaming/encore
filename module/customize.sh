@@ -141,8 +141,10 @@ extract "$ZIPFILE" 'module.prop' "$MODPATH"
 extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"
+extract "$ZIPFILE" 'cleanup.sh' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_profiler' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_utility' "$MODPATH"
+cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
 
 # Target architecture
 case $ARCH in
