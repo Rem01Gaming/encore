@@ -20,7 +20,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Cli.hpp"
+#include <EncoreCLI.hpp>
 #include <Dumpsys.hpp>
 #include <Encore.hpp>
 #include <EncoreConfig.hpp>
@@ -270,7 +270,7 @@ void encore_main_daemon(void) {
     return;
 }
 
-int main(int argc, char *argv[]) {
+int run_daemon() {
     auto SetModule_DescriptionStatus = [](const std::string &status) {
         static const std::string description_base = "Special performance module for your Device.";
         std::string description_new = "[" + status + "] " + description_base;
@@ -292,11 +292,6 @@ int main(int argc, char *argv[]) {
     if (getuid() != 0) {
         fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
         return EXIT_FAILURE;
-    }
-
-    // Handle CLI
-    if (argc >= 2) {
-        return encore_cli(argc, argv);
     }
 
     if (!create_lock_file()) {
@@ -346,4 +341,10 @@ int main(int argc, char *argv[]) {
 
     // If we reach this, the daemon is dead
     LOGW("Encore Tweaks daemon exited");
+    return EXIT_SUCCESS;
+}
+
+int main(int argc, char *argv[]) {
+    // Handle args
+    return encore_cli(argc, argv);
 }

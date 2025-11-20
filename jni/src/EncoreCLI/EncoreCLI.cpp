@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-#include "Cli.hpp"
+#include "EncoreCLI.hpp"
 
 #include <Encore.hpp>
 #include <GameRegistry.hpp>
@@ -92,16 +92,53 @@ int check_gamelist_handler(const std::vector<std::string> &args) {
     return EXIT_SUCCESS;
 }
 
+int daemon_handler(const std::vector<std::string> &args) {
+    (void)args;
+
+    // This will be implemented in Main.cpp
+    extern int run_daemon();
+    return run_daemon();
+}
+
 // Command definitions
 std::vector<CliCommand> commands = {
-    {"setup_gamelist", "Set up initial gamelist from base file", "setup_gamelist <base_file_path>",
-     1, 1, setup_gamelist_handler},
-    {"check_gamelist", "Validate gamelist file", "check_gamelist", 0, 0, check_gamelist_handler},
-    {"version", "Show version information", "version", 0, 0, version_handler}};
+    {
+        "daemon",
+        "Start Encore Tweaks daemon",
+        "daemon",
+        0,
+        0,
+        daemon_handler
+    },
+    {
+        "setup_gamelist",
+        "Setup initial gamelist from base file",
+        "setup_gamelist <base_file_path>",
+        1,
+        1,
+        setup_gamelist_handler
+    },
+    {
+        "check_gamelist",
+        "Validate gamelist file",
+        "check_gamelist",
+        0,
+        0,
+        check_gamelist_handler
+    },
+    {
+        "version",
+        "Show version information",
+        "version",
+        0,
+        0,
+        version_handler
+    }
+};
 
 void cli_usage(const char *program_name) {
     printf("Encore Tweaks CLI\n\n");
-    printf("Usage: %s <COMMAND> [OPTIONS]\n\n", program_name);
+    printf("Usage: %s <COMMAND>\n\n", program_name);
     printf("Commands:\n");
 
     for (const auto &cmd : commands) {
