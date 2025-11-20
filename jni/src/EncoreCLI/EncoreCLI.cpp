@@ -16,6 +16,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -31,7 +32,7 @@ std::string get_module_version() {
     std::string version = "unknown";
 
     if (!prop_file.is_open()) {
-        fprintf(stderr, "\033[33mERROR:\033[0m Could not open %s\n", MODULE_PROP);
+        std::cerr << "\033[33mERROR:\033[0m Could not open " << MODULE_PROP << std::endl;
         return version;
     }
 
@@ -57,16 +58,15 @@ int version_handler(const std::vector<std::string> &args) {
     (void)args;
 
     std::string module_version = get_module_version();
-    printf("Encore Tweaks %s\n", module_version.c_str());
-    printf("Built on %s %s\n", __TIME__, __DATE__);
+    std::cout << "Encore Tweaks " << module_version << std::endl;
+    std::cout << "Built on " << __TIME__ << " " << __DATE__ << std::endl;
     return EXIT_SUCCESS;
 }
 
 int setup_gamelist_handler(const std::vector<std::string> &args) {
     bool success = GameRegistry::populate_from_base(ENCORE_GAMELIST, args[0]);
     if (!success) {
-        fprintf(
-            stderr, "\033[31mERROR:\033[0m Failed to setup gamelist from %s\n", args[0].c_str());
+        std::cerr << "\033[31mERROR:\033[0m Failed to setup gamelist from " << args[0] << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -77,18 +77,18 @@ int check_gamelist_handler(const std::vector<std::string> &args) {
     (void)args;
 
     if (access(ENCORE_GAMELIST, F_OK) != 0) {
-        printf("\033[33mERROR:\033[0m %s does not exist\n", ENCORE_GAMELIST);
+        std::cout << "\033[33mERROR:\033[0m " << ENCORE_GAMELIST << " does not exist" << std::endl;
         return EXIT_FAILURE;
     }
 
     GameRegistry registry;
     if (!registry.load_from_json(ENCORE_GAMELIST)) {
-        fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << ENCORE_GAMELIST << std::endl;
         return EXIT_FAILURE;
     }
 
-    fprintf(stderr, "%s is valid\n", ENCORE_GAMELIST);
-    fprintf(stderr, "Registered games: %zu\n", registry.size());
+    std::cerr << ENCORE_GAMELIST << " is valid" << std::endl;
+    std::cerr << "Registered games: " << registry.size() << std::endl;
     return EXIT_SUCCESS;
 }
 
@@ -133,27 +133,27 @@ std::vector<CliCommand> commands = {
         0,
         0,
         version_handler
-    }
+    },
 };
 
 void cli_usage(const char *program_name) {
-    printf("Encore Tweaks CLI\n\n");
-    printf("Usage: %s <COMMAND>\n\n", program_name);
-    printf("Commands:\n");
+    std::cout << "Encore Tweaks CLI" << std::endl << std::endl;
+    std::cout << "Usage: " << program_name << " <COMMAND>" << std::endl << std::endl;
+    std::cout << "Commands:" << std::endl;
 
     for (const auto &cmd : commands) {
         printf("  %-20s %s\n", cmd.name.c_str(), cmd.description.c_str());
     }
 
-    printf("\nOptions:\n");
-    printf("  -h, --help          Show this help message\n");
-    printf("  -V, --version       Show version information\n");
-    printf("\nRun '%s <COMMAND> --help' for more information on a command.\n", program_name);
+    std::cout << std::endl << "Options:" << std::endl;
+    std::cout << "  -h, --help          Show this help message" << std::endl;
+    std::cout << "  -V, --version       Show version information" << std::endl;
+    std::cout << std::endl << "Run '" << program_name << " <COMMAND> --help' for more information on a command." << std::endl;
 }
 
 void cli_usage_command(const CliCommand &cmd) {
-    printf("Usage: encored %s\n\n", cmd.usage.c_str());
-    printf("%s\n", cmd.description.c_str());
+    std::cout << "Usage: encored " << cmd.usage << std::endl << std::endl;
+    std::cout << cmd.description << std::endl;
 }
 
 int encore_cli(int argc, char *argv[]) {
@@ -187,7 +187,7 @@ int encore_cli(int argc, char *argv[]) {
             return EXIT_SUCCESS;
         }
 
-        fprintf(stderr, "\033[31mERROR:\033[0m Unknown command: %s\n", command.c_str());
+        std::cerr << "\033[31mERROR:\033[0m Unknown command: " << command << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -197,9 +197,7 @@ int encore_cli(int argc, char *argv[]) {
             size_t max_args = static_cast<size_t>(cmd.max_args);
 
             if (args.size() < min_args || args.size() > max_args) {
-                fprintf(
-                    stderr, "\033[31mERROR:\033[0m Invalid number of arguments for '%s'\n",
-                    command.c_str());
+                std::cerr << "\033[31mERROR:\033[0m Invalid number of arguments for '" << command << "'" << std::endl;
                 cli_usage_command(cmd);
                 return EXIT_FAILURE;
             }
@@ -208,7 +206,7 @@ int encore_cli(int argc, char *argv[]) {
         }
     }
 
-    fprintf(stderr, "\033[31mERROR:\033[0m Unknown command: %s\n", command.c_str());
-    fprintf(stderr, "See '%s --help' for available commands.\n", program_name);
+    std::cerr << "\033[31mERROR:\033[0m Unknown command: " << command << std::endl;
+    std::cerr << "See '" << program_name << " --help' for available commands." << std::endl;
     return EXIT_FAILURE;
 }

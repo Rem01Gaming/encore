@@ -16,6 +16,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <thread>
 #include <unordered_map>
 #include <vector>
@@ -290,33 +291,32 @@ int run_daemon() {
     };
 
     if (getuid() != 0) {
-        fprintf(stderr, "\033[31mERROR:\033[0m Please run this program as root\n");
+        std::cerr << "\033[31mERROR:\033[0m Please run this program as root" << std::endl;
         return EXIT_FAILURE;
     }
 
     if (!create_lock_file()) {
-        fprintf(
-            stderr,
-            "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n");
+        std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!"
+                  << std::endl;
         return EXIT_FAILURE;
     }
 
     if (!check_dumpsys_sanity()) {
-        fprintf(stderr, "\033[31mERROR:\033[0m Dumpsys sanity check failed\n");
+        std::cerr << "\033[31mERROR:\033[0m Dumpsys sanity check failed" << std::endl;
         NotifyFatalError("Dumpsys sanity check failed");
         LOGC("Dumpsys sanity check failed");
         return EXIT_FAILURE;
     }
 
     if (access(ENCORE_GAMELIST, F_OK) != 0) {
-        fprintf(stderr, "\033[31mERROR:\033[0m %s is missing\n", ENCORE_GAMELIST);
+        std::cerr << "\033[31mERROR:\033[0m " << ENCORE_GAMELIST << " is missing" << std::endl;
         NotifyFatalError("gamelist.json is missing");
         LOGC("{} is missing", ENCORE_GAMELIST);
         return EXIT_FAILURE;
     }
 
     if (!game_registry.load_from_json(ENCORE_GAMELIST)) {
-        fprintf(stderr, "\033[31mERROR:\033[0m Failed to parse %s\n", ENCORE_GAMELIST);
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << ENCORE_GAMELIST << std::endl;
         NotifyFatalError("Failed to parse gamelist.json");
         LOGC("Failed to parse {}", ENCORE_GAMELIST);
         return EXIT_FAILURE;
