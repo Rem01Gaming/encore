@@ -1,0 +1,50 @@
+{
+    "common": {
+        "module": "Encore Tweaks",
+        "profile": "현재 프로필",
+        "kernel": "커널",
+        "chipset": "칩셋",
+        "androidSDK": "안드로이드 SDK"
+    },
+    "settings": {
+        "title": "설정",
+        "cpu_governor_title": "CPU 거버너",
+        "dnd_gameplay": "게임 중 방해 금지",
+        "lite_mode": "라이트 모드",
+        "device_mitigation": "기기 완화",
+        "default_cpu_gov": "기본 CPU 거버너",
+        "powersave_cpu_gov": "절전 CPU 거버너"
+    },
+    "actions": {
+        "title": "동작",
+        "edit_gamelist": "게임 목록 편집",
+        "create_shortcut": "웹UI 바로가기 만들기",
+        "save_logs": "모듈 로그 저장"
+    },
+    "support": {
+        "title": "지원하기",
+        "description": "Encore Tweaks는 항상 여러분과 모두를 위해 무료입니다. 그러나 기부를 통해 저에게 관심을 보여주실 수 있습니다."
+    },
+    "toast": {
+        "reboot_to_apply": "변경 사항을 적용하려면 기기를 재부팅하세요.",
+        "has_shortcut": "바로가기가 이미 존재합니다.",
+        "gamelist_save_success": "게임 목록이 성공적으로 저장되었습니다."
+    },
+    "modal": {
+        "dnd_title": "방해 금지 모드",
+        "dnd_desc": "게임을 할 때 방해 금지 모드를 활성화합니다. 알림 및 전화로 인한 방해를 제한하여 좋아하는 게임을 방해받지 않고 즐길 수 있습니다.",
+        "lite_mode_title": "라이트 모드",
+        "lite_mode_desc": "이 옵션은 게임 플레이 중 CPU 및 기타 구성 요소가 최고 주파수에서 지속적으로 실행되는 대신 낮은 주파수에서 실행되도록 하여 과열 및 전력 소비를 줄입니다. 이는 전체 게임 성능에 영향을 미칠 수 있습니다.",
+        "device_mitigation_title": "기기 완화",
+        "device_mitigation_desc": "특정 조정을 적용하여 일부 기기별 버그를 완화하여 호환성과 신뢰성을 향상시킵니다. 이 기능은 기기에서 문제가 발생할 때만 활성화하세요.",
+        "unauthorized_mod_title": "무단 수정 감지",
+        "unauthorized_mod_desc": "이 모듈은 제3자에 의해 수정되었을 수 있습니다. 보안을 위해 공식 Encore Tweaks 웹사이트에서 공식 버전을 다운로드하세요.",
+        "edit_gamelist_title": "게임 목록 편집",
+        "edit_gamelist_desc": "여기에 나열된 게임 및 앱 중 하나가 실행될 때 성능 프로필이 활성화됩니다.",
+        "save_changes": "변경 사항 저장",
+        "cancel_changes": "변경 사항 취소",
+        "save_log_fail": "로그를 저장할 수 없습니다",
+        "log_saved_title": "모듈 로그 저장됨",
+        "log_saved_desc": "로그가 {0}에 저장되었습니다."
+    }
+}
