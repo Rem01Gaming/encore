@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <filesystem>
 #include <fstream>
 #include <map>
@@ -34,7 +36,7 @@ namespace ModuleProperty {
  * @param result Vector of ModuleProperties, which will be filled with the key-value pairs from module.prop
  * @throws std::runtime_error If R/W operation failed
  */
-void Get(const std::string &path, std::vector<ModuleProperties> &result) {
+inline void Get(const std::string &path, std::vector<ModuleProperties> &result) {
     result.clear();
 
     std::ifstream in(path);
@@ -66,7 +68,7 @@ void Get(const std::string &path, std::vector<ModuleProperties> &result) {
  * @throws std::runtime_error If R/W operation failed
  * @note This function will only change the values of the keys specified in the data vector, leaving others intact
  */
-void Change(const std::string &path, const std::vector<ModuleProperties> &data) {
+inline void Change(const std::string &path, const std::vector<ModuleProperties> &data) {
     namespace fs = std::filesystem;
 
     std::map<std::string, std::string> props;

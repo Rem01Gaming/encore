@@ -17,6 +17,7 @@
 #include "EncoreUtility.hpp"
 
 #include <ShellUtility.hpp>
+#include <ModuleProperty.hpp>
 
 void set_do_not_disturb(bool do_not_disturb) {
     if (do_not_disturb) {
@@ -52,12 +53,22 @@ void notify(const char *message) {
 }
 
 void is_kanged(void) {
-    if (systemv("grep -q '^name=Encore Tweaks$' %s", MODULE_PROP) != 0) [[unlikely]] {
-        goto doorprize;
-    }
+    std::vector<ModuleProperties> module_properties;
 
-    if (systemv("grep -q '^author=Rem01Gaming$' %s", MODULE_PROP) != 0) [[unlikely]] {
-        goto doorprize;
+    try {
+        ModuleProperty::Get(MODULE_PROP, module_properties);
+
+        for (const auto &property : module_properties) {
+            if (property.key == "name" && property.value != "Encore Tweaks") {
+                goto doorprize;
+            }
+
+            if (property.key == "author" && property.value != "Rem01Gaming") {
+                goto doorprize;
+            }
+        }
+    } catch (const std::exception &e) {
+        LOGE_TAG("ModuleProperty", "{}", e.what());
     }
 
     return;
