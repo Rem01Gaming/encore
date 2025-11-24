@@ -43,7 +43,7 @@
         "edit_gamelist_desc": "여기에 등록된 게임이나 앱을 실행하면 해당 성능 프로필이 자동으로 적용됩니다.",
         "save_changes": "변경 사항 저장",
         "cancel_changes": "변경 취소",
-        "save_log_fail": "로그를 저장할 수 없습니다.",
+        "save_log_fail": "로그를 저장할 수 없습니다",
         "log_saved_title": "모듈 로그 저장 완료",
         "log_saved_desc": "로그가 {0}에 저장되었습니다."
     }
