@@ -29,8 +29,8 @@ echo "$default_gov" >$MODULE_CONFIG/default_cpu_gov
 
 # Create cleanup script
 [ ! -f "$CLEANUP_SCRIPT" ] && {
-  mkdir -p "$(dirname $MODULE_CONFIG)"
-  cp "$MODDIR/cleanup.sh" "$MODULE_CONFIG"
+  mkdir -p "$(dirname $CLEANUP_SCRIPT)"
+  cp "$MODDIR/cleanup.sh" "$CLEANUP_SCRIPT"
   chmod +x "$CLEANUP_SCRIPT"
 }
 
