@@ -29,7 +29,8 @@
         "lite_mode": "وضع Lite",
         "device_mitigation": "تخفيف الجهاز",
         "default_cpu_gov": "المنظم الافتراضي للمعالج",
-        "powersave_cpu_gov": "منظم توفير الطاقة للمعالج"
+        "powersave_cpu_gov": "منظم توفير الطاقة للمعالج",
+        "cpu_governor_title": "مدير المعالج"
     },
     "actions": {
         "title": "الإجراءات",
