@@ -73,7 +73,7 @@ void encore_main_daemon(void) {
     auto IsGameStillActive = [&](const std::vector<RecentAppList> &recent_applist,
                                  const std::string &package_name) -> bool {
         for (const auto &recent : recent_applist) {
-            if (recent.package_name == package_name && recent.visible) {
+            if (recent.package_name == package_name) {
                 return true;
             }
         }
