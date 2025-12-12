@@ -100,7 +100,7 @@ int daemon_handler(const std::vector<std::string> &args) {
     return run_daemon();
 }
 
-// Command definitions
+// clang-format off
 std::vector<CliCommand> commands = {
     {
         "daemon",
@@ -135,6 +135,7 @@ std::vector<CliCommand> commands = {
         version_handler
     },
 };
+// clang-format on
 
 void cli_usage(const char *program_name) {
     std::cout << "Encore Tweaks CLI" << std::endl << std::endl;
