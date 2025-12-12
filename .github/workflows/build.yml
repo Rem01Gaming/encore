@@ -43,7 +43,7 @@ jobs:
       uses: oven-sh/setup-bun@v2.0.2
 
     - name: Build Encore JNI
-      run: ndk-build
+      run: ndk-build -j$(nproc --all)
 
     - name: Build WebUI
       working-directory: ./webui
