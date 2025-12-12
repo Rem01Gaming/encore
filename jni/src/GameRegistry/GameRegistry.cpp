@@ -24,8 +24,8 @@
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <rapidjson/filereadstream.h>
+#include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 
 namespace fs = std::filesystem;
 
@@ -148,7 +148,8 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     }
 
     rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    writer.SetIndent(' ', 2);
     doc.Accept(writer);
 
     std::ofstream output_file(gamelist);

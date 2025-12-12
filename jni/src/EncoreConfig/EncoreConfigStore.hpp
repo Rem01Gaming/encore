@@ -16,8 +16,6 @@
 
 #pragma once
 
-#include <fstream>
-#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -25,10 +23,6 @@
 #include <vector>
 
 #include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 
 #include "Encore.hpp"
 #include "EncoreLog.hpp"

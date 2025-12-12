@@ -16,6 +16,14 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <fstream>
+#include <memory>
+
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+#include <rapidjson/filereadstream.h>
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/stringbuffer.h>
 
 #include "EncoreConfigStore.hpp"
 
@@ -90,9 +98,9 @@ bool EncoreConfigStore::save_config(const std::string &config_path) {
         allocator);
     doc.AddMember("cpu_governor", cpu_gov_obj, allocator);
 
-    // Write to file
     rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    writer.SetIndent(' ', 2);
     doc.Accept(writer);
 
     FILE *fp = fopen(config_path.c_str(), "wb");
