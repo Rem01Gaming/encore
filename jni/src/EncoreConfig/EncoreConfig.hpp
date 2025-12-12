@@ -18,7 +18,7 @@
 
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
-#include <GameRegistry.hpp>
+#include <EncoreConfigStore.hpp>
 #include <InotifyWatcher.hpp>
 
 bool init_file_watcher(InotifyWatcher &watcher);

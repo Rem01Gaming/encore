@@ -28,6 +28,8 @@
 #define LOG_FILE CONFIG_DIR "/encore.log"
 #define PROFILE_MODE CONFIG_DIR "/current_profile"
 #define GAME_INFO CONFIG_DIR "/gameinfo"
+#define CONFIG_FILE CONFIG_DIR "/config.json"
+#define DEFAULT_CPU_GOV CONFIG_DIR "/default_cpu_gov"
 #define ENCORE_GAMELIST CONFIG_DIR "/gamelist.json"
 
 #define MODULE_PROP MODPATH "/module.prop"

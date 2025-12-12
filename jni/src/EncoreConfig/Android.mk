@@ -4,7 +4,7 @@ ROOT_PATH := $(call my-dir)/../..
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := EncoreConfig
-LOCAL_SRC_FILES := InotifyHandler.cpp
+LOCAL_SRC_FILES := InotifyHandler.cpp EncoreConfigStore.cpp
 
 LOCAL_STATIC_LIBRARIES := GameRegistry
 

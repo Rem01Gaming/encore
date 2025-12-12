@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
@@ -26,20 +27,25 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
+namespace fs = std::filesystem;
+
 bool GameRegistry::load_from_json(const std::string &filename) {
-    FILE *fp = fopen(filename.c_str(), "rb");
-    if (!fp) {
+    if (!fs::exists(filename)) {
+        LOGE_TAG("GameRegistry", "{}: File not found", filename);
+        return false;
+    }
+
+    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
+    if (!ifs.is_open()) {
         LOGE_TAG("GameRegistry", "{}: {}", filename, strerror(errno));
         return false;
     }
 
-    char readBuffer[65536];
-    rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+    std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    ifs.close();
 
     rapidjson::Document doc;
-    doc.ParseStream(is);
-
-    fclose(fp);
+    doc.Parse(content.c_str());
 
     if (doc.HasParseError()) {
         LOGE_TAG(
@@ -154,10 +160,7 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     output_file << buffer.GetString();
     output_file.close();
 
-    LOGI_TAG("GameRegistry", "Automatically added {} games to the game list", game_list.size());
-    for (const auto &game : game_list) {
-        LOGI_TAG("GameRegistry", " - {}", game.package_name.c_str());
-    }
+    LOGI_TAG("GameRegistry", "Populated gamelist JSON with {} games", game_list.size());
 
     return true;
 }

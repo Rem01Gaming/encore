@@ -16,6 +16,8 @@
 
 #include "EncoreConfig.hpp"
 
+#include <GameRegistry.hpp>
+
 enum WatchContext {
     WATCH_CONTEXT_GAMELIST,
     WATCH_CONTEXT_CONFIG,
@@ -31,11 +33,38 @@ void on_json_modified(
         game_registry.load_from_json(path);
     };
 
+    auto OnConfigModified = [&](const std::string &path) -> void {
+        LOGD_TAG("InotifyHandler", "Callback OnConfigModified reached");
+
+        if (!CONFIG_STORE.reload()) {
+            LOGW_TAG("InotifyHandler", "Failed to reload config from {}", path);
+            return;
+        }
+
+        // Apply new log level
+        auto prefs = CONFIG_STORE.get_preferences();
+        auto logger = EncoreLog::get();
+        spdlog::level::level_enum level = spdlog::level::info;
+
+        switch (prefs.log_level) {
+            case 0: level = spdlog::level::critical; break;
+            case 1: level = spdlog::level::err; break;
+            case 2: level = spdlog::level::warn; break;
+            case 3: level = spdlog::level::info; break;
+            case 4: level = spdlog::level::debug; break;
+            case 5: level = spdlog::level::trace; break;
+            default: level = spdlog::level::info; break;
+        }
+
+        logger->set_level(level);
+        LOGI_TAG("InotifyHandler", "Config reloaded from {}", path);
+    };
+
     // After the JSON was closed for writing
     if (event->mask & IN_CLOSE_WRITE) {
         switch (context) {
             case WATCH_CONTEXT_GAMELIST: OnGamelistModified(path); break;
-            // case WATCH_CONTEXT_CONFIG: OnConfigModified(path); break;
+            case WATCH_CONTEXT_CONFIG: OnConfigModified(path); break;
             default: break;
         }
     }
@@ -43,12 +72,47 @@ void on_json_modified(
 
 bool init_file_watcher(InotifyWatcher &watcher) {
     try {
+        // Initialize config store first
+        if (!CONFIG_STORE.load_config()) {
+            LOGE_TAG("EncoreConfig", "Failed to load config file");
+            return false;
+        }
+
+        // Apply log level from config
+        auto prefs = CONFIG_STORE.get_preferences();
+        auto logger = EncoreLog::get();
+        spdlog::level::level_enum level = spdlog::level::info;
+
+        switch (prefs.log_level) {
+            case 0: level = spdlog::level::critical; break;
+            case 1: level = spdlog::level::err; break;
+            case 2: level = spdlog::level::warn; break;
+            case 3: level = spdlog::level::info; break;
+            case 4: level = spdlog::level::debug; break;
+            case 5: level = spdlog::level::trace; break;
+            default: level = spdlog::level::info; break;
+        }
+
+        logger->set_level(level);
+
+        // Set up file watchers
         InotifyWatcher::WatchReference gamelist_ref{
             ENCORE_GAMELIST, on_json_modified, WATCH_CONTEXT_GAMELIST, nullptr};
 
-        watcher.addFile(gamelist_ref);
-        watcher.start();
+        InotifyWatcher::WatchReference config_ref{
+            CONFIG_FILE, on_json_modified, WATCH_CONTEXT_CONFIG, nullptr};
 
+        if (!watcher.addFile(gamelist_ref)) {
+            LOGE_TAG("InotifyWatcher", "Failed to add gamelist watch");
+            return false;
+        }
+
+        if (!watcher.addFile(config_ref)) {
+            LOGE_TAG("InotifyWatcher", "Failed to add config watch");
+            return false;
+        }
+
+        watcher.start();
         return true;
     } catch (const std::runtime_error &e) {
         std::string error_msg = e.what();
