@@ -505,7 +505,6 @@ org.citron.citron_emu
 org.sudachi.sudachi_emu.ea
 org.uzuy.uzuy_emu.ea
 org.yuzu.yuzu_emu
-pro.archiemeng.waifu2x
 ro.alyn_sampmobile.game
 ru.nsu.ccfit.zuev.osuplus
 ru.unisamp_mobile.game
