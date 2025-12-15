@@ -40,7 +40,6 @@ public:
     };
 
     struct CPUGovernor {
-        std::string performance;
         std::string balance;
         std::string powersave;
     };
@@ -150,4 +149,4 @@ private:
     std::string config_path_ = CONFIG_FILE;
 };
 
-#define CONFIG_STORE EncoreConfigStore::get_instance()
+#define config_store EncoreConfigStore::get_instance()

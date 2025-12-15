@@ -16,6 +16,9 @@
 
 #include "EncoreConfig.hpp"
 
+#include <Encore.hpp>
+#include <EncoreConfigStore.hpp>
+#include <EncoreLog.hpp>
 #include <GameRegistry.hpp>
 
 enum WatchContext {
@@ -36,13 +39,13 @@ void on_json_modified(
     auto OnConfigModified = [&](const std::string &path) -> void {
         LOGD_TAG("InotifyHandler", "Callback OnConfigModified reached");
 
-        if (!CONFIG_STORE.reload()) {
+        if (!config_store.reload()) {
             LOGW_TAG("InotifyHandler", "Failed to reload config from {}", path);
             return;
         }
 
         // Apply new log level
-        auto prefs = CONFIG_STORE.get_preferences();
+        auto prefs = config_store.get_preferences();
         auto logger = EncoreLog::get();
         spdlog::level::level_enum level = spdlog::level::info;
 
@@ -73,13 +76,13 @@ void on_json_modified(
 bool init_file_watcher(InotifyWatcher &watcher) {
     try {
         // Initialize config store first
-        if (!CONFIG_STORE.load_config()) {
+        if (!config_store.load_config()) {
             LOGE_TAG("EncoreConfig", "Failed to load config file");
             return false;
         }
 
         // Apply log level from config
-        auto prefs = CONFIG_STORE.get_preferences();
+        auto prefs = config_store.get_preferences();
         auto logger = EncoreLog::get();
         spdlog::level::level_enum level = spdlog::level::info;
 

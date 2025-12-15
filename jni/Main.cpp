@@ -21,10 +21,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include <EncoreCLI.hpp>
 #include <Dumpsys.hpp>
 #include <Encore.hpp>
+#include <EncoreCLI.hpp>
 #include <EncoreConfig.hpp>
+#include <EncoreConfigStore.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
@@ -153,7 +154,7 @@ void encore_main_daemon(void) {
         // Check if active game is still in recent app list when in game session
         // Fix profile stuck, especially in Mobile Legends: Bang Bang
         if (in_game_session && !active_package.empty() && do_full_check) {
-            if (!IsGameStillActive(window_displays.recent_app, active_package)) {
+            if (!IsGameStillActive(window_displays.recent_app, active_package)) [[unlikely]] {
                 goto game_exited;
             }
         }
@@ -223,7 +224,9 @@ void encore_main_daemon(void) {
             cur_mode = PERFORMANCE_PROFILE;
 
             LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
-            apply_performance_profile(active_game->lite_mode, active_package, game_pid);
+            bool lite_mode = active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
+
+            apply_performance_profile(lite_mode, active_package, game_pid);
             pid_tracker.set_pid(game_pid);
 
             if (active_game->enable_dnd) {

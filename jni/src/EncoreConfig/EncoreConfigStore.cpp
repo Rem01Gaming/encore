@@ -88,9 +88,6 @@ bool EncoreConfigStore::save_config(const std::string &config_path) {
     // Serialize CPU governor
     rapidjson::Value cpu_gov_obj(rapidjson::kObjectType);
     cpu_gov_obj.AddMember(
-        "performance", rapidjson::Value(config_.cpu_governor.performance.c_str(), allocator).Move(),
-        allocator);
-    cpu_gov_obj.AddMember(
         "balance", rapidjson::Value(config_.cpu_governor.balance.c_str(), allocator).Move(),
         allocator);
     cpu_gov_obj.AddMember(
@@ -203,7 +200,6 @@ bool EncoreConfigStore::create_default_config() {
             .items = {}
         },
         .cpu_governor = {
-            .performance = default_governor,
             .balance = default_governor,
             .powersave = default_governor
         }
@@ -254,10 +250,6 @@ bool EncoreConfigStore::parse_config(const rapidjson::Document &doc) {
     // Parse CPU governor
     if (doc.HasMember("cpu_governor") && doc["cpu_governor"].IsObject()) {
         const rapidjson::Value &gov = doc["cpu_governor"];
-
-        if (gov.HasMember("performance") && gov["performance"].IsString()) {
-            new_config.cpu_governor.performance = gov["performance"].GetString();
-        }
 
         if (gov.HasMember("balance") && gov["balance"].IsString()) {
             new_config.cpu_governor.balance = gov["balance"].GetString();
