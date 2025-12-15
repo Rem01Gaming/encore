@@ -38,7 +38,7 @@ GameRegistry game_registry;
 
 void encore_main_daemon(void) {
     constexpr static auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
-    constexpr static auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(12);
+    constexpr static auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(7);
 
     static_assert(
         NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
