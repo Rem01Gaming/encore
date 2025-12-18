@@ -12,7 +12,7 @@ LOCAL_STATIC_LIBRARIES := Dumpsys EncoreCLI GameRegistry EncoreConfig EncoreUtil
 
 LOCAL_SRC_FILES := Main.cpp
 
-LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O2 -flto
+LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O0 -flto
 LOCAL_CPPFLAGS += -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized
 
 LOCAL_LDFLAGS += -flto
