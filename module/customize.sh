@@ -200,12 +200,12 @@ set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 
 # Gamelist setup
 if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then
-  ui_print "- Initializing gamelist..."
+  ui_print "- Initializing Gamelist JSON..."
   generate_gamelist
 else
   "$MODPATH/system/bin/encored" check_gamelist
   [ $? -gt 0 ] && {
-    ui_print "! gamelist is malformed, rebuilding..."
+    ui_print "! Gamelist JSON is malformed, regenerating..."
     generate_gamelist
   }
 fi
