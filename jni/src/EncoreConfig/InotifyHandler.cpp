@@ -60,7 +60,6 @@ void on_json_modified(
         }
 
         logger->set_level(level);
-        LOGI_TAG("InotifyHandler", "Config reloaded from {}", path);
     };
 
     // After the JSON was closed for writing
