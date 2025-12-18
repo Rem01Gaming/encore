@@ -46,20 +46,7 @@ void on_json_modified(
 
         // Apply new log level
         auto prefs = config_store.get_preferences();
-        auto logger = EncoreLog::get();
-        spdlog::level::level_enum level = spdlog::level::info;
-
-        switch (prefs.log_level) {
-            case 0: level = spdlog::level::critical; break;
-            case 1: level = spdlog::level::err; break;
-            case 2: level = spdlog::level::warn; break;
-            case 3: level = spdlog::level::info; break;
-            case 4: level = spdlog::level::debug; break;
-            case 5: level = spdlog::level::trace; break;
-            default: level = spdlog::level::info; break;
-        }
-
-        logger->set_level(level);
+        EncoreLog::set_log_level(prefs.log_level);
     };
 
     // After the JSON was closed for writing
@@ -82,20 +69,7 @@ bool init_file_watcher(InotifyWatcher &watcher) {
 
         // Apply log level from config
         auto prefs = config_store.get_preferences();
-        auto logger = EncoreLog::get();
-        spdlog::level::level_enum level = spdlog::level::info;
-
-        switch (prefs.log_level) {
-            case 0: level = spdlog::level::critical; break;
-            case 1: level = spdlog::level::err; break;
-            case 2: level = spdlog::level::warn; break;
-            case 3: level = spdlog::level::info; break;
-            case 4: level = spdlog::level::debug; break;
-            case 5: level = spdlog::level::trace; break;
-            default: level = spdlog::level::info; break;
-        }
-
-        logger->set_level(level);
+        EncoreLog::set_log_level(prefs.log_level);
 
         // Set up file watchers
         InotifyWatcher::WatchReference gamelist_ref{
