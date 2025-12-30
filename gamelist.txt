@@ -38,6 +38,7 @@ com.Wispwood.ArrowQuest
 com.YoStarEN.Arknights
 com.YoStarEN.HBR
 com.YoStarEN.MahjongSoul
+com.YoStarEN.StellaSora
 com.YoStarJP.MajSoul
 com.YoStar.AetherGazer
 com.YostarJP.BlueArchive
