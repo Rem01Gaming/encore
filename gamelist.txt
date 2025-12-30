@@ -54,6 +54,7 @@ com.alightcreative.motion
 com.android.test.uibench
 com.andromeda.androbench2
 com.and.games505.Terraria
+com.and.games505.TerrariaPaid
 com.archosaur.sea.dr.gp
 com.asobimo.toramonline
 com.autumn.skullgirls
