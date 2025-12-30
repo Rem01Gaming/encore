@@ -15,6 +15,7 @@ com.GameCoaster.ProtectDungeon
 com.HoYoverse.Nap
 com.HoYoverse.hkrpgoversea
 com.LanPiaoPiao.PlantsVsZombiesRH
+com.Nekootan.kfkjos.google
 com.MOBGames.PoppyMobileChap1
 com.OxGames.Pluvia
 com.PigeonGames.Phigros
