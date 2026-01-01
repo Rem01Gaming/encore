@@ -224,7 +224,8 @@ void encore_main_daemon(void) {
             cur_mode = PERFORMANCE_PROFILE;
 
             LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
-            bool lite_mode = active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
+            bool lite_mode =
+                active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
 
             apply_performance_profile(lite_mode, active_package, game_pid);
             pid_tracker.set_pid(game_pid);
@@ -293,11 +294,6 @@ int run_daemon() {
         SetModule_DescriptionStatus("\xE2\x9D\x8C " + error_msg);
     };
 
-    if (getuid() != 0) {
-        std::cerr << "\033[31mERROR:\033[0m Please run this program as root" << std::endl;
-        return EXIT_FAILURE;
-    }
-
     if (!create_lock_file()) {
         std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!"
                   << std::endl;
@@ -348,6 +344,11 @@ int run_daemon() {
 }
 
 int main(int argc, char *argv[]) {
+    if (getuid() != 0) {
+        std::cerr << "\033[31mERROR:\033[0m Please run this program as root" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     // Handle args
     return encore_cli(argc, argv);
 }
