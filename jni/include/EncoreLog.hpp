@@ -29,11 +29,10 @@ inline std::shared_ptr<spdlog::logger> g_logger;
 
 /**
  * @brief Initialize the logging system
- * 
+ *
  * @param log_path Path to the log file (defaults to LOG_FILE)
- * 
+ *
  * @details Creates a basic file logger with the pattern "YYYY-MM-DD HH:MM:SS.mmm L message"
- * 
  * @note If initialization fails, the program will exit with EXIT_FAILURE.
  */
 inline void init(const std::string &log_path = LOG_FILE) {
@@ -50,15 +49,26 @@ inline void init(const std::string &log_path = LOG_FILE) {
 
 /**
  * @brief Get the logger instance
- * 
+ *
  * @return std::shared_ptr<spdlog::logger> Shared pointer to the logger
- * 
+ *
  * @details If the logger hasn't been initialized yet, it will be initialized
  *          with default parameters before being returned.
  */
 inline std::shared_ptr<spdlog::logger> get() {
     if (!g_logger) init();
     return g_logger;
+}
+
+/**
+ * @brief Flush all pending log messages
+ *
+ * @details Forces immediate write of all buffered log messages to disk
+ */
+inline void flush() {
+    if (g_logger) {
+        g_logger->flush();
+    }
 }
 
 } // namespace EncoreLog
@@ -104,9 +114,9 @@ namespace EncoreLog {
 
 /**
  * @brief Set the log level
- * 
+ *
  * @param level Log level (0-5)
- * 
+ *
  * @note If an invalid level is provided, it defaults to info.
  */
 inline void set_log_level(int level) {
