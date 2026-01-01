@@ -32,6 +32,7 @@
 #include <InotifyWatcher.hpp>
 #include <ModuleProperty.hpp>
 #include <PIDTracker.hpp>
+#include <SignalHandler.hpp>
 #include <ShellUtility.hpp>
 
 GameRegistry game_registry;
@@ -294,6 +295,12 @@ int run_daemon() {
         SetModule_DescriptionStatus("\xE2\x9D\x8C " + error_msg);
     };
 
+    std::atexit([]() {
+        SignalHandler::cleanup_before_exit();
+    });
+
+    SignalHandler::setup_signal_handlers();
+
     if (!create_lock_file()) {
         std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!"
                   << std::endl;
@@ -340,6 +347,7 @@ int run_daemon() {
 
     // If we reach this, the daemon is dead
     LOGW("Encore Tweaks daemon exited");
+    SignalHandler::cleanup_before_exit();
     return EXIT_SUCCESS;
 }
 
