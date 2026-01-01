@@ -49,13 +49,13 @@ bool GameRegistry::load_from_json(const std::string &filename) {
 
     if (doc.HasParseError()) {
         LOGE_TAG(
-            "GameRegistry", "{} parse error: {} (Offset: {})", filename,
+            "GameRegistry", "{}: parse error: {} (Offset: {})", filename,
             rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
         return false;
     }
 
     if (!doc.IsObject()) {
-        LOGE_TAG("GameRegistry", "{} root is not an object", filename);
+        LOGE_TAG("GameRegistry", "{}: root is not an object", filename);
         return false;
     }
 
@@ -101,7 +101,7 @@ bool GameRegistry::load_from_json(const std::string &filename) {
     }
 
     update_gamelist(new_list);
-    LOGI_TAG("GameRegistry", "Loaded {} games from {}", new_list.size(), filename);
+    LOGI_TAG("GameRegistry", "Loaded gamelist from {}", filename);
     return true;
 }
 
