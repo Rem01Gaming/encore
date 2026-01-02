@@ -1,9 +1,6 @@
 name: Build Encore Zip
 
 on:
-  pull_request:
-    branches:
-      -main
   workflow_dispatch:
   push:
     branches:
@@ -11,7 +8,7 @@ on:
     paths:
       - '.github/workflows/build.yml'
       - '.github/scripts/**'
-      - 'jni/**'
+      - 'daemon/**'
       - 'scripts/**'
       - 'module/**'
       - 'webui/**'
@@ -34,16 +31,19 @@ jobs:
         fetch-depth: 0
         submodules: true
 
-    - name: NDK Setup
-      uses: nttld/setup-ndk@v1.5.0
+    - name: Setup Zig
+      uses: mlugg/setup-zig@v2
       with:
-        ndk-version: r29
+        version: latest
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2.0.2
 
     - name: Build Encore JNI
-      run: ndk-build -j$(nproc --all)
+      working-directory: ./daemon
+      run: |
+        make TARGET=aarch64-linux -j$(nproc)
+        make TARGET=arm-linux -j$(nproc)
 
     - name: Build WebUI
       working-directory: ./webui
