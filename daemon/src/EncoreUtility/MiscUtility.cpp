@@ -16,14 +16,34 @@
 
 #include "EncoreUtility.hpp"
 
-#include <ShellUtility.hpp>
 #include <ModuleProperty.hpp>
+#include <ShellUtility.hpp>
 
 void set_do_not_disturb(bool do_not_disturb) {
-    if (do_not_disturb) {
-        system("cmd notification set_dnd priority");
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        int devnull = open("/dev/null", O_WRONLY);
+        if (devnull >= 0) {
+            dup2(devnull, STDOUT_FILENO);
+            dup2(devnull, STDERR_FILENO);
+            close(devnull);
+        }
+
+        const char *args[] = {
+            "cmd", "notification", "set_dnd", do_not_disturb ? "priority" : "off", NULL};
+
+        execvp("/system/bin/cmd", (char *const *)args);
+        _exit(127);
+    } else if (pid > 0) {
+        int status;
+        waitpid(pid, &status, 0);
+
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) [[unlikely]] {
+            LOGE("Failed to set DND mode with status: {}", WEXITSTATUS(status));
+        }
     } else {
-        system("cmd notification set_dnd off");
+        LOGE("fork failed: {}", strerror(errno));
     }
 }
 
@@ -31,6 +51,13 @@ void notify(const char *message) {
     pid_t pid = fork();
 
     if (pid == 0) {
+        int devnull = open("/dev/null", O_WRONLY);
+        if (devnull >= 0) {
+            dup2(devnull, STDOUT_FILENO);
+            dup2(devnull, STDERR_FILENO);
+            close(devnull);
+        }
+
         if (setgid(2000) != 0 || setuid(2000) != 0) {
             _exit(126);
         }
@@ -45,10 +72,10 @@ void notify(const char *message) {
         waitpid(pid, &status, 0);
 
         if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) [[unlikely]] {
-            LOGE_TAG("Notify", "Push notification failed with status: {}", WEXITSTATUS(status));
+            LOGE("Push notification failed with status: {}", WEXITSTATUS(status));
         }
     } else {
-        LOGE_TAG("Notify", "fork failed: {}", strerror(errno));
+        LOGE("fork failed: {}", strerror(errno));
     }
 }
 
