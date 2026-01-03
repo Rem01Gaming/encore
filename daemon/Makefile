@@ -11,12 +11,13 @@ TARGET_FLAGS := -target $(TARGET)
 OBJ_DIR := ../obj/$(TARGET)
 BIN_DIR := ../libs/$(TARGET)
 
-LINK_FLAGS := -static -s -Wl,--gc-sections,--strip-all,-z,norelro -fno-unwind-tables
+LINK_FLAGS := -static
 
 ifeq ($(DEBUG),1)
 	OPT_FLAGS := -O0 -g -fno-omit-frame-pointer
 else
 	OPT_FLAGS := -Os -flto -DNDEBUG
+	LINK_FLAGS += -s -Wl,--gc-sections,--strip-all,-z,norelro -fno-unwind-tables
 endif
 
 CXXFLAGS := $(TARGET_FLAGS) $(OPT_FLAGS) -std=c++23 -fexceptions \
