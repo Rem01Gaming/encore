@@ -31,11 +31,7 @@ SOC=$(<$MODULE_CONFIG/soc_recognition)
 PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
 
 # Default CPU Governor
-if [ -f $MODULE_CONFIG/custom_default_cpu_gov ]; then
-	DEFAULT_CPU_GOV="$(<$MODULE_CONFIG/custom_default_cpu_gov)"
-else
-	DEFAULT_CPU_GOV="$(<$MODULE_CONFIG/default_cpu_gov)"
-fi
+DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
 # Device specific bug workaround
 DEVICE_MITIGATION="$(<$MODULE_CONFIG/device_mitigation)"
@@ -918,7 +914,7 @@ powersave_profile() {
 	done &
 
 	# CPU governor
-	change_cpu_gov "$(<$MODULE_CONFIG/powersave_cpu_gov)"
+	change_cpu_gov "$ENCORE_POWERSAVE_CPUGOV"
 
 	case $SOC in
 	1) mediatek_powersave ;;
