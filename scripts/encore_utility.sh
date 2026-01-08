@@ -113,7 +113,7 @@ logcat() {
 		case "$level_char" in
 		W) level_color="\e[1;33m" ;; # Yellow
 		E) level_color="\e[1;31m" ;; # Red
-		F) level_color="\e[1;31m" ;; # Red
+		C) level_color="\e[1;31m" ;; # Red
 		*) level_color="\e[0m" ;;    # Default
 		esac
 
