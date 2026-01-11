@@ -23,6 +23,7 @@ need_integrity=(
 	"module/cleanup.sh"
 	"module/module.prop"
 	"module/gamelist.txt"
+	"module/device_mitigation.json"
 )
 
 # Version info
@@ -36,6 +37,7 @@ sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 cp -r ./libs module
 cp -r ./scripts/* module/system/bin
 cp gamelist.txt module
+cp device_mitigation.json module
 cp LICENSE module
 cp NOTICE.md module
 

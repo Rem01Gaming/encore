@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Rem01Gaming
+ * Copyright (C) 2026 Rem01Gaming
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include "EncoreConfigStore.hpp"
-#include "EncoreUtility.hpp"
+#include <DeviceMitigationStore.hpp>
+#include <EncoreConfigStore.hpp>
+#include <EncoreUtility.hpp>
 
 void set_profiler_env_vars() {
-    auto device_mitigation = config_store.get_device_mitigation();
+    // Get preferences from config store
+    auto prefs = config_store.get_preferences();
 
     // Clear all existing _ENCORE_* environment variables
     extern char **environ;
@@ -37,22 +39,20 @@ void set_profiler_env_vars() {
         }
     }
 
-    // Set device mitigation variables
-    if (device_mitigation.enable && !device_mitigation.items.empty()) {
-        setenv("ENCORE_MITIGATION_ENABLED", "1", 1);
+    // Use cached mitigation items instead of re-evaluating rules
+    auto mitigation_items =
+        device_mitigation_store.get_cached_mitigation_items(prefs.use_device_mitigation);
 
-        // Set environment variable for each mitigation item
-        for (const auto &item : device_mitigation.items) {
-            std::string env_var = "ENCORE_" + item;
-            std::transform(env_var.begin(), env_var.end(), env_var.begin(), [](unsigned char c) {
-                // Convert to uppercase and replace non-alphanumeric characters with underscores
-                if (!std::isalnum(c) && c != '_') return '_';
-                return static_cast<char>(std::toupper(c));
-            });
+    // Set environment variable for mitigation items
+    for (const auto &item : mitigation_items) {
+        std::string env_var = "ENCORE_" + item;
+        std::transform(env_var.begin(), env_var.end(), env_var.begin(), [](unsigned char c) {
+            if (!std::isalnum(c) && c != '_') return '_';
+            return static_cast<char>(std::toupper(c));
+        });
 
-            setenv(env_var.c_str(), "1", 1);
-            LOGD_TAG("Profiler", "Set mitigation env var: {}", env_var);
-        }
+        setenv(env_var.c_str(), "1", 1);
+        LOGD_TAG("Profiler", "Set mitigation env var: {}", env_var);
     }
 
     // Set CPU Governor variables

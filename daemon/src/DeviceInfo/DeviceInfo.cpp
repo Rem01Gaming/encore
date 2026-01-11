@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2026 Rem01Gaming
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <DeviceInfo.hpp>
+#include <EncoreLog.hpp>
+#include <ShellUtility.hpp>
+
+#include <fstream>
+
+#include <sys/utsname.h>
+
+std::string get_kernel_uname() {
+    struct utsname buffer;
+    if (uname(&buffer) != 0) {
+        LOGE_TAG("DeviceInfo", "uname failed: {}", strerror(errno));
+        return "Unknown";
+    }
+
+    return std::string(buffer.release);
+}
+
+std::string get_soc_model() {
+    std::ifstream file("/proc/device-tree/model");
+    if (!file.is_open()) {
+        return "Unknown";
+    }
+
+    std::string model;
+    std::getline(file, model);
+
+    size_t null_pos = model.find('\0');
+    if (null_pos != std::string::npos) {
+        model = model.substr(0, null_pos);
+    }
+
+    model.erase(model.find_last_not_of(" \t\n\r\f\v") + 1);
+
+    return model;
+}
+
+std::string get_device_model() {
+    auto pipe = popen_direct({"/system/bin/getprop", "ro.product.model"});
+
+    if (!pipe) {
+        return "Unknown";
+    }
+
+    char buffer[128];
+    std::string result;
+
+    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
+        result += buffer;
+    }
+
+    if (!result.empty() && result.back() == '\n') {
+        result.pop_back();
+    }
+
+    size_t end = result.find_last_not_of(" \t\r\n");
+    if (end != std::string::npos) {
+        result = result.substr(0, end + 1);
+    }
+
+    return result.empty() ? "Unknown" : result;
+}

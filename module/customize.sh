@@ -188,7 +188,7 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 make_dir "$MODULE_CONFIG"
-make_node 0 "$MODULE_CONFIG/device_mitigation"
+extract "$ZIPFILE" 'device_mitigation.json' "$MODULE_CONFIG"
 [ ! -f "$MODULE_CONFIG/ppm_policies_mediatek" ] && echo 'PWR_THRO|THERMAL' >"$MODULE_CONFIG/ppm_policies_mediatek"
 
 # Permission settings

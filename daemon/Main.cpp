@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Rem01Gaming
+ * Copyright (C) 2026 Rem01Gaming
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@
 #include <EncoreCLI.hpp>
 #include <EncoreConfig.hpp>
 #include <EncoreConfigStore.hpp>
+#include <DeviceMitigationStore.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
@@ -325,6 +326,13 @@ int run_daemon() {
         std::cerr << "\033[31mERROR:\033[0m Failed to parse " << ENCORE_GAMELIST << std::endl;
         NotifyFatalError("Failed to parse gamelist.json");
         LOGC("Failed to parse {}", ENCORE_GAMELIST);
+        return EXIT_FAILURE;
+    }
+
+    if (!device_mitigation_store.load_config()) {
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE << std::endl;
+        NotifyFatalError("Failed to parse device_mitigation.json");
+        LOGC("Failed to parse {}", DEVICE_MITIGATION_FILE);
         return EXIT_FAILURE;
     }
 

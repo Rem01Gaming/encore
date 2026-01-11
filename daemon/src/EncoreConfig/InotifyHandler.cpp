@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Rem01Gaming
+ * Copyright (C) 2026 Rem01Gaming
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #include "EncoreConfig.hpp"
 
+#include <DeviceMitigationStore.hpp>
 #include <Encore.hpp>
 #include <EncoreConfigStore.hpp>
 #include <EncoreLog.hpp>
@@ -24,6 +25,7 @@
 enum WatchContext {
     WATCH_CONTEXT_GAMELIST,
     WATCH_CONTEXT_CONFIG,
+    WATCH_CONTEXT_DEVICE_MITIGATION,
 };
 
 void on_json_modified(
@@ -34,6 +36,11 @@ void on_json_modified(
     auto OnGamelistModified = [&](const std::string &path) -> void {
         LOGD_TAG("InotifyHandler", "Callback OnGamelistModified reached");
         game_registry.load_from_json(path);
+    };
+
+    auto OnDeviceMitigationModified = [&](const std::string &path) -> void {
+        LOGD_TAG("InotifyHandler", "Callback OnDeviceMitigationModified reached");
+        device_mitigation_store.load_config(path);
     };
 
     auto OnConfigModified = [&](const std::string &path) -> void {
@@ -54,6 +61,7 @@ void on_json_modified(
         switch (context) {
             case WATCH_CONTEXT_GAMELIST: OnGamelistModified(path); break;
             case WATCH_CONTEXT_CONFIG: OnConfigModified(path); break;
+            case WATCH_CONTEXT_DEVICE_MITIGATION: OnDeviceMitigationModified(path); break;
             default: break;
         }
     }
@@ -78,6 +86,9 @@ bool init_file_watcher(InotifyWatcher &watcher) {
         InotifyWatcher::WatchReference config_ref{
             CONFIG_FILE, on_json_modified, WATCH_CONTEXT_CONFIG, nullptr};
 
+        InotifyWatcher::WatchReference device_mitigation_ref{
+            DEVICE_MITIGATION_FILE, on_json_modified, WATCH_CONTEXT_DEVICE_MITIGATION, nullptr};
+
         if (!watcher.addFile(gamelist_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add gamelist watch");
             return false;
@@ -85,6 +96,11 @@ bool init_file_watcher(InotifyWatcher &watcher) {
 
         if (!watcher.addFile(config_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add config watch");
+            return false;
+        }
+
+        if (!watcher.addFile(device_mitigation_ref)) {
+            LOGE_TAG("InotifyWatcher", "Failed to add device mitigation watch");
             return false;
         }
 

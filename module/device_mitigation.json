@@ -1,0 +1,6 @@
+{
+  "default": {
+    "items": ["DISABLE_DDR_TWEAK", "NO_PERFORMANCE_CPUGOV"]
+  },
+  "device_rules": {}
+}

@@ -29,6 +29,7 @@
 #define PROFILE_MODE CONFIG_DIR "/current_profile"
 #define GAME_INFO CONFIG_DIR "/gameinfo"
 #define CONFIG_FILE CONFIG_DIR "/config.json"
+#define DEVICE_MITIGATION_FILE CONFIG_DIR "/device_mitigation.json"
 #define DEFAULT_CPU_GOV CONFIG_DIR "/default_cpu_gov"
 #define ENCORE_GAMELIST CONFIG_DIR "/gamelist.json"
 

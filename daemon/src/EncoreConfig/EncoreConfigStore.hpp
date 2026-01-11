@@ -31,12 +31,8 @@ class EncoreConfigStore {
 public:
     struct Preferences {
         bool enforce_lite_mode = false;
-        int log_level = 3;
-    };
-
-    struct DeviceMitigation {
-        bool enable = false;
-        std::unordered_set<std::string> items;
+        bool use_device_mitigation = false;
+        int log_level = 4;
     };
 
     struct CPUGovernor {
@@ -46,7 +42,6 @@ public:
 
     struct ConfigData {
         Preferences preferences;
-        DeviceMitigation device_mitigation;
         CPUGovernor cpu_governor;
     };
 
@@ -83,19 +78,9 @@ public:
     Preferences get_preferences() const;
 
     /**
-     * @brief Get device mitigation settings
-     */
-    DeviceMitigation get_device_mitigation() const;
-
-    /**
      * @brief Get CPU governor settings
      */
     CPUGovernor get_cpu_governor() const;
-
-    /**
-     * @brief Check if a specific mitigation item is enabled
-     */
-    bool is_mitigation_enabled(const std::string &item) const;
 
     /**
      * @brief Update preferences
@@ -103,17 +88,12 @@ public:
     void set_preferences(const Preferences &prefs);
 
     /**
-     * @brief Update device mitigation
-     */
-    void set_device_mitigation(const DeviceMitigation &mitigation);
-
-    /**
      * @brief Update CPU governor settings
      */
     void set_cpu_governor(const CPUGovernor &governor);
 
     /**
-     * @brief Reload configuration from disk
+     * @brief Get config file path
      */
     std::string get_config_path() const;
 

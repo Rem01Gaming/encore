@@ -71,19 +71,10 @@ bool EncoreConfigStore::save_config(const std::string &config_path) {
     // Serialize preferences
     rapidjson::Value prefs_obj(rapidjson::kObjectType);
     prefs_obj.AddMember("enforce_lite_mode", config_.preferences.enforce_lite_mode, allocator);
+    prefs_obj.AddMember(
+        "use_device_mitigation", config_.preferences.use_device_mitigation, allocator);
     prefs_obj.AddMember("log_level", config_.preferences.log_level, allocator);
     doc.AddMember("preferences", prefs_obj, allocator);
-
-    // Serialize device mitigation
-    rapidjson::Value device_mit_obj(rapidjson::kObjectType);
-    device_mit_obj.AddMember("enable", config_.device_mitigation.enable, allocator);
-
-    rapidjson::Value items_array(rapidjson::kArrayType);
-    for (const auto &item : config_.device_mitigation.items) {
-        items_array.PushBack(rapidjson::Value(item.c_str(), allocator).Move(), allocator);
-    }
-    device_mit_obj.AddMember("items", items_array, allocator);
-    doc.AddMember("device_mitigation", device_mit_obj, allocator);
 
     // Serialize CPU governor
     rapidjson::Value cpu_gov_obj(rapidjson::kObjectType);
@@ -123,30 +114,14 @@ EncoreConfigStore::Preferences EncoreConfigStore::get_preferences() const {
     return config_.preferences;
 }
 
-EncoreConfigStore::DeviceMitigation EncoreConfigStore::get_device_mitigation() const {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return config_.device_mitigation;
-}
-
 EncoreConfigStore::CPUGovernor EncoreConfigStore::get_cpu_governor() const {
     std::lock_guard<std::mutex> lock(mutex_);
     return config_.cpu_governor;
 }
 
-bool EncoreConfigStore::is_mitigation_enabled(const std::string &item) const {
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (!config_.device_mitigation.enable) return false;
-    return config_.device_mitigation.items.find(item) != config_.device_mitigation.items.end();
-}
-
 void EncoreConfigStore::set_preferences(const Preferences &prefs) {
     std::lock_guard<std::mutex> lock(mutex_);
     config_.preferences = prefs;
-}
-
-void EncoreConfigStore::set_device_mitigation(const DeviceMitigation &mitigation) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    config_.device_mitigation = mitigation;
 }
 
 void EncoreConfigStore::set_cpu_governor(const CPUGovernor &governor) {
@@ -193,11 +168,8 @@ bool EncoreConfigStore::create_default_config() {
     ConfigData default_config = ConfigData{
         .preferences = {
             .enforce_lite_mode = false,
-            .log_level = 3
-        },
-        .device_mitigation = {
-            .enable = false,
-            .items = {}
+            .use_device_mitigation = false,
+            .log_level = 4
         },
         .cpu_governor = {
             .balance = default_governor,
@@ -225,25 +197,12 @@ bool EncoreConfigStore::parse_config(const rapidjson::Document &doc) {
             new_config.preferences.enforce_lite_mode = prefs["enforce_lite_mode"].GetBool();
         }
 
+        if (prefs.HasMember("use_device_mitigation") && prefs["use_device_mitigation"].IsBool()) {
+            new_config.preferences.use_device_mitigation = prefs["use_device_mitigation"].GetBool();
+        }
+
         if (prefs.HasMember("log_level") && prefs["log_level"].IsInt()) {
             new_config.preferences.log_level = prefs["log_level"].GetInt();
-        }
-    }
-
-    // Parse device mitigation
-    if (doc.HasMember("device_mitigation") && doc["device_mitigation"].IsObject()) {
-        const rapidjson::Value &mit = doc["device_mitigation"];
-
-        if (mit.HasMember("enable") && mit["enable"].IsBool()) {
-            new_config.device_mitigation.enable = mit["enable"].GetBool();
-        }
-
-        if (mit.HasMember("items") && mit["items"].IsArray()) {
-            for (const auto &item : mit["items"].GetArray()) {
-                if (item.IsString()) {
-                    new_config.device_mitigation.items.insert(item.GetString());
-                }
-            }
         }
     }
 
