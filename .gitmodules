@@ -1,6 +1,6 @@
-[submodule "daemon/external/spdlog"]
-	path = daemon/external/spdlog
+[submodule "jni/external/spdlog"]
+	path = jni/external/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "daemon/external/rapidjson"]
-	path = daemon/external/rapidjson
+[submodule "jni/external/rapidjson"]
+	path = jni/external/rapidjson
 	url = https://github.com/Tencent/rapidjson.git

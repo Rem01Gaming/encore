@@ -148,8 +148,11 @@ cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
 
 # Target architecture
 case $ARCH in
-"arm64") ARCH_TMP="aarch64-linux" ;;
-"arm") ARCH_TMP="arm-linux" ;;
+"arm64") ARCH_TMP="arm64-v8a" ;;
+"arm") ARCH_TMP="armeabi-v7a" ;;
+"x64") ARCH_TMP="x86_64" ;;
+"x86") ARCH_TMP="x86" ;;
+"riscv64") ARCH_TMP="riscv64" ;;
 *) abort_unsupported_arch ;;
 esac
 
