@@ -20,6 +20,7 @@
 
 #include <fstream>
 
+#include <sys/system_properties.h>
 #include <sys/utsname.h>
 
 std::string get_kernel_uname() {
@@ -52,22 +53,14 @@ std::string get_soc_model() {
 }
 
 std::string get_device_model() {
-    auto pipe = popen_direct({"/system/bin/getprop", "ro.product.model"});
+    char prop_value[PROP_VALUE_MAX];
+    int len = __system_property_get("ro.product.model", prop_value);
 
-    if (!pipe) {
+    if (len <= 0) {
         return "Unknown";
     }
 
-    char buffer[128];
-    std::string result;
-
-    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
-        result += buffer;
-    }
-
-    if (!result.empty() && result.back() == '\n') {
-        result.pop_back();
-    }
+    std::string result(prop_value, len);
 
     size_t end = result.find_last_not_of(" \t\r\n");
     if (end != std::string::npos) {
