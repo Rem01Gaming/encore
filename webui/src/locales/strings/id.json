@@ -1,165 +1,141 @@
 {
-  "home_page": {
-    "title": "Encore Tweaks",
-
-    "status_card": {
-      "running": "Berfungsi ✨",
-      "stopped": "Terhenti 💤",
-      "error": "Error ~",
-      "daemonPID": "PID Daemon: {pid}",
-      "daemon_inactive": "Layanan tidak aktif",
-      "loading_daemon": "Sebentar ya..."
+    "home_page": {
+        "title": "Encore Tweaks",
+        "status_card": {
+            "running": "Berfungsi ✨",
+            "stopped": "Terhenti 💤",
+            "error": "Error ~",
+            "daemonPID": "PID Daemon: {pid}",
+            "daemon_inactive": "Layanan tidak aktif",
+            "loading_daemon": "Sebentar ya..."
+        },
+        "info_card": {
+            "module": "Encore Tweaks",
+            "profile": "Profil Saat Ini",
+            "kernel": "Kernel",
+            "chipset": "Chipset",
+            "androidSDK": "Android SDK"
+        },
+        "support_button": {
+            "title": "Dukung Saya",
+            "description": "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi."
+        },
+        "learn_encore": {
+            "title": "Pelajari Encore",
+            "description": "Pelajari cara menggunakan Encore Tweaks dan fitur-fiturnya."
+        }
     },
-
-    "info_card": {
-      "module": "Encore Tweaks",
-      "profile": "Profil Saat Ini",
-      "kernel": "Kernel",
-      "chipset": "Chipset",
-      "androidSDK": "Android SDK"
+    "games_page": {
+        "title": "Game Saya",
+        "search_placeholder": "Cari aplikasi...",
+        "no_apps_found": "Tidak ada aplikasi yang ditemukan",
+        "badges": {
+            "tweak_enabled": "Aktif"
+        }
     },
-
-    "support_button": {
-      "title": "Dukung Saya",
-      "description": "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi."
+    "settings_page": {
+        "title": "Pengaturan",
+        "section": {
+            "preferences": "Preferensi",
+            "system": "Sistem",
+            "others": "Lainnya"
+        },
+        "lite_mode": {
+            "title": "Terapkan Mode Lite",
+            "description": "Aktifkan Mode Lite secara default untuk semua game"
+        },
+        "language": {
+            "title": "Bahasa"
+        },
+        "device_mitigation": {
+            "title": "Mitigasi Perangkat",
+            "description": "Atasi masalah spesifik perangkat di Encore Tweaks"
+        },
+        "cpu_governor": {
+            "title": "Governor CPU",
+            "description": "Kustomisasi Governor CPU per profil"
+        },
+        "log_level": {
+            "title": "Log Level",
+            "description": "Pilih seberapa detail log operasional Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Simpan Log",
+            "description": "Ekspor log operasional Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Buat Pintasan",
+            "description": "Buat pintasan di layar utama untuk akses cepat ke Encore Tweaks"
+        }
     },
-
-    "learn_encore": {
-      "title": "Pelajari Encore",
-      "description": "Pelajari cara menggunakan Encore Tweaks dan fitur-fiturnya."
-    }
-  },
-
-  "games_page": {
-    "title": "Game Saya",
-    "search_placeholder": "Cari aplikasi...",
-    "no_apps_found": "Tidak ada aplikasi yang ditemukan",
-
-    "badges": {
-      "tweak_enabled": "Aktif"
-    }
-  },
-
-  "settings_page": {
-    "title": "Pengaturan",
-
-    "section": {
-      "preferences": "Preferensi",
-      "system": "Sistem",
-      "others": "Lainnya"
+    "game_settings": {
+        "title": "Pengaturan Game",
+        "application": "Aplikasi",
+        "preferences": "Preferensi",
+        "enable_tweaks": "Aktifkan Tweaks",
+        "lite_mode": "Mode Lite",
+        "lite_mode_description": "Optimalkan daya tahan baterai daripada performa maksimal",
+        "dnd_mode": "Jangan Ganggu",
+        "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game"
     },
-
+    "language_selection": {
+        "title": "Bahasa",
+        "follow_system": "Ikuti sistem"
+    },
+    "log_level_selection": {
+        "title": "Log Level",
+        "level_0": "Critical",
+        "level_1": "Error",
+        "level_2": "Warning",
+        "level_3": "Info",
+        "level_4": "Debug",
+        "level_5": "Trace"
+    },
     "lite_mode": {
-      "title": "Terapkan Mode Lite",
-      "description": "Aktifkan Mode Lite secara default untuk semua game"
+        "title": "Mode Lite",
+        "toggle_title": "Terapkan mode lite",
+        "brief": "Mode lite mengurangi panas berlebih dan konsumsi daya saat bermain game dengan menurunkan frekuensi CPU dan komponen. Pengaturan ini berlaku untuk semua game saat diaktifkan."
     },
-
-    "language": {
-      "title": "Bahasa"
-    },
-
     "device_mitigation": {
-      "title": "Mitigasi Perangkat",
-      "description": "Atasi masalah spesifik perangkat di Encore Tweaks"
+        "title": "Mitigasi Perangkat",
+        "toggle_title": "Aktifkan mitigasi perangkat",
+        "brief": "Mitigasi perangkat menonaktifkan tweak yang berpotensi tidak kompatibel untuk perangkat tertentu. Jangan aktifkan kecuali Anda mengalami masalah."
     },
-
     "cpu_governor": {
-      "title": "Governor CPU",
-      "description": "Kustomisasi Governor CPU per profil"
+        "title": "Governor CPU",
+        "default_title": "Governor CPU Default",
+        "default_description": "Diterapkan pada profil seimbang dan performa saat mode lite aktif",
+        "powersave_title": "Governor CPU Hemat Daya",
+        "powersave_description": "Digunakan khusus untuk profil hemat daya",
+        "brief": "Governor CPU adalah algoritma yang menyesuaikan frekuensi prosesor secara dinamis secara real time, secara langsung memengaruhi performa sistem dan konsumsi daya.",
+        "modal": {
+            "default_select_title": "Pilih Governor CPU Default",
+            "powersave_select_title": "Pilih Governor CPU Hemat Daya"
+        }
     },
-
-    "log_level": {
-      "title": "Log Level",
-      "description": "Pilih seberapa detail log operasional Encore Tweaks"
+    "profiles": {
+        "initializing": "Menginisialisasi",
+        "balanced": "Seimbang",
+        "powersave": "Hemat Daya",
+        "performance": "Performa"
     },
-
-    "save_log": {
-      "title": "Simpan Log",
-      "description": "Ekspor log operasional Encore Tweaks"
+    "toast": {
+        "reboot_to_apply": "Mulai ulang perangkat Anda untuk menerapkan perubahan.",
+        "has_shortcut": "Pintasan sudah ada.",
+        "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini, gunakan WebUI X untuk menggunakan fitur ini.",
+        "failed_open_external_browser": "Gagal membuka browser eksternal",
+        "failed_open_extrenal_browser": "Gagal membuka peramban eksternal"
     },
-
-    "create_shortcut": {
-      "title": "Buat Pintasan",
-      "description": "Buat pintasan di layar utama untuk akses cepat ke Encore Tweaks"
+    "navigation": {
+        "home": "Beranda",
+        "games": "Game",
+        "settings": "Pengaturan"
+    },
+    "common": {
+        "loading": "Memuat",
+        "unknown": "Tidak diketahui",
+        "enabled": "Aktif",
+        "disabled": "Nonaktif",
+        "cancel": "Batal"
     }
-  },
-
-  "game_settings": {
-    "title": "Pengaturan Game",
-    "application": "Aplikasi",
-    "preferences": "Preferensi",
-    "enable_tweaks": "Aktifkan Tweaks",
-    "lite_mode": "Mode Lite",
-    "lite_mode_description": "Optimalkan daya tahan baterai daripada performa maksimal",
-    "dnd_mode": "Jangan Ganggu",
-    "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game"
-  },
-
-  "language_selection": {
-    "title": "Bahasa",
-    "follow_system": "Ikuti sistem"
-  },
-
-  "log_level_selection": {
-    "title": "Log Level",
-    "level_0": "Critical",
-    "level_1": "Error",
-    "level_2": "Warning",
-    "level_3": "Info",
-    "level_4": "Debug",
-    "level_5": "Trace"
-  },
-
-  "lite_mode": {
-    "title": "Mode Lite",
-    "toggle_title": "Terapkan mode lite",
-    "brief": "Mode lite mengurangi panas berlebih dan konsumsi daya saat bermain game dengan menurunkan frekuensi CPU dan komponen. Pengaturan ini berlaku untuk semua game saat diaktifkan."
-  },
-
-  "device_mitigation": {
-    "title": "Mitigasi Perangkat",
-    "toggle_title": "Aktifkan mitigasi perangkat",
-    "brief": "Mitigasi perangkat menonaktifkan tweak yang berpotensi tidak kompatibel untuk perangkat tertentu. Jangan aktifkan kecuali Anda mengalami masalah."
-  },
-
-  "cpu_governor": {
-    "title": "Governor CPU",
-    "default_title": "Governor CPU Default",
-    "default_description": "Diterapkan pada profil seimbang dan performa saat mode lite aktif",
-    "powersave_title": "Governor CPU Hemat Daya",
-    "powersave_description": "Digunakan khusus untuk profil hemat daya",
-    "brief": "Governor CPU adalah algoritma yang menyesuaikan frekuensi prosesor secara dinamis secara real time, secara langsung memengaruhi performa sistem dan konsumsi daya.",
-    "modal": {
-      "default_select_title": "Pilih Governor CPU Default",
-      "powersave_select_title": "Pilih Governor CPU Hemat Daya"
-    }
-  },
-
-  "profiles": {
-    "initializing": "Menginisialisasi",
-    "balanced": "Seimbang",
-    "powersave": "Hemat Daya",
-    "performance": "Performa"
-  },
-
-  "toast": {
-    "reboot_to_apply": "Mulai ulang perangkat Anda untuk menerapkan perubahan.",
-    "has_shortcut": "Pintasan sudah ada.",
-    "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini, gunakan WebUI X untuk menggunakan fitur ini.",
-    "failed_open_external_browser": "Gagal membuka browser eksternal"
-  },
-
-  "navigation": {
-    "home": "Beranda",
-    "games": "Game",
-    "settings": "Pengaturan"
-  },
-
-  "common": {
-    "loading": "Memuat",
-    "unknown": "Tidak diketahui",
-    "enabled": "Aktif",
-    "disabled": "Nonaktif",
-    "cancel": "Batal"
-  }
 }
