@@ -1,0 +1,64 @@
+@import './base.css';
+@import './fonts.css';
+@import './copy_guard.css';
+
+/* WebUI X insets for edge-to-edge support */
+.main-content {
+  padding-top: var(--window-inset-top, 0px);
+}
+
+/* Hide scrollbars */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Fonts */
+body {
+  font-family: 'Google Sans Flex', system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body,
+.page,
+.main-content {
+  overscroll-behavior: none;
+}
+
+.page {
+  height: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-left: 1rem;
+  }
+
+  .main-content {
+    height: 100vh;
+  }
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}

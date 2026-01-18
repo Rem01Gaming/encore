@@ -1,0 +1,121 @@
+@import url('https://mui.kernelsu.org/internal/insets.css');
+@import url('https://mui.kernelsu.org/internal/colors.css');
+
+@import 'tailwindcss';
+
+html,
+body,
+#app {
+  height: 100%;
+  overflow: hidden;
+}
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Firefox */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+  }
+
+  /* IE and Edge */
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+  }
+
+  /* MD3 Lists */
+  .md3-list {
+    @apply mb-1 last:mb-4;
+  }
+
+  .md3-list .md3-list-item {
+    @apply bg-surface-container overflow-hidden cursor-pointer;
+  }
+
+  .md3-list:first-child .md3-list-item {
+    @apply rounded-t-2xl rounded-b-sm;
+  }
+
+  .md3-list:last-child .md3-list-item {
+    @apply rounded-t-sm rounded-b-2xl;
+  }
+
+  .md3-list:not(:first-child):not(:last-child) .md3-list-item {
+    @apply rounded-sm;
+  }
+
+  .single-card-item {
+    @apply mb-0!;
+  }
+
+  .single-card-item .md3-list-item {
+    @apply rounded-2xl!;
+  }
+}
+
+/* Define tailwind custom colors for the MD3 theme */
+@theme {
+  --color-primary: var(--primary, #ffb0ccff);
+  --color-on-primary: var(--onPrimary, #541d35ff);
+  --color-primary-container: var(--primaryContainer, #6f334bff);
+  --color-on-primary-container: var(--onPrimaryContainer, #ffd9e4ff);
+  --color-inverse-primary: var(--inversePrimary, #8b4a63ff);
+
+  --color-secondary: var(--secondary, #e2bdc8ff);
+  --color-on-secondary: var(--onSecondary, #422932ff);
+  --color-secondary-container: var(--secondaryContainer, #5a3f48ff);
+  --color-on-secondary-container: var(--onSecondaryContainer, #ffd9e4ff);
+
+  --color-tertiary: var(--tertiary, #f0bc95ff);
+  --color-on-tertiary: var(--onTertiary, #48290dff);
+  --color-tertiary-container: var(--tertiaryContainer, #623f21ff);
+  --color-on-tertiary-container: var(--onTertiaryContainer, #ffdcc4ff);
+
+  --color-background: var(--background, #1c1014ff);
+  --color-on-background: var(--onBackground, #f2dde2ff);
+  --color-surface: var(--surface, #1c1014ff);
+  --color-tonal-surface: var(--tonalSurface, #28181dff);
+  --color-on-surface: var(--onSurface, #f2dde2ff);
+  --color-surface-variant: var(--surfaceVariant, #514347ff);
+  --color-on-surface-variant: var(--onSurfaceVariant, #d5c2c6ff);
+  --color-surface-tint: var(--surfaceTint, #ffb0ccff);
+
+  --color-inverse-surface: var(--inverseSurface, #f2dde2ff);
+  --color-inverse-on-surface: var(--inverseOnSurface, #392d31ff);
+
+  --color-error: var(--error, #f2b8b5ff);
+  --color-on-error: var(--onError, #601410ff);
+  --color-error-container: var(--errorContainer, #8c1d18ff);
+  --color-on-error-container: var(--onErrorContainer, #f9dedcff);
+
+  --color-outline: var(--outline, #9d8c91ff);
+  --color-outline-variant: var(--outlineVariant, #514347ff);
+  --color-scrim: var(--scrim, #000000ff);
+
+  --color-surface-bright: var(--surfaceBright, #433639ff);
+  --color-surface-dim: var(--surfaceDim, #1c1014ff);
+  --color-surface-container: var(--surfaceContainer, #281c20ff);
+  --color-surface-container-high: var(--surfaceContainerHigh, #33272aff);
+  --color-surface-container-highest: var(--surfaceContainerHighest, #3e3135ff);
+  --color-surface-container-low: var(--surfaceContainerLow, #23191cff);
+  --color-surface-container-lowest: var(--surfaceContainerLowest, #18090fff);
+
+  --color-filled-tonal-button-content-color: var(--filledTonalButtonContentColor, #ffd9e4ff);
+  --color-filled-tonal-button-container-color: var(--filledTonalButtonContainerColor, #5a3f48ff);
+  --color-filled-tonal-button-disabled-content-color: var(
+    --filledTonalButtonDisabledContentColor,
+    #f2dde261
+  );
+  --color-filled-tonal-button-disabled-container-color: var(
+    --filledTonalButtonDisabledContainerColor,
+    #f2dde21f
+  );
+
+  --color-filled-card-content-color: var(--filledCardContentColor, #f2dde2ff);
+  --color-filled-card-container-color: var(--filledCardContainerColor, #3e3135ff);
+  --color-filled-card-disabled-content-color: var(--filledCardDisabledContentColor, #f2dde261);
+  --color-filled-card-disabled-container-color: var(--filledCardDisabledContainerColor, #45383cff);
+}

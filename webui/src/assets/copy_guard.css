@@ -1,0 +1,9 @@
+.copy-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.copy-protected .allow-copy {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
