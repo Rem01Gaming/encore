@@ -244,6 +244,7 @@ import HomePlusIcon from '@/components/icons/HomePlus.vue'
 import ContentSaveIcon from '@/components/icons/ContentSave.vue'
 
 import * as KernelSU from '@/helpers/KernelSU'
+import { exec, toast } from 'kernelsu'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -286,10 +287,10 @@ const createShortcut = () => {
 
 const exportEncoreLog = () => {
   setTimeout(() => {
-    KernelSU.exec(`encore_utility save_logs`).then(({ errno }) => {
+    exec(`encore_utility save_logs`).then(({ errno }) => {
       if (errno !== 0) {
         const failed_toast = getTranslation("toast.failed_save_log")
-        KernelSU.toast(failed_toast)
+        toast(failed_toast)
       }
     })
   }, 1000)
