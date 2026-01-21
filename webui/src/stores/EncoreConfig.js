@@ -1,9 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+
+import { exec } from 'kernelsu'
 import * as KernelSU from '@/helpers/KernelSU'
+
+import { useHomeStore } from '@/stores/Home'
 
 export const useEncoreConfigStore = defineStore('encoreConfig', () => {
   const config = ref(null)
+
+  const homeStore = useHomeStore()
+  const currentProfile = computed(() => homeStore.currentProfileRaw)
 
   const preferences = computed(() => config.value?.preferences)
   const cpuGovernor = computed(() => config.value?.cpu_governor)
@@ -94,11 +101,30 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
   function setBalanceGovernor(governor) {
     ensureConfigStructure()
     config.value.cpu_governor.balance = governor
+
+    if (
+      currentProfile.value === 'balanced' ||
+      (currentProfile.value === 'performance' && isLiteModeEnabled.value)
+    ) {
+      exec(`encore_utility change_cpu_gov ${governor}`).then(({ errno, stderr }) => {
+        if (errno !== 0) {
+          console.error('[setBalanceGovernor] Failed to change CPU governor:', stderr)
+        }
+      })
+    }
   }
 
   function setPowersaveGovernor(governor) {
     ensureConfigStructure()
     config.value.cpu_governor.powersave = governor
+
+    if (currentProfile.value === 'powersave') {
+      exec(`encore_utility change_cpu_gov ${governor}`).then(({ errno, stderr }) => {
+        if (errno !== 0) {
+          console.error('[setPowersaveGovernor] Failed to change CPU governor:', stderr)
+        }
+      })
+    }
   }
 
   function setCpuGovernorProfile(profile, governor) {
