@@ -146,7 +146,8 @@
     "reboot_to_apply": "Reboot your device to apply changes.",
     "has_shortcut": "Shortcut already exists.",
     "shortcut_unavailable": "No API available for this feature, use WebUI X to use this feature.",
-    "failed_open_extrenal_browser": "Failed to open external browser"
+    "failed_open_extrenal_browser": "Failed to open external browser.",
+    "failed_save_log": "Failed to save logs."
   },
 
   "navigation": {

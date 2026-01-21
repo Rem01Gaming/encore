@@ -26,9 +26,7 @@
             <RippleComponent @click="openLiteModeView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
                     <FeatherIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -42,13 +40,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -59,9 +52,7 @@
             <RippleComponent @click="openLanguageView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
                     <LanguageIcon class="w-5 h-5 text-on-secondary-container" />
                   </div>
 
@@ -75,13 +66,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -102,9 +88,7 @@
             <RippleComponent @click="openDeviceMitigationView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
                     <BugIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -118,13 +102,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -135,9 +114,7 @@
             <RippleComponent @click="openCpuGovernorView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
                     <ChipsetIcon class="w-5 h-5 text-on-secondary-container" />
                   </div>
                   <div class="flex-1 min-w-0">
@@ -150,13 +127,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -167,9 +139,7 @@
             <RippleComponent @click="openLogLvlView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center shrink-0">
                     <TextIcon class="w-5 h-5 text-on-tertiary-container" />
                   </div>
 
@@ -183,13 +153,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -210,9 +175,7 @@
             <RippleComponent @click="exportEncoreLog" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
                     <ContentSaveIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -226,13 +189,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -243,9 +201,7 @@
             <RippleComponent @click="createShortcut" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div
-                    class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0"
-                  >
+                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
                     <HomePlusIcon class="w-5 h-5 text-on-secondary-container" />
                   </div>
 
@@ -259,13 +215,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3"
-                >
-                  <ChevronRightIcon
-                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
-                    :size="22"
-                  />
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
             </RippleComponent>
@@ -334,7 +285,14 @@ const createShortcut = () => {
 }
 
 const exportEncoreLog = () => {
-  // TODO: Implement export log functionality
+  setTimeout(() => {
+    KernelSU.exec(`encore_utility save_logs`).then(({ errno }) => {
+      if (errno !== 0) {
+        const failed_toast = getTranslation("toast.failed_save_log")
+        KernelSU.toast(failed_toast)
+      }
+    })
+  }, 1000)
 }
 </script>
 
