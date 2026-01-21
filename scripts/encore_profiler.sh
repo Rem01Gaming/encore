@@ -33,8 +33,10 @@ PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
 # Default CPU Governor
 DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
-# Device specific bug workaround
-DEVICE_MITIGATION="$(<$MODULE_CONFIG/device_mitigation)"
+# Just a note that lite mode is now controlled by script arg, check case
+# statement on the EOF and performance_profile() functions.
+
+# Certain ENCORE_* variables is set by daemon, see 'jni/src/EncoreUtility/Profiler.cpp'.
 
 ###################################
 # Common Function
@@ -286,7 +288,7 @@ mediatek_performance() {
 
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*cpu*-lat \
 			/sys/class/devfreq/*cpu*-bw \
 			/sys/class/devfreq/*llccbw* \
@@ -362,7 +364,7 @@ exynos_performance() {
 	apply always_on "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			if [ $LITE_MODE -eq 1 ]; then
 				devfreq_mid_perf "$path"
@@ -401,7 +403,7 @@ tensor_performance() {
 	}
 
 	# DRAM frequency
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			if [ $LITE_MODE -eq 1 ]; then
 				devfreq_mid_perf "$path"
@@ -478,7 +480,7 @@ mediatek_normal() {
 
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*cpu*-lat \
 			/sys/class/devfreq/*cpu*-bw \
 			/sys/class/devfreq/*llccbw* \
@@ -530,7 +532,7 @@ exynos_normal() {
 	apply coarse_demand "$mali_sysfs/power_policy"
 
 	# DRAM frequency
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			devfreq_unlock "$path"
 		done &
@@ -554,7 +556,7 @@ tensor_normal() {
 	}
 
 	# DRAM frequency
-	[ $DEVICE_MITIGATION -eq 0 ] && {
+	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			devfreq_unlock "$path"
 		done &
@@ -783,7 +785,7 @@ performance_profile() {
 	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
 	# applied (some device hates performance governor).
-	if [ $LITE_MODE -eq 0 ] && [ $DEVICE_MITIGATION -eq 0 ]; then
+	if [ $LITE_MODE -eq 0 ] && [ -z $ENCORE_NO_PERFORMANCE_CPUGOV ]; then
 		change_cpu_gov performance
 	else
 		change_cpu_gov "$DEFAULT_CPU_GOV"
