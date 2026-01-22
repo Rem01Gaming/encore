@@ -145,6 +145,7 @@ com.garena.game.nfsm
 com.gbits.funnyfighter.android.overseas
 com.gravity.romg
 com.gravity.roo.sea
+com.gryphline.endfield.gp
 com.gryphline.exastris.gp
 com.guigugame.guigubahuang
 com.guyou.deadstrike
