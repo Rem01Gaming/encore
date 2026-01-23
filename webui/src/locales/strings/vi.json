@@ -1,1 +1,6 @@
-{}
+{
+    "toast": {
+        "reboot_to_apply": "Khởi động lại thiết bị để áp dụng các thay đổi.",
+        "has_shortcut": "Lối tắt đã tồn tại."
+    }
+}
