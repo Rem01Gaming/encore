@@ -1,1 +1,6 @@
-{}
+{
+    "toast": {
+        "reboot_to_apply": "Reinicia tu dispositivo para aplicar los cambios.",
+        "has_shortcut": "Ya existe un atajo."
+    }
+}
