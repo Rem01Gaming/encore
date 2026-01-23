@@ -7,7 +7,7 @@
             "error": "Помилка ~",
             "daemonPID": "Деймон PID: {pid}",
             "daemon_inactive": "Сервіс неактивний",
-            "loading_daemon": "Зачекайте будь-ласка..."
+            "loading_daemon": "Зачекайте будь-ласка…"
         },
         "info_card": {
             "module": "Encore Tweaks",
@@ -27,7 +27,7 @@
     },
     "games_page": {
         "title": "Мої Ігри",
-        "search_placeholder": "Пошук додатків...",
+        "search_placeholder": "Пошук додатків",
         "no_apps_found": "Ніяких додатків не знайдено",
         "badges": {
             "tweak_enabled": "Увімкнено"

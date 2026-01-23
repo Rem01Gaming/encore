@@ -7,7 +7,7 @@
             "error": "Error ~",
             "daemonPID": "PID Daemon: {pid}",
             "daemon_inactive": "Layanan tidak aktif",
-            "loading_daemon": "Sebentar ya..."
+            "loading_daemon": "Sebentar ya…"
         },
         "info_card": {
             "module": "Encore Tweaks",
@@ -27,7 +27,7 @@
     },
     "games_page": {
         "title": "Game Saya",
-        "search_placeholder": "Cari aplikasi...",
+        "search_placeholder": "Cari aplikasi",
         "no_apps_found": "Tidak ada aplikasi yang ditemukan",
         "badges": {
             "tweak_enabled": "Aktif"
