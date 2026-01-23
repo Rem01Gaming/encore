@@ -1,1 +1,92 @@
-{}
+{
+    "home_page": {
+        "status_card": {
+            "running": "Çalışıyor ✨",
+            "stopped": "Durdu 💤",
+            "error": "Hata ~",
+            "daemonPID": "Daemon PID: {pid}",
+            "daemon_inactive": "Servis devre dışı",
+            "loading_daemon": "Bir dakika lütfen…"
+        },
+        "info_card": {
+            "profile": "Mevcut Profil",
+            "kernel": "Çekirdek",
+            "chipset": "Çipset",
+            "androidSDK": "Android SDK"
+        },
+        "support_button": {
+            "title": "Beni Destekle",
+            "description": "Encore Tweaks ,her zaman, sizin ve herkes için ücretsiz olmuştur ve öyle kalacaktır. Ancak, bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
+        },
+        "learn_encore": {
+            "title": "Encore'u Öğren",
+            "description": "Encore Tweaklerini ve özelliklerini nasıl kullanıcağınızı öğrenin."
+        }
+    },
+    "games_page": {
+        "title": "Oyunlarım",
+        "search_placeholder": "Uygulama ara",
+        "no_apps_found": "Uygulama bulunamadı",
+        "badges": {
+            "tweak_enabled": "Aktif"
+        }
+    },
+    "settings_page": {
+        "title": "Ayarlar",
+        "section": {
+            "preferences": "Tercihler",
+            "system": "Sistem",
+            "others": "Başka"
+        },
+        "lite_mode": {
+            "title": "Açık Tema Uygula",
+            "description": "Tüm oyunlar için açık temayı varsayılan yap"
+        },
+        "language": {
+            "title": "Dil"
+        },
+        "device_mitigation": {
+            "title": "Cihaz seviyesinde zarar azaltma",
+            "description": "Encore Tweak sipesifik cihaz hataları azalt"
+        },
+        "cpu_governor": {
+            "title": "CPU Profili",
+            "description": "Kullanıma göre CPU profili yapılandırma"
+        },
+        "log_level": {
+            "title": "Günlük Seviyesi",
+            "description": "Encore Tweaks log ayrıntı düzeyini seçin"
+        },
+        "save_log": {
+            "title": "Günlüğü Kaydet",
+            "description": "Encore Tweaks günlüğünü dışa aktar"
+        },
+        "create_shortcut": {
+            "title": "Kısayol Oluştur"
+        }
+    },
+    "profiles": {
+        "balanced": "Dengeli",
+        "powersave": "Güç tasarrufu",
+        "performance": "Performans"
+    },
+    "toast": {
+        "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
+        "has_shortcut": "Kısayol zaten var.",
+        "shortcut_unavailable": "Bu özellik için bir API bulunmamaktadır; bu özelliği kullanmak için WebUI X’i kullanın.",
+        "failed_open_extrenal_browser": "Harici tarayıcı açılırken hata.",
+        "failed_save_log": "Günlük kayıt başarısız."
+    },
+    "navigation": {
+        "home": "Ev",
+        "games": "Oyunlar",
+        "settings": "Ayarlar"
+    },
+    "common": {
+        "loading": "Yükleniyor",
+        "unknown": "Bilinmeyen",
+        "enabled": "Aktif",
+        "disabled": "Devre dışı",
+        "cancel": "İptal"
+    }
+}
