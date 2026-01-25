@@ -2,5 +2,42 @@
     "toast": {
         "reboot_to_apply": "Перезагрузите своё устройство, чтобы изменения вступили в силу.",
         "has_shortcut": "Ярлык уже существует."
+    },
+    "settings_page": {
+        "cpu_governor": {
+            "description": "Настройка регулятора ЦП для каждого профиля"
+        },
+        "log_level": {
+            "title": "Уровень журнала",
+            "description": "Выберите уровень детализации журнала операций Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Сохранить журнал",
+            "description": "Экспорт журнала операций Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Создать ярлык",
+            "description": "Создайте ярлык на главном экране для быстрого доступа к Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "Настройки игры",
+        "application": "Приложение",
+        "preferences": "Предпочтения",
+        "enable_tweaks": "Включить настройки",
+        "lite_mode": "Облегченный режим",
+        "lite_mode_description": "Оптимизация для увеличения времени автономной работы за счет повышения максимальной производительности",
+        "dnd_mode": "Просьба не беспокоить",
+        "dnd_mode_description": "Блокировка уведомлений и звонков во время игры"
+    },
+    "language_selection": {
+        "title": "Язык",
+        "follow_system": "Следуйте системе"
+    },
+    "log_level_selection": {
+        "title": "Уровень журнала"
+    },
+    "lite_mode": {
+        "title": "Облегченный режим"
     }
 }
