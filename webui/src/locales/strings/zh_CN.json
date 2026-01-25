@@ -26,8 +26,8 @@
         }
     },
     "toast": {
-        "reboot_to_apply": "重启设备使变更应用。",
-        "has_shortcut": "快捷方式已存在",
+        "reboot_to_apply": "重启设备来应用变更。",
+        "has_shortcut": "快捷方式已存在。",
         "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
         "failed_open_extrenal_browser": "无法打开外部浏览器",
         "failed_save_log": "日志保存失败"
@@ -98,19 +98,21 @@
         "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
     },
     "device_mitigation": {
-        "title": "设备缓解措施",
-        "toggle_title": "启用设备缓解措施",
-        "brief": "设备缓解选项会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
+        "title": "设备兼容性",
+        "toggle_title": "启用设备兼容",
+        "brief": "设备兼容模式会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
     },
     "cpu_governor": {
-        "title": "CPU 调速器",
-        "default_title": "默认 CPU 调速器",
-        "default_description": "当轻量模式激活时，应用平衡和性能配置",
-        "brief": "CPU调速器是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
+        "title": "CPU 调节模式",
+        "default_title": "默认 CPU 调节模式",
+        "default_description": "当轻量模式激活时，会应用平衡和性能配置",
+        "brief": "CPU调节模式是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
         "modal": {
-            "default_select_title": "设置默认 CPU 调速器",
-            "powersave_select_title": "选择省电 CPU 调速器"
-        }
+            "default_select_title": "设置默认 CPU 调节模式",
+            "powersave_select_title": "选择省电 CPU 调节模式"
+        },
+        "powersave_title": "省电CPU调节模式",
+        "powersave_description": "省电配置专用"
     },
     "profiles": {
         "initializing": "初始化中",
