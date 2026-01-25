@@ -96,6 +96,11 @@
     },
     "device_mitigation": {
         "title": "设备问题缓解",
-        "toggle_title": "启用设备问题缓解"
+        "toggle_title": "启用设备问题缓解",
+        "brief": "设备问题缓解选项会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
+    },
+    "cpu_governor": {
+        "title": "CPU 调速器",
+        "default_title": "默认 CPU 调速器"
     }
 }
