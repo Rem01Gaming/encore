@@ -6,7 +6,76 @@
     "home_page": {
         "status_card": {
             "running": "Funcionando ✨",
-            "stopped": "Parado 💤"
+            "stopped": "Parado 💤",
+            "daemon_inactive": "Serviço inativo",
+            "loading_daemon": "Só um momento, por favor…",
+            "error": "Erro ~",
+            "daemonPID": "Daemon PID: {pid}"
+        },
+        "support_button": {
+            "description": "O Encore Tweaks é, e sempre será, gratuito para você e para todos. No entanto, você pode demonstrar seu apoio fazendo uma doação.",
+            "title": "Apoie-me"
+        },
+        "learn_encore": {
+            "title": "Aprenda Encore",
+            "description": "Aprenda a usar o Encore Tweaks e suas funcionalidades."
+        },
+        "info_card": {
+            "profile": "Perfil atual",
+            "kernel": "Kernel",
+            "chipset": "Chipset",
+            "androidSDK": "Android SDK"
         }
+    },
+    "games_page": {
+        "title": "Meus Jogos",
+        "search_placeholder": "Procurar aplicativos",
+        "no_apps_found": "Nenhum aplicativo encontrado",
+        "badges": {
+            "tweak_enabled": "Habilitado"
+        }
+    },
+    "settings_page": {
+        "title": "Configurações",
+        "section": {
+            "preferences": "Preferências",
+            "system": "Sistema",
+            "others": "Outros"
+        },
+        "lite_mode": {
+            "description": "Ative o Modo Lite por padrão para todos os jogos",
+            "title": "Impor Modo Lite"
+        },
+        "language": {
+            "title": "Linguagem"
+        },
+        "device_mitigation": {
+            "title": "Mitigação de Dispositivos",
+            "description": "Corrija problemas específicos do dispositivo no Encore Tweaks"
+        },
+        "cpu_governor": {
+            "title": "Governador da CPU",
+            "description": "Personalize o governador da CPU por perfil"
+        },
+        "log_level": {
+            "title": "Nível de registro",
+            "description": "Escolha o nível de detalhamento do registro operacional do Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Salvar Registros",
+            "description": "Registro operacional do Export Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Criar atalho",
+            "description": "Crie um atalho na tela inicial para acesso rápido ao Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "Configurações dos Jogos",
+        "application": "Aplicativo",
+        "preferences": "Preferências",
+        "enable_tweaks": "Habilitar Tweaks",
+        "lite_mode": "Modo Lite",
+        "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo"
     }
 }
