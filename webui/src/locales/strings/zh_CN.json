@@ -102,6 +102,11 @@
     "cpu_governor": {
         "title": "CPU 调速器",
         "default_title": "默认 CPU 调速器",
-        "default_description": "当lite模式激活时，应用平衡和性能配置"
+        "default_description": "当轻量模式激活时，应用平衡和性能配置",
+        "brief": "CPU调速器是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
+        "modal": {
+            "default_select_title": "设置默认 CPU 调速器",
+            "powersave_select_title": "选择省电 CPU 调速器"
+        }
     }
 }
