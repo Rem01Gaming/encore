@@ -2,5 +2,11 @@
     "toast": {
         "reboot_to_apply": "Reinicie o seu aparelho para aplicar as mudanças.",
         "has_shortcut": "Atalho já existe."
+    },
+    "home_page": {
+        "status_card": {
+            "running": "Funcionando ✨",
+            "stopped": "Parado 💤"
+        }
     }
 }
