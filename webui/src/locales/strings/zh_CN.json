@@ -27,7 +27,10 @@
     },
     "toast": {
         "reboot_to_apply": "重启设备使变更应用。",
-        "has_shortcut": "快捷方式已存在。"
+        "has_shortcut": "快捷方式已存在",
+        "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
+        "failed_open_extrenal_browser": "无法打开外部浏览器",
+        "failed_save_log": "日志保存失败"
     },
     "games_page": {
         "title": "我的游戏",
@@ -108,5 +111,23 @@
             "default_select_title": "设置默认 CPU 调速器",
             "powersave_select_title": "选择省电 CPU 调速器"
         }
+    },
+    "profiles": {
+        "initializing": "初始化中",
+        "balanced": "平衡模式",
+        "powersave": "节能模式",
+        "performance": "性能模式"
+    },
+    "navigation": {
+        "home": "主页",
+        "games": "游戏",
+        "settings": "设置"
+    },
+    "common": {
+        "loading": "加载中",
+        "unknown": "未知",
+        "enabled": "已启用",
+        "disabled": "已禁用",
+        "cancel": "取消"
     }
 }
