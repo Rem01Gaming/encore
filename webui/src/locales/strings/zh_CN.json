@@ -52,7 +52,7 @@
             "title": "语言"
         },
         "device_mitigation": {
-            "title": "设备问题缓解",
+            "title": "设备缓解措施",
             "description": "缓解 Encore Tweaks 中设备特定的问题"
         },
         "cpu_governor": {
@@ -95,12 +95,13 @@
         "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
     },
     "device_mitigation": {
-        "title": "设备问题缓解",
-        "toggle_title": "启用设备问题缓解",
-        "brief": "设备问题缓解选项会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
+        "title": "设备缓解措施",
+        "toggle_title": "启用设备缓解措施",
+        "brief": "设备缓解选项会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
     },
     "cpu_governor": {
         "title": "CPU 调速器",
-        "default_title": "默认 CPU 调速器"
+        "default_title": "默认 CPU 调速器",
+        "default_description": "当lite模式激活时，应用平衡和性能配置"
     }
 }
