@@ -48,8 +48,8 @@
             "others": "其他"
         },
         "lite_mode": {
-            "title": "强制Lite模式",
-            "description": "为所有游戏默认启用Lite模式"
+            "title": "强制轻量模式",
+            "description": "为所有游戏默认启用轻量模式"
         },
         "language": {
             "title": "语言"
@@ -59,8 +59,8 @@
             "description": "缓解 Encore Tweaks 中设备特定的问题"
         },
         "cpu_governor": {
-            "title": "CPU 调节器",
-            "description": "为每个配置文件自定义 CPU 调速器"
+            "title": "CPU 调节模式",
+            "description": "为每个配置文件自定义 CPU 调节模式"
         },
         "log_level": {
             "title": "日志级别",
@@ -111,13 +111,13 @@
             "default_select_title": "设置默认 CPU 调节模式",
             "powersave_select_title": "选择省电 CPU 调节模式"
         },
-        "powersave_title": "省电CPU调节模式",
+        "powersave_title": "省电 CPU 调节模式",
         "powersave_description": "省电配置专用"
     },
     "profiles": {
         "initializing": "初始化中",
         "balanced": "平衡模式",
-        "powersave": "节能模式",
+        "powersave": "省电模式",
         "performance": "性能模式"
     },
     "navigation": {
