@@ -20,7 +20,7 @@
         },
         "learn_encore": {
             "title": "Encore'u Öğren",
-            "description": "Encore Tweaklerini ve özelliklerini nasıl kullanıcağınızı öğrenin."
+            "description": "Encore Tweaks'i ve özelliklerini nasıl kullanıcağınızı öğrenin."
         }
     },
     "games_page": {
@@ -39,15 +39,15 @@
             "others": "Başka"
         },
         "lite_mode": {
-            "title": "Açık Tema Uygula",
-            "description": "Tüm oyunlar için açık temayı varsayılan yap"
+            "title": "Basit Moda Geç",
+            "description": "Tüm oyunlar için Lite Mmodunu varsayılan yap"
         },
         "language": {
             "title": "Dil"
         },
         "device_mitigation": {
             "title": "Cihaz seviyesinde zarar azaltma",
-            "description": "Encore Tweak sipesifik cihaz hataları azalt"
+            "description": "Encore Tweak spesifik cihaz hataları azalt"
         },
         "cpu_governor": {
             "title": "CPU Profili",
