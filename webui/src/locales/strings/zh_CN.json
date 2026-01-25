@@ -3,11 +3,99 @@
         "status_card": {
             "running": "工作中 ✨",
             "stopped": "已停止 💤",
-            "error": "出错了~"
+            "error": "出错了~",
+            "daemonPID": "Daemon PID: {pid}",
+            "daemon_inactive": "服务未启用",
+            "loading_daemon": "请稍候…"
+        },
+        "title": "Encore Tweaks",
+        "info_card": {
+            "module": "Encore Tweaks",
+            "profile": "当前配置文件",
+            "kernel": "内核",
+            "chipset": "芯片组",
+            "androidSDK": "Android SDK"
+        },
+        "support_button": {
+            "title": "支持我",
+            "description": "Encore Tweaks 一直是自由免费的软件，你可以通过向我捐赠促进项目发展。"
+        },
+        "learn_encore": {
+            "title": "了解 Encore",
+            "description": "了解如何使用 Encore Tweaks 及其特性"
         }
     },
     "toast": {
         "reboot_to_apply": "重启设备使变更应用。",
         "has_shortcut": "快捷方式已存在。"
+    },
+    "games_page": {
+        "title": "我的游戏",
+        "search_placeholder": "搜索应用",
+        "no_apps_found": "未找到应用",
+        "badges": {
+            "tweak_enabled": "已启用"
+        }
+    },
+    "settings_page": {
+        "title": "设置",
+        "section": {
+            "preferences": "偏好",
+            "system": "系统",
+            "others": "其他"
+        },
+        "lite_mode": {
+            "title": "强制轻量模式",
+            "description": "为所有游戏默认启用轻量模式"
+        },
+        "language": {
+            "title": "语言"
+        },
+        "device_mitigation": {
+            "title": "设备问题缓解",
+            "description": "缓解 Encore Tweaks 中设备特定的问题"
+        },
+        "cpu_governor": {
+            "title": "CPU 调节器",
+            "description": "为每个配置文件自定义 CPU 调速器"
+        },
+        "log_level": {
+            "title": "日志级别",
+            "description": "选择 Encore Tweaks 操作日志的详细程度"
+        },
+        "save_log": {
+            "title": "保存日志",
+            "description": "导出 Encore Tweaks 的操作日志"
+        },
+        "create_shortcut": {
+            "title": "创建快捷方式",
+            "description": "在主屏幕创建一个快捷方式以快速访问 Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "游戏设置",
+        "application": "应用程序",
+        "preferences": "偏好",
+        "enable_tweaks": "启用调整",
+        "lite_mode": "轻量模式",
+        "lite_mode_description": "优化更长的电池续航，而不是极致性能表现",
+        "dnd_mode": "免打扰",
+        "dnd_mode_description": "在游戏时阻止通知和电话"
+    },
+    "language_selection": {
+        "title": "语言",
+        "follow_system": "跟随系统"
+    },
+    "log_level_selection": {
+        "title": "日志级别"
+    },
+    "lite_mode": {
+        "title": "轻量模式",
+        "toggle_title": "强制轻量模式",
+        "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
+    },
+    "device_mitigation": {
+        "title": "设备问题缓解",
+        "toggle_title": "启用设备问题缓解"
     }
 }
