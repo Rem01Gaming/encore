@@ -11,7 +11,7 @@
         "title": "Encore Tweaks",
         "info_card": {
             "module": "Encore Tweaks",
-            "profile": "当前配置文件",
+            "profile": "当前配置",
             "kernel": "内核",
             "chipset": "芯片组",
             "androidSDK": "Android SDK"
@@ -37,7 +37,7 @@
         "search_placeholder": "搜索应用",
         "no_apps_found": "未找到应用",
         "badges": {
-            "tweak_enabled": "启用"
+            "tweak_enabled": "已启用"
         }
     },
     "settings_page": {
@@ -55,12 +55,12 @@
             "title": "语言"
         },
         "device_mitigation": {
-            "title": "设备兼容性",
-            "description": "缓解 Encore Tweaks 中设备特定的问题"
+            "title": "设备兼容模式",
+            "description": "兼容 Encore Tweaks 中设备特定的问题"
         },
         "cpu_governor": {
             "title": "CPU 调节模式",
-            "description": "为每个配置文件自定义 CPU 调节模式"
+            "description": "为每个配置自定义 CPU 调节模式"
         },
         "log_level": {
             "title": "日志级别",
@@ -79,9 +79,9 @@
         "title": "游戏设置",
         "application": "应用程序",
         "preferences": "偏好",
-        "enable_tweaks": "启用调整",
+        "enable_tweaks": "启用Tweaks",
         "lite_mode": "轻量模式",
-        "lite_mode_description": "优化更长的电池续航，而不是极致性能表现",
+        "lite_mode_description": "优先优化续航而不是性能",
         "dnd_mode": "免打扰",
         "dnd_mode_description": "在游戏时阻止通知和电话"
     },
@@ -98,9 +98,9 @@
         "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
     },
     "device_mitigation": {
-        "title": "设备兼容性",
+        "title": "设备兼容模式",
         "toggle_title": "启用设备兼容",
-        "brief": "设备兼容模式会禁用针对特定设备的可能不兼容的调整。除非遇到问题，否则应保持关闭。"
+        "brief": "设备兼容模式会禁用针对特定设备的可能不兼容的调整。如无异常，请勿开启。"
     },
     "cpu_governor": {
         "title": "CPU 调节模式",
@@ -112,7 +112,7 @@
             "powersave_select_title": "选择省电 CPU 调节模式"
         },
         "powersave_title": "省电 CPU 调节模式",
-        "powersave_description": "省电配置专用"
+        "powersave_description": "仅用于省电配置"
     },
     "profiles": {
         "initializing": "初始化中",
@@ -128,8 +128,8 @@
     "common": {
         "loading": "加载中",
         "unknown": "未知",
-        "enabled": "启用",
-        "disabled": "禁用",
+        "enabled": "已启用",
+        "disabled": "已禁用",
         "cancel": "取消"
     }
 }
