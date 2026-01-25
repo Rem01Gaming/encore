@@ -2,5 +2,102 @@
     "toast": {
         "reboot_to_apply": "Reboot piranti kanggo ngetrapake owah-owahan.",
         "has_shortcut": "Pintasan wis ana."
+    },
+    "home_page": {
+        "status_card": {
+            "running": "Mlaku✨",
+            "stopped": "Mandheg 💤",
+            "error": "Eror ~",
+            "daemonPID": "Daemon PID: {pid}",
+            "daemon_inactive": "Servis ora aktif",
+            "loading_daemon": "Tunggu sek yo"
+        },
+        "info_card": {
+            "profile": "Profil Saiki",
+            "kernel": "Kernel",
+            "androidSDK": "SDK Android"
+        },
+        "support_button": {
+            "title": "Tulungi Aku",
+            "description": "Encore Tweaks bakale tetep gratis. Koe isoh donasi yen koe peduli."
+        },
+        "learn_encore": {
+            "title": "Sinaoni Encore",
+            "description": "Sinau carane nganggo fitur-fitur Encore"
+        }
+    },
+    "games_page": {
+        "title": "Game ku",
+        "search_placeholder": "Goleki Aplikasi",
+        "no_apps_found": "Aplikasi Ora Ono",
+        "badges": {
+            "tweak_enabled": "Wis Urip"
+        }
+    },
+    "settings_page": {
+        "title": "Setelan",
+        "section": {
+            "preferences": "Pamilihan",
+            "system": "Sistem",
+            "others": "Liyane"
+        },
+        "lite_mode": {
+            "title": "Mode Kepeksa Lite",
+            "description": "Mode Kepeksa Lite Nggo Kabeh Game"
+        },
+        "language": {
+            "title": "Boso"
+        },
+        "device_mitigation": {
+            "title": "Mitigasi Piranti",
+            "description": "Mitigasi masalah khusus piranti ing Encore Tweaks"
+        },
+        "cpu_governor": {
+            "description": "Ngatur CPU Governor saben profil"
+        },
+        "log_level": {
+            "title": "Level Log",
+            "description": "Pilih sepira rinci log operasi Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Simpen Log",
+            "description": "Ekspor log operasi Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Gawe Shortcut",
+            "description": "Nggawe shortcut layar ngarep kanggo akses cepet menyang Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "Pengaturan Game",
+        "application": "Aplikasi",
+        "preferences": "Pamilihan",
+        "enable_tweaks": "Ngaktifke Tweaks",
+        "lite_mode": "Mode Lite",
+        "lite_mode_description": "Ngutamakaké keawetan baterei tinimbang performa paling dhuwur",
+        "dnd_mode": "Ojo Ganggu",
+        "dnd_mode_description": "Ngeblok Notifikasi lan Telpon pas ngegame"
+    },
+    "language_selection": {
+        "title": "Boso",
+        "follow_system": "Ngetutne sistem"
+    },
+    "log_level_selection": {
+        "title": "Level Log"
+    },
+    "lite_mode": {
+        "title": "Mode Lite",
+        "toggle_title": "Peksa Mode Lite",
+        "brief": "Mode Lite nyuda panas lan konsumsi daya nalika dolanan kanthi nurunaké frekuensi CPU lan komponen. Setelan iki ditrapaké kanggo kabèh game nalika diaktifaké"
+    },
+    "device_mitigation": {
+        "title": "Mitigasi Piranti",
+        "toggle_title": "Aktifke mitigasi piranti",
+        "brief": "Mitigasi piranti bakal mateni tweak sing duwé potensi ora kompatibel ing piranti tartamtu. Lebokna tetep mati yen ora nemoni masalah"
+    },
+    "cpu_governor": {
+        "title": "Governor CPU",
+        "default_title": "CPU Governor Gawan",
+        "default_description": "Setelan iki ditrapaké kanggo profil balanced lan performance nalika mode Lite diaktifaké"
     }
 }
