@@ -1,7 +1,10 @@
 {
     "toast": {
         "reboot_to_apply": "قم بإعادة تشغيل جهازك لتطبيق التغييرات.",
-        "has_shortcut": "الإختصار موجود بالفعل."
+        "has_shortcut": "الإختصار موجود بالفعل.",
+        "shortcut_unavailable": "لا يوجد API متاح لتلك الميزة، استخدم WebUI X لاستخدام تلك الميزة.",
+        "failed_open_extrenal_browser": "فشل في فتح متصفح خارجي.",
+        "failed_save_log": "فشل في حفظ السجلات."
     },
     "home_page": {
         "status_card": {
@@ -34,5 +37,97 @@
         "badges": {
             "tweak_enabled": "مُفعّل"
         }
+    },
+    "settings_page": {
+        "title": "الإعدادات",
+        "section": {
+            "preferences": "التفضيلات",
+            "system": "النظام",
+            "others": "أُخرى"
+        },
+        "lite_mode": {
+            "title": "وضع الاداء الخفيف",
+            "description": "تفعيل الوضع الخفيف بشكل افتراضي في جميع الألعاب"
+        },
+        "language": {
+            "title": "اللغة"
+        },
+        "device_mitigation": {
+            "title": "معالجة الجهاز",
+            "description": "معالجة بعض مشاكل الجهاز من طرف Encore Tweaks"
+        },
+        "cpu_governor": {
+            "title": "وضع المعالج",
+            "description": "خصص وضع المعالج لكل ملف تعريف"
+        },
+        "log_level": {
+            "title": "وضع السجل",
+            "description": "اختر مستوى تفصيل سجل عمليات Encore Tweaks"
+        },
+        "save_log": {
+            "title": "حفظ السجل",
+            "description": "تصدير سجلات تشغيل Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "إنشاء اختصار",
+            "description": "إنشاء اختصار في الشاشة الرئيسية للوصول السريع لـEncore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "إعدادات اللعبة",
+        "application": "التطبيق",
+        "preferences": "التفضيلات",
+        "enable_tweaks": "تفعيل التحسينات",
+        "lite_mode": "الوضع البسيط",
+        "lite_mode_description": "تحسين لعمر بطارية أطول مقابل اقصى أداء",
+        "dnd_mode": "عدم الإزعاج",
+        "dnd_mode_description": "منع المكالمات و الإشعارات عند اللعب"
+    },
+    "language_selection": {
+        "title": "اللغة",
+        "follow_system": "اتبع النظام"
+    },
+    "log_level_selection": {
+        "title": "مستوى السجل"
+    },
+    "lite_mode": {
+        "title": "الوضع الخفيف",
+        "toggle_title": "فرض الوضع الخفيف",
+        "brief": "الوضع الخفيف يحد من سخونة الجهاز و استهلاكه للطاقة عن طريق تقليل ترددات المعالج. هذا الإعداد يطبق على كل الألعاب عند التفعيل."
+    },
+    "device_mitigation": {
+        "title": "معالجة الجهاز",
+        "toggle_title": "تفعيل إجراءات الجهاز",
+        "brief": "معالج الجهاز يقوم بتعطيل بعض التعديلات التي قد تكون غير متوافقة مع بعض الأجهزة. أبقه معطلاً إلا إذا واجهتك مشاكل."
+    },
+    "cpu_governor": {
+        "title": "وضع المعالج",
+        "default_title": "الوضع الإفتراضي للمعالج",
+        "default_description": "يُطبَّق على ملفي التعريف (المتوازن و الأداء) عندما يكون الوضع الخفيف مفعلاً",
+        "powersave_title": "وضع المعالج Powersave",
+        "powersave_description": "يستخدم خصيصاً لملف تعريف Powersave",
+        "brief": "وضعية المعالج هي خوارزمية تقوم بتعديل ترددات المعالج في الوقت الحقيقي، يقوم بالتأثير على أداء النظام و استهلاك الطاقة.",
+        "modal": {
+            "default_select_title": "اختر وضع المعالج الافتراضي",
+            "powersave_select_title": "اختر وضعية المعالج Powersave"
+        }
+    },
+    "profiles": {
+        "initializing": "يتم البدء",
+        "balanced": "متوازن",
+        "powersave": "توفير الطاقة",
+        "performance": "الأداء"
+    },
+    "navigation": {
+        "home": "الرئيسية",
+        "games": "الألعاب",
+        "settings": "الإعدادات"
+    },
+    "common": {
+        "loading": "جارِ التحميل",
+        "unknown": "غير معروف",
+        "enabled": "مُفعَّل",
+        "disabled": "مُعطَّل",
+        "cancel": "إلغاء"
     }
 }
