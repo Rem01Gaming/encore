@@ -1,10 +1,10 @@
 {
     "home_page": {
         "status_card": {
-            "running": "工作中 ✨",
+            "running": "生效中 ✨",
             "stopped": "已停止 💤",
             "error": "出错了~",
-            "daemonPID": "Daemon PID: {pid}",
+            "daemonPID": "进程 PID: {pid}",
             "daemon_inactive": "服务未启用",
             "loading_daemon": "请稍候…"
         },
@@ -18,26 +18,26 @@
         },
         "support_button": {
             "title": "支持我",
-            "description": "Encore Tweaks 一直是自由免费的软件，你可以通过向我捐赠促进项目发展。"
+            "description": "Encore Tweaks 一直并永远是自由免费的软件，你可以通过向我捐赠来促进项目发展。"
         },
         "learn_encore": {
             "title": "了解 Encore",
-            "description": "了解如何使用 Encore Tweaks 及其特性"
+            "description": "了解如何使用 Encore Tweaks 及其功能"
         }
     },
     "toast": {
         "reboot_to_apply": "重启设备来应用变更。",
         "has_shortcut": "快捷方式已存在。",
         "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
-        "failed_open_extrenal_browser": "无法打开外部浏览器",
-        "failed_save_log": "日志保存失败"
+        "failed_open_extrenal_browser": "无法打开外部浏览器。",
+        "failed_save_log": "日志保存失败。"
     },
     "games_page": {
         "title": "我的游戏",
         "search_placeholder": "搜索应用",
         "no_apps_found": "未找到应用",
         "badges": {
-            "tweak_enabled": "已启用"
+            "tweak_enabled": "启用"
         }
     },
     "settings_page": {
@@ -48,14 +48,14 @@
             "others": "其他"
         },
         "lite_mode": {
-            "title": "强制轻量模式",
-            "description": "为所有游戏默认启用轻量模式"
+            "title": "强制Lite模式",
+            "description": "为所有游戏默认启用Lite模式"
         },
         "language": {
             "title": "语言"
         },
         "device_mitigation": {
-            "title": "设备缓解措施",
+            "title": "设备兼容性",
             "description": "缓解 Encore Tweaks 中设备特定的问题"
         },
         "cpu_governor": {
@@ -128,8 +128,8 @@
     "common": {
         "loading": "加载中",
         "unknown": "未知",
-        "enabled": "已启用",
-        "disabled": "已禁用",
+        "enabled": "启用",
+        "disabled": "禁用",
         "cancel": "取消"
     }
 }
