@@ -1,1 +1,16 @@
-{}
+{
+    "toast": {
+        "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
+        "has_shortcut": "ショートカットは既に存在します。"
+    },
+    "home_page": {
+        "status_card": {
+            "daemon_inactive": "サービスが停止中",
+            "loading_daemon": "ちょっとお待ちください…"
+        },
+        "info_card": {
+            "profile": "現在のプロフィール",
+            "chipset": "チップセット"
+        }
+    }
+}

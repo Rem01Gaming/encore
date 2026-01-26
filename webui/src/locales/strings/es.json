@@ -1,1 +1,135 @@
-{}
+{
+    "toast": {
+        "reboot_to_apply": "Reinicia tu dispositivo para aplicar los cambios.",
+        "has_shortcut": "Ya existe un atajo.",
+        "shortcut_unavailable": "No hay una API disponible para esta función; usa WebUI X para utilizarla.",
+        "failed_open_extrenal_browser": "No se pudo abrir el navegador externo.",
+        "failed_save_log": "No se pudieron guardar los registros."
+    },
+    "home_page": {
+        "title": "Encore Tweaks",
+        "status_card": {
+            "running": "Ejecutandose ✨",
+            "stopped": "Detenido 💤",
+            "error": "Error ~",
+            "daemonPID": "PID de Daemon: {pid}",
+            "daemon_inactive": "Servicio inactivo",
+            "loading_daemon": "Un momento por favor…"
+        },
+        "info_card": {
+            "module": "Encore Tweaks",
+            "profile": "Perfil actual",
+            "kernel": "Núcleo",
+            "chipset": "Chipset",
+            "androidSDK": "SDK de Android"
+        },
+        "support_button": {
+            "title": "Apoyame",
+            "description": "Encore Tweaks es, y siempre será, gratuito para ti y para todos. Sin embargo, puedes demostrar que te importa haciendo una donación."
+        },
+        "learn_encore": {
+            "title": "Aprende sobre Encore",
+            "description": "Aprende cómo usar Encore Tweaks y sus funciones."
+        }
+    },
+    "games_page": {
+        "title": "Mis juegos",
+        "search_placeholder": "Buscar aplicaciones",
+        "no_apps_found": "No se encontraron aplicaciones",
+        "badges": {
+            "tweak_enabled": "Habilitado"
+        }
+    },
+    "settings_page": {
+        "title": "Configuraciones",
+        "section": {
+            "preferences": "Preferencias",
+            "system": "Sistema",
+            "others": "Otros"
+        },
+        "lite_mode": {
+            "title": "Forzar Modo Lite",
+            "description": "Habilita el Modo Lite de forma predeterminada para todos los juegos"
+        },
+        "language": {
+            "title": "Idioma"
+        },
+        "device_mitigation": {
+            "title": "Mitigación de Dispositivo",
+            "description": "Mitiga problemas específicos del dispositivo en Encore Tweaks"
+        },
+        "cpu_governor": {
+            "title": "Gobernador de CPU",
+            "description": "Personalizar el gobernador de la CPU por perfil"
+        },
+        "log_level": {
+            "title": "Nivel de Registro",
+            "description": "Elige qué tan detallado debe ser el registro operativo de Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Guardar Registro",
+            "description": "Exporta el registro operativo de Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Crear Atajo",
+            "description": "Crear un atajo en la pantalla de inicio para un acceso rápido a Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "Configuración de juegos",
+        "application": "Aplicación",
+        "preferences": "Preferencias",
+        "enable_tweaks": "Habilitar Mejoras",
+        "lite_mode": "Modo Lite",
+        "lite_mode_description": "Optimizar para una mayor duración de la batería en lugar del máximo rendimiento",
+        "dnd_mode": "No Molestar",
+        "dnd_mode_description": "Bloquea notificaciones y llamadas mientras juegas"
+    },
+    "language_selection": {
+        "title": "Idioma",
+        "follow_system": "El del Sistema"
+    },
+    "log_level_selection": {
+        "title": "Nivel de Registro"
+    },
+    "lite_mode": {
+        "title": "Modo Lite",
+        "toggle_title": "Forzar Modo lite",
+        "brief": "El modo lite reduce el sobrecalentamiento y el consumo de energía durante el juego al disminuir las frecuencias de la CPU y de otros componentes. Esta configuración se aplica a todos los juegos cuando está habilitada."
+    },
+    "device_mitigation": {
+        "title": "Mitigación de Dispositivo",
+        "toggle_title": "Habilitar Mitigación de Dispositivo",
+        "brief": "La mitigación de dispositivo desactiva ajustes potencialmente incompatibles para dispositivos específicos. Mantén esta opción desactivada a menos que tengas problemas."
+    },
+    "cpu_governor": {
+        "title": "Gobernador de CPU",
+        "default_title": "Gobernador de CPU predeterminado",
+        "default_description": "Se aplica a los perfiles equilibrado y de rendimiento cuando el modo lite está activo",
+        "powersave_title": "Gobernador de CPU de ahorro de energía",
+        "powersave_description": "Se utiliza exclusivamente para el perfil de ahorro de energía",
+        "brief": "El gobernador de la CPU es un algoritmo que ajusta dinámicamente la frecuencia del procesador en tiempo real, afectando directamente el rendimiento del sistema y el consumo de energía.",
+        "modal": {
+            "default_select_title": "Seleccionar el gobernador de CPU predeterminado",
+            "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía"
+        }
+    },
+    "profiles": {
+        "initializing": "Inicializando",
+        "balanced": "Balanceado",
+        "powersave": "Ahorro de energía",
+        "performance": "Rendimiento"
+    },
+    "navigation": {
+        "home": "Inicio",
+        "games": "Juegos",
+        "settings": "Configuraciones"
+    },
+    "common": {
+        "loading": "Cargando",
+        "unknown": "Desconocido",
+        "enabled": "Habilitado",
+        "disabled": "Desactivado",
+        "cancel": "Cancelar"
+    }
+}

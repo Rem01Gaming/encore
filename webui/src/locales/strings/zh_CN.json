@@ -1,9 +1,135 @@
 {
     "home_page": {
         "status_card": {
-            "running": "工作中 ✨",
+            "running": "生效中 ✨",
             "stopped": "已停止 💤",
-            "error": "出错了~"
+            "error": "出错了~",
+            "daemonPID": "进程 PID: {pid}",
+            "daemon_inactive": "服务未启用",
+            "loading_daemon": "请稍候…"
+        },
+        "title": "Encore Tweaks",
+        "info_card": {
+            "module": "Encore Tweaks",
+            "profile": "当前配置",
+            "kernel": "内核",
+            "chipset": "芯片组",
+            "androidSDK": "Android SDK"
+        },
+        "support_button": {
+            "title": "支持我",
+            "description": "Encore Tweaks 一直并永远是自由免费的软件，你可以通过向我捐赠来促进项目发展。"
+        },
+        "learn_encore": {
+            "title": "了解 Encore",
+            "description": "了解如何使用 Encore Tweaks 及其功能。"
         }
+    },
+    "toast": {
+        "reboot_to_apply": "重启设备来应用变更。",
+        "has_shortcut": "快捷方式已存在。",
+        "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
+        "failed_open_extrenal_browser": "无法打开外部浏览器。",
+        "failed_save_log": "日志保存失败。"
+    },
+    "games_page": {
+        "title": "我的游戏",
+        "search_placeholder": "搜索应用",
+        "no_apps_found": "未找到应用",
+        "badges": {
+            "tweak_enabled": "已启用"
+        }
+    },
+    "settings_page": {
+        "title": "设置",
+        "section": {
+            "preferences": "偏好",
+            "system": "系统",
+            "others": "其他"
+        },
+        "lite_mode": {
+            "title": "强制轻量模式",
+            "description": "为所有游戏默认启用轻量模式"
+        },
+        "language": {
+            "title": "语言"
+        },
+        "device_mitigation": {
+            "title": "设备兼容模式",
+            "description": "兼容 Encore Tweaks 中设备特定的问题"
+        },
+        "cpu_governor": {
+            "title": "CPU 调速器",
+            "description": "为每个配置自定义 CPU 调速器"
+        },
+        "log_level": {
+            "title": "日志级别",
+            "description": "选择 Encore Tweaks 操作日志的详细程度"
+        },
+        "save_log": {
+            "title": "保存日志",
+            "description": "导出 Encore Tweaks 的操作日志"
+        },
+        "create_shortcut": {
+            "title": "创建快捷方式",
+            "description": "在主屏幕创建一个快捷方式以快速访问 Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "游戏设置",
+        "application": "应用程序",
+        "preferences": "偏好",
+        "enable_tweaks": "启用Tweaks",
+        "lite_mode": "轻量模式",
+        "lite_mode_description": "优先优化续航而不是性能",
+        "dnd_mode": "免打扰",
+        "dnd_mode_description": "在游戏时阻止通知和电话"
+    },
+    "language_selection": {
+        "title": "语言",
+        "follow_system": "跟随系统"
+    },
+    "log_level_selection": {
+        "title": "日志级别"
+    },
+    "lite_mode": {
+        "title": "轻量模式",
+        "toggle_title": "强制轻量模式",
+        "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
+    },
+    "device_mitigation": {
+        "title": "设备兼容模式",
+        "toggle_title": "启用设备兼容模式",
+        "brief": "设备兼容模式会禁用针对特定设备的可能不兼容的调整。如无异常，请勿开启。"
+    },
+    "cpu_governor": {
+        "title": "CPU 调速器",
+        "default_title": "默认 CPU 调速器",
+        "default_description": "当轻量模式激活时，会应用平衡和性能配置",
+        "brief": "CPU调速器是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
+        "modal": {
+            "default_select_title": "设置默认 CPU 调速器",
+            "powersave_select_title": "选择省电 CPU 调速器"
+        },
+        "powersave_title": "省电 CPU 调速器",
+        "powersave_description": "仅用于省电配置"
+    },
+    "profiles": {
+        "initializing": "初始化中",
+        "balanced": "平衡模式",
+        "powersave": "省电模式",
+        "performance": "性能模式"
+    },
+    "navigation": {
+        "home": "主页",
+        "games": "游戏",
+        "settings": "设置"
+    },
+    "common": {
+        "loading": "加载中",
+        "unknown": "未知",
+        "enabled": "已启用",
+        "disabled": "已禁用",
+        "cancel": "取消"
     }
 }
