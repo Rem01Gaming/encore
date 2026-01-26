@@ -1,103 +1,133 @@
 {
     "toast": {
         "reboot_to_apply": "Reboot piranti kanggo ngetrapake owah-owahan.",
-        "has_shortcut": "Pintasan wis ana."
+        "has_shortcut": "Pintasan wis ana.",
+        "shortcut_unavailable": "Fitur iki ora kasedhiya, gunakake WebUI X.",
+        "failed_open_extrenal_browser": "Gagal mbukak browser.",
+        "failed_save_log": "Gagal nyimpen log."
     },
     "home_page": {
         "status_card": {
             "running": "Mlaku✨",
             "stopped": "Mandheg 💤",
-            "error": "Eror ~",
+            "error": "Error ~",
             "daemonPID": "Daemon PID: {pid}",
-            "daemon_inactive": "Servis ora aktif",
-            "loading_daemon": "Tunggu sek yo"
+            "daemon_inactive": "Layanan ora aktif",
+            "loading_daemon": "Sabar sediluk, nggih…"
         },
         "info_card": {
             "profile": "Profil Saiki",
             "kernel": "Kernel",
-            "androidSDK": "SDK Android"
+            "androidSDK": "SDK Android",
+            "chipset": "Chipset"
         },
         "support_button": {
-            "title": "Tulungi Aku",
-            "description": "Encore Tweaks bakale tetep gratis. Koe isoh donasi yen koe peduli."
+            "title": "Dukung Aku",
+            "description": "Encore Tweaks gratis lan bakal tetep gratis kanggo sapa wae. Nanging, sampeyan bisa nuduhake rasa peduli kanthi nyumbang."
         },
         "learn_encore": {
-            "title": "Sinaoni Encore",
-            "description": "Sinau carane nganggo fitur-fitur Encore"
+            "title": "Sinau Encore",
+            "description": "Sinau carane nganggo Encore Tweaks lan fitur-fiture."
         }
     },
     "games_page": {
         "title": "Game ku",
-        "search_placeholder": "Goleki Aplikasi",
-        "no_apps_found": "Aplikasi Ora Ono",
+        "search_placeholder": "Goleki aplikasi",
+        "no_apps_found": "Aplikasi ora ketemu",
         "badges": {
-            "tweak_enabled": "Wis Urip"
+            "tweak_enabled": "Aktif"
         }
     },
     "settings_page": {
-        "title": "Setelan",
+        "title": "Pengaturan",
         "section": {
-            "preferences": "Pamilihan",
+            "preferences": "Preferensi",
             "system": "Sistem",
             "others": "Liyane"
         },
         "lite_mode": {
-            "title": "Mode Kepeksa Lite",
-            "description": "Mode Kepeksa Lite Nggo Kabeh Game"
+            "title": "Pepeksa Mode Lite",
+            "description": "Aktifake Mode Lite kanggo kabeh game"
         },
         "language": {
-            "title": "Boso"
+            "title": "Basa"
         },
         "device_mitigation": {
             "title": "Mitigasi Piranti",
-            "description": "Mitigasi masalah khusus piranti ing Encore Tweaks"
+            "description": "Atasi masalah khusus piranti ing Encore Tweaks"
         },
         "cpu_governor": {
-            "description": "Ngatur CPU Governor saben profil"
+            "description": "Setel CPU Governor saben profil",
+            "title": "CPU Governor"
         },
         "log_level": {
             "title": "Level Log",
-            "description": "Pilih sepira rinci log operasi Encore Tweaks"
+            "description": "Pilih sepiro detail cathetan operasional Encore Tweaks"
         },
         "save_log": {
             "title": "Simpen Log",
-            "description": "Ekspor log operasi Encore Tweaks"
+            "description": "Ekspor cathetan operasional Encore Tweaks"
         },
         "create_shortcut": {
-            "title": "Gawe Shortcut",
-            "description": "Nggawe shortcut layar ngarep kanggo akses cepet menyang Encore Tweaks"
+            "title": "Gawe Pintasan",
+            "description": "Gawe pintasan ing layar ngarep kanggo akses cepet mbukak Encore Tweaks"
         }
     },
     "game_settings": {
         "title": "Pengaturan Game",
         "application": "Aplikasi",
-        "preferences": "Pamilihan",
-        "enable_tweaks": "Ngaktifke Tweaks",
+        "preferences": "Preferensi",
+        "enable_tweaks": "Aktifake Tweaks",
         "lite_mode": "Mode Lite",
-        "lite_mode_description": "Ngutamakaké keawetan baterei tinimbang performa paling dhuwur",
+        "lite_mode_description": "Ngirit baterei tinimbang performa dhuwur",
         "dnd_mode": "Ojo Ganggu",
-        "dnd_mode_description": "Ngeblok Notifikasi lan Telpon pas ngegame"
+        "dnd_mode_description": "Ngeblok notifikasi lan telpon pas ngegame"
     },
     "language_selection": {
         "title": "Boso",
-        "follow_system": "Ngetutne sistem"
+        "follow_system": "Melu sistem"
     },
     "log_level_selection": {
         "title": "Level Log"
     },
     "lite_mode": {
         "title": "Mode Lite",
-        "toggle_title": "Peksa Mode Lite",
-        "brief": "Mode Lite nyuda panas lan konsumsi daya nalika dolanan kanthi nurunaké frekuensi CPU lan komponen. Setelan iki ditrapaké kanggo kabèh game nalika diaktifaké"
+        "toggle_title": "Pepeksa mode lite",
+        "brief": "Mode lite ngurangi panas lan nggunakake daya kanthi ngedhunake frekuensi CPU. Setelan iki ditrapake kanggo kabeh game."
     },
     "device_mitigation": {
         "title": "Mitigasi Piranti",
-        "toggle_title": "Aktifke mitigasi piranti",
-        "brief": "Mitigasi piranti bakal mateni tweak sing duwé potensi ora kompatibel ing piranti tartamtu. Lebokna tetep mati yen ora nemoni masalah"
+        "toggle_title": "Aktifake mitigasi piranti",
+        "brief": "Mitigasi iki mateni tweaks sing mbokmenawa ora cocok kanggo piranti tartamtu. Jarke mati wae kecuali nek ana masalah."
     },
     "cpu_governor": {
         "title": "Governor CPU",
-        "default_title": "CPU Governor Gawan",
-        "default_description": "Setelan iki ditrapaké kanggo profil balanced lan performance nalika mode Lite diaktifaké"
+        "default_title": "Default CPU Governor",
+        "default_description": "Kanggo profil seimbang lan performa pas mode lite aktif",
+        "powersave_title": "Powersave CPU Governor",
+        "powersave_description": "Khusus kanggo profil irit daya",
+        "brief": "CPU governor kuwi algoritma sing ngatur frekuensi prosesor kanthi otomatis, sing mengaruhi performa lan baterei.",
+        "modal": {
+            "default_select_title": "Pilih Default CPU Governor",
+            "powersave_select_title": "Pilih Powersave CPU Governor"
+        }
+    },
+    "profiles": {
+        "initializing": "Lagi nyiapake",
+        "balanced": "Seimbang",
+        "powersave": "Irit Daya",
+        "performance": "Performa"
+    },
+    "navigation": {
+        "home": "Beranda",
+        "games": "Game",
+        "settings": "Setelan"
+    },
+    "common": {
+        "loading": "Loading",
+        "unknown": "Ora dingerteni",
+        "enabled": "Aktif",
+        "disabled": "Mati",
+        "cancel": "Batalke"
     }
 }
