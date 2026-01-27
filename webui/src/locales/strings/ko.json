@@ -1,1 +1,18 @@
-{}
+{
+    "home_page": {
+        "status_card": {
+            "running": "작동중✨",
+            "stopped": "중지됨 💤",
+            "error": "오류 ~",
+            "daemonPID": "데몬 PID: {pid}",
+            "daemon_inactive": "서비스 비활성"
+        },
+        "info_card": {
+            "profile": "현재 프로필",
+            "androidSDK": "Android SDK"
+        },
+        "support_button": {
+            "title": "후원하기"
+        }
+    }
+}
