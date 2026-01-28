@@ -1,1 +1,32 @@
-{}
+{
+    "home_page": {
+        "status_card": {
+            "running": "작동중✨",
+            "stopped": "중지됨 💤",
+            "error": "오류 ~",
+            "daemonPID": "데몬 PID: {pid}",
+            "daemon_inactive": "서비스 비활성",
+            "loading_daemon": "잠시만 기다려 주세요…"
+        },
+        "info_card": {
+            "profile": "현재 프로필",
+            "androidSDK": "Android SDK",
+            "kernel": "커널",
+            "chipset": "칩셋"
+        },
+        "support_button": {
+            "title": "후원하기",
+            "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
+        }
+    },
+    "game_settings": {
+        "dnd_mode_description": "게임 중 알림과 전화 차단"
+    },
+    "language_selection": {
+        "title": "언어",
+        "follow_system": "시스템 설정 따르기"
+    },
+    "log_level_selection": {
+        "title": "로그 수준"
+    }
+}
