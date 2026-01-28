@@ -5,14 +5,16 @@
             "stopped": "중지됨 💤",
             "error": "오류 ~",
             "daemonPID": "데몬 PID: {pid}",
-            "daemon_inactive": "서비스 비활성"
+            "daemon_inactive": "서비스 비활성",
+            "loading_daemon": "잠시만 기다려 주세요…"
         },
         "info_card": {
             "profile": "현재 프로필",
             "androidSDK": "Android SDK"
         },
         "support_button": {
-            "title": "후원하기"
+            "title": "후원하기",
+            "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
         }
     }
 }
