@@ -16,5 +16,15 @@
             "title": "후원하기",
             "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
         }
+    },
+    "game_settings": {
+        "dnd_mode_description": "게임 중 알림과 전화 차단"
+    },
+    "language_selection": {
+        "title": "언어",
+        "follow_system": "시스템 설정 따르기"
+    },
+    "log_level_selection": {
+        "title": "로그 수준"
     }
 }
