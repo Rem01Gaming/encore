@@ -10,7 +10,9 @@
         },
         "info_card": {
             "profile": "현재 프로필",
-            "androidSDK": "Android SDK"
+            "androidSDK": "Android SDK",
+            "kernel": "커널",
+            "chipset": "칩셋"
         },
         "support_button": {
             "title": "후원하기",
