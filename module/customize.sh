@@ -101,7 +101,7 @@ recognize_soc() {
 	*mt* | *MT*) SOC=1 ;;
 	*sm* | *qcom* | *SM* | *QCOM* | *Qualcomm*) SOC=2 ;;
 	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 ;;
-	*Unisoc* | *unisoc* | *ums* | *UNISOC* | *sp* | *sc*) SOC=4 ;;
+	*Unisoc* | *unisoc* | *ums* | *UNISOC* | *sp* | *SC*) SOC=4 ;;
 	*gs* | *Tensor* | *tensor*) SOC=5 ;;
 	*Intel* | *intel*) SOC=6 ;;
 	*kirin*) SOC=8 ;;
