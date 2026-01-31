@@ -140,7 +140,7 @@ void encore_main_daemon(void) {
         }
 
         auto now = std::chrono::steady_clock::now();
-        bool do_full_check = !in_game_session || (now - last_full_check) >= INGAME_LOOP_INTERVAL;
+        bool do_full_check = !in_game_session || (now - last_full_check) >= NORMAL_LOOP_INTERVAL;
 
         if (do_full_check) {
             try {
