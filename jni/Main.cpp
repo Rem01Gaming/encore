@@ -21,20 +21,20 @@
 #include <unordered_map>
 #include <vector>
 
+#include <DeviceMitigationStore.hpp>
 #include <Dumpsys.hpp>
 #include <Encore.hpp>
 #include <EncoreCLI.hpp>
 #include <EncoreConfig.hpp>
 #include <EncoreConfigStore.hpp>
-#include <DeviceMitigationStore.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
 #include <InotifyWatcher.hpp>
 #include <ModuleProperty.hpp>
 #include <PIDTracker.hpp>
-#include <SignalHandler.hpp>
 #include <ShellUtility.hpp>
+#include <SignalHandler.hpp>
 
 GameRegistry game_registry;
 
@@ -171,13 +171,11 @@ void encore_main_daemon(void) {
             need_profile_checkup = true;
 
             // Game exited, run dumpsys immediately
-            if (!do_full_check) {
-                try {
-                    Dumpsys::WindowDisplays(window_displays);
-                    last_full_check = now;
-                } catch (const std::runtime_error &e) {
-                    LOGE_TAG("DumpsysGetAppPID", "{}", e.what());
-                }
+            try {
+                Dumpsys::WindowDisplays(window_displays);
+                last_full_check = now;
+            } catch (const std::runtime_error &e) {
+                LOGE_TAG("DumpsysGetAppPID", "{}", e.what());
             }
         }
 
@@ -239,7 +237,7 @@ void encore_main_daemon(void) {
                 game_requested_dnd = false;
                 set_do_not_disturb(false);
             }
-        } else if (battery_saver_state && do_full_check) {
+        } else if (battery_saver_state) {
             if (cur_mode == POWERSAVE_PROFILE) goto take_me_to_the_bed;
 
             cur_mode = POWERSAVE_PROFILE;
@@ -251,7 +249,7 @@ void encore_main_daemon(void) {
                 set_do_not_disturb(false);
                 game_requested_dnd = false;
             }
-        } else if (do_full_check) {
+        } else {
             if (cur_mode == BALANCE_PROFILE) goto take_me_to_the_bed;
 
             cur_mode = BALANCE_PROFILE;
@@ -296,9 +294,7 @@ int run_daemon() {
         SetModule_DescriptionStatus("\xE2\x9D\x8C " + error_msg);
     };
 
-    std::atexit([]() {
-        SignalHandler::cleanup_before_exit();
-    });
+    std::atexit([]() { SignalHandler::cleanup_before_exit(); });
 
     SignalHandler::setup_signal_handlers();
 
@@ -330,7 +326,8 @@ int run_daemon() {
     }
 
     if (!device_mitigation_store.load_config()) {
-        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE << std::endl;
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE
+                  << std::endl;
         NotifyFatalError("Failed to parse device_mitigation.json");
         LOGC("Failed to parse {}", DEVICE_MITIGATION_FILE);
         return EXIT_FAILURE;
