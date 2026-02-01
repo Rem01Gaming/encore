@@ -23,10 +23,8 @@
               {{ $t('cpu_governor.default_description') }}
             </p>
             <Ripple class="rounded-xl">
-              <button
-                @click="openModal('default')"
-                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-left flex items-center justify-between hover:bg-surface-container"
-              >
+              <button @click="openSelectionModal('default')"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-left flex items-center justify-between hover:bg-surface-container">
                 <span class="text-sm text-on-surface">{{ balanceGovernor || 'schedutil' }}</span>
                 <ChevronRightIcon class="w-5 h-5 text-on-surface-variant" />
               </button>
@@ -41,10 +39,8 @@
               {{ $t('cpu_governor.powersave_description') }}
             </p>
             <Ripple class="rounded-xl">
-              <button
-                @click="openModal('powersave')"
-                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-left flex items-center justify-between hover:bg-surface-container"
-              >
+              <button @click="openSelectionModal('powersave')"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-left flex items-center justify-between hover:bg-surface-container">
                 <span class="text-sm text-on-surface">{{ powersaveGovernor || 'schedutil' }}</span>
                 <ChevronRightIcon class="w-5 h-5 text-on-surface-variant" />
               </button>
@@ -59,54 +55,40 @@
       </div>
     </div>
 
-    <Transition name="modal">
-      <div
-        v-if="showModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-        @click="closeModal"
-      >
-        <div
-          class="bg-surface rounded-2xl w-full max-w-md max-h-[80vh] overflow-hidden modal-container shadow-xl mx-3"
-          @click.stop
-        >
-          <div class="p-5 border-b border-outline-variant">
-            <h2 class="text-lg font-medium text-on-surface">
-              {{ modalTitle }}
-            </h2>
-          </div>
-
-          <div class="overflow-y-auto max-h-[60vh]">
-            <div class="p-2">
-              <div
-                v-for="governor in availableGovernors"
-                :key="governor"
-                @click="selectAndApplyGovernor(governor)"
-                class="px-4 py-3 flex items-center gap-3 hover:bg-surface-container rounded-lg cursor-pointer"
-              >
-                <RadioButton
-                  :model-value="selectedGovernor"
-                  :value="governor"
-                  :label="governor"
-                  size="md"
-                  class="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="p-4 border-t border-outline-variant flex justify-end">
-            <Ripple class="rounded-full">
-              <button
-                @click="closeModal"
-                class="px-4 py-2 text-sm font-medium text-primary hover:text-on-surface"
-              >
-                {{ $t('common.cancel') }}
-              </button>
-            </Ripple>
-          </div>
+    <Modal :show="showSelectionModal" :title="modalTitle" @close="closeSelectionModal">
+      <div class="p-2 border-y border-outline-variant">
+        <div v-for="governor in availableGovernors" :key="governor" @click="handleGovernorSelect(governor)"
+          class="px-4 py-3 flex items-center gap-3 hover:bg-surface-container rounded-lg cursor-pointer">
+          <RadioButton :model-value="selectedGovernor" :value="governor" :label="governor" size="md"
+            class="flex-1 pointer-events-none" />
         </div>
       </div>
-    </Transition>
+      <template #actions>
+        <button @click="closeSelectionModal"
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+          {{ $t('common.cancel') }}
+        </button>
+      </template>
+    </Modal>
+
+    <Modal :show="showWarningModal" :title="$t('common.warning')" @close="cancelPerformanceSelection">
+      <div class="px-4 pb-2">
+        <p class="text-sm">
+          {{ $t('cpu_governor.modal.performance_warning') }}
+        </p>
+      </div>
+
+      <template #actions>
+        <button @click="cancelPerformanceSelection"
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full">
+          {{ $t('common.cancel') }}
+        </button>
+        <button @click="confirmPerformanceSelection"
+          class="px-4 py-2 text-sm font-medium text-error hover:bg-error/10 rounded-full">
+          {{ $t('cpu_governor.modal.performance_warning_confirm') }}
+        </button>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -117,20 +99,25 @@ import { useI18n } from 'vue-i18n'
 import { useEncoreConfigStore } from '@/stores/EncoreConfig'
 import * as KernelSU from '@/helpers/KernelSU'
 
+// Components
 import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
 import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
 import RadioButton from '@/components/ui/RadioButton.vue'
 import InformationOutlineIcon from '@/components/icons/InformationOutline.vue'
 import Ripple from '@/components/ui/Ripple.vue'
+import Modal from '@/components/ui/Modal.vue'
 
 const router = useRouter()
 const encoreConfigStore = useEncoreConfigStore()
 const { t } = useI18n()
 
+// State
 const availableGovernors = ref([])
-const showModal = ref(false)
+const showSelectionModal = ref(false)
+const showWarningModal = ref(false)
 const modalType = ref('default') // 'default' or 'powersave'
 const selectedGovernor = ref('')
+const pendingGovernor = ref('') // Stores choice while warning is shown
 const hasUnsavedChanges = ref(false)
 
 const balanceGovernor = computed(() => encoreConfigStore.balanceGovernor)
@@ -172,17 +159,41 @@ async function loadAvailableGovernors() {
   }
 }
 
-function openModal(type) {
+function openSelectionModal(type) {
   modalType.value = type
   selectedGovernor.value = type === 'default' ? balanceGovernor.value : powersaveGovernor.value
-  showModal.value = true
+  showSelectionModal.value = true
 }
 
-function closeModal() {
-  showModal.value = false
+function closeSelectionModal() {
+  showSelectionModal.value = false
 }
 
-async function selectAndApplyGovernor(governor) {
+function handleGovernorSelect(governor) {
+  if (governor === 'performance') {
+    pendingGovernor.value = governor
+    showWarningModal.value = true
+    showSelectionModal.value = false
+  } else {
+    applyGovernor(governor)
+  }
+}
+
+function cancelPerformanceSelection() {
+  showWarningModal.value = false
+  pendingGovernor.value = ''
+  showSelectionModal.value = true
+}
+
+function confirmPerformanceSelection() {
+  if (pendingGovernor.value) {
+    applyGovernor(pendingGovernor.value)
+    pendingGovernor.value = ''
+  }
+  showWarningModal.value = false
+}
+
+async function applyGovernor(governor) {
   try {
     if (modalType.value === 'default') {
       encoreConfigStore.setBalanceGovernor(governor)
@@ -192,7 +203,7 @@ async function selectAndApplyGovernor(governor) {
 
     hasUnsavedChanges.value = true
     await encoreConfigStore.saveConfig()
-    closeModal()
+    closeSelectionModal()
   } catch (error) {
     console.error('Failed to apply governor:', error)
   }
@@ -215,25 +226,3 @@ function goBack() {
   }
 }
 </script>
-
-<style scoped>
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 150ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.modal-enter-active .modal-container,
-.modal-leave-active .modal-container {
-  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-from .modal-container,
-.modal-leave-to .modal-container {
-  transform: scale(0.92);
-}
-</style>

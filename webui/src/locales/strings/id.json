@@ -110,7 +110,9 @@
         "brief": "Governor CPU adalah algoritma yang menyesuaikan frekuensi prosesor secara dinamis secara real time, secara langsung memengaruhi performa sistem dan konsumsi daya.",
         "modal": {
             "default_select_title": "Pilih Governor CPU Default",
-            "powersave_select_title": "Pilih Governor CPU Hemat Daya"
+            "powersave_select_title": "Pilih Governor CPU Hemat Daya",
+            "performance_warning": "Mengatur governor ke performance akan menyebabkan panas berlebih dan baterai cepat habis. Kamu yakin mau pake governor ini?",
+            "performance_warning_confirm": "Saya mengerti, Terapkan"
         }
     },
     "profiles": {
@@ -137,6 +139,7 @@
         "unknown": "Tidak diketahui",
         "enabled": "Aktif",
         "disabled": "Nonaktif",
-        "cancel": "Batal"
+        "cancel": "Batal",
+        "warning": "Peringatan"
     }
 }

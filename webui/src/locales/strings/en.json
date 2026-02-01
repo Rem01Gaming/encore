@@ -131,7 +131,9 @@
     "brief": "CPU governor is an algorithm that dynamically adjusts the processor's frequency in real time, directly affecting system performance and power consumtion.",
     "modal": {
       "default_select_title": "Select Default CPU Governor",
-      "powersave_select_title": "Select Powersave CPU Governor"
+      "powersave_select_title": "Select Powersave CPU Governor",
+      "performance_warning": "Setting the governor to performance will cause overheating and rapid battery drain. Are you sure you want to proceed?",
+      "performance_warning_confirm": "I understand, Apply"
     }
   },
 
@@ -161,6 +163,7 @@
     "unknown": "Unknown",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "warning": "Warning"
   }
 }

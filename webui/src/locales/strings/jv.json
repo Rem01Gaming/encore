@@ -109,7 +109,9 @@
         "brief": "CPU governor kuwi algoritma sing ngatur frekuensi prosesor kanthi otomatis, sing mengaruhi performa lan baterei.",
         "modal": {
             "default_select_title": "Pilih Default CPU Governor",
-            "powersave_select_title": "Pilih Powersave CPU Governor"
+            "powersave_select_title": "Pilih Powersave CPU Governor",
+            "performance_warning": "Nyetel governor menyang performance bakal nggawe hp panas banget lan baterei cepet entek. Sampeyan yakin arep nganggo governor iki?",
+            "performance_warning_confirm": "Aku ngerti, Terapke"
         }
     },
     "profiles": {
@@ -128,6 +130,7 @@
         "unknown": "Ora dingerteni",
         "enabled": "Aktif",
         "disabled": "Mati",
-        "cancel": "Batalke"
+        "cancel": "Batalke",
+        "warning": "Peringatan"
     }
 }
