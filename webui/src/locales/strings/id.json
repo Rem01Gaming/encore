@@ -126,6 +126,7 @@
         "has_shortcut": "Pintasan sudah ada.",
         "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini, gunakan WebUI X untuk menggunakan fitur ini.",
         "failed_open_external_browser": "Gagal membuka browser eksternal.",
+        "success_save_log": "Log berhasil disimpan di {path}",
         "failed_save_log": "Gagal menyimpan log.",
         "failed_open_extrenal_browser": "Gagal membuka peramban eksternal."
     },

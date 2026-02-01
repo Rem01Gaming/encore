@@ -232,6 +232,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguageStore } from '@/stores/Language'
+import { getTranslation } from '@/helpers/Locales'
 
 import RippleComponent from '@/components/ui/Ripple.vue'
 import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
@@ -287,10 +288,13 @@ const createShortcut = () => {
 
 const exportEncoreLog = () => {
   setTimeout(() => {
-    exec(`encore_utility save_logs`).then(({ errno }) => {
+    exec(`encore_utility save_logs`).then(({ errno, stdout }) => {
       if (errno !== 0) {
         const failed_toast = getTranslation("toast.failed_save_log")
         toast(failed_toast)
+      } else {
+        const success_toast = getTranslation("toast.success_save_log", { path: stdout.trim() })
+        toast(success_toast)
       }
     })
   }, 1000)

@@ -4,6 +4,7 @@
         "has_shortcut": "Pintasan wis ana.",
         "shortcut_unavailable": "Fitur iki ora kasedhiya, gunakake WebUI X.",
         "failed_open_extrenal_browser": "Gagal mbukak browser.",
+        "success_save_log": "Log sampun kasimpen ing {path}",
         "failed_save_log": "Gagal nyimpen log."
     },
     "home_page": {
