@@ -4,7 +4,8 @@
         "has_shortcut": "Ya existe un atajo.",
         "shortcut_unavailable": "No hay una API disponible para esta función; usa WebUI X para utilizarla.",
         "failed_open_extrenal_browser": "No se pudo abrir el navegador externo.",
-        "failed_save_log": "No se pudieron guardar los registros."
+        "failed_save_log": "No se pudieron guardar los registros.",
+        "success_save_log": "Los registros se guardaron correctamente en {path}"
     },
     "home_page": {
         "title": "Encore Tweaks",
@@ -111,7 +112,9 @@
         "brief": "El gobernador de la CPU es un algoritmo que ajusta dinámicamente la frecuencia del procesador en tiempo real, afectando directamente el rendimiento del sistema y el consumo de energía.",
         "modal": {
             "default_select_title": "Seleccionar el gobernador de CPU predeterminado",
-            "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía"
+            "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía",
+            "performance_warning": "Configurar el gobernador en modo rendimiento provocará sobrecalentamiento y un consumo acelerado de la batería. ¿Estás seguro de que deseas continuar?",
+            "performance_warning_confirm": "Lo entiendo, Aplicar"
         }
     },
     "profiles": {
@@ -130,6 +133,7 @@
         "unknown": "Desconocido",
         "enabled": "Habilitado",
         "disabled": "Desactivado",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "warning": "Advertencia"
     }
 }
