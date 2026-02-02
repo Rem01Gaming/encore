@@ -30,7 +30,8 @@
         "has_shortcut": "快捷方式已存在。",
         "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
         "failed_open_extrenal_browser": "无法打开外部浏览器。",
-        "failed_save_log": "日志保存失败。"
+        "failed_save_log": "日志保存失败。",
+        "success_save_log": "日志成功保存到 {path}"
     },
     "games_page": {
         "title": "我的游戏",
@@ -109,7 +110,9 @@
         "brief": "CPU调速器是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
         "modal": {
             "default_select_title": "设置默认 CPU 调速器",
-            "powersave_select_title": "选择省电 CPU 调速器"
+            "powersave_select_title": "选择省电 CPU 调速器",
+            "performance_warning": "将调速器设置为性能模式可能导致手机过热并影响电池寿命，确认继续操作吗?",
+            "performance_warning_confirm": "我知晓风险，应用更改"
         },
         "powersave_title": "省电 CPU 调速器",
         "powersave_description": "仅用于省电配置"
@@ -130,6 +133,7 @@
         "unknown": "未知",
         "enabled": "已启用",
         "disabled": "已禁用",
-        "cancel": "取消"
+        "cancel": "取消",
+        "warning": "警告"
     }
 }
