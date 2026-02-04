@@ -456,8 +456,7 @@ public:
 
     /**
      * @brief Removes a file watch.
-     * 
-     * @param path The full path to the file to stop watching.
+     * * @param path The full path to the file to stop watching.
      * @return true if the file was being watched and was removed, false otherwise.
      */
     bool removeFile(const std::string &path) {
@@ -493,6 +492,14 @@ public:
 
         files.erase(file_it);
         LOGD_TAG("InotifyWatcher", "Removed file watch for '{}'", path);
+
+        // If no more files and no directory callback, remove the directory watch
+        if (dir_it->files.empty() && dir_it->callback_func == nullptr) {
+            inotify_rm_watch(inotify_fd_, dir_it->inotify_watch_fd);
+            directories_.erase(dir_it);
+            LOGD_TAG("InotifyWatcher", "Removed empty directory watch for '{}'", dir_path);
+        }
+
         return true;
     }
 
