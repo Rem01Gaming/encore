@@ -46,8 +46,11 @@ bool DeviceMitigationStore::load_config(const std::string &config_path) {
 
     if (doc.HasParseError()) {
         LOGE_TAG(
-            "DeviceMitigationStore", "Parse error: {} (Offset: {})",
-            rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
+            "DeviceMitigationStore",
+            "Parse error: {} (Offset: {})",
+            rapidjson::GetParseError_En(doc.GetParseError()),
+            doc.GetErrorOffset()
+        );
         return false;
     }
 
@@ -59,8 +62,7 @@ bool DeviceMitigationStore::load_config(const std::string &config_path) {
     return parse_config(doc);
 }
 
-std::unordered_set<std::string>
-DeviceMitigationStore::get_mitigation_items(bool use_device_mitigation) const {
+std::unordered_set<std::string> DeviceMitigationStore::get_mitigation_items(bool use_device_mitigation) const {
     std::lock_guard<std::mutex> lock(mutex_);
     std::unordered_set<std::string> items;
 
@@ -87,8 +89,7 @@ DeviceMitigationStore::get_mitigation_items(bool use_device_mitigation) const {
     return items;
 }
 
-std::unordered_set<std::string>
-DeviceMitigationStore::get_cached_mitigation_items(bool use_device_mitigation) const {
+std::unordered_set<std::string> DeviceMitigationStore::get_cached_mitigation_items(bool use_device_mitigation) const {
     std::lock_guard<std::mutex> lock(mutex_);
     std::unordered_set<std::string> items;
 
@@ -109,8 +110,12 @@ bool DeviceMitigationStore::matches_rule(const DeviceRule &rule) const {
     LOGT_TAG("DeviceMitigationStore", "Matching rule: {}", rule.name);
     LOGT_TAG("DeviceMitigationStore", "  Filter type: {}", rule.filter_type);
     LOGT_TAG(
-        "DeviceMitigationStore", "  Device info - SOC: '{}', Model: '{}', Uname: '{}'",
-        device_info.at("soc"), device_info.at("model"), device_info.at("uname"));
+        "DeviceMitigationStore",
+        "  Device info - SOC: '{}', Model: '{}', Uname: '{}'",
+        device_info.at("soc"),
+        device_info.at("model"),
+        device_info.at("uname")
+    );
 
     bool all_match = (rule.filter_type == "all");
     bool any_match = (rule.filter_type == "any");
@@ -128,9 +133,7 @@ bool DeviceMitigationStore::matches_rule(const DeviceRule &rule) const {
         total_conditions++;
 
         LOGT_TAG("DeviceMitigationStore", "    Condition {}:", condition_name);
-        LOGT_TAG(
-            "DeviceMitigationStore", "      Operator: '{}', Expected value: '{}'", condition.op,
-            condition.value);
+        LOGT_TAG("DeviceMitigationStore", "      Operator: '{}', Expected value: '{}'", condition.op, condition.value);
 
         auto it = device_info.find(condition_name);
         if (it != device_info.end()) {
@@ -140,26 +143,20 @@ bool DeviceMitigationStore::matches_rule(const DeviceRule &rule) const {
                 matched_conditions++;
                 LOGD_TAG("DeviceMitigationStore", "      -> MATCHED");
                 if (any_match) {
-                    LOGT_TAG(
-                        "DeviceMitigationStore", "      'any' condition satisfied - rule matches");
+                    LOGT_TAG("DeviceMitigationStore", "      'any' condition satisfied - rule matches");
                     return true;
                 }
             } else {
                 LOGT_TAG("DeviceMitigationStore", "      -> NOT MATCHED");
                 if (all_match) {
-                    LOGT_TAG(
-                        "DeviceMitigationStore",
-                        "      'all' condition failed - rule does not match");
+                    LOGT_TAG("DeviceMitigationStore", "      'all' condition failed - rule does not match");
                     return false;
                 }
             }
         } else {
-            LOGW_TAG(
-                "DeviceMitigationStore", "    Condition {} not found in device info",
-                condition_name);
+            LOGW_TAG("DeviceMitigationStore", "    Condition {} not found in device info", condition_name);
             if (all_match) {
-                LOGD_TAG(
-                    "DeviceMitigationStore", "      'all' condition missing - rule does not match");
+                LOGD_TAG("DeviceMitigationStore", "      'all' condition missing - rule does not match");
                 return false;
             }
         }
@@ -169,13 +166,21 @@ bool DeviceMitigationStore::matches_rule(const DeviceRule &rule) const {
     if (all_match) {
         result = (matched_conditions == total_conditions);
         LOGT_TAG(
-            "DeviceMitigationStore", "  'all' rule: matched {}/{} conditions, result: {}",
-            matched_conditions, total_conditions, result);
+            "DeviceMitigationStore",
+            "  'all' rule: matched {}/{} conditions, result: {}",
+            matched_conditions,
+            total_conditions,
+            result
+        );
     } else { // any_match
         result = (matched_conditions > 0);
         LOGT_TAG(
-            "DeviceMitigationStore", "  'any' rule: matched {}/{} conditions, result: {}",
-            matched_conditions, total_conditions, result);
+            "DeviceMitigationStore",
+            "  'any' rule: matched {}/{} conditions, result: {}",
+            matched_conditions,
+            total_conditions,
+            result
+        );
     }
 
     return result;
@@ -243,15 +248,11 @@ bool DeviceMitigationStore::parse_config(const rapidjson::Document &doc) {
                 }
 
                 // Parse filter conditions
-                if (rule_obj.HasMember("filter_condition") &&
-                    rule_obj["filter_condition"].IsObject()) {
+                if (rule_obj.HasMember("filter_condition") && rule_obj["filter_condition"].IsObject()) {
                     const rapidjson::Value &cond_obj = rule_obj["filter_condition"];
-                    LOGD_TAG(
-                        "DeviceMitigationStore", "  Rule '{}': {} filter conditions", rule.name,
-                        cond_obj.MemberCount());
+                    LOGD_TAG("DeviceMitigationStore", "  Rule '{}': {} filter conditions", rule.name, cond_obj.MemberCount());
 
-                    for (auto cond_it = cond_obj.MemberBegin(); cond_it != cond_obj.MemberEnd();
-                         ++cond_it) {
+                    for (auto cond_it = cond_obj.MemberBegin(); cond_it != cond_obj.MemberEnd(); ++cond_it) {
                         if (cond_it->name.IsString() && cond_it->value.IsObject()) {
                             Condition condition;
                             const rapidjson::Value &cond_val = cond_it->value;
@@ -266,16 +267,18 @@ bool DeviceMitigationStore::parse_config(const rapidjson::Document &doc) {
                             rule.filter_condition[cond_it->name.GetString()] = condition;
 
                             LOGD_TAG(
-                                "DeviceMitigationStore", "    {}: {} '{}'",
-                                cond_it->name.GetString(), condition.op, condition.value);
+                                "DeviceMitigationStore",
+                                "    {}: {} '{}'",
+                                cond_it->name.GetString(),
+                                condition.op,
+                                condition.value
+                            );
                         }
                     }
                 }
 
                 new_data.device_rules[it->name.GetString()] = rule;
-                LOGD_TAG(
-                    "DeviceMitigationStore", "  Added rule: {} with {} items", rule.name,
-                    rule.items.size());
+                LOGD_TAG("DeviceMitigationStore", "  Added rule: {} with {} items", rule.name, rule.items.size());
             }
         }
     }
@@ -298,12 +301,14 @@ bool DeviceMitigationStore::parse_config(const rapidjson::Document &doc) {
     return true;
 }
 
-bool DeviceMitigationStore::check_condition(
-    const Condition &condition, const std::string &value) const {
+bool DeviceMitigationStore::check_condition(const Condition &condition, const std::string &value) const {
     LOGT_TAG(
         "DeviceMitigationStore",
-        "    Checking condition: operator='{}', expected='{}', actual='{}'", condition.op,
-        condition.value, value);
+        "    Checking condition: operator='{}', expected='{}', actual='{}'",
+        condition.op,
+        condition.value,
+        value
+    );
 
     bool result = false;
 
@@ -312,18 +317,14 @@ bool DeviceMitigationStore::check_condition(
         LOGT_TAG("DeviceMitigationStore", "      Exact match: {}", result);
     } else if (condition.op == "contains") {
         result = value.contains(condition.value);
-        LOGT_TAG(
-            "DeviceMitigationStore", "      Contains check: '{}' in '{}' = {}", condition.value,
-            value, result);
+        LOGT_TAG("DeviceMitigationStore", "      Contains check: '{}' in '{}' = {}", condition.value, value, result);
     } else if (condition.op == "regex") {
         try {
             std::regex pattern(condition.value);
             result = std::regex_search(value, pattern);
             LOGT_TAG("DeviceMitigationStore", "      Regex match: {}", result);
         } catch (const std::regex_error &e) {
-            LOGE_TAG(
-                "DeviceMitigationStore", "Invalid regex pattern: {} - {}", condition.value,
-                e.what());
+            LOGE_TAG("DeviceMitigationStore", "Invalid regex pattern: {} - {}", condition.value, e.what());
             return false;
         }
     } else {

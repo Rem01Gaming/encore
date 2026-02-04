@@ -41,8 +41,7 @@ inline void Get(const std::string &path, std::vector<ModuleProperties> &result) 
 
     std::ifstream in(path);
     if (!in.is_open()) {
-        throw std::system_error(
-            errno, std::generic_category(), "Failed to open module.prop file: " + path);
+        throw std::system_error(errno, std::generic_category(), "Failed to open module.prop file: " + path);
     }
 
     std::string line;
@@ -93,8 +92,7 @@ inline void Change(const std::string &path, const std::vector<ModuleProperties> 
 
     std::ofstream out(path, std::ios::trunc);
     if (!out) {
-        throw std::system_error(
-            errno, std::generic_category(), "Failed to open module.prop for writing: " + path);
+        throw std::system_error(errno, std::generic_category(), "Failed to open module.prop for writing: " + path);
     }
 
     for (const auto &[k, v] : props) {

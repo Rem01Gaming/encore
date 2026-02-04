@@ -30,8 +30,7 @@ void set_do_not_disturb(bool do_not_disturb) {
             close(devnull);
         }
 
-        const char *args[] = {
-            "cmd", "notification", "set_dnd", do_not_disturb ? "priority" : "off", NULL};
+        const char *args[] = {"cmd", "notification", "set_dnd", do_not_disturb ? "priority" : "off", NULL};
 
         execvp("/system/bin/cmd", (char *const *)args);
         _exit(127);
@@ -62,8 +61,7 @@ void notify(const char *message) {
             _exit(126);
         }
 
-        const char *args[] = {"cmd",        "notification", "post",  "-t",
-                              NOTIFY_TITLE, LOG_TAG,        message, NULL};
+        const char *args[] = {"cmd", "notification", "post", "-t", NOTIFY_TITLE, LOG_TAG, message, NULL};
 
         execvp("/system/bin/cmd", (char *const *)args);
         _exit(127);

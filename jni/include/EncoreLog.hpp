@@ -73,35 +73,39 @@ inline void flush() {
 
 } // namespace EncoreLog
 
-#define LOGT_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::trace, "{}: {}",   \
-        TAG, fmt::format(__VA_ARGS__))
+#define LOGT_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::trace, "{}: {}", TAG, fmt::format(__VA_ARGS__)   \
+    )
 
-#define LOGD_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::debug, "{}: {}",   \
-        TAG, fmt::format(__VA_ARGS__))
+#define LOGD_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::debug, "{}: {}", TAG, fmt::format(__VA_ARGS__)   \
+    )
 
-#define LOGI_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::info, "{}: {}",    \
-        TAG, fmt::format(__VA_ARGS__))
+#define LOGI_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::info, "{}: {}", TAG, fmt::format(__VA_ARGS__)    \
+    )
 
-#define LOGW_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::warn, "{}: {}",    \
-        TAG, fmt::format(__VA_ARGS__))
+#define LOGW_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::warn, "{}: {}", TAG, fmt::format(__VA_ARGS__)    \
+    )
 
-#define LOGE_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::err, "{}: {}",     \
-        TAG, fmt::format(__VA_ARGS__))
+#define LOGE_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::err, "{}: {}", TAG, fmt::format(__VA_ARGS__)     \
+    )
 
-#define LOGC_TAG(TAG, ...)                                                                         \
-    EncoreLog::get()->log(                                                                         \
-        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::critical,          \
-        "{}: {}", TAG, fmt::format(__VA_ARGS__))
+#define LOGC_TAG(TAG, ...)                                                                                                       \
+    EncoreLog::get()->log(                                                                                                       \
+        spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION},                                                                 \
+        spdlog::level::critical,                                                                                                 \
+        "{}: {}",                                                                                                                \
+        TAG,                                                                                                                     \
+        fmt::format(__VA_ARGS__)                                                                                                 \
+    )
 
 #define LOGT(...) LOGT_TAG(LOG_TAG, __VA_ARGS__)
 #define LOGD(...) LOGD_TAG(LOG_TAG, __VA_ARGS__)

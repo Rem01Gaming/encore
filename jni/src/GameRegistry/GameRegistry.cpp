@@ -49,8 +49,12 @@ bool GameRegistry::load_from_json(const std::string &filename) {
 
     if (doc.HasParseError()) {
         LOGE_TAG(
-            "GameRegistry", "{}: parse error: {} (Offset: {})", filename,
-            rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
+            "GameRegistry",
+            "{}: parse error: {} (Offset: {})",
+            filename,
+            rapidjson::GetParseError_En(doc.GetParseError()),
+            doc.GetErrorOffset()
+        );
         return false;
     }
 
@@ -68,8 +72,7 @@ bool GameRegistry::load_from_json(const std::string &filename) {
         }
 
         if (!it->value.IsObject()) {
-            LOGE_TAG(
-                "GameRegistry", "Value for {} is not an object, skipping", it->name.GetString());
+            LOGE_TAG("GameRegistry", "Value for {} is not an object, skipping", it->name.GetString());
             continue;
         }
 

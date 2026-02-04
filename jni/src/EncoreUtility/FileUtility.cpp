@@ -34,7 +34,7 @@ bool create_lock_file(void) {
 }
 
 bool check_dumpsys_sanity(void) {
-    FILE* file = fopen("/system/bin/dumpsys", "rb");
+    FILE *file = fopen("/system/bin/dumpsys", "rb");
     int ch;
     if (!file) {
         fprintf(stderr, "/system/bin/dumpsys: %s\n", strerror(errno));

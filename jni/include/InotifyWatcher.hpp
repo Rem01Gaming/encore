@@ -54,9 +54,8 @@ public:
      * @param context An integer context value provided by the user.
      * @param additional_data A void pointer for user-defined data.
      */
-    using EventCallback = std::function<void(
-        const struct inotify_event *event, const std::string &path, int context,
-        void *additional_data)>;
+    using EventCallback =
+        std::function<void(const struct inotify_event *event, const std::string &path, int context, void *additional_data)>;
 
     /**
      * @struct WatchReference
@@ -90,9 +89,8 @@ private:
         std::string path;             /// The path of the directory
         int context;                  /// User-provided context for the directory watch
         void *additional_data;        /// User-provided data for the directory watch
-        EventCallback
-            callback_func;    /// Callback for events in the directory not matching a specific file
-        int inotify_watch_fd; /// The inotify watch descriptor for this directory
+        EventCallback callback_func;  /// Callback for events in the directory not matching a specific file
+        int inotify_watch_fd;         /// The inotify watch descriptor for this directory
     };
 
     // Constants for event buffer handling
@@ -162,11 +160,9 @@ private:
                     std::unique_lock<std::mutex> lock(directories_mutex_);
 
                     // Find the directory corresponding to the watch descriptor.
-                    auto dir_it = std::find_if(
-                        directories_.begin(), directories_.end(),
-                        [event](const DirectoryWatch &dir) {
-                            return dir.inotify_watch_fd == event->wd;
-                        });
+                    auto dir_it = std::find_if(directories_.begin(), directories_.end(), [event](const DirectoryWatch &dir) {
+                        return dir.inotify_watch_fd == event->wd;
+                    });
 
                     if (dir_it == directories_.end()) {
                         // This can happen if a watch was removed but an event was already in flight.
@@ -180,9 +176,10 @@ private:
                     std::string event_name = (event->len > 0) ? std::string(event->name) : "";
 
                     // Check if the event matches a specific file watch.
-                    auto file_it = std::find_if(
-                        directory.files.begin(), directory.files.end(),
-                        [&event_name](const FileWatch &file) { return file.name == event_name; });
+                    auto file_it =
+                        std::find_if(directory.files.begin(), directory.files.end(), [&event_name](const FileWatch &file) {
+                            return file.name == event_name;
+                        });
 
                     if (file_it != directory.files.end()) {
                         // Event is for a specific file, use its callback.
@@ -208,8 +205,7 @@ private:
                 // Call callback if it exists and we found a valid watch
                 if (valid_event && callback_to_call) {
                     try {
-                        callback_to_call(
-                            event, callback_path, callback_context, callback_additional_data);
+                        callback_to_call(event, callback_path, callback_context, callback_additional_data);
                     } catch (const std::exception &e) {
                         LOGE_TAG("InotifyWatcher", "Callback exception: {}", e.what());
                     } catch (...) {
@@ -295,9 +291,9 @@ public:
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
         // Find or create directory
-        auto dir_it = std::find_if(
-            directories_.begin(), directories_.end(),
-            [&dir_path](const DirectoryWatch &dir) { return dir.path == dir_path; });
+        auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&dir_path](const DirectoryWatch &dir) {
+            return dir.path == dir_path;
+        });
 
         if (dir_it == directories_.end()) {
             DirectoryWatch new_dir;
@@ -308,14 +304,11 @@ public:
             new_dir.inotify_watch_fd = -1;
 
             // Add inotify watch for common file events
-            new_dir.inotify_watch_fd = inotify_add_watch(
-                inotify_fd_, dir_path.c_str(),
-                IN_MODIFY | IN_CLOSE_WRITE | IN_DELETE | IN_MOVE | IN_CREATE);
+            new_dir.inotify_watch_fd =
+                inotify_add_watch(inotify_fd_, dir_path.c_str(), IN_MODIFY | IN_CLOSE_WRITE | IN_DELETE | IN_MOVE | IN_CREATE);
 
             if (new_dir.inotify_watch_fd == -1) {
-                LOGE_TAG(
-                    "InotifyWatcher", "Cannot add file watch for directory '{}': {}", dir_path,
-                    strerror(errno));
+                LOGE_TAG("InotifyWatcher", "Cannot add file watch for directory '{}': {}", dir_path, strerror(errno));
                 return false;
             }
 
@@ -325,15 +318,13 @@ public:
 
         DirectoryWatch &directory = *dir_it;
 
-        auto file_exists = std::find_if(
-            directory.files.begin(), directory.files.end(),
-            [&filename](const FileWatch &file) { return file.name == filename; });
+        auto file_exists = std::find_if(directory.files.begin(), directory.files.end(), [&filename](const FileWatch &file) {
+            return file.name == filename;
+        });
 
         // File already being watched
         if (file_exists != directory.files.end()) {
-            LOGE_TAG(
-                "InotifyWatcher", "File '{}' already being watched in directory '{}'", filename,
-                dir_path);
+            LOGE_TAG("InotifyWatcher", "File '{}' already being watched in directory '{}'", filename, dir_path);
             return false;
         }
 
@@ -344,8 +335,7 @@ public:
         new_file.callback_func = reference.callback_func;
 
         directory.files.push_back(std::move(new_file));
-        LOGD_TAG(
-            "InotifyWatcher", "Added file watch for '{}' in directory '{}'", filename, dir_path);
+        LOGD_TAG("InotifyWatcher", "Added file watch for '{}' in directory '{}'", filename, dir_path);
         return true;
     }
 
@@ -366,9 +356,9 @@ public:
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
         // Check if directory already exists
-        auto dir_it = std::find_if(
-            directories_.begin(), directories_.end(),
-            [&path](const DirectoryWatch &dir) { return dir.path == path; });
+        auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&path](const DirectoryWatch &dir) {
+            return dir.path == path;
+        });
 
         if (dir_it != directories_.end()) {
             // Directory exists, update callback if not set
@@ -393,12 +383,11 @@ public:
 
         // Add inotify watch for directory events
         new_dir.inotify_watch_fd = inotify_add_watch(
-            inotify_fd_, path.c_str(),
-            IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVED_FROM | IN_MOVED_TO | IN_CLOSE_WRITE);
+            inotify_fd_, path.c_str(), IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVED_FROM | IN_MOVED_TO | IN_CLOSE_WRITE
+        );
 
         if (new_dir.inotify_watch_fd == -1) {
-            LOGE_TAG(
-                "InotifyWatcher", "Cannot add directory watch for '{}': {}", path, strerror(errno));
+            LOGE_TAG("InotifyWatcher", "Cannot add directory watch for '{}': {}", path, strerror(errno));
             return false;
         }
 
@@ -472,9 +461,9 @@ public:
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
         // Find directory
-        auto dir_it = std::find_if(
-            directories_.begin(), directories_.end(),
-            [&dir_path](const DirectoryWatch &dir) { return dir.path == dir_path; });
+        auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&dir_path](const DirectoryWatch &dir) {
+            return dir.path == dir_path;
+        });
 
         if (dir_it == directories_.end()) {
             return false;
@@ -482,9 +471,8 @@ public:
 
         // Remove file from directory's watch list
         auto &files = dir_it->files;
-        auto file_it = std::find_if(files.begin(), files.end(), [&filename](const FileWatch &file) {
-            return file.name == filename;
-        });
+        auto file_it =
+            std::find_if(files.begin(), files.end(), [&filename](const FileWatch &file) { return file.name == filename; });
 
         if (file_it == files.end()) {
             return false;
@@ -517,9 +505,9 @@ public:
 
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
-        auto dir_it = std::find_if(
-            directories_.begin(), directories_.end(),
-            [&clean_path](const DirectoryWatch &dir) { return dir.path == clean_path; });
+        auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&clean_path](const DirectoryWatch &dir) {
+            return dir.path == clean_path;
+        });
 
         if (dir_it == directories_.end()) {
             return false;

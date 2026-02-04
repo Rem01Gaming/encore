@@ -36,12 +36,7 @@
 #define MODULE_PROP MODPATH "/module.prop"
 #define MODULE_UPDATE MODPATH "/update"
 
-enum EncoreProfileMode : char {
-    PERFCOMMON,
-    PERFORMANCE_PROFILE,
-    BALANCE_PROFILE,
-    POWERSAVE_PROFILE
-};
+enum EncoreProfileMode : char { PERFCOMMON, PERFORMANCE_PROFILE, BALANCE_PROFILE, POWERSAVE_PROFILE };
 
 struct EncoreGameList {
     std::string package_name;

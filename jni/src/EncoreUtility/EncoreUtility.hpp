@@ -48,7 +48,7 @@ bool check_dumpsys_sanity(void);
  * @param package_name The package name of the application (e.g., "com.termux").
  * @return The UID of the package if found, otherwise 0.
  */
-uid_t get_uid_by_package_name(const std::string& package_name);
+uid_t get_uid_by_package_name(const std::string &package_name);
 
 /**
  * @brief Posts a notification via shell.
@@ -56,7 +56,7 @@ uid_t get_uid_by_package_name(const std::string& package_name);
  * @param message The message content of the notification.
  * @note It is only intended for use in an Android environment.
  */
-void notify(const char* message);
+void notify(const char *message);
 
 /**
  * @brief Sets the do not disturb mode via shell.

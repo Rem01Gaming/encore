@@ -28,9 +28,7 @@ enum WatchContext {
     WATCH_CONTEXT_DEVICE_MITIGATION,
 };
 
-void on_json_modified(
-    const struct inotify_event *event, const std::string &path, int context,
-    void *additional_data) {
+void on_json_modified(const struct inotify_event *event, const std::string &path, int context, void *additional_data) {
     (void)additional_data;
 
     auto OnGamelistModified = [&](const std::string &path) -> void {
@@ -80,14 +78,13 @@ bool init_file_watcher(InotifyWatcher &watcher) {
         EncoreLog::set_log_level(prefs.log_level);
 
         // Set up file watchers
-        InotifyWatcher::WatchReference gamelist_ref{
-            ENCORE_GAMELIST, on_json_modified, WATCH_CONTEXT_GAMELIST, nullptr};
+        InotifyWatcher::WatchReference gamelist_ref{ENCORE_GAMELIST, on_json_modified, WATCH_CONTEXT_GAMELIST, nullptr};
 
-        InotifyWatcher::WatchReference config_ref{
-            CONFIG_FILE, on_json_modified, WATCH_CONTEXT_CONFIG, nullptr};
+        InotifyWatcher::WatchReference config_ref{CONFIG_FILE, on_json_modified, WATCH_CONTEXT_CONFIG, nullptr};
 
         InotifyWatcher::WatchReference device_mitigation_ref{
-            DEVICE_MITIGATION_FILE, on_json_modified, WATCH_CONTEXT_DEVICE_MITIGATION, nullptr};
+            DEVICE_MITIGATION_FILE, on_json_modified, WATCH_CONTEXT_DEVICE_MITIGATION, nullptr
+        };
 
         if (!watcher.addFile(gamelist_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add gamelist watch");

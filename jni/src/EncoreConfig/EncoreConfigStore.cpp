@@ -48,8 +48,11 @@ bool EncoreConfigStore::load_config(const std::string &config_path) {
 
     if (doc.HasParseError()) {
         LOGE_TAG(
-            "EncoreConfigStore", "Parse error: {} (Offset: {})",
-            rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
+            "EncoreConfigStore",
+            "Parse error: {} (Offset: {})",
+            rapidjson::GetParseError_En(doc.GetParseError()),
+            doc.GetErrorOffset()
+        );
         return create_default_config();
     }
 
@@ -71,19 +74,14 @@ bool EncoreConfigStore::save_config(const std::string &config_path) {
     // Serialize preferences
     rapidjson::Value prefs_obj(rapidjson::kObjectType);
     prefs_obj.AddMember("enforce_lite_mode", config_.preferences.enforce_lite_mode, allocator);
-    prefs_obj.AddMember(
-        "use_device_mitigation", config_.preferences.use_device_mitigation, allocator);
+    prefs_obj.AddMember("use_device_mitigation", config_.preferences.use_device_mitigation, allocator);
     prefs_obj.AddMember("log_level", config_.preferences.log_level, allocator);
     doc.AddMember("preferences", prefs_obj, allocator);
 
     // Serialize CPU governor
     rapidjson::Value cpu_gov_obj(rapidjson::kObjectType);
-    cpu_gov_obj.AddMember(
-        "balance", rapidjson::Value(config_.cpu_governor.balance.c_str(), allocator).Move(),
-        allocator);
-    cpu_gov_obj.AddMember(
-        "powersave", rapidjson::Value(config_.cpu_governor.powersave.c_str(), allocator).Move(),
-        allocator);
+    cpu_gov_obj.AddMember("balance", rapidjson::Value(config_.cpu_governor.balance.c_str(), allocator).Move(), allocator);
+    cpu_gov_obj.AddMember("powersave", rapidjson::Value(config_.cpu_governor.powersave.c_str(), allocator).Move(), allocator);
     doc.AddMember("cpu_governor", cpu_gov_obj, allocator);
 
     rapidjson::StringBuffer buffer;
@@ -144,17 +142,13 @@ std::string EncoreConfigStore::read_default_cpu_governor() const {
 
     std::ifstream file(DEFAULT_CPU_GOV);
     if (!file.is_open()) {
-        LOGW_TAG(
-            "EncoreConfigStore", "Default CPU governor file not found, using fallback: {}",
-            default_governor);
+        LOGW_TAG("EncoreConfigStore", "Default CPU governor file not found, using fallback: {}", default_governor);
     }
 
     if (std::getline(file, default_governor)) {
         LOGD_TAG("EncoreConfigStore", "Read default CPU governor from file: {}", default_governor);
     } else {
-        LOGW_TAG(
-            "EncoreConfigStore", "Default CPU governor file is empty, using fallback: {}",
-            default_governor);
+        LOGW_TAG("EncoreConfigStore", "Default CPU governor file is empty, using fallback: {}", default_governor);
     }
 
     file.close();

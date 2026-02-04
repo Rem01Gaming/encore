@@ -81,7 +81,7 @@ inline std::unique_ptr<FILE, decltype(&fclose)> popen_direct(const std::vector<s
  * @param ... Additional arguments to be formatted into the command string.
  * @return The return value of the `system()` call.
  */
-inline int systemv(const char* format, ...) {
+inline int systemv(const char *format, ...) {
     char command[512];
     va_list args;
     va_start(args, format);

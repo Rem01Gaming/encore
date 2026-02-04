@@ -118,8 +118,7 @@ public:
      * @return True if the PID is valid and non-zero, false otherwise.
      */
     bool is_valid() {
-        return pid_valid.load(std::memory_order_acquire) &&
-               current_pid.load(std::memory_order_acquire) != 0;
+        return pid_valid.load(std::memory_order_acquire) && current_pid.load(std::memory_order_acquire) != 0;
     }
 
     /**

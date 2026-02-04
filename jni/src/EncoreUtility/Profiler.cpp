@@ -40,8 +40,7 @@ void set_profiler_env_vars() {
     }
 
     // Use cached mitigation items instead of re-evaluating rules
-    auto mitigation_items =
-        device_mitigation_store.get_cached_mitigation_items(prefs.use_device_mitigation);
+    auto mitigation_items = device_mitigation_store.get_cached_mitigation_items(prefs.use_device_mitigation);
 
     // Set environment variable for mitigation items
     for (const auto &item : mitigation_items) {

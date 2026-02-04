@@ -44,7 +44,8 @@ void encore_main_daemon(void) {
 
     static_assert(
         NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
-        "NORMAL_LOOP_INTERVAL must be a multiple of INGAME_LOOP_INTERVAL");
+        "NORMAL_LOOP_INTERVAL must be a multiple of INGAME_LOOP_INTERVAL"
+    );
 
     EncoreProfileMode cur_mode = PERFCOMMON;
     DumpsysWindowDisplays window_displays;
@@ -60,8 +61,7 @@ void encore_main_daemon(void) {
 
     PIDTracker pid_tracker;
 
-    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist,
-                             GameRegistry &registry) -> std::string {
+    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist, GameRegistry &registry) -> std::string {
         for (const auto &recent : recent_applist) {
             if (!recent.visible) continue;
 
@@ -73,8 +73,7 @@ void encore_main_daemon(void) {
         return "";
     };
 
-    auto IsGameStillActive = [&](const std::vector<RecentAppList> &recent_applist,
-                                 const std::string &package_name) -> bool {
+    auto IsGameStillActive = [&](const std::vector<RecentAppList> &recent_applist, const std::string &package_name) -> bool {
         for (const auto &recent : recent_applist) {
             if (recent.package_name == package_name) {
                 return true;
@@ -94,10 +93,9 @@ void encore_main_daemon(void) {
                 if (fgets(buffer, sizeof(buffer), pipe.get())) {
                     std::string result = buffer;
                     result.erase(
-                        std::remove_if(
-                            result.begin(), result.end(),
-                            [](unsigned char c) { return std::isspace(c); }),
-                        result.end());
+                        std::remove_if(result.begin(), result.end(), [](unsigned char c) { return std::isspace(c); }),
+                        result.end()
+                    );
 
                     if (result == "1") return true;
                     if (result == "0") return false;
@@ -224,8 +222,7 @@ void encore_main_daemon(void) {
             cur_mode = PERFORMANCE_PROFILE;
 
             LOGI("Applying performance profile for {} (PID: {})", active_package, game_pid);
-            bool lite_mode =
-                active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
+            bool lite_mode = active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
 
             apply_performance_profile(lite_mode, active_package, game_pid);
             pid_tracker.set_pid(game_pid);
@@ -299,8 +296,7 @@ int run_daemon() {
     SignalHandler::setup_signal_handlers();
 
     if (!create_lock_file()) {
-        std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!"
-                  << std::endl;
+        std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -326,8 +322,7 @@ int run_daemon() {
     }
 
     if (!device_mitigation_store.load_config()) {
-        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE
-                  << std::endl;
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE << std::endl;
         NotifyFatalError("Failed to parse device_mitigation.json");
         LOGC("Failed to parse {}", DEVICE_MITIGATION_FILE);
         return EXIT_FAILURE;

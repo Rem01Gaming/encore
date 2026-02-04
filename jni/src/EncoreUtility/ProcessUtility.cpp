@@ -16,7 +16,7 @@
 
 #include "EncoreUtility.hpp"
 
-uid_t get_uid_by_package_name(const std::string& package_name) {
+uid_t get_uid_by_package_name(const std::string &package_name) {
     struct stat st{};
 
     if (stat(("/data/data/" + package_name).c_str(), &st) != 0) {

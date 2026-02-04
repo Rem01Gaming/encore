@@ -135,8 +135,7 @@ void Power(DumpsysPower &result) {
         std::string line(buffer);
 
         // We've got all information needed, do not process any further
-        if (found_wakefulness && found_is_plugged &&
-            found_battery_saver && found_battery_saver_sticky) {
+        if (found_wakefulness && found_is_plugged && found_battery_saver && found_battery_saver_sticky) {
             continue;
         }
 
@@ -227,7 +226,7 @@ pid_t GetAppPID(const std::string &package_name) {
 
                 try {
                     pid = std::stoi(pid_str);
-                } catch (const std::exception& e) {
+                } catch (const std::exception &e) {
                     throw std::runtime_error("failed to parse PID: " + std::string(e.what()));
                 }
             }
