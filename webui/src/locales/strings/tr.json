@@ -62,7 +62,8 @@
             "description": "Encore Tweaks günlüğünü dışa aktar"
         },
         "create_shortcut": {
-            "title": "Kısayol Oluştur"
+            "title": "Kısayol Oluştur",
+            "description": "Hızlı erişim için Encore Tweaks'in kısayolunu ana ekrana ekleyin"
         }
     },
     "profiles": {
@@ -88,5 +89,39 @@
         "enabled": "Aktif",
         "disabled": "Devre dışı",
         "cancel": "İptal"
+    },
+    "game_settings": {
+        "title": "Oyun ayarları",
+        "application": "Uygulama",
+        "preferences": "Seçenekler",
+        "enable_tweaks": "İnce ayarları uygula",
+        "lite_mode": "Lite modu",
+        "lite_mode_description": "Uzun batarya ömrü için yüksek performansı optimize et",
+        "dnd_mode": "Rahatsız etme",
+        "dnd_mode_description": "Oyundayken bildirimleri ve aramaları engelle"
+    },
+    "language_selection": {
+        "title": "Dil",
+        "follow_system": "Sistemi takip et"
+    },
+    "log_level_selection": {
+        "title": "Log seviyesi"
+    },
+    "lite_mode": {
+        "title": "Lite modu",
+        "toggle_title": "Lite moduna zorla",
+        "brief": "Lite modu, oyun sırasında aşırı ısınmayı azaltır ve CPU kullanımını ve frekansını azaltır. Bu ayar aktif edildiğinde tüm oyunlara uygular."
+    },
+    "device_mitigation": {
+        "title": "Cihazı hafifleştir",
+        "toggle_title": "Cihaz hafifletmeyi etkinleştir",
+        "brief": "Cihaz hafifletme bazı cihazlardaki potansiyel ayarları devre dışı bırabakilir. Sorun yaşarsanız kapalı tutun."
+    },
+    "cpu_governor": {
+        "title": "CPU yönetimi",
+        "default_title": "Varsayılan işlemci yönetimi",
+        "default_description": "Lite modu aktifleşince dengelenmiş ve performans modları uygulanır",
+        "powersave_title": "Tasarruflu CPU yönetimi",
+        "powersave_description": "Sadece güç tasarrufu profilinde kullanılır"
     }
 }

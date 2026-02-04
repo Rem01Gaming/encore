@@ -9,7 +9,7 @@
     },
     "home_page": {
         "status_card": {
-            "running": "Mlaku✨",
+            "running": "Mlaku ✨",
             "stopped": "Mandheg 💤",
             "error": "Error ~",
             "daemonPID": "Daemon PID: {pid}",
