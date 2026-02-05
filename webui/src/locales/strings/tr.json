@@ -69,14 +69,16 @@
     "profiles": {
         "balanced": "Dengeli",
         "powersave": "Güç tasarrufu",
-        "performance": "Performans"
+        "performance": "Performans",
+        "initializing": "Başlatılıyor"
     },
     "toast": {
         "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
         "has_shortcut": "Kısayol zaten var.",
         "shortcut_unavailable": "Bu özellik için bir API bulunmamaktadır; bu özelliği kullanmak için WebUI X’i kullanın.",
         "failed_open_extrenal_browser": "Harici tarayıcı açılırken hata.",
-        "failed_save_log": "Günlük kayıt başarısız."
+        "failed_save_log": "Günlük kayıt başarısız.",
+        "success_save_log": "Log {path} konumuna başırıyla kaydedildi"
     },
     "navigation": {
         "home": "Ev",
@@ -88,7 +90,8 @@
         "unknown": "Bilinmeyen",
         "enabled": "Aktif",
         "disabled": "Devre dışı",
-        "cancel": "İptal"
+        "cancel": "İptal",
+        "warning": "Uyarı"
     },
     "game_settings": {
         "title": "Oyun ayarları",
@@ -122,6 +125,13 @@
         "default_title": "Varsayılan işlemci yönetimi",
         "default_description": "Lite modu aktifleşince dengelenmiş ve performans modları uygulanır",
         "powersave_title": "Tasarruflu CPU yönetimi",
-        "powersave_description": "Sadece güç tasarrufu profilinde kullanılır"
+        "powersave_description": "Sadece güç tasarrufu profilinde kullanılır",
+        "brief": "CPU yönetimi çekirdeğin anlık frekans algoritmasına göre değişir, sistemin performans ve güç yönetimi ile doğrudan ilişkilidir.",
+        "modal": {
+            "default_select_title": "Varsayılan CPU yönetimini seç",
+            "powersave_select_title": "Pil tasarrufu yönetimine geç",
+            "performance_warning": "Performans yönetim ayarı sistemin aşırı ısınmasına ve batarya ömrünün azalmasına sebep olur. Yine de devam edilsin mi?",
+            "performance_warning_confirm": "Anlıyorum ve uygula"
+        }
     }
 }
