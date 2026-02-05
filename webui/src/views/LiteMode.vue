@@ -16,16 +16,8 @@
           </h1>
 
           <div class="aspect-3/2 rounded-3xl overflow-hidden -mx-1.5">
-            <video
-              ref="videoElement"
-              preload="auto"
-              poster="/illustration/lite_mode_poster.avif"
-              class="w-full h-full object-cover"
-              autoplay
-              loop
-              muted
-              playsinline
-            >
+            <video ref="videoElement" preload="auto" poster="/illustration/lite_mode_poster.avif"
+              class="w-full h-full object-cover" autoplay loop muted playsinline webkit-playsinline>
               <source src="/illustration/lite_mode.webm" type="video/webm" />
             </video>
           </div>
@@ -68,11 +60,31 @@ const videoElement = ref(null)
 const hasUnsavedChanges = ref(false)
 const wakeLock = ref(null)
 
+const playVideo = async () => {
+  if (!videoElement.value) return
+
+  try {
+    videoElement.value.muted = true
+    await videoElement.value.play()
+  } catch (err) {
+    console.warn('Initial playback failed, retrying after transition...', err)
+
+    setTimeout(async () => {
+      try {
+        if (videoElement.value) {
+          await videoElement.value.play()
+        }
+      } catch (retryErr) {
+        console.error('Playback blocked by WebView policy:', retryErr)
+      }
+    }, 300)
+  }
+}
+
 const requestWakeLock = async () => {
   if ('wakeLock' in navigator) {
     try {
       wakeLock.value = await navigator.wakeLock.request('screen')
-      console.log('Wake Lock is active')
     } catch (err) {
       console.error(`${err.name}, ${err.message}`)
     }
@@ -83,19 +95,13 @@ const releaseWakeLock = async () => {
   if (wakeLock.value !== null) {
     await wakeLock.value.release()
     wakeLock.value = null
-    console.log('Wake Lock released')
   }
 }
 
 const handleVisibilityChange = async () => {
   if (document.visibilityState === 'visible') {
     await requestWakeLock()
-
-    if (videoElement.value && videoElement.value.paused) {
-      videoElement.value.play().catch((e) => {
-        console.log('Video play failed on visibility change:', e)
-      })
-    }
+    playVideo()
   }
 }
 
@@ -106,6 +112,10 @@ onMounted(async () => {
     }
     isLiteModeEnabled.value = encoreConfigStore.isLiteModeEnabled
 
+    if (videoElement.value) {
+      videoElement.value.addEventListener('canplay', playVideo, { once: true })
+    }
+
     document.addEventListener('visibilitychange', handleVisibilityChange)
     await requestWakeLock()
   } catch (error) {
@@ -115,11 +125,7 @@ onMounted(async () => {
 
 onActivated(async () => {
   await requestWakeLock()
-  if (videoElement.value && videoElement.value.paused) {
-    videoElement.value.play().catch((e) => {
-      console.log('Video play failed on activated:', e)
-    })
-  }
+  playVideo()
 })
 
 onDeactivated(async () => {
@@ -144,6 +150,9 @@ onBeforeRouteLeave(async (to, from, next) => {
 
 onBeforeUnmount(async () => {
   document.removeEventListener('visibilitychange', handleVisibilityChange)
+  if (videoElement.value) {
+    videoElement.value.removeEventListener('canplay', playVideo)
+  }
   await releaseWakeLock()
 })
 
