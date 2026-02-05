@@ -29,7 +29,7 @@
       </div>
 
       <!-- List -->
-      <div class="scrollbar-hidden pb-26 md:pb-8 flex-1 min-h-0 overflow-y-scroll px-5">
+      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5">
         <LoadingSpinner class="text-primary py-8" v-if="gamesStore.isLoading" />
 
         <div v-else class="pb-2">

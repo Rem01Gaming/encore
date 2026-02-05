@@ -14,7 +14,7 @@
       </div>
 
       <!-- Log Level List -->
-      <div class="scrollbar-hidden pb-25 md:pb-4 flex-1 min-h-0 overflow-y-scroll px-5">
+      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5">
         <div class="space-y-0">
           <!-- Log Level Options -->
           <div

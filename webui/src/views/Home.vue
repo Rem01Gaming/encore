@@ -10,7 +10,7 @@
     </div>
 
     <!-- Scrollable Content -->
-    <div class="scrollbar-hidden pb-15 md:pb-0 flex-1 min-h-0 overflow-y-scroll">
+    <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
       <div class="max-w-3xl mx-auto p-5 pt-1">
         <!-- Daemon Status -->
         <div

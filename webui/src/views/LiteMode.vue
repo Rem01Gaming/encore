@@ -9,7 +9,7 @@
         </div>
       </div>
 
-      <div class="scrollbar-hidden pb-25 md:pb-4 flex-1 min-h-0 overflow-y-scroll px-5">
+      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5">
         <div class="space-y-6">
           <h1 class="text-4xl text-on-surface mt-12 mb-6">
             {{ $t('lite_mode.title') }}

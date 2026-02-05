@@ -17,7 +17,7 @@
       </div>
 
       <!-- Settings Content -->
-      <div class="scrollbar-hidden pb-25 md:pb-4 flex-1 min-h-0 overflow-y-scroll px-5">
+      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5">
         <div class="space-y-6">
           <h2 class="text-on-surface-variant text-sm font-medium tracking-wide">
             {{ $t('game_settings.application') }}
