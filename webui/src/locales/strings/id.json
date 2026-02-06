@@ -76,7 +76,9 @@
         "lite_mode": "Mode Lite",
         "lite_mode_description": "Optimalkan daya tahan baterai daripada performa maksimal",
         "dnd_mode": "Jangan Ganggu",
-        "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game"
+        "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game",
+        "launch_app": "Buka",
+        "app_info": "Info aplikasi"
     },
     "language_selection": {
         "title": "Bahasa",

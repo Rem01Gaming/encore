@@ -24,13 +24,13 @@ export function isRunningOnWebUIX() {
  */
 export function createShortcut() {
   if (!isRunningOnWebUIX()) {
-    const shortcut_unavailable = getTranslation("toast.shortcut_unavailable");
+    const shortcut_unavailable = getTranslation('toast.shortcut_unavailable')
     toast(shortcut_unavailable)
     return
   }
 
   if (moduleInterface.hasShortcut()) {
-    const has_shortcut = getTranslation("toast.has_shortcut");
+    const has_shortcut = getTranslation('toast.has_shortcut')
     toast(has_shortcut)
     return
   }
@@ -125,12 +125,62 @@ export async function openWebsite(link) {
     } else {
       exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`).then(({ errno }) => {
         if (errno !== 0) {
-          const failed_toast = getTranslation("toast.failed_open_extrenal_browser")
+          const failed_toast = getTranslation('toast.failed_open_extrenal_browser')
           toast(failed_toast)
         }
       })
     }
   }, 100)
+}
+
+/**
+ * Launch an application
+ * @param {string} packageName
+ */
+export async function launchApp(packageName) {
+  if (!isKSUWebUI()) {
+    throw new Error('Not running on KSU WebUI')
+  }
+
+  if (isRunningOnWebUIX()) {
+    try {
+      const intent = packageManagerInterface.getLaunchIntentForPackage(packageName)
+      if (intent) {
+        const webui = new WebUI()
+        webui.startActivity(intent)
+        return
+      }
+    } catch (e) {
+      console.error('Failed to launch app via WebUIX:', e)
+    }
+  }
+
+  await exec(`monkey -p ${packageName} -c android.intent.category.LAUNCHER 1`)
+}
+
+/**
+ * Open App Info settings
+ * @param {string} packageName
+ */
+export async function openAppInfo(packageName) {
+  if (!isKSUWebUI()) {
+    throw new Error('Not running on KSU WebUI')
+  }
+
+  if (isRunningOnWebUIX()) {
+    try {
+      const webui = new WebUI()
+      const intent = new Intent('android.settings.APPLICATION_DETAILS_SETTINGS')
+      intent.setData(`package:${packageName}`)
+      webui.startActivity(intent)
+    } catch (e) {
+      console.error('Failed to open app info via WebUIX:', e)
+    }
+  } else {
+    await exec(
+      `am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:${packageName}`,
+    )
+  }
 }
 
 /**

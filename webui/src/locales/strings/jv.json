@@ -82,10 +82,12 @@
         "lite_mode": "Mode Lite",
         "lite_mode_description": "Ngirit baterei tinimbang performa dhuwur",
         "dnd_mode": "Ojo Ganggu",
-        "dnd_mode_description": "Ngeblok notifikasi lan telpon pas ngegame"
+        "dnd_mode_description": "Ngeblok notifikasi lan telpon pas ngegame",
+        "launch_app": "Bukak",
+        "app_info": "Info aplikasi"
     },
     "language_selection": {
-        "title": "Boso",
+        "title": "Basa",
         "follow_system": "Melu sistem"
     },
     "log_level_selection": {

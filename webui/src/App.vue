@@ -1,14 +1,9 @@
 <template>
-  <div
-    id="app"
-    class="copy-protected min-h-screen flex flex-col bg-background text-on-background overflow-hidden"
-  >
+  <div id="app" class="copy-protected min-h-screen flex flex-col bg-background text-on-background overflow-hidden">
     <main class="main-content flex-1 md:ml-20 overflow-hidden relative">
       <router-view v-slot="{ Component, route }">
         <transition :name="transitionName">
-          <keep-alive>
-            <component :is="Component" :key="route.path" />
-          </keep-alive>
+          <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
     </main>
@@ -76,6 +71,7 @@ watch(
 .page-open-enter-active {
   z-index: 2;
 }
+
 .page-open-leave-active {
   z-index: 1;
 }
@@ -88,6 +84,7 @@ watch(
   transform: translateX(15%);
   opacity: 0;
 }
+
 .page-open-enter-to {
   transform: translateX(0);
   opacity: 1;
@@ -96,6 +93,7 @@ watch(
 .page-close-leave-active {
   z-index: 2;
 }
+
 .page-close-enter-active {
   z-index: 1;
 }
@@ -104,6 +102,7 @@ watch(
   transform: scale(1);
   opacity: 1;
 }
+
 .page-close-leave-to {
   transform: scale(0.95);
   opacity: 0;
@@ -112,6 +111,7 @@ watch(
 .page-close-enter-from {
   transform: translateX(-15%);
 }
+
 .page-close-enter-to {
   transform: translateX(0);
 }

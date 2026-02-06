@@ -92,7 +92,9 @@
     "lite_mode": "Lite Mode",
     "lite_mode_description": "Optimize for longer battery life over peak performance",
     "dnd_mode": "Do Not Disturb",
-    "dnd_mode_description": "Block notifications and calls while gaming"
+    "dnd_mode_description": "Block notifications and calls while gaming",
+    "launch_app": "Launch",
+    "app_info": "App info"
   },
 
   "language_selection": {

@@ -1,18 +1,49 @@
 <template>
   <div class="page game-settings-page h-full flex flex-col overflow-hidden bg-surface">
     <div class="max-w-3xl mx-auto h-full flex flex-col w-full">
-      <!-- Header -->
-      <div class="flex-none p-5 mb-2">
-        <div class="flex items-center gap-4 mb-2">
-          <button
-            @click="$router.back()"
-            class="text-on-surface hover:text-primary transition-colors"
-          >
-            <ArrowLeftIcon class="w-6 h-6 cursor-pointer rtl:rotate-180" />
-          </button>
-          <h1 class="text-xl font-semibold text-on-surface">
-            {{ $t('game_settings.title') }}
-          </h1>
+      <div class="flex-none p-5 mb-2 relative z-50">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-4">
+            <button @click="$router.back()" class="text-on-surface hover:text-primary transition-colors">
+              <ArrowLeftIcon class="w-6 h-6 cursor-pointer rtl:rotate-180" />
+            </button>
+            <h1 class="text-xl font-semibold text-on-surface">
+              {{ $t('game_settings.title') }}
+            </h1>
+          </div>
+
+          <div class="relative">
+            <button @click="showMenu = !showMenu"
+              class="p-2 -mr-2 rounded-full text-on-surface hover:bg-on-surface/10 transition-colors">
+              <DotsVertical />
+            </button>
+
+            <div v-if="showMenu" @click="showMenu = false" class="fixed inset-0 z-40"></div>
+
+            <Transition enter-active-class="transition duration-150 ease-out-quart"
+              enter-from-class="transform scale-90 opacity-0" enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-100 ease-in" leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-90 opacity-0">
+              <div v-if="showMenu"
+                class="absolute right-0 top-full mt-2 w-52 rounded-xl bg-surface-container-high shadow-xl border border-outline-variant/20 overflow-hidden z-50 origin-top-right py-2">
+                <button @click="handleLaunchApp"
+                  class="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-on-surface/10 transition-colors text-on-surface">
+                  <OpenInNew :size="20" />
+                  <span class="text-sm font-medium">{{
+                    $t('game_settings.launch_app')
+                    }}</span>
+                </button>
+
+                <button @click="handleOpenAppInfo"
+                  class="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-on-surface/10 transition-colors text-on-surface">
+                  <InformationOutline :size="20" />
+                  <span class="text-sm font-medium">{{
+                    $t('game_settings.app_info')
+                    }}</span>
+                </button>
+              </div>
+            </Transition>
+          </div>
         </div>
       </div>
 
@@ -25,20 +56,14 @@
 
           <!-- App Info Section -->
           <div class="flex items-center gap-4">
-            <img
-              :src="currentApp.icon"
-              @error="handleImageError"
-              class="w-12 h-12 rounded-full object-cover"
-              :alt="currentApp.appName"
-            />
+            <img :src="currentApp.icon" @error="handleImageError" class="w-12 h-12 rounded-full object-cover"
+              :alt="currentApp.appName" />
             <div class="flex-1 min-w-0">
               <h3 class="text-base font-medium text-on-surface truncate">
                 {{ currentApp.appName || currentApp.packageName }}
               </h3>
-              <p
-                v-if="currentApp.appName && currentApp.appName !== currentApp.packageName"
-                class="allow-copy text-sm text-on-surface-variant truncate mt-1"
-              >
+              <p v-if="currentApp.appName && currentApp.appName !== currentApp.packageName"
+                class="allow-copy text-sm text-on-surface-variant truncate mt-1">
                 {{ currentApp.packageName }}
               </p>
             </div>
@@ -55,11 +80,8 @@
                   </h3>
                 </div>
               </div>
-              <ToggleSwitch
-                class="opacity-100!"
-                :model-value="appSettings.isEnabled"
-                @update:model-value="toggleAppEnabled"
-              />
+              <ToggleSwitch class="opacity-100!" :model-value="appSettings.isEnabled"
+                @update:model-value="toggleAppEnabled" />
             </div>
           </div>
 
@@ -68,19 +90,15 @@
 
           <!-- Preferences Section -->
           <div class="space-y-6">
-            <h2
-              class="text-on-surface-variant text-sm font-medium tracking-wide"
-              :class="{ 'opacity-50': !appSettings.isEnabled }"
-            >
+            <h2 class="text-on-surface-variant text-sm font-medium tracking-wide"
+              :class="{ 'opacity-50': !appSettings.isEnabled }">
               {{ $t('game_settings.preferences') }}
             </h2>
 
             <div class="space-y-6">
               <!-- Lite Mode -->
-              <div
-                class="flex items-center justify-between"
-                :class="{ 'opacity-50': !appSettings.isEnabled || isGlobalLiteModeEnabled }"
-              >
+              <div class="flex items-center justify-between"
+                :class="{ 'opacity-50': !appSettings.isEnabled || isGlobalLiteModeEnabled }">
                 <div class="flex items-center gap-1.5">
                   <Feather class="shrink-0 text-primary" />
                   <div class="pl-3 pr-4">
@@ -92,19 +110,12 @@
                     </p>
                   </div>
                 </div>
-                <ToggleSwitch
-                  class="opacity-100!"
-                  :model-value="liteModeSwitchValue"
-                  :disabled="!appSettings.isEnabled || isGlobalLiteModeEnabled"
-                  @update:model-value="toggleLiteMode"
-                />
+                <ToggleSwitch class="opacity-100!" :model-value="liteModeSwitchValue"
+                  :disabled="!appSettings.isEnabled || isGlobalLiteModeEnabled" @update:model-value="toggleLiteMode" />
               </div>
 
               <!-- DND Mode -->
-              <div
-                class="flex items-center justify-between"
-                :class="{ 'opacity-50': !appSettings.isEnabled }"
-              >
+              <div class="flex items-center justify-between" :class="{ 'opacity-50': !appSettings.isEnabled }">
                 <div class="flex items-center gap-1.5">
                   <NoEntry class="text-primary shrink-0" />
                   <div class="pl-3 pr-4">
@@ -116,12 +127,8 @@
                     </p>
                   </div>
                 </div>
-                <ToggleSwitch
-                  class="opacity-100!"
-                  :model-value="appSettings.enable_dnd"
-                  :disabled="!appSettings.isEnabled"
-                  @update:model-value="toggleDndMode"
-                />
+                <ToggleSwitch class="opacity-100!" :model-value="appSettings.enable_dnd"
+                  :disabled="!appSettings.isEnabled" @update:model-value="toggleDndMode" />
               </div>
             </div>
           </div>
@@ -141,8 +148,11 @@ import * as KernelSU from '@/helpers/KernelSU'
 import ToggleSwitch from '@/components/ui/ToggleSwitch.vue'
 import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
 import Candy from '@/components/icons/Candy.vue'
+import DotsVertical from '@/components/icons/DotsVertical.vue'
 import Feather from '@/components/icons/Feather.vue'
 import NoEntry from '@/components/icons/NoEntry.vue'
+import InformationOutline from '@/components/icons/InformationOutline.vue'
+import OpenInNew from '@/components/icons/OpenInNew.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -155,6 +165,7 @@ const currentApp = ref({})
 const originalSettings = ref({})
 const isLeaving = ref(false)
 const saveTimeout = ref(null)
+const showMenu = ref(false)
 const isGlobalLiteModeEnabled = ref(false)
 
 const liteModeSwitchValue = computed(() => {
@@ -283,6 +294,20 @@ function toggleDndMode() {
       ...appSettings.value,
       enable_dnd: !appSettings.value.enable_dnd,
     }
+  }
+}
+
+function handleLaunchApp() {
+  showMenu.value = false
+  if (currentApp.value && currentApp.value.packageName) {
+    KernelSU.launchApp(currentApp.value.packageName)
+  }
+}
+
+function handleOpenAppInfo() {
+  showMenu.value = false
+  if (currentApp.value && currentApp.value.packageName) {
+    KernelSU.openAppInfo(currentApp.value.packageName)
   }
 }
 
