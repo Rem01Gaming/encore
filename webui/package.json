@@ -28,10 +28,10 @@
     "webuix": "^0.0.18"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitejs/plugin-vue": "^6.0.4",
     "prettier": "3.6.2",
     "vite": "^7.3.1",
     "vite-plugin-mkcert": "^1.17.9",
-    "vite-plugin-vue-devtools": "^8.0.5"
+    "vite-plugin-vue-devtools": "^8.0.6"
   }
 }
