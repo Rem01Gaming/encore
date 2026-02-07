@@ -182,7 +182,7 @@ fi
 
 # Extract webroot
 ui_print "- Extracting webroot"
-unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" >&2
+unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" -x "*.sha256" >&2
 
 # Mitigate root detection
 [ -d /data/encore ] && rm -rf /data/encore

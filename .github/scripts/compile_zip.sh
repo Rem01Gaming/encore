@@ -12,20 +12,6 @@ cd "$GITHUB_WORKSPACE" || {
 	exit 1
 }
 
-# Put critical files and folders here
-need_integrity=(
-	"module/system/bin"
-	"module/libs"
-	"module/META-INF"
-	"module/service.sh"
-	"module/uninstall.sh"
-	"module/action.sh"
-	"module/cleanup.sh"
-	"module/module.prop"
-	"module/gamelist.txt"
-	"module/device_mitigation.json"
-)
-
 # Version info
 version="$(cat version)"
 version_code="$(git rev-list HEAD --count)"
@@ -49,9 +35,7 @@ zipName="encore-$version-$release_code.zip"
 echo "zipName=$zipName" >>"$GITHUB_OUTPUT"
 
 # Generate sha256sum for integrity checkup
-for file in "${need_integrity[@]}"; do
-	bash .github/scripts/gen_sha256sum.sh "$file"
-done
+bash .github/scripts/gen_sha256sum.sh "module"
 
 # Zip the file
 cd ./module || {
