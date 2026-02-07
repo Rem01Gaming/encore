@@ -12,38 +12,26 @@
             </h1>
           </div>
 
-          <div class="relative">
-            <button @click="showMenu = !showMenu"
-              class="p-2 -mr-2 rounded-full text-on-surface hover:bg-on-surface/10 transition-colors">
-              <DotsVertical />
-            </button>
+          <DropdownMenu>
+            <template #trigger>
+              <button class="p-2 -mr-2 rounded-full text-on-surface hover:bg-on-surface/10 transition-colors">
+                <DotsVertical />
+              </button>
+            </template>
 
-            <div v-if="showMenu" @click="showMenu = false" class="fixed inset-0 z-40"></div>
+            <template #content="{ close }">
+              <MenuItem @click="() => { handleLaunchApp(); close(); }">
+                <template #icon><OpenInNew :size="20" /></template>
+                {{ $t('game_settings.launch_app') }}
+              </MenuItem>
 
-            <Transition enter-active-class="transition duration-150 ease-out-quart"
-              enter-from-class="transform scale-90 opacity-0" enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-100 ease-in" leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-90 opacity-0">
-              <div v-if="showMenu"
-                class="absolute right-0 top-full mt-2 w-52 rounded-xl bg-surface-container-high shadow-xl border border-outline-variant/20 overflow-hidden z-50 origin-top-right py-2">
-                <button @click="handleLaunchApp"
-                  class="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-on-surface/10 transition-colors text-on-surface">
-                  <OpenInNew :size="20" />
-                  <span class="text-sm font-medium">{{
-                    $t('game_settings.launch_app')
-                    }}</span>
-                </button>
+              <MenuItem @click="() => { handleOpenAppInfo(); close(); }">
+                <template #icon><InformationOutline :size="20" /></template>
+                {{ $t('game_settings.app_info') }}
+              </MenuItem>
+            </template>
+          </DropdownMenu>
 
-                <button @click="handleOpenAppInfo"
-                  class="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-on-surface/10 transition-colors text-on-surface">
-                  <InformationOutline :size="20" />
-                  <span class="text-sm font-medium">{{
-                    $t('game_settings.app_info')
-                    }}</span>
-                </button>
-              </div>
-            </Transition>
-          </div>
         </div>
       </div>
 
@@ -144,6 +132,9 @@ import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useGamesStore } from '@/stores/Games'
 import { useEncoreConfigStore } from '@/stores/EncoreConfig'
 import * as KernelSU from '@/helpers/KernelSU'
+
+import DropdownMenu from '@/components/ui/DropdownMenu.vue'
+import MenuItem from '@/components/ui/MenuItem.vue'
 
 import ToggleSwitch from '@/components/ui/ToggleSwitch.vue'
 import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
