@@ -189,9 +189,9 @@ bool DeviceMitigationStore::matches_rule(const DeviceRule &rule) const {
 std::unordered_map<std::string, std::string> DeviceMitigationStore::get_device_info() const {
     std::unordered_map<std::string, std::string> info;
 
-    info["soc"] = get_soc_model();
-    info["model"] = get_device_model();
-    info["uname"] = get_kernel_uname();
+    info["soc"] = DeviceInfo::get_soc_model();
+    info["model"] = DeviceInfo::get_device_model();
+    info["uname"] = DeviceInfo::get_kernel_uname();
 
     LOGT_TAG("DeviceMitigationStore", "Current device info:");
     LOGT_TAG("DeviceMitigationStore", "  SOC: '{}'", info["soc"]);

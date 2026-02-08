@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
+#pragma once
 #include <string>
 
-std::string get_kernel_uname();
-std::string get_soc_model();
-std::string get_device_model();
+class DeviceInfo {
+public:
+    static const std::string& get_kernel_uname();
+    static const std::string& get_soc_model();
+    static const std::string& get_device_model();
+
+private:
+    static std::string fetch_kernel_uname();
+    static std::string fetch_soc_model();
+    static std::string fetch_device_model();
+};

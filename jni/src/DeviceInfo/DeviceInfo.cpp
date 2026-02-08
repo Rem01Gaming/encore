@@ -16,24 +16,39 @@
 
 #include <DeviceInfo.hpp>
 #include <EncoreLog.hpp>
-#include <ShellUtility.hpp>
-
 #include <fstream>
-
 #include <sys/system_properties.h>
 #include <sys/utsname.h>
 
-std::string get_kernel_uname() {
+// --- Public API ---
+
+const std::string &DeviceInfo::get_kernel_uname() {
+    static const std::string cached = fetch_kernel_uname();
+    return cached;
+}
+
+const std::string &DeviceInfo::get_soc_model() {
+    static const std::string cached = fetch_soc_model();
+    return cached;
+}
+
+const std::string &DeviceInfo::get_device_model() {
+    static const std::string cached = fetch_device_model();
+    return cached;
+}
+
+// --- Private ---
+
+std::string DeviceInfo::fetch_kernel_uname() {
     struct utsname buffer;
     if (uname(&buffer) != 0) {
         LOGE_TAG("DeviceInfo", "uname failed: {}", strerror(errno));
         return "Unknown";
     }
-
     return std::string(buffer.release);
 }
 
-std::string get_soc_model() {
+std::string DeviceInfo::fetch_soc_model() {
     std::ifstream file("/proc/device-tree/model");
     if (!file.is_open()) {
         return "Unknown";
@@ -48,11 +63,10 @@ std::string get_soc_model() {
     }
 
     model.erase(model.find_last_not_of(" \t\n\r\f\v") + 1);
-
-    return model;
+    return model.empty() ? "Unknown" : model;
 }
 
-std::string get_device_model() {
+std::string DeviceInfo::fetch_device_model() {
     char prop_value[PROP_VALUE_MAX];
     int len = __system_property_get("ro.product.model", prop_value);
 
@@ -61,7 +75,6 @@ std::string get_device_model() {
     }
 
     std::string result(prop_value, len);
-
     size_t end = result.find_last_not_of(" \t\r\n");
     if (end != std::string::npos) {
         result = result.substr(0, end + 1);
