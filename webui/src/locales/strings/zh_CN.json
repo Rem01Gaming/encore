@@ -84,7 +84,9 @@
         "lite_mode": "轻量模式",
         "lite_mode_description": "优先优化续航而不是性能",
         "dnd_mode": "免打扰",
-        "dnd_mode_description": "在游戏时阻止通知和电话"
+        "dnd_mode_description": "在游戏时阻止通知和电话",
+        "launch_app": "启动",
+        "app_info": "应用信息"
     },
     "language_selection": {
         "title": "语言",
