@@ -84,7 +84,9 @@
         "lite_mode": "Modo Lite",
         "lite_mode_description": "Optimizar para una mayor duración de la batería en lugar del máximo rendimiento",
         "dnd_mode": "No Molestar",
-        "dnd_mode_description": "Bloquea notificaciones y llamadas mientras juegas"
+        "dnd_mode_description": "Bloquea notificaciones y llamadas mientras juegas",
+        "app_info": "Información de aplicación",
+        "launch_app": "Iniciar"
     },
     "language_selection": {
         "title": "Idioma",
