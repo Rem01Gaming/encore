@@ -23,7 +23,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
     result.screen_awake = false;
     result.recent_app.clear();
 
-    auto pipe = popen_direct({"/system/bin/dumpsys", "window", "displays"});
+    auto pipe = popen_direct({"/system/bin/dumpsys", "window", "visible-apps"});
 
     if (!pipe) {
         std::string error_msg = "popen failed: ";
