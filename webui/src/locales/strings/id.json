@@ -114,7 +114,9 @@
             "default_select_title": "Pilih Governor CPU Default",
             "powersave_select_title": "Pilih Governor CPU Hemat Daya",
             "performance_warning": "Mengatur governor ke performance akan menyebabkan panas berlebih dan baterai cepat habis. Kamu yakin mau pake governor ini?",
-            "performance_warning_confirm": "Saya mengerti, Terapkan"
+            "performance_warning_confirm": "Saya mengerti, Terapkan",
+            "initial_warn": "Harap dicatat bahwa Encore Tweaks telah mengonfigurasi CPU Governor secara otomatis. Jangan mengubahnya secara manual kecuali Anda sudah berpengalaman.",
+            "initial_warn_checkbox": "Jangan munculkan pesan ini lagi"
         }
     },
     "profiles": {
@@ -143,6 +145,7 @@
         "enabled": "Aktif",
         "disabled": "Nonaktif",
         "cancel": "Batal",
-        "warning": "Peringatan"
+        "warning": "Peringatan",
+        "ok": "Oke"
     }
 }
