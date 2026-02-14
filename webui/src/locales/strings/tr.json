@@ -101,7 +101,9 @@
         "lite_mode": "Lite modu",
         "lite_mode_description": "Uzun batarya ömrü için yüksek performansı optimize et",
         "dnd_mode": "Rahatsız etme",
-        "dnd_mode_description": "Oyundayken bildirimleri ve aramaları engelle"
+        "dnd_mode_description": "Oyundayken bildirimleri ve aramaları engelle",
+        "launch_app": "Başlat",
+        "app_info": "Uygulama bilgileri"
     },
     "language_selection": {
         "title": "Dil",
