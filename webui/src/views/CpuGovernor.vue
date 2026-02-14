@@ -65,7 +65,7 @@
       </div>
       <template #actions>
         <button @click="closeSelectionModal"
-          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
           {{ $t('common.cancel') }}
         </button>
       </template>
@@ -80,12 +80,32 @@
 
       <template #actions>
         <button @click="cancelPerformanceSelection"
-          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full">
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
           {{ $t('common.cancel') }}
         </button>
         <button @click="confirmPerformanceSelection"
-          class="px-4 py-2 text-sm font-medium text-error hover:bg-error/10 rounded-full">
+          class="px-4 py-2 text-sm font-medium text-error hover:bg-error/10 transition-colors">
           {{ $t('cpu_governor.modal.performance_warning_confirm') }}
+        </button>
+      </template>
+    </Modal>
+
+    <Modal :show="showInitialWarning" :title="$t('common.warning')" @close="dismissInitialWarning">
+      <div class="px-4 pb-2">
+        <p class="text-sm">
+          {{ $t('cpu_governor.modal.initial_warn') }}
+        </p>
+        <div class="mt-6 flex items-center gap-3 cursor-pointer" @click="dontShowWarningAgain = !dontShowWarningAgain">
+          <Checkbox v-model="dontShowWarningAgain" />
+          <span class="text-sm text-on-surface">
+            {{ $t('cpu_governor.modal.initial_warn_checkbox') }}
+          </span>
+        </div>
+      </div>
+      <template #actions>
+        <button @click="dismissInitialWarning"
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
+          {{ $t('common.ok') }}
         </button>
       </template>
     </Modal>
@@ -104,6 +124,7 @@ import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
 import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
 import RadioButton from '@/components/ui/RadioButton.vue'
 import InformationOutlineIcon from '@/components/icons/InformationOutline.vue'
+import Checkbox from '@/components/ui/Checkbox.vue'
 import Ripple from '@/components/ui/Ripple.vue'
 import Modal from '@/components/ui/Modal.vue'
 
@@ -115,10 +136,12 @@ const { t } = useI18n()
 const availableGovernors = ref([])
 const showSelectionModal = ref(false)
 const showWarningModal = ref(false)
-const modalType = ref('default') // 'default' or 'powersave'
+const modalType = ref('default')
 const selectedGovernor = ref('')
-const pendingGovernor = ref('') // Stores choice while warning is shown
+const pendingGovernor = ref('')
 const hasUnsavedChanges = ref(false)
+const showInitialWarning = ref(false)
+const dontShowWarningAgain = ref(false)
 
 const balanceGovernor = computed(() => encoreConfigStore.balanceGovernor)
 const powersaveGovernor = computed(() => encoreConfigStore.powersaveGovernor)
@@ -134,11 +157,29 @@ onMounted(async () => {
     if (!encoreConfigStore.isLoaded) {
       await encoreConfigStore.loadConfig()
     }
+
     await loadAvailableGovernors()
   } catch (error) {
     console.error('Failed to initialize CPU governor page:', error)
   }
 })
+
+function onPageReady() {
+  const hideWarning = localStorage.getItem('hide_cpu_governor_warning')
+  if (!hideWarning || hideWarning === 'false') {
+    showInitialWarning.value = true
+  }
+}
+
+// Expose the method to the parent component
+defineExpose({ onPageReady })
+
+function dismissInitialWarning() {
+  if (dontShowWarningAgain.value) {
+    localStorage.setItem('hide_cpu_governor_warning', 'true')
+  }
+  showInitialWarning.value = false
+}
 
 async function loadAvailableGovernors() {
   try {
@@ -146,10 +187,7 @@ async function loadAvailableGovernors() {
 
     if (await KernelSU.fileExists(governorsFile)) {
       const content = await KernelSU.readFile(governorsFile)
-      availableGovernors.value = content
-        .trim()
-        .split(/\s+/)
-        .filter((g) => g)
+      availableGovernors.value = content.trim().split(/\s+/).filter((g) => g)
     } else {
       availableGovernors.value = []
     }
@@ -211,8 +249,7 @@ async function applyGovernor(governor) {
 
 function goBack() {
   if (hasUnsavedChanges.value) {
-    encoreConfigStore
-      .saveConfig()
+    encoreConfigStore.saveConfig()
       .then(() => {
         hasUnsavedChanges.value = false
         router.back()

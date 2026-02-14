@@ -135,7 +135,9 @@
       "default_select_title": "Select Default CPU Governor",
       "powersave_select_title": "Select Powersave CPU Governor",
       "performance_warning": "Setting the governor to performance will cause overheating and rapid battery drain. Are you sure you want to proceed?",
-      "performance_warning_confirm": "I understand, Apply"
+      "performance_warning_confirm": "I understand, Apply",
+      "initial_warn": "Please note that Encore Tweaks has automatically configured the optimal CPU Governor. Manual changes are not recommended unless you are an advanced user.",
+      "initial_warn_checkbox": "Don't show this again"
     }
   },
 
@@ -167,6 +169,7 @@
     "enabled": "Enabled",
     "disabled": "Disabled",
     "cancel": "Cancel",
-    "warning": "Warning"
+    "warning": "Warning",
+    "ok": "Okay"
   }
 }

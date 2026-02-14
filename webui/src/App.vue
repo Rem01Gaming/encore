@@ -2,8 +2,8 @@
   <div id="app" class="copy-protected min-h-screen flex flex-col bg-background text-on-background overflow-hidden">
     <main class="main-content flex-1 md:ml-20 overflow-hidden relative">
       <router-view v-slot="{ Component, route }">
-        <transition :name="transitionName">
-          <component :is="Component" :key="route.path" />
+        <transition :name="transitionName" @after-enter="onAfterEnter">
+          <component :is="Component" :key="route.path" ref="pageComponent" />
         </transition>
       </router-view>
     </main>
@@ -18,9 +18,17 @@ import Navigation from '@/components/ui/Navigation.vue'
 
 const route = useRoute()
 const transitionName = ref('')
+const pageComponent = ref(null)
 
 // Define top-level routes that should NOT animate between each other
 const topLevelRoutes = ['/', '/games', '/settings']
+
+// Triggered when the enter transition finishes
+const onAfterEnter = () => {
+  if (pageComponent.value && typeof pageComponent.value.onPageReady === 'function') {
+    pageComponent.value.onPageReady()
+  }
+}
 
 watch(
   () => route.path,
@@ -62,9 +70,6 @@ watch(
   bottom: 0;
   left: 0;
   will-change: transform, opacity;
-
-  /* Force a solid background during transition to prevent 
-     content from the page "underneath" from bleeding through */
   background-color: var(--color-background);
 }
 
