@@ -88,9 +88,9 @@ void encore_main_daemon(void) {
         if (use_settings_method) {
             auto pipe = popen_direct({"/system/bin/cmd", "settings", "get", "global", "low_power"});
 
-            if (pipe) {
+            if (pipe.stream) {
                 char buffer[16];
-                if (fgets(buffer, sizeof(buffer), pipe.get())) {
+                if (fgets(buffer, sizeof(buffer), pipe.stream)) {
                     std::string result = buffer;
                     result.erase(
                         std::remove_if(result.begin(), result.end(), [](unsigned char c) { return std::isspace(c); }),

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Rem01Gaming
+ * Copyright (C) 2024-2026 Rem01Gaming
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
 
     auto pipe = popen_direct({"/system/bin/dumpsys", "window", "visible-apps"});
 
-    if (!pipe) {
+    if (!pipe.stream) {
         std::string error_msg = "popen failed: ";
         error_msg += strerror(errno);
         throw std::runtime_error(error_msg);
@@ -37,12 +37,12 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
     bool found_awake = false;
     std::string current_task_line;
 
-    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe.stream) != nullptr) {
         std::string line(buffer);
 
         // We've got all information needed, do not process any further
         if (exited_task_section && found_awake) {
-            continue;
+            break;
         }
 
         // Remove trailing newline
@@ -119,7 +119,7 @@ void Power(DumpsysPower &result) {
 
     auto pipe = popen_direct({"/system/bin/dumpsys", "power"});
 
-    if (!pipe) {
+    if (!pipe.stream) {
         std::string error_msg = "popen failed: ";
         error_msg += strerror(errno);
         throw std::runtime_error(error_msg);
@@ -131,12 +131,12 @@ void Power(DumpsysPower &result) {
     bool found_battery_saver = false;
     bool found_battery_saver_sticky = false;
 
-    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe.stream) != nullptr) {
         std::string line(buffer);
 
         // We've got all information needed, do not process any further
         if (found_wakefulness && found_is_plugged && found_battery_saver && found_battery_saver_sticky) {
-            continue;
+            break;
         }
 
         // Remove trailing newline
@@ -190,7 +190,7 @@ void Power(DumpsysPower &result) {
 pid_t GetAppPID(const std::string &package_name) {
     auto pipe = popen_direct({"/system/bin/dumpsys", "activity", "top"});
 
-    if (!pipe) {
+    if (!pipe.stream) {
         std::string error_msg = "popen failed: ";
         error_msg += strerror(errno);
         throw std::runtime_error(error_msg);
@@ -200,9 +200,9 @@ pid_t GetAppPID(const std::string &package_name) {
     bool found_package = false;
     int pid = 0;
 
-    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
+    while (fgets(buffer, sizeof(buffer), pipe.stream) != nullptr) {
         // Found our package, no need to continue
-        if (found_package) continue;
+        if (found_package) break;
 
         std::string line(buffer);
 

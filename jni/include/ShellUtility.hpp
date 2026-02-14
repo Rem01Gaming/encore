@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025 Rem01Gaming
+ * Copyright (C) 2024-2026 Rem01Gaming
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,39 +23,61 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-/**
- * @brief Opens a process by creating a pipe, forking, and invoking execvp.
- *
- * This function is a replacement for `popen` that directly takes a vector of strings
- * as arguments, avoiding the need for shell interpretation. This is safer as it
- * prevents shell injection vulnerabilities. The function creates a pipe, forks the
- * process, and in the child process, executes the command specified by `args`.
- * The standard output of the child process is redirected to the pipe. The parent
- * process receives a `FILE*` stream to read from the child's standard output.
- *
- * @param args A vector of strings where the first element is the command to execute
- *             and subsequent elements are its arguments.
- * @return A `std::unique_ptr<FILE, decltype(&fclose)>` that wraps the file stream
- *         for reading the child's stdout. The file is automatically closed when the
- *         unique_ptr goes out of scope. Returns a null-holding unique_ptr on failure.
- */
-inline std::unique_ptr<FILE, decltype(&fclose)> popen_direct(const std::vector<std::string> &args) {
-    int pipefd[2];
-    if (pipe(pipefd) == -1) {
-        return {nullptr, fclose};
+struct PipeResult {
+    FILE* stream;
+    pid_t pid;
+
+    PipeResult(FILE* s, pid_t p) : stream(s), pid(p) {}
+
+    // Helper to close and reap automatically
+    void close() {
+        if (stream) {
+            fclose(stream);
+            stream = nullptr;
+        }
+        if (pid > 0) {
+            waitpid(pid, nullptr, 0);
+            pid = -1;
+        }
     }
 
+    ~PipeResult() { close(); }
+    
+    // Disable copying
+    PipeResult(const PipeResult&) = delete;
+    PipeResult& operator=(const PipeResult&) = delete;
+    
+    // Allow moving
+    PipeResult(PipeResult&& other) noexcept : stream(other.stream), pid(other.pid) {
+        other.stream = nullptr;
+        other.pid = -1;
+    }
+};
+
+/**
+ * @brief Executes a command directly and captures its standard output.
+ *
+ * Forks a child process and uses `execvp` to run the specified command. This approach 
+ * is safer than `popen` as it avoids shell interpretation and potential injection.
+ * 
+ * @param args A vector where args[0] is the command and subsequent elements are arguments.
+ * @return A PipeResult object. Check `PipeResult.stream` for the file pointer.
+ * @note The child process is automatically reaped (waitpid) when the result goes out of scope.
+ */
+inline PipeResult popen_direct(const std::vector<std::string> &args) {
+    int pipefd[2];
+    if (pipe(pipefd) == -1) return PipeResult(nullptr, -1);
     pid_t pid = fork();
     if (pid == -1) {
-        close(pipefd[0]);
-        close(pipefd[1]);
-        return {nullptr, fclose};
+        ::close(pipefd[0]);
+        ::close(pipefd[1]);
+        return PipeResult(nullptr, -1);
     }
 
     if (pid == 0) { // Child
-        close(pipefd[0]);
+        ::close(pipefd[0]);
         dup2(pipefd[1], STDOUT_FILENO);
-        close(pipefd[1]);
+        ::close(pipefd[1]);
 
         std::vector<char *> cargs;
         for (const auto &arg : args) {
@@ -65,10 +87,11 @@ inline std::unique_ptr<FILE, decltype(&fclose)> popen_direct(const std::vector<s
 
         execvp(cargs[0], cargs.data());
         _exit(127);
-    } else { // Parent
-        close(pipefd[1]);
-        return {fdopen(pipefd[0], "r"), fclose};
-    }
+    } 
+
+    // Parent
+    ::close(pipefd[1]);
+    return PipeResult(fdopen(pipefd[0], "r"), pid);
 }
 
 /**
