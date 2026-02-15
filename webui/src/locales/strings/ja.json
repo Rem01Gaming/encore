@@ -6,11 +6,49 @@
     "home_page": {
         "status_card": {
             "daemon_inactive": "サービスが停止中",
-            "loading_daemon": "ちょっとお待ちください…"
+            "loading_daemon": "ちょっとお待ちください…",
+            "running": "仕事中",
+            "stopped": "停止💤",
+            "error": "エラー ~",
+            "daemonPID": "デーモン PID: {pid}"
         },
         "info_card": {
             "profile": "現在のプロフィール",
-            "chipset": "チップセット"
+            "chipset": "チップセット",
+            "kernel": "カーネル"
+        },
+        "support_button": {
+            "title": "支援してね"
         }
+    },
+    "settings_page": {
+        "title": "設定",
+        "section": {
+            "system": "システム"
+        },
+        "language": {
+            "title": "言語"
+        },
+        "save_log": {
+            "title": "保存ログ"
+        },
+        "create_shortcut": {
+            "title": "ショートカット作成"
+        }
+    },
+    "game_settings": {
+        "title": "ゲーム設定",
+        "dnd_mode_description": "ゲーム中は通知と電話をブロック",
+        "app_info": "アプリ情報"
+    },
+    "language_selection": {
+        "title": "言語"
+    },
+    "games_page": {
+        "badges": {
+            "tweak_enabled": "有効化"
+        },
+        "search_placeholder": "アプリ検索",
+        "no_apps_found": "アプリが見つかりませんでした"
     }
 }
