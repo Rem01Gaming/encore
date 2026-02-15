@@ -4,7 +4,7 @@
             "running": "Çalışıyor ✨",
             "stopped": "Durdu 💤",
             "error": "Hata ~",
-            "daemonPID": "Daemon PID: {pid}",
+            "daemonPID": "Servis PID: {pid}",
             "daemon_inactive": "Servis devre dışı",
             "loading_daemon": "Bir dakika lütfen…"
         },
@@ -91,7 +91,8 @@
         "enabled": "Aktif",
         "disabled": "Devre dışı",
         "cancel": "İptal",
-        "warning": "Uyarı"
+        "warning": "Uyarı",
+        "ok": "Tamam"
     },
     "game_settings": {
         "title": "Oyun ayarları",
@@ -133,7 +134,9 @@
             "default_select_title": "Varsayılan CPU yönetimini seç",
             "powersave_select_title": "Pil tasarrufu yönetimine geç",
             "performance_warning": "Performans yönetim ayarı sistemin aşırı ısınmasına ve batarya ömrünün azalmasına sebep olur. Yine de devam edilsin mi?",
-            "performance_warning_confirm": "Anlıyorum ve uygula"
+            "performance_warning_confirm": "Anlıyorum ve uygula",
+            "initial_warn": "CPU yönetiminin Encore Tweaks tarafından otomatik olarak yönetildiğini unutmayın. Eğer bilgili bir kullanıcı değilseniz bunun elle yapılandırılması tavsiye edilmez.",
+            "initial_warn_checkbox": "Bunu tekrar gösterme"
         }
     }
 }
