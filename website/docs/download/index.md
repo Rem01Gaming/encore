@@ -3,19 +3,20 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 4.6
+# Encore Tweaks 5.0
 
 ## Changelog
 
-- Refactor and design changes on the WebUI
-- Implement WebUI X API for file read/write
-- WebUI translation updates
-- Exposes Encore's logging system to other processes/module
-- Add sanity check for dumpsys
+While this release may appear minor on the surface, the entire codebase has undergone significant refactoring and migration. The previously C-based daemon has been completely rewritten in C++ to leverage abstraction and object-oriented programming. Similarly, the WebUI has been fully rebuilt in VueJS, enabling a native-like single-page application experience.
+
+- Massive internal refactoring and code migration
+- UI/UX improvements in WebUI
+- Drop support for logging system interface to other processes/module
+- Fix performance profile stuck when exiting games
 - Other misc changes and optimizations
 
 ## Download
-- [Download](https://github.com/Rem01Gaming/encore/releases/tag/4.6)
+- [Download](https://github.com/Rem01Gaming/encore/releases/tag/5.0)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Support our project
@@ -23,6 +24,7 @@ Please consider support our project by not sharing direct module file
 :::
 
 ## Download older version
+- [Version 4.6](/download/version/4.6)
 - [Version 4.5](/download/version/4.5)
 - [Version 4.4](/download/version/4.4)
 - [Version 4.3](/download/version/4.3)

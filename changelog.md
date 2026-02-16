@@ -1,4 +1,4 @@
-## Encore Tweaks 4.6
+## Encore Tweaks 5.0
 
 **Thanks for using Encore Tweaks!**
 
@@ -6,9 +6,10 @@ Your continued support keeps this project going. If you enjoy the improvements a
 
 ### Changelog
 
-- Refactor and design changes on the WebUI
-- Implement WebUI X API for file read/write
-- WebUI translation updates
-- Exposes Encore's logging system to other processes/module
-- Add sanity check for dumpsys
+While this release may appear minor on the surface, the entire codebase has undergone significant refactoring and migration. The previously C-based daemon has been completely rewritten in C++ to leverage abstraction and object-oriented programming. Similarly, the WebUI has been fully rebuilt in VueJS, enabling a native-like single-page application experience.
+
+- Massive internal refactoring and code migration
+- UI/UX improvements in WebUI
+- Drop support for logging system interface to other processes/module
+- Fix performance profile stuck when exiting games
 - Other misc changes and optimizations
