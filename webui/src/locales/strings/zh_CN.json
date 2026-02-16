@@ -114,7 +114,9 @@
             "default_select_title": "设置默认 CPU 调速器",
             "powersave_select_title": "选择省电 CPU 调速器",
             "performance_warning": "将调速器设置为性能模式可能导致手机过热并影响电池寿命，确认继续操作吗?",
-            "performance_warning_confirm": "我知晓风险，应用更改"
+            "performance_warning_confirm": "我知晓风险，应用更改",
+            "initial_warn": "Encore Tweaks 已经自动应用了最优 CPU 调速器。除非您是专业用户，否则不建议您手动更改配置。",
+            "initial_warn_checkbox": "不再提示"
         },
         "powersave_title": "省电 CPU 调速器",
         "powersave_description": "仅用于省电配置"
@@ -136,6 +138,7 @@
         "enabled": "已启用",
         "disabled": "已禁用",
         "cancel": "取消",
-        "warning": "警告"
+        "warning": "警告",
+        "ok": "好"
     }
 }
