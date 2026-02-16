@@ -116,7 +116,9 @@
             "default_select_title": "Seleccionar el gobernador de CPU predeterminado",
             "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía",
             "performance_warning": "Configurar el gobernador en modo rendimiento provocará sobrecalentamiento y un consumo acelerado de la batería. ¿Estás seguro de que deseas continuar?",
-            "performance_warning_confirm": "Lo entiendo, Aplicar"
+            "performance_warning_confirm": "Lo entiendo, Aplicar",
+            "initial_warn": "Ten en cuenta que Encore Tweaks ha configurado automáticamente el gobernador de CPU óptimo. No se recomiendan cambios manuales a menos que sea un usuario avanzado.",
+            "initial_warn_checkbox": "No mostrar otra vez"
         }
     },
     "profiles": {
@@ -136,6 +138,7 @@
         "enabled": "Habilitado",
         "disabled": "Desactivado",
         "cancel": "Cancelar",
-        "warning": "Advertencia"
+        "warning": "Advertencia",
+        "ok": "De acuerdo"
     }
 }
