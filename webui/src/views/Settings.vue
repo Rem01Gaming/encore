@@ -288,7 +288,7 @@ const createShortcut = () => {
 
 const exportEncoreLog = () => {
   setTimeout(() => {
-    exec(`encore_utility save_logs`).then(({ errno, stdout }) => {
+    exec(`/data/adb/modules/encore/system/bin/encore_utility save_logs`).then(({ errno, stdout }) => {
       if (errno !== 0) {
         const failed_toast = getTranslation("toast.failed_save_log")
         toast(failed_toast)
