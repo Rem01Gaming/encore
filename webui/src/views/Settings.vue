@@ -52,8 +52,8 @@
             <RippleComponent @click="openLanguageView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                    <LanguageIcon class="w-5 h-5 text-on-secondary-container" />
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <LanguageIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
                   <div class="flex-1 min-w-0">
@@ -114,8 +114,8 @@
             <RippleComponent @click="openCpuGovernorView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                    <ChipsetIcon class="w-5 h-5 text-on-secondary-container" />
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <ChipsetIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
                   <div class="flex-1 min-w-0">
                     <h3 class="text-sm font-medium text-on-surface">
@@ -139,8 +139,8 @@
             <RippleComponent @click="openLogLvlView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center shrink-0">
-                    <TextIcon class="w-5 h-5 text-on-tertiary-container" />
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <TextIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
                   <div class="flex-1 min-w-0">
@@ -201,8 +201,8 @@
             <RippleComponent @click="createShortcut" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                    <HomePlusIcon class="w-5 h-5 text-on-secondary-container" />
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <HomePlusIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
                   <div class="flex-1 min-w-0">
