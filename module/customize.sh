@@ -70,7 +70,7 @@ soc_recognition_extra() {
 	}
 
 	[ -d /sys/kernel/tegra_gpu ] && {
-		SOC=7
+		SOC=6
 		ui_print "- Implementing tweaks for Nvidia Tegra"
 		return 0
 	}
@@ -103,8 +103,7 @@ recognize_soc() {
 	*exynos* | *Exynos* | *EXYNOS* | *universal* | *samsung* | *erd* | *s5e*) SOC=3 ;;
 	*Unisoc* | *unisoc* | *ums* | *UNISOC* | *sp* | *SC*) SOC=4 ;;
 	*gs* | *Tensor* | *tensor*) SOC=5 ;;
-	*Intel* | *intel*) SOC=6 ;;
-	*kirin*) SOC=8 ;;
+	*kirin*) SOC=7 ;;
 	esac
 
 	case "$SOC" in
@@ -113,9 +112,8 @@ recognize_soc() {
 	3) ui_print "- Implementing tweaks for Exynos" ;;
 	4) ui_print "- Implementing tweaks for Unisoc" ;;
 	5) ui_print "- Implementing tweaks for Google Tensor" ;;
-	6) ui_print "- Implementing tweaks for Intel" ;;
-	7) ui_print "- Implementing tweaks for Nvidia Tegra" ;;
-	8) ui_print "- Implementing tweaks for Kirin" ;;
+	6) ui_print "- Implementing tweaks for Nvidia Tegra" ;;
+	7) ui_print "- Implementing tweaks for Kirin" ;;
 	0) return 1 ;;
 	esac
 }
@@ -150,9 +148,6 @@ cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
 case $ARCH in
 "arm64") ARCH_TMP="arm64-v8a" ;;
 "arm") ARCH_TMP="armeabi-v7a" ;;
-"x64") ARCH_TMP="x86_64" ;;
-"x86") ARCH_TMP="x86" ;;
-"riscv64") ARCH_TMP="riscv64" ;;
 *) abort_unsupported_arch ;;
 esac
 
@@ -215,9 +210,8 @@ fi
 # 3 = Exynos
 # 4 = Unisoc
 # 5 = Google Tensor
-# 6 = Intel
-# 7 = Nvidia Tegra
-# 8 = Kirin
+# 6 = Nvidia Tegra
+# 7 = Kirin
 
 # Recognize Chipset
 soc_recognition_extra

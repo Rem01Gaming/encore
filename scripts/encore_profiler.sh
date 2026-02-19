@@ -414,10 +414,6 @@ tensor_performance() {
 	}
 }
 
-intel_performance() {
-	return 0 # some tweaks soon
-}
-
 ###################################
 # Device-specific normal profile
 ###################################
@@ -563,10 +559,6 @@ tensor_normal() {
 	}
 }
 
-intel_normal() {
-	return 0 # some tweaks soon
-}
-
 ###################################
 # Device-specific powersave profile
 ###################################
@@ -627,10 +619,6 @@ tensor_powersave() {
 		apply "$freq" "$gpu_path/scaling_min_freq"
 		apply "$freq" "$gpu_path/scaling_max_freq"
 	}
-}
-
-intel_powersave() {
-	return 0 # some tweaks soon
 }
 
 ###################################
@@ -817,8 +805,7 @@ performance_profile() {
 	3) exynos_performance ;;
 	4) unisoc_performance ;;
 	5) tensor_performance ;;
-	6) intel_performance ;;
-	7) tegra_performance ;;
+	6) tegra_performance ;;
 	esac
 
 	echo 3 >/proc/sys/vm/drop_caches
@@ -896,8 +883,7 @@ balance_profile() {
 	3) exynos_normal ;;
 	4) unisoc_normal ;;
 	5) tensor_normal ;;
-	6) intel_normal ;;
-	7) tegra_normal ;;
+	6) tegra_normal ;;
 	esac
 }
 
@@ -928,8 +914,7 @@ powersave_profile() {
 	3) exynos_powersave ;;
 	4) unisoc_powersave ;;
 	5) tensor_powersave ;;
-	6) intel_powersave ;;
-	7) tegra_powersave ;;
+	6) tegra_powersave ;;
 	esac
 }
 
