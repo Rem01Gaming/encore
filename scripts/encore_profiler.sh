@@ -34,7 +34,7 @@ PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
 DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
 # Just a note that lite mode is now controlled by script arg, check case
-# statement on the EOF and performance_profile() functions.
+# statement on the EOF and performance_profile() function.
 
 # Certain ENCORE_* variables is set by daemon, see 'jni/src/EncoreUtility/Profiler.cpp'.
 
@@ -587,7 +587,11 @@ mediatek_powersave() {
 
 snapdragon_powersave() {
 	# GPU Frequency
-	devfreq_min_perf /sys/class/kgsl/kgsl-3d0/devfreq
+	# There's some report that this causes no video issue after the phone went sleep and awaken
+	# However there's no informations about which affected device models that've been disclosed by the users
+	if [ -z $ENCORE_QCOM_NO_GPU_POWERSAVE ]; then
+		devfreq_min_perf /sys/class/kgsl/kgsl-3d0/devfreq
+	fi
 }
 
 tegra_powersave() {
