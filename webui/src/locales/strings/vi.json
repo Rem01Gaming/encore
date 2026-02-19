@@ -1,6 +1,142 @@
 {
     "toast": {
         "reboot_to_apply": "Khởi động lại thiết bị để áp dụng các thay đổi.",
-        "has_shortcut": "Lối tắt đã tồn tại."
+        "has_shortcut": "Lối tắt đã tồn tại.",
+        "shortcut_unavailable": "Không có API khả dụng cho tính năng này, sử dụng WebUI X để sử dụng tính năng này.",
+        "failed_open_extrenal_browser": "Mở trình duyệt ngoài thất bại.",
+        "success_save_log": "Các nhật ký được lưu thành công tại {path}",
+        "failed_save_log": "Lưu các nhật ký thất bại."
+    },
+    "home_page": {
+        "status_card": {
+            "running": "Đang hoạt động ✨",
+            "stopped": "Đã dừng lại 💤",
+            "error": "Lỗi~",
+            "daemon_inactive": "Dịch vụ không hoạt động",
+            "loading_daemon": "Vui lòng chờ một lát…",
+            "daemonPID": "PID tiến trình: {pid}"
+        },
+        "info_card": {
+            "profile": "Hồ sơ hiện tại",
+            "kernel": "Kernel",
+            "androidSDK": "Android SDK",
+            "chipset": "Bộ vi mạch"
+        },
+        "support_button": {
+            "title": "Hỗ trợ tôi",
+            "description": "Encore Tweak luôn luôn miễn phí cho bạn và tất cả mọi người. Tuy nhiên bạn có thể hiện sự quan tâm của mình bằng cách quyên góp."
+        },
+        "learn_encore": {
+            "title": "Học Encore",
+            "description": "Tìm hiểu cách sử dụng Encore Tweaks và những tính năng của nó."
+        }
+    },
+    "games_page": {
+        "title": "Những trò chơi của tôi",
+        "search_placeholder": "Tìm kiếm ứng dụng",
+        "no_apps_found": "Không ứng dụng nào tìm thấy",
+        "badges": {
+            "tweak_enabled": "Đã bật"
+        }
+    },
+    "settings_page": {
+        "title": "Cài đặt",
+        "section": {
+            "preferences": "Tùy chọn",
+            "system": "Hệ thống",
+            "others": "Những thứ khác"
+        },
+        "lite_mode": {
+            "title": "Thực thi chế độ Lite",
+            "description": "Bật chế độ Lite theo mặc định cho tất cả trò chơi"
+        },
+        "language": {
+            "title": "Ngôn ngữ"
+        },
+        "device_mitigation": {
+            "title": "Giảm thiểu rủi ro cho thiết bị",
+            "description": "Khắc phục sự cố của thiết bị trên Encore Tweaks"
+        },
+        "cpu_governor": {
+            "title": "Bộ điều chỉnh CPU",
+            "description": "Tùy chỉnh bộ điều chỉnh CPU cho mỗi hồ sơ"
+        },
+        "log_level": {
+            "title": "Mức độ ghi nhật ký",
+            "description": "Chọn mức độ chi tiết của nhật ký hoạt động Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Lưu nhật ký",
+            "description": "Xuất nhật ký hoạt động Encore Tweaks"
+        },
+        "create_shortcut": {
+            "title": "Tạo lối tắt",
+            "description": "Tạo lối tắt màn hình chính để truy cập nhanh vào Encore Tweaks"
+        }
+    },
+    "game_settings": {
+        "title": "Cài đặt trò chơi",
+        "application": "Ứng dụng",
+        "preferences": "Tùy chọn",
+        "enable_tweaks": "Bật các tinh chỉnh",
+        "lite_mode": "Chế độ Lite",
+        "lite_mode_description": "Tối ưu cho thời lượng pin khi đạt hiệu suất tối đa",
+        "dnd_mode": "Không làm phiền",
+        "dnd_mode_description": "Chặn các thông báo và cuộc gọi khi chơi game",
+        "launch_app": "Khởi động",
+        "app_info": "Thông tin ứng dụng"
+    },
+    "language_selection": {
+        "title": "Ngôn ngữ",
+        "follow_system": "Theo hệ thống"
+    },
+    "log_level_selection": {
+        "title": "Mức độ nhật ký"
+    },
+    "lite_mode": {
+        "title": "Chế độ Lite",
+        "toggle_title": "Thực thi chế độ Lite",
+        "brief": "Chế độ Lite giảm thiểu hiện tượng quá nhiệt và tiêu thụ điện năng trong quá trình chơi game bằng cách giảm tần số CPU và các linh kiện. Cài đặt này áp dụng cho tất cả các trò chơi khi được bật."
+    },
+    "device_mitigation": {
+        "title": "Giảm thiểu rủi ro cho thiết bị",
+        "toggle_title": "Giảm thiểu rủi ro cho thiết bị",
+        "brief": "Tính năng giảm thiểu sự không tương thích thiết bị sẽ vô hiệu hóa các tinh chỉnh có khả năng không tương thích với các thiết bị cụ thể. Hãy tắt tính năng này trừ khi bạn gặp sự cố."
+    },
+    "cpu_governor": {
+        "title": "Bộ điều chỉnh CPU",
+        "default_title": "Bộ điều chỉnh CPU mặc định",
+        "default_description": "Được áp dụng cho hồ sơ cân bằng và hiệu năng khi chế độ lite được kích hoạt",
+        "powersave_title": "Tiết kiệm năng lượng cho CPU",
+        "powersave_description": "Chỉ được sử dụng cho cấu hình tiết kiệm năng lượng",
+        "brief": "Bộ tinh chỉnh CPU là một thuật toán tự động điều chỉnh tần số của bộ xử lý trong thời gian thực, ảnh hưởng trực tiếp đến hiệu năng hệ thống và mức tiêu thụ điện năng.",
+        "modal": {
+            "performance_warning": "Việc thiết lập chế độ điều chỉnh tốc độ ở mức hiệu suất cao sẽ gây quá nhiệt và làm hao pin nhanh chóng. Bạn có chắc chắn muốn tiếp tục không?",
+            "performance_warning_confirm": "Tôi đã hiểu, áp dụng",
+            "initial_warn": "Xin lưu ý rằng Encore Tweaks đã tự động cấu hình chế độ quản lý CPU tối ưu. Những thay đổi thủ công không được đề xuất trừ khi bạn là người dùng thành thạo.",
+            "default_select_title": "Chọn Trình quản lý CPU mặc định",
+            "powersave_select_title": "Chọn chế độ tiết kiệm năng lượng cho CPU",
+            "initial_warn_checkbox": "Không hiện thứ này nữa"
+        }
+    },
+    "profiles": {
+        "initializing": "Đang khởi tạo",
+        "balanced": "Cân bằng",
+        "powersave": "Tiết kiểm năng lượng",
+        "performance": "Hiệu năng"
+    },
+    "navigation": {
+        "home": "Trang chủ",
+        "games": "Trò chơi",
+        "settings": "Cài đặt"
+    },
+    "common": {
+        "loading": "Đang tải",
+        "unknown": "Không rõ",
+        "enabled": "Đã bật",
+        "disabled": "Đã tắt",
+        "cancel": "Hủy bỏ",
+        "warning": "Cảnh báo",
+        "ok": "Okay"
     }
 }
