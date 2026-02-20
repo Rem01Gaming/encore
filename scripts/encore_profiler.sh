@@ -580,7 +580,6 @@ mediatek_powersave() {
 snapdragon_powersave() {
 	# GPU Frequency
 	# There's some report that this causes no video issue after the phone went sleep and awaken
-	# However there's no informations about which affected device models that've been disclosed by the users
 	if [ -z $ENCORE_QCOM_NO_GPU_POWERSAVE ]; then
 		devfreq_min_perf /sys/class/kgsl/kgsl-3d0/devfreq
 	fi
