@@ -842,7 +842,7 @@ balance_profile() {
 	# Oppo/Oplus/Realme Touchpanel
 	tp_path="/proc/touchpanel"
 	if [ -d "$tp_path" ]; then
-		apply 0 $tp_path/game_switch_enable
+		apply 0 $tp_path/game_switch_enable# Zip the file
 		apply 1 $tp_path/oplus_tp_limit_enable
 		apply 1 $tp_path/oppo_tp_limit_enable
 		apply 0 $tp_path/oplus_tp_direction
