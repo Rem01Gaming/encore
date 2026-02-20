@@ -8,7 +8,6 @@
 </p>
 
 ## About Encore Tweaks
-[English](/README.md) | [Bahasa Indonesia](/docs/README_id-ID.md) | [简体中文](/docs/README_zh-CN.md)
 
 **Encore Tweaks** is a dynamic Magisk module designed to maximize your device's gaming performance while intelligently preserving battery life during everyday use. Perfect for gamers who demand smooth gameplay without compromising daily usability!
 
@@ -22,8 +21,9 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ### Also Supported on
 
-- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>▶ 🌐</sup>
-- [MMRL](https://github.com/DerGoogler/MMRL)   <sup>▶ 🌐</sup>
+- [KsuWebUI](https://github.com/5ec1cff/KsuWebUIStandalone)   <sup>🌐</sup>
+- [WebUI-X](https://github.com/MMRLApp/WebUI-X-Portable)   <sup>🌐</sup>
+- [MMRL](https://github.com/MMRLApp/MMRL)
 
 ## Resources
 
@@ -39,13 +39,9 @@ More info about this project on [Official Encore Tweaks website](https://encore.
 
 ## Translation
 
-Interested in translating Encore Tweaks? We use Weblate to crowdsource translations, so anyone can create an account and contribute!
+Interested in translating Encore Tweaks? We use Weblate to crowdsource translations, allowing the community to collaborate on making the project accessible in multiple languages. Visit our translation project [here](https://hosted.weblate.org/projects/encore-tweaks/) and help us reach more users worldwide!
 
-Visit our translation project [here](https://hosted.weblate.org/projects/encore-tweaks/).
-
-### Translation status
-
-![Weblate translation status](https://hosted.weblate.org/widget/encore-tweaks/webui/horizontal-auto.svg)
+<a href="https://hosted.weblate.org/projects/encore-tweaks/"><img src="https://hosted.weblate.org/widget/encore-tweaks/webui/horizontal-auto.svg" alt="Weblate translation status"></a>
 
 ## License
 
