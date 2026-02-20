@@ -26,6 +26,9 @@ cp gamelist.txt module
 cp LICENSE module
 cp NOTICE.md module
 
+# Download banner image
+wget -O module/banner.webp https://encore.rem01gaming.dev/ogp/default.webp
+
 # Remove .sh extension from scripts
 find module/system/bin -maxdepth 1 -type f -name "*.sh" -exec sh -c 'mv -- "$0" "${0%.sh}"' {} \;
 
@@ -40,9 +43,6 @@ cd ./module || {
 	echo "Unable to cd to ./module" >&2
 	exit 1
 }
-
-# Download banner image
-wget -O banner.webp https://encore.rem01gaming.dev/ogp/default.webp
 
 # Zip the file
 zip -r9 ../"$zipName" * -x *placeholder* *.map .shellcheckrc
