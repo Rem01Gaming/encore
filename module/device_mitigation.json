@@ -1,6 +1,6 @@
 {
   "default": {
-    "items": ["DISABLE_DDR_TWEAK", "NO_PERFORMANCE_CPUGOV", "ENCORE_QCOM_NO_GPU_POWERSAVE"]
+    "items": ["DISABLE_DDR_TWEAK", "NO_PERFORMANCE_CPUGOV", "QCOM_NO_GPU_POWERSAVE"]
   },
   "device_rules": {}
 }
