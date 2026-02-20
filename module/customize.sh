@@ -136,6 +136,7 @@ source "$TMPDIR/verify.sh"
 # Extract module files
 ui_print "- Extracting module files"
 extract "$ZIPFILE" 'module.prop' "$MODPATH"
+extract "$ZIPFILE" 'banner.webp' "$MODPATH"
 extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"

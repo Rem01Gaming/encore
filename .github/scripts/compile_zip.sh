@@ -37,12 +37,15 @@ echo "zipName=$zipName" >>"$GITHUB_OUTPUT"
 # Generate sha256sum for integrity checkup
 bash .github/scripts/gen_sha256sum.sh "module"
 
-# Zip the file
 cd ./module || {
 	echo "Unable to cd to ./module" >&2
 	exit 1
 }
 
+# Download banner image
+wget -O banner.webp https://encore.rem01gaming.dev/ogp/default.webp
+
+# Zip the file
 zip -r9 ../"$zipName" * -x *placeholder* *.map .shellcheckrc
 zip -z ../"$zipName" <<EOF
 $version-$release_code
