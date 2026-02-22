@@ -35,6 +35,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
     bool found_task_section = false;
     bool exited_task_section = false;
     bool found_awake = false;
+    bool found_focused_app = false;
     std::string current_task_line;
 
     while (fgets(buffer, sizeof(buffer), pipe.stream) != nullptr) {
@@ -51,9 +52,30 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
         }
 
         // Check for screen awake state
-        if (!found_awake && line.find("mAwake=") != std::string::npos) {
-            result.screen_awake = line.find("mAwake=true") != std::string::npos;
+        if (!found_awake && line.contains("mAwake=")) {
+            result.screen_awake = line.contains("mAwake=true");
             found_awake = true;
+            continue;
+        }
+
+        if (!found_focused_app && line.contains("mFocusedApp=")) {
+            size_t equal_pos = line.find('=');
+            if (equal_pos != std::string::npos) {
+                // Extract package name from ActivityRecord line
+                // Format: ActivityRecord{9b1a1d4 u0 com.termux/.app.TermuxActivity t83}
+                std::string record = line.substr(equal_pos + 1);
+                size_t u0_pos = record.find(" u0 ");
+
+                if (u0_pos != std::string::npos) {
+                    size_t package_start = u0_pos + 4; // After " u0 "
+                    size_t slash_pos = record.find('/'); // Before slash
+                    if (slash_pos != std::string::npos) {
+                        result.focused_app = record.substr(package_start, slash_pos - package_start);
+                        found_focused_app = true;
+                    }
+                }
+            }
+
             continue;
         }
 
@@ -73,15 +95,15 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
         }
 
         // Look for task lines and store it for processing
-        if (line.find("* Task{") != std::string::npos && line.find("type=standard") != std::string::npos) {
+        if (line.contains("* Task{") && line.contains("type=standard")) {
             current_task_line = line;
         }
         // Look for ActivityRecord lines that follow task lines
-        else if (!current_task_line.empty() && line.find("* ActivityRecord{") != std::string::npos) {
+        else if (!current_task_line.empty() && line.contains("* ActivityRecord{")) {
             RecentAppList app;
 
             // Extract visibility from the task line
-            app.visible = current_task_line.find("visible=true") != std::string::npos;
+            app.visible = current_task_line.contains("visible=true");
 
             // Extract package name from ActivityRecord line
             // Format: * ActivityRecord{91afba8 u0 com.termux/.app.TermuxActivity t1624}
@@ -144,26 +166,26 @@ void Power(DumpsysPower &result) {
             line.pop_back();
         }
 
-        if (!found_wakefulness && line.find("mWakefulness=") != std::string::npos) {
-            result.screen_awake = line.find("mWakefulness=Awake") != std::string::npos;
+        if (!found_wakefulness && line.contains("mWakefulness=")) {
+            result.screen_awake = line.contains("mWakefulness=Awake");
             found_wakefulness = true;
             continue;
         }
 
-        if (!found_is_plugged && line.find("mIsPowered=") != std::string::npos) {
-            result.is_plugged = line.find("mIsPowered=true") != std::string::npos;
+        if (!found_is_plugged && line.contains("mIsPowered=")) {
+            result.is_plugged = line.contains("mIsPowered=true");
             found_is_plugged = true;
             continue;
         }
 
-        if (!found_battery_saver && line.find("mSettingBatterySaverEnabled=") != std::string::npos) {
-            result.battery_saver = line.find("mSettingBatterySaverEnabled=true") != std::string::npos;
+        if (!found_battery_saver && line.contains("mSettingBatterySaverEnabled=")) {
+            result.battery_saver = line.contains("mSettingBatterySaverEnabled=true");
             found_battery_saver = true;
             continue;
         }
 
-        if (!found_battery_saver_sticky && line.find("mSettingBatterySaverEnabledSticky=") != std::string::npos) {
-            result.battery_saver_sticky = line.find("mSettingBatterySaverEnabledSticky=true") != std::string::npos;
+        if (!found_battery_saver_sticky && line.contains("mSettingBatterySaverEnabledSticky=")) {
+            result.battery_saver_sticky = line.contains("mSettingBatterySaverEnabledSticky=true");
             found_battery_saver_sticky = true;
             continue;
         }

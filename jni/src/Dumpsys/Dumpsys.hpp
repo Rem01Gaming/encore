@@ -32,6 +32,7 @@ struct RecentAppList {
 
 struct DumpsysWindowDisplays {
     bool screen_awake;
+    std::string focused_app;
     std::vector<RecentAppList> recent_app;
 };
 

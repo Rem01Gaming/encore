@@ -61,10 +61,15 @@ void encore_main_daemon(void) {
 
     PIDTracker pid_tracker;
 
-    auto GetActiveGame = [&](const std::vector<RecentAppList> &recent_applist, GameRegistry &registry) -> std::string {
-        for (const auto &recent : recent_applist) {
+    auto GetActiveGame = [&](const DumpsysWindowDisplays &window_info, GameRegistry &registry) -> std::string {
+        for (const auto &recent : window_info.recent_app) {
+            // Is it visible?
             if (!recent.visible) continue;
 
+            // Is it focused?
+            if (window_info.focused_app != recent.package_name) continue;
+
+            // Is it registered as a game?
             if (registry.is_game_registered(recent.package_name)) {
                 return recent.package_name;
             }
@@ -179,7 +184,7 @@ void encore_main_daemon(void) {
 
         // Fetch active game package name
         if (active_package.empty()) {
-            active_package = GetActiveGame(window_displays.recent_app, game_registry);
+            active_package = GetActiveGame(window_displays, game_registry);
             if (!active_package.empty()) {
                 in_game_session = true;
             }
