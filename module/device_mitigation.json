@@ -1,6 +1,28 @@
 {
   "default": {
-    "items": ["DISABLE_DDR_TWEAK", "NO_PERFORMANCE_CPUGOV", "QCOM_NO_GPU_POWERSAVE"]
+    "items": [
+      "DISABLE_DDR_TWEAK",
+      "NO_PERFORMANCE_CPUGOV",
+      "QCOM_NO_GPU_POWERSAVE"
+    ]
   },
-  "device_rules": {}
+  "device_rules": {
+    "xiaomi_peridot": {
+      "name": "Xiaomi POCO F6 / Redmi Turbo 3 (xiaomi-peridot)",
+      "filter_type": "any",
+      "filter_condition": {
+        "soc": {
+          "operator": "contains",
+          "value": "Peridot"
+        },
+        "model": {
+          "operator": "regex",
+          "value": "24069PC21[GI]"
+        }
+      },
+      "items": [
+        "DISABLE_DDR_TWEAK"
+      ]
+    }
+  }
 }
