@@ -62,28 +62,28 @@ void encore_main_daemon(void) {
     PIDTracker pid_tracker;
 
     auto GetActiveGame = [&](const DumpsysWindowDisplays &window_info, GameRegistry &registry) -> std::string {
-        for (const auto &recent : window_info.recent_app) {
-            // Is it visible?
-            if (!recent.visible) continue;
-
-            // Is it focused?
-            if (window_info.focused_app != recent.package_name) continue;
-
-            // Is it registered as a game?
-            if (registry.is_game_registered(recent.package_name)) {
-                return recent.package_name;
-            }
+        // Is it registered as a game?
+        if (registry.is_game_registered(window_info.focused_app)) {
+            return window_info.focused_app;
         }
 
         return "";
     };
 
-    auto IsGameStillActive = [&](const std::vector<RecentAppList> &recent_applist, const std::string &package_name) -> bool {
-        for (const auto &recent : recent_applist) {
+    auto IsGameStillActive = [&](const DumpsysWindowDisplays &window_info, const std::string &package_name) -> bool {
+        // Check focused app
+        if (window_info.focused_app == package_name) {
+            return true;
+        }
+
+        // Try searching on recent app list, on rare case the focused app switches
+        for (const auto &recent : window_info.recent_app) {
             if (recent.package_name == package_name) {
                 return true;
             }
         }
+
+        LOGD("IsGameStillActive: Game {} is no longer active", package_name);
         return false;
     };
 
@@ -159,7 +159,7 @@ void encore_main_daemon(void) {
         // Check if active game is still in recent app list when in game session
         // Fix profile stuck, especially in Mobile Legends: Bang Bang
         if (in_game_session && !active_package.empty() && do_full_check) {
-            if (!IsGameStillActive(window_displays.recent_app, active_package)) [[unlikely]] {
+            if (!IsGameStillActive(window_displays, active_package)) [[unlikely]] {
                 goto game_exited;
             }
         }
