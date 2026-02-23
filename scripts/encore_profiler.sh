@@ -258,7 +258,7 @@ mediatek_performance() {
 			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreq/gpufreq_opp_dump)
 		fi
 
-		apply $mid_oppfreq /sys/kernel/ged/hal/custom_boost_gpu_freq
+		apply "$mid_oppfreq" /sys/kernel/ged/hal/custom_boost_gpu_freq
 	fi
 
 	# Disable GPU Power limiter
@@ -288,7 +288,7 @@ mediatek_performance() {
 
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*cpu*-lat \
 			/sys/class/devfreq/*cpu*-bw \
 			/sys/class/devfreq/*llccbw* \
@@ -364,7 +364,7 @@ exynos_performance() {
 	apply always_on "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			if [ $LITE_MODE -eq 1 ]; then
 				devfreq_mid_perf "$path"
@@ -403,7 +403,7 @@ tensor_performance() {
 	}
 
 	# DRAM frequency
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			if [ $LITE_MODE -eq 1 ]; then
 				devfreq_mid_perf "$path"
@@ -453,7 +453,7 @@ mediatek_normal() {
 		min_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreq/gpufreq_opp_dump)
 	fi
 
-	apply $min_oppfreq /sys/kernel/ged/hal/custom_boost_gpu_freq
+	apply "$min_oppfreq" /sys/kernel/ged/hal/custom_boost_gpu_freq
 
 	# GPU Power limiter
 	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
@@ -476,7 +476,7 @@ mediatek_normal() {
 
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*cpu*-lat \
 			/sys/class/devfreq/*cpu*-bw \
 			/sys/class/devfreq/*llccbw* \
@@ -528,7 +528,7 @@ exynos_normal() {
 	apply coarse_demand "$mali_sysfs/power_policy"
 
 	# DRAM frequency
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			devfreq_unlock "$path"
 		done &
@@ -552,7 +552,7 @@ tensor_normal() {
 	}
 
 	# DRAM frequency
-	[ -z $ENCORE_DISABLE_DDR_TWEAK ] && {
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
 			devfreq_unlock "$path"
 		done &
@@ -580,7 +580,7 @@ mediatek_powersave() {
 snapdragon_powersave() {
 	# GPU Frequency
 	# There's some report that this causes no video issue after the phone went sleep and awaken
-	if [ -z $ENCORE_QCOM_NO_GPU_POWERSAVE ]; then
+	if [ -z "$ENCORE_QCOM_NO_GPU_POWERSAVE" ]; then
 		devfreq_min_perf /sys/class/kgsl/kgsl-3d0/devfreq
 	fi
 }
@@ -776,7 +776,7 @@ performance_profile() {
 	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
 	# applied (some device hates performance governor).
-	if [ $LITE_MODE -eq 0 ] && [ -z $ENCORE_NO_PERFORMANCE_CPUGOV ]; then
+	if [ $LITE_MODE -eq 0 ] && [ -z "$ENCORE_NO_PERFORMANCE_CPUGOV" ]; then
 		change_cpu_gov performance
 	else
 		change_cpu_gov "$DEFAULT_CPU_GOV"
