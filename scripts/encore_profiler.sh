@@ -241,13 +241,6 @@ mediatek_performance() {
 
 	# GPU Frequency
 	if [ $LITE_MODE -eq 0 ]; then
-		if [ -d /proc/gpufreqv2 ]; then
-			apply 0 /proc/gpufreqv2/fix_target_opp_index
-		else
-			gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | head -n 1)
-			apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
-		fi
-	else
 		apply 0 /proc/gpufreq/gpufreq_opp_freq
 		apply -1 /proc/gpufreqv2/fix_target_opp_index
 
@@ -298,19 +291,19 @@ snapdragon_performance() {
 			/sys/class/devfreq/*cpubw* \
 			/sys/class/devfreq/*kgsl-ddr-qos*; do
 
-			if [ $LITE_MODE -eq 1 ]; then
-				devfreq_mid_perf "$path"
-			else
+			if [ $LITE_MODE -eq 0 ]; then
 				devfreq_max_perf "$path"
+			else
+				devfreq_mid_perf "$path"
 			fi
 		done &
 
 		for component in DDR LLCC L3; do
 			path="/sys/devices/system/cpu/bus_dcvs/$component"
-			if [ "$LITE_MODE" -eq 1 ]; then
-				qcom_cpudcvs_mid_perf "$path"
-			else
+			if [ "$LITE_MODE" -eq 0 ]; then
 				qcom_cpudcvs_max_perf "$path"
+			else
+				qcom_cpudcvs_mid_perf "$path"
 			fi
 		done &
 	}
@@ -318,8 +311,6 @@ snapdragon_performance() {
 	# GPU tweak
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
 	if [ "$LITE_MODE" -eq 0 ]; then
-		devfreq_max_perf "$gpu_path"
-	else
 		devfreq_mid_perf "$gpu_path"
 	fi
 
@@ -336,11 +327,9 @@ tegra_performance() {
 		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
 		apply "$max_freq" "$gpu_path/gpu_cap_rate"
 
-		if [ $LITE_MODE -eq 1 ]; then
+		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_floor_rate"
-		else
-			apply "$max_freq" "$gpu_path/gpu_floor_rate"
 		fi
 	fi
 }
@@ -352,11 +341,9 @@ exynos_performance() {
 		max_freq=$(which_maxfreq "$gpu_path/gpu_available_frequencies")
 		apply "$max_freq" "$gpu_path/gpu_max_clock"
 
-		if [ $LITE_MODE -eq 1 ]; then
+		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/gpu_available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_min_clock"
-		else
-			apply "$max_freq" "$gpu_path/gpu_min_clock"
 		fi
 	}
 
@@ -378,28 +365,17 @@ exynos_performance() {
 unisoc_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-	[ -n "$gpu_path" ] && {
-		if [ $LITE_MODE -eq 0 ]; then
-			devfreq_max_perf "$gpu_path"
-		else
+	[ -n "$gpu_path" ] && [ $LITE_MODE -eq 0 ] && {
 			devfreq_mid_perf "$gpu_path"
-		fi
 	}
 }
 
 tensor_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
-	[ -n "$gpu_path" ] && {
-		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
-		apply "$max_freq" "$gpu_path/scaling_max_freq"
-
-		if [ $LITE_MODE -eq 1 ]; then
+	[ -n "$gpu_path" ] && [ $LITE_MODE -eq 0 ] && {
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/scaling_min_freq"
-		else
-			apply "$max_freq" "$gpu_path/scaling_min_freq"
-		fi
 	}
 
 	# DRAM frequency
