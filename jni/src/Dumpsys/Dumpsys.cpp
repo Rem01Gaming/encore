@@ -42,7 +42,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
         std::string line(buffer);
 
         // We've got all information needed, do not process any further
-        if (exited_task_section && found_awake) {
+        if (found_focused_app && exited_task_section && found_awake) {
             break;
         }
 
