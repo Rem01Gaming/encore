@@ -240,10 +240,10 @@ mediatek_performance() {
 	apply 0 /sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
 
 	# GPU Frequency
-	if [ $LITE_MODE -eq 0 ]; then
-		apply 0 /proc/gpufreq/gpufreq_opp_freq
-		apply -1 /proc/gpufreqv2/fix_target_opp_index
+	apply 0 /proc/gpufreq/gpufreq_opp_freq
+  apply -1 /proc/gpufreqv2/fix_target_opp_index
 
+	if [ $LITE_MODE -eq 0 ]; then
 		# Set min freq via GED
 		if [ -d /proc/gpufreqv2 ]; then
 			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreqv2/gpu_working_opp_table)
@@ -312,6 +312,8 @@ snapdragon_performance() {
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
 	if [ "$LITE_MODE" -eq 0 ]; then
 		devfreq_mid_perf "$gpu_path"
+	else
+	  devfreq_unlock "$gpu_path"
 	fi
 
 	# Disable GPU Bus split
@@ -330,6 +332,9 @@ tegra_performance() {
 		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_floor_rate"
+		else
+		  min_freq=$(which_minfreq "$gpu_path/available_frequencies")
+      apply "$min_freq" "$gpu_path/gpu_floor_rate"
 		fi
 	fi
 }
@@ -344,6 +349,9 @@ exynos_performance() {
 		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/gpu_available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_min_clock"
+		else
+		  min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
+      apply "$min_freq" "$gpu_path/gpu_min_clock"
 		fi
 	}
 
@@ -365,17 +373,29 @@ exynos_performance() {
 unisoc_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
-	[ -n "$gpu_path" ] && [ $LITE_MODE -eq 0 ] && {
+	[ -n "$gpu_path" ] && {
+	  if [ $LITE_MODE -eq 0 ]; then
 			devfreq_mid_perf "$gpu_path"
+		else
+			devfreq_unlock "$gpu_path"
+		fi
 	}
 }
 
 tensor_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
-	[ -n "$gpu_path" ] && [ $LITE_MODE -eq 0 ] && {
+	[ -n "$gpu_path" ] && {
+	  max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
+    apply "max_freq" "$gpu_path/scaling_max_freq"
+
+	  if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/scaling_min_freq"
+		else
+		  mid_freq=$(which_minfreq "$gpu_path/available_frequencies")
+      apply "$min_freq" "$gpu_path/scaling_min_freq"
+    fi
 	}
 
 	# DRAM frequency
