@@ -21,7 +21,6 @@ namespace Dumpsys {
 void WindowDisplays(DumpsysWindowDisplays &result) {
     // Clear previous results
     result.screen_awake = false;
-    result.recent_app.clear();
 
     auto pipe = popen_direct({"/system/bin/dumpsys", "window", "visible-apps"});
 
@@ -32,8 +31,6 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
     }
 
     char buffer[1024];
-    bool found_task_section = false;
-    bool exited_task_section = false;
     bool found_awake = false;
     bool found_focused_app = false;
     std::string current_task_line;
@@ -42,7 +39,7 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
         std::string line(buffer);
 
         // We've got all information needed, do not process any further
-        if (found_focused_app && exited_task_section && found_awake) {
+        if (found_focused_app && found_awake) {
             break;
         }
 
@@ -75,55 +72,11 @@ void WindowDisplays(DumpsysWindowDisplays &result) {
                     }
                 }
             }
-
-            continue;
-        }
-
-        // Look for task section start
-        if (!found_task_section && line.find("Application tokens in top down Z order:") != std::string::npos) {
-            found_task_section = true;
-            continue;
-        }
-
-        // Bailout if we aren't in task section
-        if (!found_task_section || exited_task_section) continue;
-
-        // Check if we've reached the end of the task section
-        if (line.empty()) {
-            exited_task_section = true;
-            continue;
-        }
-
-        // Look for task lines and store it for processing
-        if (line.contains("* Task{") && line.contains("type=standard")) {
-            current_task_line = line;
-        }
-        // Look for ActivityRecord lines that follow task lines
-        else if (!current_task_line.empty() && line.contains("* ActivityRecord{")) {
-            RecentAppList app;
-
-            // Extract visibility from the task line
-            app.visible = current_task_line.contains("visible=true");
-
-            // Extract package name from ActivityRecord line
-            // Format: * ActivityRecord{91afba8 u0 com.termux/.app.TermuxActivity t1624}
-            size_t u0_pos = line.find(" u0 ");
-            if (u0_pos != std::string::npos) {
-                size_t package_start = u0_pos + 4; // Skip " u0 "
-                size_t slash_pos = line.find("/", package_start);
-                if (slash_pos != std::string::npos) {
-                    app.package_name = line.substr(package_start, slash_pos - package_start);
-                    result.recent_app.push_back(app);
-                }
-            }
-
-            // Clear the current task line after processing
-            current_task_line.clear();
         }
     }
 
     // Handle missing information
-    if (!found_task_section) {
+    if (!found_focused_app) {
         throw std::runtime_error("unable to find task section");
     }
 

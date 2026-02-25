@@ -25,15 +25,9 @@
 
 #include <ShellUtility.hpp>
 
-struct RecentAppList {
-    std::string package_name;
-    bool visible;
-};
-
 struct DumpsysWindowDisplays {
     bool screen_awake;
     std::string focused_app;
-    std::vector<RecentAppList> recent_app;
 };
 
 struct DumpsysPower {

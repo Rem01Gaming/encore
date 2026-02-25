@@ -94,14 +94,10 @@ struct DaemonState {
  * Checks focused_app first (fast path). Falls back to a recent-app scan to
  * handle the rare case where focus briefly switches during a game session.
  */
-[[nodiscard]] static bool is_game_still_active(const DumpsysWindowDisplays &window_info, const std::string &package_name) {
-    if (window_info.focused_app == package_name) return true;
+[[nodiscard]] static bool is_game_still_active(DaemonState &state) {
+    if (state.window_displays.focused_app == state.active_package) return true;
 
-    for (const auto &recent : window_info.recent_app) {
-        if (recent.package_name == package_name) return true;
-    }
-
-    LOGD("is_game_still_active: Game {} is no longer active", package_name);
+    LOGD("is_game_still_active: Game {} is no longer active", state.active_package);
     return false;
 }
 
@@ -309,7 +305,7 @@ static void encore_main_daemon() {
 
         // Stale-activity check (fixes profile stuck in MLBB etc.)
         if (state.in_game_session && !state.active_package.empty() && do_full_check) {
-            if (!is_game_still_active(state.window_displays, state.active_package)) [[unlikely]] {
+            if (!is_game_still_active(state)) [[unlikely]] {
                 handle_game_exit(state);
             }
         }
