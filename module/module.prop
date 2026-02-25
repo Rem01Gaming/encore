@@ -6,3 +6,4 @@ author=Rem01Gaming
 description=Special performance module for your Device.
 updateJson=https://encore.rem01gaming.dev/api/update.json
 banner=banner.webp
+webuiIcon=webroot/icon.webp
