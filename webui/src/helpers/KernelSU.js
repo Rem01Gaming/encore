@@ -23,19 +23,24 @@ export function isRunningOnWebUIX() {
  * Create WebUI shortcut
  */
 export function createShortcut() {
-  if (!isRunningOnWebUIX()) {
-    const shortcut_unavailable = getTranslation('toast.shortcut_unavailable')
-    toast(shortcut_unavailable)
+  if (isRunningOnWebUIX()) {
+    if (moduleInterface.hasShortcut()) {
+      const has_shortcut = getTranslation('toast.has_shortcut')
+      toast(has_shortcut)
+      return
+    }
+
+    moduleInterface.createShortcut()
     return
   }
 
-  if (moduleInterface.hasShortcut()) {
-    const has_shortcut = getTranslation('toast.has_shortcut')
-    toast(has_shortcut)
+  if (typeof ksu.createShortcut === 'function') {
+    ksu.createShortcut()
     return
   }
 
-  moduleInterface.createShortcut()
+  const shortcut_unavailable = getTranslation('toast.shortcut_unavailable')
+  toast(shortcut_unavailable)
 }
 
 /**
