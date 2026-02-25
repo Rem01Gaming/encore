@@ -76,6 +76,21 @@
         "preferences": "Preferências",
         "enable_tweaks": "Habilitar Tweaks",
         "lite_mode": "Modo Lite",
-        "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo"
+        "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo",
+        "dnd_mode": "Não incomodar",
+        "dnd_mode_description": "Bloqueie notificações e chamadas enquanto joga",
+        "launch_app": "Lançar",
+        "app_info": "Informações sodo aplicativo"
+    },
+    "language_selection": {
+        "title": "Linguagem",
+        "follow_system": "Seguir o sistema"
+    },
+    "log_level_selection": {
+        "title": "Nível de registro"
+    },
+    "lite_mode": {
+        "title": "Modo lite",
+        "toggle_title": "Impor o modo leve"
     }
 }
