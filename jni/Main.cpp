@@ -262,7 +262,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
     if (mlbb_pid != 0) {
         LOGD("Found UnityKillsMe thread for {} (PID: {})", state.active_package, mlbb_pid);
         state.is_mlbb = true;
-        state.mlbb_tracker.set_pid(mlbb_pid); // Start tracking
+        state.mlbb_tracker.set_pid(mlbb_pid);
     } else {
         state.is_mlbb = false;
         state.mlbb_tracker.invalidate();
