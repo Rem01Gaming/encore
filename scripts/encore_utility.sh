@@ -22,7 +22,7 @@ MODULE_CONFIG="/data/adb/.config/encore"
 
 change_cpu_gov() {
 	chown 0:0 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-  chown 0:0 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
+	chown 0:0 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
 	echo "$1" | tee /sys/devices/system/cpu/cpufreq/policy*/scaling_governor >/dev/null
 }

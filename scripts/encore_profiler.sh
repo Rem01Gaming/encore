@@ -241,7 +241,7 @@ mediatek_performance() {
 
 	# GPU Frequency
 	apply 0 /proc/gpufreq/gpufreq_opp_freq
-  apply -1 /proc/gpufreqv2/fix_target_opp_index
+	apply -1 /proc/gpufreqv2/fix_target_opp_index
 
 	if [ $LITE_MODE -eq 0 ]; then
 		# Set min freq via GED
@@ -313,7 +313,7 @@ snapdragon_performance() {
 	if [ "$LITE_MODE" -eq 0 ]; then
 		devfreq_mid_perf "$gpu_path"
 	else
-	  devfreq_unlock "$gpu_path"
+		devfreq_unlock "$gpu_path"
 	fi
 
 	# Disable GPU Bus split
@@ -333,8 +333,8 @@ tegra_performance() {
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_floor_rate"
 		else
-		  min_freq=$(which_minfreq "$gpu_path/available_frequencies")
-      apply "$min_freq" "$gpu_path/gpu_floor_rate"
+			min_freq=$(which_minfreq "$gpu_path/available_frequencies")
+			apply "$min_freq" "$gpu_path/gpu_floor_rate"
 		fi
 	fi
 }
@@ -350,8 +350,8 @@ exynos_performance() {
 			mid_freq=$(which_midfreq "$gpu_path/gpu_available_frequencies")
 			apply "$mid_freq" "$gpu_path/gpu_min_clock"
 		else
-		  min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
-      apply "$min_freq" "$gpu_path/gpu_min_clock"
+			min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
+			apply "$min_freq" "$gpu_path/gpu_min_clock"
 		fi
 	}
 
@@ -374,7 +374,7 @@ unisoc_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
 	[ -n "$gpu_path" ] && {
-	  if [ $LITE_MODE -eq 0 ]; then
+		if [ $LITE_MODE -eq 0 ]; then
 			devfreq_mid_perf "$gpu_path"
 		else
 			devfreq_unlock "$gpu_path"
@@ -386,16 +386,16 @@ tensor_performance() {
 	# GPU Frequency
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 	[ -n "$gpu_path" ] && {
-	  max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
-    apply "max_freq" "$gpu_path/scaling_max_freq"
+		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
+		apply "max_freq" "$gpu_path/scaling_max_freq"
 
-	  if [ $LITE_MODE -eq 0 ]; then
+		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/scaling_min_freq"
 		else
-		  mid_freq=$(which_minfreq "$gpu_path/available_frequencies")
-      apply "$min_freq" "$gpu_path/scaling_min_freq"
-    fi
+			mid_freq=$(which_minfreq "$gpu_path/available_frequencies")
+			apply "$min_freq" "$gpu_path/scaling_min_freq"
+		fi
 	}
 
 	# DRAM frequency
@@ -710,8 +710,8 @@ perfcommon() {
 }
 
 performance_profile() {
-  LITE_MODE=0
-  [ "$1" = "lite" ] && LITE_MODE=1
+	LITE_MODE=0
+	[ "$1" = "lite" ] && LITE_MODE=1
 
 	# Enable Do not Disturb
 	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 1
@@ -780,9 +780,9 @@ performance_profile() {
 
 	# Force CPU to highest possible frequency.
 	if [ -d /proc/ppm ]; then
-	  cpufreq_ppm_max_perf
+		cpufreq_ppm_max_perf
 	else
-	  cpufreq_max_perf
+		cpufreq_max_perf
 	fi
 
 	# I/O Tweaks
@@ -858,9 +858,9 @@ balance_profile() {
 	change_cpu_gov "$DEFAULT_CPU_GOV"
 
 	if [ -d /proc/ppm ]; then
-	  cpufreq_ppm_unlock
+		cpufreq_ppm_unlock
 	else
-	  cpufreq_unlock
+		cpufreq_unlock
 	fi
 
 	# I/O Tweaks
