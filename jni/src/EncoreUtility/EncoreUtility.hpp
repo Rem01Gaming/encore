@@ -43,12 +43,20 @@ bool create_lock_file(void);
 bool check_dumpsys_sanity(void);
 
 /**
+ * @brief  Fetches PID of a process.
+ * @param  target_name: The package name.
+ * @param  strict: Strict matching mode. If true, "com.mobile.legends" will NOT match "com.mobile.legends:UnityKillsMe"
+ * @return The PID of the package if found, otherwise 0.
+ */
+[[nodiscard]] pid_t pidof(std::string_view target_name, bool strict = true);
+
+/**
  * @brief Retrieves the UID of a given package name by checking its data directory.
  *
  * @param package_name The package name of the application (e.g., "com.termux").
  * @return The UID of the package if found, otherwise 0.
  */
-uid_t get_uid_by_package_name(const std::string &package_name);
+[[nodiscard]] uid_t get_uid_by_package_name(const std::string &package_name);
 
 /**
  * @brief Posts a notification via shell.

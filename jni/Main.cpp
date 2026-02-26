@@ -68,8 +68,12 @@ struct DaemonState {
     bool battery_saver_state_oops = false;
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
+    bool is_mlbb = false;
+
+    int focus_loss_count = 0;
 
     PIDTracker pid_tracker;
+    PIDTracker mlbb_tracker;
 };
 
 // ---------------------------------------------------------------------------
@@ -88,16 +92,38 @@ struct DaemonState {
 }
 
 /**
- * @brief Returns true if @p package_name is still the focused app or appears
- *        in the recent-app list.
+ * @brief Returns true if @p package_name is still running.
  *
- * Checks focused_app first (fast path). Falls back to a recent-app scan to
- * handle the rare case where focus briefly switches during a game session.
+ * Handle cases where a game is still boosted when it already closed.
  */
 [[nodiscard]] static bool is_game_still_active(DaemonState &state) {
-    if (state.window_displays.focused_app == state.active_package) return true;
+    // Check if MLBB sub-process is still alive
+    if (state.is_mlbb && !state.mlbb_tracker.is_valid()) {
+        const pid_t new_mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
+        if (new_mlbb_pid == 0) {
+            LOGI("UnityKillsMe thread of {} no longer active", state.active_package);
+            return false;
+        } else {
+            LOGI("New UnityKillsMe thread detected for {} (PID: {})", state.active_package, new_mlbb_pid);
+            state.mlbb_tracker.set_pid(new_mlbb_pid);
+        }
+    }
 
-    LOGD("is_game_still_active: Game {} is no longer active", state.active_package);
+    // Check if the app is still focused
+    if (state.window_displays.focused_app == state.active_package) {
+        state.focus_loss_count = 0;
+        return true;
+    }
+
+    // Only return false if the focus lost persists for 3 checks
+    state.focus_loss_count++;
+    if (state.focus_loss_count < 3) {
+        LOGD("is_game_still_active: Focus lost for {}, strike {}/3", state.active_package, state.focus_loss_count);
+        return true;
+    }
+
+    LOGD("is_game_still_active: Game {} no longer active (3 strikes reached)", state.active_package);
+    state.focus_loss_count = 0;
     return false;
 }
 
@@ -138,6 +164,7 @@ struct DaemonState {
 
 /**
  * @brief Returns the PID of @p package_name, or 0 on failure.
+ * @note This function uses dumpsys to grep exact PID of the app, different from EncoreUtility's @p pidof()
  */
 [[nodiscard]] static pid_t pidof_game(const std::string &package_name) {
     try {
@@ -147,10 +174,6 @@ struct DaemonState {
         return 0;
     }
 }
-
-// ---------------------------------------------------------------------------
-// Per-iteration helpers (operate on DaemonState)
-// ---------------------------------------------------------------------------
 
 /**
  * @brief Attempt to refresh window-display data.
@@ -177,8 +200,10 @@ static void handle_game_exit(DaemonState &state) {
     LOGI("Game {} exited", state.active_package);
     state.active_package.clear();
     state.pid_tracker.invalidate();
+    state.mlbb_tracker.invalidate();
     state.in_game_session = false;
     state.need_profile_checkup = true;
+    state.is_mlbb = false;
 
     // Refresh immediately so the balance/powersave decision below sees
     // the current foreground app rather than stale data.
@@ -223,6 +248,17 @@ static void clear_dnd_if_needed(DaemonState &state) {
         state.pid_tracker.invalidate();
         state.in_game_session = false;
         return false;
+    }
+
+    // Handle MLBB process
+    const pid_t mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
+    if (mlbb_pid != 0) {
+        LOGD("Found UnityKillsMe thread for {} (PID: {})", state.active_package, mlbb_pid);
+        state.is_mlbb = true;
+        state.mlbb_tracker.set_pid(mlbb_pid); // Start tracking
+    } else {
+        state.is_mlbb = false;
+        state.mlbb_tracker.invalidate();
     }
 
     state.need_profile_checkup = false;
