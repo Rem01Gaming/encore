@@ -143,7 +143,14 @@ struct DaemonState {
             if (fgets(buffer, sizeof(buffer), pipe.stream)) {
                 std::string result = buffer;
                 result.erase(
-                    std::remove_if(result.begin(), result.end(), [](unsigned char c) { return std::isspace(c); }), result.end()
+                    std::remove_if(
+                        result.begin(),
+                        result.end(),
+                        [](unsigned char c) {
+                            return std::isspace(c);
+                        }
+                    ),
+                    result.end()
                 );
                 if (result == "1") return true;
                 if (result == "0") return false;
@@ -399,7 +406,10 @@ int run_daemon() {
         set_module_description_status("\xE2\x9D\x8C " + error_msg);
     };
 
-    std::atexit([]() { SignalHandler::cleanup_before_exit(); });
+    std::atexit([]() {
+        SignalHandler::cleanup_before_exit();
+    });
+
     SignalHandler::setup_signal_handlers();
 
     if (!create_lock_file()) {

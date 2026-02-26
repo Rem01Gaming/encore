@@ -62,9 +62,9 @@ pid_t pidof(std::string_view target_name, bool strict) {
                 break;
             }
         }
-    } catch (const fs::filesystem_error& e) {
+    } catch (const fs::filesystem_error &e) {
         LOGE_TAG("pidof", "Filesystem error: %s", e.what());
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         LOGE_TAG("pidof", "Error: %s", e.what());
     } catch (...) {
         LOGE_TAG("pidof", "Unknown exception occurred");

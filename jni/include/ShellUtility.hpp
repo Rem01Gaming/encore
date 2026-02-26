@@ -24,10 +24,13 @@
 #include <unistd.h>
 
 struct PipeResult {
-    FILE* stream;
+    FILE *stream;
     pid_t pid;
 
-    PipeResult(FILE* s, pid_t p) : stream(s), pid(p) {}
+    PipeResult(FILE *s, pid_t p)
+        : stream(s)
+        , pid(p) {
+    }
 
     // Helper to close and reap automatically
     void close() {
@@ -41,14 +44,18 @@ struct PipeResult {
         }
     }
 
-    ~PipeResult() { close(); }
-    
+    ~PipeResult() {
+        close();
+    }
+
     // Disable copying
-    PipeResult(const PipeResult&) = delete;
-    PipeResult& operator=(const PipeResult&) = delete;
-    
+    PipeResult(const PipeResult &) = delete;
+    PipeResult &operator=(const PipeResult &) = delete;
+
     // Allow moving
-    PipeResult(PipeResult&& other) noexcept : stream(other.stream), pid(other.pid) {
+    PipeResult(PipeResult &&other) noexcept
+        : stream(other.stream)
+        , pid(other.pid) {
         other.stream = nullptr;
         other.pid = -1;
     }
@@ -87,7 +94,7 @@ inline PipeResult popen_direct(const std::vector<std::string> &args) {
 
         execvp(cargs[0], cargs.data());
         _exit(127);
-    } 
+    }
 
     // Parent
     ::close(pipefd[1]);

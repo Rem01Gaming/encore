@@ -471,8 +471,9 @@ public:
 
         // Remove file from directory's watch list
         auto &files = dir_it->files;
-        auto file_it =
-            std::find_if(files.begin(), files.end(), [&filename](const FileWatch &file) { return file.name == filename; });
+        auto file_it = std::find_if(files.begin(), files.end(), [&filename](const FileWatch &file) {
+            return file.name == filename;
+        });
 
         if (file_it == files.end()) {
             return false;
