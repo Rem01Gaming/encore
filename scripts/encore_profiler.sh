@@ -36,7 +36,7 @@ DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 # Just a note that lite mode is now controlled by script arg, check case
 # statement on the EOF and performance_profile() function.
 
-# Certain ENCORE_* variables is set by daemon, see 'jni/src/EncoreUtility/Profiler.cpp'.
+# ENCORE_* variables is set by daemon, see 'jni/src/EncoreUtility/Profiler.cpp'.
 
 ###################################
 # Common Function
@@ -44,22 +44,22 @@ DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
 apply() {
 	[ ! -f "$2" ] && return 1
-	chmod 644 "$2" >/dev/null 2>&1
+	chmod 640 "$2" >/dev/null 2>&1
 	echo "$1" >"$2" 2>/dev/null
-	chmod 444 "$2" >/dev/null 2>&1
+	chmod 440 "$2" >/dev/null 2>&1
 }
 
 write() {
 	[ ! -f "$2" ] && return 1
-	chmod 644 "$2" >/dev/null 2>&1
+	chmod 640 "$2" >/dev/null 2>&1
 	echo "$1" >"$2" 2>/dev/null
 }
 
 change_cpu_gov() {
-	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	chown 0:0 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	chown 0:0 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
-	chmod 444 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-	chmod 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
+	echo "$1" | tee /sys/devices/system/cpu/cpufreq/policy*/scaling_governor >/dev/null
 }
 
 ###################################
@@ -102,15 +102,15 @@ cpufreq_ppm_max_perf() {
 	for path in /sys/devices/system/cpu/cpufreq/policy*; do
 		((cluster++))
 		cpu_maxfreq=$(<"$path/cpuinfo_max_freq")
-		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
+		write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_max_cpu_freq
 
 		[ $LITE_MODE -eq 1 ] && {
 			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-			apply "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+			write "$cluster $cpu_midfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 			continue
 		}
 
-		apply "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
+		write "$cluster $cpu_maxfreq" /proc/ppm/policy/hard_userlimit_min_cpu_freq
 	done
 }
 
@@ -127,7 +127,7 @@ cpufreq_max_perf() {
 
 		apply "$cpu_maxfreq" "$path/scaling_min_freq"
 	done
-	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+	chmod -f 440 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 }
 
 cpufreq_ppm_unlock() {
@@ -148,7 +148,7 @@ cpufreq_unlock() {
 		write "$cpu_maxfreq" "$path/scaling_max_freq"
 		write "$cpu_minfreq" "$path/scaling_min_freq"
 	done
-	chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+	chmod -f 640 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 }
 
 devfreq_max_perf() {
