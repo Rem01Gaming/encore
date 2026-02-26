@@ -44,14 +44,14 @@ DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
 apply() {
 	[ ! -f "$2" ] && return 1
-	chmod 640 "$2" >/dev/null 2>&1
+	chmod 644 "$2" >/dev/null 2>&1
 	echo "$1" >"$2" 2>/dev/null
-	chmod 440 "$2" >/dev/null 2>&1
+	chmod 444 "$2" >/dev/null 2>&1
 }
 
 write() {
 	[ ! -f "$2" ] && return 1
-	chmod 640 "$2" >/dev/null 2>&1
+	chmod 644 "$2" >/dev/null 2>&1
 	echo "$1" >"$2" 2>/dev/null
 }
 
@@ -127,7 +127,7 @@ cpufreq_max_perf() {
 
 		apply "$cpu_maxfreq" "$path/scaling_min_freq"
 	done
-	chmod -f 440 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+	chmod -f 444 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 }
 
 cpufreq_ppm_unlock() {
@@ -148,7 +148,7 @@ cpufreq_unlock() {
 		write "$cpu_maxfreq" "$path/scaling_max_freq"
 		write "$cpu_minfreq" "$path/scaling_min_freq"
 	done
-	chmod -f 640 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
+	chmod -f 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_*_freq
 }
 
 devfreq_max_perf() {
