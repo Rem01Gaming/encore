@@ -26,6 +26,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <unordered_map>
 #include <vector>
 
 #include <fcntl.h>
@@ -48,7 +49,7 @@ class InotifyWatcher {
 public:
     /**
      * @brief A callback function type for handling inotify events.
-     * 
+     *
      * @param event A pointer to the inotify_event structure.
      * @param path The full path of the file or directory associated with the event.
      * @param context An integer context value provided by the user.
@@ -93,63 +94,56 @@ private:
         int inotify_watch_fd;         /// The inotify watch descriptor for this directory
     };
 
-    // Constants for event buffer handling
+    // Each inotify_event is at least sizeof(inotify_event) bytes, plus a
+    // null-terminated filename of up to NAME_MAX (255) bytes. Sizing the buffer
+    // for 1024 events at maximum filename length gives ~275 KB well within
+    // typical stack limits and large enough to drain a burst without looping.
     static constexpr size_t EVENT_SIZE = sizeof(struct inotify_event);
     static constexpr size_t BUF_LEN = 1024 * (EVENT_SIZE + NAME_MAX + 1);
     static constexpr char DIR_SEPARATOR = '/';
 
-    std::vector<DirectoryWatch> directories_; /// A list of all directories being watched
-    pthread_t thread_;                        /// The worker thread for processing events
-    std::atomic<bool> alive_;                 /// A flag to control the life of the worker thread
-    std::atomic<bool> thread_started_;        /// Flag to track if thread was started
-    int inotify_fd_;                          /// The file descriptor for the inotify instance
-    std::mutex directories_mutex_;            /// Mutex to protect access to directories_
+    std::vector<DirectoryWatch> directories_;
+    std::unordered_map<int, size_t> wd_to_index_;
+
+    std::thread thread_;           /// Worker thread that drives the inotify event loop
+    std::atomic<bool> alive_;      /// Signals the worker thread to keep running
+    int inotify_fd_;               /// File descriptor for the inotify instance
+    std::mutex directories_mutex_; /// Protects directories_ and wd_to_index_
 
     /**
-     * @brief The static entry point for the worker thread.
-     * 
-     * @param argument A pointer to the InotifyWatcher instance.
-     */
-    static void *threadProcess(void *argument) {
-        InotifyWatcher *watcher = static_cast<InotifyWatcher *>(argument);
-        pthread_setname_np(pthread_self(), "InotifyWatcher");
-        watcher->processEvents();
-        return nullptr;
-    }
-
-    /**
-     * @brief The main event processing loop for the worker thread.
+     * @brief The main event processing loop run by the worker thread.
      */
     void processEvents() {
+        pthread_setname_np(pthread_self(), "InotifyWatcher");
+
         char buffer[BUF_LEN];
 
         while (alive_.load(std::memory_order_acquire)) {
             struct pollfd pfd = {inotify_fd_, POLLIN, 0};
-            int ret = poll(&pfd, 1, 50); // Use a timeout to periodically check the 'alive_' flag.
+            int ret = poll(&pfd, 1, 50); // 50 ms timeout so we re-check alive_ regularly
 
             if (ret < 0) {
                 LOGE_TAG("InotifyWatcher", "Poll failed: {}", strerror(errno));
                 break;
             } else if (ret == 0) {
-                continue; // Timeout, loop again.
+                continue; // Timeout — loop back and check alive_
             }
 
-            // Read events from the inotify file descriptor.
             ssize_t length = read(inotify_fd_, buffer, BUF_LEN);
             if (length < 0) {
                 if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                    continue; // No data available
+                    continue;
                 }
                 LOGE_TAG("InotifyWatcher", "Read failed: {}", strerror(errno));
                 break;
             }
 
-            // Process all events in the buffer.
             ssize_t i = 0;
             while (i < length) {
                 struct inotify_event *event = reinterpret_cast<struct inotify_event *>(&buffer[i]);
 
-                // Extract callback information under lock protection
+                // Capture everything needed to fire the callback while holding the lock,
+                // then release the lock before actually calling it.
                 EventCallback callback_to_call;
                 std::string callback_path;
                 int callback_context = 0;
@@ -157,32 +151,27 @@ private:
                 bool valid_event = false;
 
                 {
-                    std::unique_lock<std::mutex> lock(directories_mutex_);
+                    std::lock_guard<std::mutex> lock(directories_mutex_);
 
-                    // Find the directory corresponding to the watch descriptor.
-                    auto dir_it = std::find_if(directories_.begin(), directories_.end(), [event](const DirectoryWatch &dir) {
-                        return dir.inotify_watch_fd == event->wd;
-                    });
-
-                    if (dir_it == directories_.end()) {
-                        // This can happen if a watch was removed but an event was already in flight.
-                        // It's usually safe to ignore.
+                    auto map_it = wd_to_index_.find(event->wd);
+                    if (map_it == wd_to_index_.end()) {
+                        // Watch was removed but an event was already buffered
                         i += EVENT_SIZE + event->len;
                         continue;
                     }
 
-                    DirectoryWatch &directory = *dir_it;
-                    // The event->name is only valid if len > 0.
+                    DirectoryWatch &directory = directories_[map_it->second];
+
+                    // event->name is only valid when len > 0
                     std::string event_name = (event->len > 0) ? std::string(event->name) : "";
 
-                    // Check if the event matches a specific file watch.
+                    // Check whether this event targets a specific tracked file
                     auto file_it =
                         std::find_if(directory.files.begin(), directory.files.end(), [&event_name](const FileWatch &file) {
                             return file.name == event_name;
                         });
 
                     if (file_it != directory.files.end()) {
-                        // Event is for a specific file, use its callback.
                         FileWatch &file = *file_it;
                         callback_path = directory.path + DIR_SEPARATOR + file.name;
                         callback_to_call = file.callback_func;
@@ -190,7 +179,7 @@ private:
                         callback_additional_data = file.additional_data;
                         valid_event = true;
                     } else if (directory.callback_func) {
-                        // Event is not for a specific file, use the general directory callback if available.
+                        // Not a file-specific event, use the general directory callback
                         callback_to_call = directory.callback_func;
                         callback_path = directory.path;
                         if (!event_name.empty()) {
@@ -200,9 +189,8 @@ private:
                         callback_additional_data = directory.additional_data;
                         valid_event = true;
                     }
-                } // Lock released here
+                } // lock released here
 
-                // Call callback if it exists and we found a valid watch
                 if (valid_event && callback_to_call) {
                     try {
                         callback_to_call(event, callback_path, callback_context, callback_additional_data);
@@ -213,7 +201,6 @@ private:
                     }
                 }
 
-                // Move to the next event in the buffer.
                 i += EVENT_SIZE + event->len;
             }
         }
@@ -222,25 +209,54 @@ private:
     }
 
     /**
-     * @brief Cleans up inotify watches and closes the file descriptor.
+     * @brief Removes all inotify watches.
+     *
+     * @ntes The inotify fd is closed in the destructor.
      */
     void cleanup() {
         std::lock_guard<std::mutex> lock(directories_mutex_);
         for (auto &directory : directories_) {
             inotify_rm_watch(inotify_fd_, directory.inotify_watch_fd);
         }
-        // The main file descriptor is closed in the destructor to avoid race conditions.
+    }
+
+    /**
+     * @brief Registers a new DirectoryWatch and updates wd_to_index_.
+     *
+     * @pre directories_mutex_ must be held by the caller.
+     */
+    void push_directory(DirectoryWatch &&dir) {
+        size_t idx = directories_.size();
+        wd_to_index_[dir.inotify_watch_fd] = idx;
+        directories_.push_back(std::move(dir));
+    }
+
+    /**
+     * @brief Removes the DirectoryWatch at @p pos and keeps wd_to_index_ consistent.
+     *
+     * @pre directories_mutex_ must be held by the caller.
+     */
+    void erase_directory(std::vector<DirectoryWatch>::iterator pos) {
+        size_t idx = static_cast<size_t>(pos - directories_.begin());
+        wd_to_index_.erase(pos->inotify_watch_fd);
+
+        size_t last = directories_.size() - 1;
+        if (idx != last) {
+            // Swap the last element into the gap to avoid shifting the whole vector
+            directories_[idx] = std::move(directories_[last]);
+            wd_to_index_[directories_[idx].inotify_watch_fd] = idx;
+        }
+        directories_.pop_back();
     }
 
 public:
     /**
      * @brief Constructs an InotifyWatcher object.
-     * 
+     *
      * @throws std::runtime_error if inotify initialization fails.
      */
     InotifyWatcher()
         : alive_(false)
-        , thread_started_(false)
         , inotify_fd_(-1) {
         inotify_fd_ = inotify_init1(O_NONBLOCK | O_CLOEXEC);
         if (inotify_fd_ < 0) {
@@ -268,16 +284,14 @@ public:
     bool addFile(const WatchReference &reference) {
         std::string path = reference.path;
 
-        // Remove trailing slash if present
         if (!path.empty() && path.back() == DIR_SEPARATOR) {
             path.pop_back();
         }
 
-        // Extract directory and filename
         size_t last_slash = path.find_last_of(DIR_SEPARATOR);
         if (last_slash == std::string::npos) {
             LOGE_TAG("InotifyWatcher", "Invalid file path: {}", path);
-            return false; // No directory component found
+            return false;
         }
 
         std::string dir_path = path.substr(0, last_slash);
@@ -290,7 +304,7 @@ public:
 
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
-        // Find or create directory
+        // Find or create directory watch
         auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&dir_path](const DirectoryWatch &dir) {
             return dir.path == dir_path;
         });
@@ -298,12 +312,9 @@ public:
         if (dir_it == directories_.end()) {
             DirectoryWatch new_dir;
             new_dir.path = dir_path;
-            new_dir.callback_func = nullptr; // No directory callback for file watches
+            new_dir.callback_func = nullptr;
             new_dir.context = 0;
             new_dir.additional_data = nullptr;
-            new_dir.inotify_watch_fd = -1;
-
-            // Add inotify watch for common file events
             new_dir.inotify_watch_fd =
                 inotify_add_watch(inotify_fd_, dir_path.c_str(), IN_MODIFY | IN_CLOSE_WRITE | IN_DELETE | IN_MOVE | IN_CREATE);
 
@@ -312,18 +323,15 @@ public:
                 return false;
             }
 
-            directories_.push_back(std::move(new_dir));
+            push_directory(std::move(new_dir));
             dir_it = directories_.end() - 1;
         }
 
         DirectoryWatch &directory = *dir_it;
 
-        auto file_exists = std::find_if(directory.files.begin(), directory.files.end(), [&filename](const FileWatch &file) {
-            return file.name == filename;
-        });
-
-        // File already being watched
-        if (file_exists != directory.files.end()) {
+        if (std::find_if(directory.files.begin(), directory.files.end(), [&filename](const FileWatch &f) {
+                return f.name == filename;
+            }) != directory.files.end()) {
             LOGE_TAG("InotifyWatcher", "File '{}' already being watched in directory '{}'", filename, dir_path);
             return false;
         }
@@ -348,20 +356,17 @@ public:
     bool addDirectory(const WatchReference &reference) {
         std::string path = reference.path;
 
-        // Remove trailing slash if present
         if (!path.empty() && path.back() == DIR_SEPARATOR) {
             path.pop_back();
         }
 
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
-        // Check if directory already exists
         auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&path](const DirectoryWatch &dir) {
             return dir.path == path;
         });
 
         if (dir_it != directories_.end()) {
-            // Directory exists, update callback if not set
             if (dir_it->callback_func) {
                 LOGE_TAG("InotifyWatcher", "Directory '{}' already has a callback", path);
                 return false;
@@ -374,14 +379,11 @@ public:
             return true;
         }
 
-        // Create new directory watch
         DirectoryWatch new_dir;
         new_dir.path = path;
         new_dir.callback_func = reference.callback_func;
         new_dir.context = reference.context;
         new_dir.additional_data = reference.additional_data;
-
-        // Add inotify watch for directory events
         new_dir.inotify_watch_fd = inotify_add_watch(
             inotify_fd_, path.c_str(), IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVED_FROM | IN_MOVED_TO | IN_CLOSE_WRITE
         );
@@ -391,14 +393,14 @@ public:
             return false;
         }
 
-        directories_.push_back(std::move(new_dir));
+        push_directory(std::move(new_dir));
         LOGD_TAG("InotifyWatcher", "Added directory watch for '{}'", path);
         return true;
     }
 
     /**
      * @brief Starts the event processing thread.
-     * 
+     *
      * @return true if the thread was started successfully, otherwise false.
      */
     bool start() {
@@ -408,15 +410,14 @@ public:
             return false;
         }
 
-        int result = pthread_create(&thread_, nullptr, threadProcess, this);
-
-        if (result != 0) {
+        try {
+            thread_ = std::thread(&InotifyWatcher::processEvents, this);
+        } catch (const std::system_error &e) {
             alive_.store(false, std::memory_order_release);
-            LOGE_TAG("InotifyWatcher", "Failed to create thread: {}", strerror(result));
+            LOGE_TAG("InotifyWatcher", "Failed to create thread: {}", e.what());
             return false;
         }
 
-        thread_started_.store(true, std::memory_order_release);
         LOGD_TAG("InotifyWatcher", "Started monitoring thread");
         return true;
     }
@@ -427,16 +428,15 @@ public:
     void stop() {
         bool expected = true;
         if (alive_.compare_exchange_strong(expected, false)) {
-            if (thread_started_.load(std::memory_order_acquire)) {
-                pthread_join(thread_, nullptr);
-                thread_started_.store(false, std::memory_order_release);
+            if (thread_.joinable()) {
+                thread_.join();
             }
         }
     }
 
     /**
      * @brief Checks if the watcher is running.
-     * 
+     *
      * @return true if the watcher is active, false otherwise.
      */
     bool isRunning() const {
@@ -445,11 +445,11 @@ public:
 
     /**
      * @brief Removes a file watch.
-     * * @param path The full path to the file to stop watching.
+     *
+     * @param path The full path to the file to stop watching.
      * @return true if the file was being watched and was removed, false otherwise.
      */
     bool removeFile(const std::string &path) {
-        // Extract directory and filename
         size_t last_slash = path.find_last_of(DIR_SEPARATOR);
         if (last_slash == std::string::npos) {
             return false;
@@ -460,7 +460,6 @@ public:
 
         std::lock_guard<std::mutex> lock(directories_mutex_);
 
-        // Find directory
         auto dir_it = std::find_if(directories_.begin(), directories_.end(), [&dir_path](const DirectoryWatch &dir) {
             return dir.path == dir_path;
         });
@@ -469,7 +468,6 @@ public:
             return false;
         }
 
-        // Remove file from directory's watch list
         auto &files = dir_it->files;
         auto file_it = std::find_if(files.begin(), files.end(), [&filename](const FileWatch &file) {
             return file.name == filename;
@@ -482,11 +480,11 @@ public:
         files.erase(file_it);
         LOGD_TAG("InotifyWatcher", "Removed file watch for '{}'", path);
 
-        // If no more files and no directory callback, remove the directory watch
-        if (dir_it->files.empty() && dir_it->callback_func == nullptr) {
+        // If the directory has no remaining watches, tear it down
+        if (files.empty() && !dir_it->callback_func) {
             inotify_rm_watch(inotify_fd_, dir_it->inotify_watch_fd);
-            directories_.erase(dir_it);
             LOGD_TAG("InotifyWatcher", "Removed empty directory watch for '{}'", dir_path);
+            erase_directory(dir_it);
         }
 
         return true;
@@ -494,7 +492,7 @@ public:
 
     /**
      * @brief Removes a directory watch.
-     * 
+     *
      * @param path The path to the directory to stop watching.
      * @return true if the directory was being watched and was removed, false otherwise.
      */
@@ -514,12 +512,9 @@ public:
             return false;
         }
 
-        // Remove the inotify watch
         inotify_rm_watch(inotify_fd_, dir_it->inotify_watch_fd);
-
-        // Remove from list
-        directories_.erase(dir_it);
         LOGD_TAG("InotifyWatcher", "Removed directory watch for '{}'", clean_path);
+        erase_directory(dir_it);
         return true;
     }
 
