@@ -282,14 +282,17 @@ mediatek_performance() {
 snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
-		for path in /sys/class/devfreq/*cpu*-lat \
-			/sys/class/devfreq/*cpu*-bw \
+		# Latency Nodes
+		for path in /sys/class/devfreq/*memlat* /sys/class/devfreq/*latfloor*; do
+			devfreq_max_perf "$path"
+		done
+
+		# Bandwith & Bus
+		for path in /sys/class/devfreq/*cpu*-bw \
 			/sys/class/devfreq/*l3-cpu* \
-			/sys/class/devfreq/*llccbw* \
-			/sys/class/devfreq/*bus_llcc* \
 			/sys/class/devfreq/*bus_ddr* \
-			/sys/class/devfreq/*memlat* \
-			/sys/class/devfreq/*cpubw* \
+			/sys/class/devfreq/*bus_llcc* \
+			/sys/class/devfreq/*llccbw* \
 			/sys/class/devfreq/*kgsl-ddr-qos*; do
 
 			if [ $LITE_MODE -eq 0 ]; then
@@ -297,7 +300,7 @@ snapdragon_performance() {
 			else
 				devfreq_mid_perf "$path"
 			fi
-		done &
+		done
 
 		for component in DDR LLCC L3; do
 			path="/sys/devices/system/cpu/bus_dcvs/$component"
@@ -306,7 +309,7 @@ snapdragon_performance() {
 			else
 				qcom_cpudcvs_mid_perf "$path"
 			fi
-		done &
+		done
 	}
 
 	# GPU tweak
@@ -474,18 +477,20 @@ mediatek_normal() {
 snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
-		for path in /sys/class/devfreq/*cpu*-lat \
-			/sys/class/devfreq/*cpu*-bw \
-			/sys/class/devfreq/*l3-cpu* \
-			/sys/class/devfreq/*llccbw* \
-			/sys/class/devfreq/*bus_llcc* \
-			/sys/class/devfreq/*bus_ddr* \
-			/sys/class/devfreq/*memlat* \
-			/sys/class/devfreq/*cpubw* \
-			/sys/class/devfreq/*kgsl-ddr-qos*; do
-
+		# Latency Nodes
+		for path in /sys/class/devfreq/*memlat* /sys/class/devfreq/*latfloor*; do
 			devfreq_unlock "$path"
-		done &
+		done
+
+		# Bandwith & Bus
+		for path in /sys/class/devfreq/*cpu*-bw \
+			/sys/class/devfreq/*l3-cpu* \
+			/sys/class/devfreq/*bus_ddr* \
+			/sys/class/devfreq/*bus_llcc* \
+			/sys/class/devfreq/*llccbw* \
+			/sys/class/devfreq/*kgsl-ddr-qos*; do
+			devfreq_unlock "$path"
+		done
 
 		for component in DDR LLCC L3; do
 			qcom_cpudcvs_unlock /sys/devices/system/cpu/bus_dcvs/$component
