@@ -757,17 +757,6 @@ performance_profile() {
 	# Memory tweak
 	apply 80 /proc/sys/vm/vfs_cache_pressure
 
-	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc \
-		/sys/class/devfreq/mmc*; do
-
-		if [ $LITE_MODE -eq 1 ]; then
-			devfreq_mid_perf "$path"
-		else
-			devfreq_max_perf "$path"
-		fi
-	done &
-
 	# Set CPU governor to performance.
 	# If lite mode enabled, use the default governor instead.
 	# device mitigation also will prevent performance gov to be
@@ -848,12 +837,6 @@ balance_profile() {
 	# Memory Tweaks
 	apply 120 /proc/sys/vm/vfs_cache_pressure
 
-	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc \
-		/sys/class/devfreq/mmc*; do
-		devfreq_unlock "$path"
-	done &
-
 	# Restore min CPU frequency
 	change_cpu_gov "$DEFAULT_CPU_GOV"
 
@@ -893,12 +876,6 @@ powersave_profile() {
 			apply Y /sys/module/battery_saver/parameters/enabled
 		fi
 	}
-
-	# eMMC and UFS frequency
-	for path in /sys/class/devfreq/*.ufshc \
-		/sys/class/devfreq/mmc*; do
-		devfreq_min_perf "$path"
-	done &
 
 	# CPU governor
 	change_cpu_gov "$ENCORE_POWERSAVE_CPUGOV"
