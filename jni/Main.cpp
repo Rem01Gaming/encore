@@ -68,6 +68,7 @@ struct DaemonState {
     bool battery_saver_state_oops = false;
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
+    bool prev_dnd_state = false;
     bool is_mlbb = false;
 
     int focus_loss_count = 0;
@@ -183,6 +184,27 @@ struct DaemonState {
 }
 
 /**
+ * @brief Checks if Do Not Disturb mode is currently enabled.
+ * * @return true if zen_mode is 1 (Priority), 2 (Total Silence), or 3 (Alarms Only).
+ * @return false if zen_mode is 0 or if the shell command fails.
+ */
+bool is_dnd_enabled() {
+    PipeResult result = popen_direct({"settings", "get", "global", "zen_mode"});
+
+    if (result.stream == nullptr) {
+        return false; // Failed to fork or execute
+    }
+
+    char buffer[16];
+    if (fgets(buffer, sizeof(buffer), result.stream) != nullptr) {
+        // We check if the first character is NOT '0'
+        return buffer[0] != '0';
+    }
+
+    return false;
+}
+
+/**
  * @brief Attempt to refresh window-display data.
  * @return true on success, false if the dumpsys call threw.
  */
@@ -224,7 +246,7 @@ static void handle_game_exit(DaemonState &state) {
  */
 static void clear_dnd_if_needed(DaemonState &state) {
     if (state.game_requested_dnd) {
-        set_do_not_disturb(false);
+        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
         state.game_requested_dnd = false;
     }
 }
@@ -276,13 +298,15 @@ static void clear_dnd_if_needed(DaemonState &state) {
     apply_performance_profile(lite_mode, state.active_package, game_pid);
     state.pid_tracker.set_pid(game_pid);
 
+    // DND handling
     if (active_game->enable_dnd) {
         state.game_requested_dnd = true;
         set_do_not_disturb(true);
     } else {
         state.game_requested_dnd = false;
-        set_do_not_disturb(false);
+        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
     }
+
     return true;
 }
 
@@ -363,6 +387,8 @@ static void encore_main_daemon() {
             state.active_package = get_active_game(state.window_displays, game_registry);
             if (!state.active_package.empty()) {
                 state.in_game_session = true;
+                state.prev_dnd_state = is_dnd_enabled();
+                LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
             }
         }
 
