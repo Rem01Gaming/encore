@@ -220,6 +220,16 @@ bool is_dnd_enabled() {
 }
 
 /**
+ * @brief Clear Do Not Disturb if the game had requested it.
+ */
+static void clear_dnd_if_needed(DaemonState &state) {
+    if (state.game_requested_dnd) {
+        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
+        state.game_requested_dnd = false;
+    }
+}
+
+/**
  * @brief Handle the transition when the tracked game process exits.
  *
  * Clears session state and does an immediate window-display refresh so the
@@ -227,6 +237,7 @@ bool is_dnd_enabled() {
  */
 static void handle_game_exit(DaemonState &state) {
     LOGI("Game {} exited", state.active_package);
+    clear_dnd_if_needed(state);
     state.active_package.clear();
     state.pid_tracker.invalidate();
     state.mlbb_tracker.invalidate();
@@ -238,16 +249,6 @@ static void handle_game_exit(DaemonState &state) {
     // the current foreground app rather than stale data.
     if (!refresh_window_displays(state)) {
         LOGE_TAG("DumpsysWindowDisplays", "Failed to refresh after game exit");
-    }
-}
-
-/**
- * @brief Clear Do Not Disturb if the game had requested it.
- */
-static void clear_dnd_if_needed(DaemonState &state) {
-    if (state.game_requested_dnd) {
-        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
-        state.game_requested_dnd = false;
     }
 }
 
@@ -382,12 +383,16 @@ static void encore_main_daemon() {
             handle_game_exit(state);
         }
 
+        // Monitor DND state whenever the daemon isn't overriding it
+        if (!state.game_requested_dnd && do_full_check) {
+            state.prev_dnd_state = is_dnd_enabled();
+        }
+
         // Discover active game
         if (state.active_package.empty()) {
             state.active_package = get_active_game(state.window_displays, game_registry);
             if (!state.active_package.empty()) {
                 state.in_game_session = true;
-                state.prev_dnd_state = is_dnd_enabled();
                 LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
             }
         }
