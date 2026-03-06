@@ -209,7 +209,7 @@ pid_t GetAppPID(const std::string &package_name) {
     }
 
     if (!found_package) {
-        throw std::runtime_error("unable to find " + package_name + "package in activity top");
+        throw std::runtime_error("unable to find " + package_name + " package in activity top");
     }
 
     if (pid == 0) {
