@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.provider.Settings;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,6 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class SystemMonitor {
     private static final String OUTPUT_PATH = "/data/adb/.config/encore/system_status";
@@ -211,8 +213,40 @@ public class SystemMonitor {
         return powerManager != null && powerManager.isInteractive();
     }
 
+    // Huawei stores power-save state in Settings.System "SmartModeStatus" (value 4 = on).
+    // Xiaomi/MIUI stores it in Settings.System "POWER_SAVE_MODE_OPEN" (value 1 = on).
+    // Both OEMs leave the standard isPowerSaveMode() returning false, so we fall back to
+    // these vendor keys when the standard API gives us nothing.
+    private static final String HUAWEI_POWER_SAVE_SETTING = "SmartModeStatus";
+    private static final int HUAWEI_POWER_SAVE_VALUE = 4;
+    private static final String XIAOMI_POWER_SAVE_SETTING = "POWER_SAVE_MODE_OPEN";
+    private static final int XIAOMI_POWER_SAVE_VALUE = 1;
+
     private static boolean isBatterySaverOn() {
-        return powerManager != null && powerManager.isPowerSaveMode();
+        if (powerManager == null || systemContext == null) return false;
+
+        // Standard API
+        if (powerManager.isPowerSaveMode()) return true;
+
+        // Vendor-specific fallbacks for Chinese ROMs that don't implement the standard API
+        String manufacturer = Build.MANUFACTURER.toUpperCase(Locale.ROOT);
+        try {
+            if (manufacturer.contains("HUAWEI") || manufacturer.contains("HONOR")) {
+                return Settings.System.getInt(
+                        systemContext.getContentResolver(),
+                        HUAWEI_POWER_SAVE_SETTING, 0) == HUAWEI_POWER_SAVE_VALUE;
+            }
+            if (manufacturer.contains("XIAOMI")
+                    || manufacturer.contains("REDMI")
+                    || manufacturer.contains("POCO")) {
+                return Settings.System.getInt(
+                        systemContext.getContentResolver(),
+                        XIAOMI_POWER_SAVE_SETTING, 0) == XIAOMI_POWER_SAVE_VALUE;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return false;
     }
 
     private static int getZenMode() {
