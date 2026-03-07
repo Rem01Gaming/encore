@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2024-2026 Rem01Gaming
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,13 +25,36 @@ import android.os.PowerManager;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 public class SystemMonitor {
     private static final String OUTPUT_PATH = "/data/adb/.config/encore/system_status";
-    private static String lastStatus = "";
+    private static final long POLL_INTERVAL_MS = 500;
+    private static final String UNKNOWN_APP = "unknown 0 0";
+    private static final String NONE_APP = "none 0 0";
+
+    private static final String[] FOREGROUND_METHOD_CANDIDATES = {
+            "getFocusedRootTask",
+            "getFocusedStackInfo",
+            "getFocusedTaskInfo",
+            "getFocusedRootTaskInfo",
+            "getTasks",
+            "getRunningTasks",
+            "getTopActivity"
+    };
+
+    private static final String[] COMPONENT_NAME_FIELDS = {
+            "topActivity",
+            "topActivityComponent",
+            "realActivity",
+            "baseActivity",
+            "origActivity",
+            "activity"
+    };
 
     private static Context systemContext;
     private static Object activityTaskManager;
@@ -24,85 +63,69 @@ public class SystemMonitor {
     private static Object notificationManager;
     private static Method getZenModeMethod;
 
+    private static String lastStatus = "";
+
+    // -------------------------------------------------------------------------
+    // Entry point
+    // -------------------------------------------------------------------------
+
     public static void main(String[] args) {
         setupSystemContext();
         bypassHiddenApiRestrictions();
-        if (!initializeServices())
+
+        if (!initializeServices()) {
+            System.err.println("Failed to initialize services, exiting.");
             return;
+        }
+
+        runMonitorLoop();
+    }
+
+    private static void runMonitorLoop() {
         while (true) {
             try {
                 writeStatus();
-                Thread.sleep(500);
+                Thread.sleep(POLL_INTERVAL_MS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Initialization
+    // -------------------------------------------------------------------------
+
     private static void setupSystemContext() {
         try {
             Looper.prepare();
-            Class<?> at = Class.forName("android.app.ActivityThread");
-            Object thread = at.getMethod("systemMain").invoke(null);
-            systemContext = (Context) at.getMethod("getSystemContext").invoke(thread);
-        } catch (Exception ignored) {
+            Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object thread = activityThreadClass.getMethod("systemMain").invoke(null);
+            systemContext = (Context) activityThreadClass.getMethod("getSystemContext").invoke(thread);
+        } catch (Exception e) {
+            System.err.println("Failed to set up system context: " + e.getMessage());
         }
     }
 
     private static void bypassHiddenApiRestrictions() {
         try {
-            Class<?> vm = Class.forName("dalvik.system.VMRuntime");
-            Method getRuntime = vm.getDeclaredMethod("getRuntime");
-            Object runtime = getRuntime.invoke(null);
-            Method setHiddenApi = vm.getDeclaredMethod("setHiddenApiExemptions", String[].class);
-            setHiddenApi.invoke(runtime, new Object[] { new String[] { "L" } });
-        } catch (Exception ignored) {
+            Class<?> vmRuntime = Class.forName("dalvik.system.VMRuntime");
+            Object runtime = vmRuntime.getDeclaredMethod("getRuntime").invoke(null);
+            Method setExemptions = vmRuntime.getDeclaredMethod("setHiddenApiExemptions", String[].class);
+            setExemptions.invoke(runtime, new Object[]{new String[]{"L"}});
+        } catch (Exception e) {
+            System.err.println("Failed to bypass hidden API restrictions: " + e.getMessage());
         }
     }
 
     private static boolean initializeServices() {
         try {
             powerManager = (PowerManager) systemContext.getSystemService(Context.POWER_SERVICE);
-
-            Class<?> sm = Class.forName("android.os.ServiceManager");
-            Method getService = sm.getMethod("getService", String.class);
-
-            String atmInterface = Build.VERSION.SDK_INT >= 29 ? "android.app.IActivityTaskManager"
-                    : "android.app.IActivityManager";
-            String atmService = Build.VERSION.SDK_INT >= 29 ? "activity_task" : Context.ACTIVITY_SERVICE;
-
-            IBinder atmBinder = (IBinder) getService.invoke(null, atmService);
-            activityTaskManager = Class.forName(atmInterface + "$Stub").getMethod("asInterface", IBinder.class)
-                    .invoke(null, atmBinder);
-
-            String[] candidates = {
-                    "getFocusedRootTask",
-                    "getFocusedStackInfo",
-                    "getFocusedTaskInfo",
-                    "getFocusedRootTaskInfo",
-                    "getTasks",
-                    "getRunningTasks",
-                    "getTopActivity"
-            };
-
-            for (Method m : activityTaskManager.getClass().getDeclaredMethods()) {
-                String name = m.getName();
-                for (String c : candidates) {
-                    if (name.equals(c)) {
-                        m.setAccessible(true);
-                        foregroundMethod = m;
-                        break;
-                    }
-                }
-                if (foregroundMethod != null)
-                    break;
-            }
-
-            IBinder nmBinder = (IBinder) getService.invoke(null, Context.NOTIFICATION_SERVICE);
-            notificationManager = Class.forName("android.app.INotificationManager$Stub")
-                    .getMethod("asInterface", IBinder.class).invoke(null, nmBinder);
-            getZenModeMethod = notificationManager.getClass().getMethod("getZenMode");
-
+            initActivityTaskManager();
+            initNotificationManager();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,273 +133,343 @@ public class SystemMonitor {
         }
     }
 
+    private static void initActivityTaskManager() throws Exception {
+        IBinder binder = getSystemService(resolveAtmServiceName());
+        activityTaskManager = bindInterface(resolveAtmInterfaceName() + "$Stub", binder);
+        foregroundMethod = findForegroundMethod(activityTaskManager);
+    }
+
+    private static void initNotificationManager() throws Exception {
+        IBinder binder = getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = bindInterface("android.app.INotificationManager$Stub", binder);
+        getZenModeMethod = notificationManager.getClass().getMethod("getZenMode");
+    }
+
+    private static String resolveAtmServiceName() {
+        return Build.VERSION.SDK_INT >= 29 ? "activity_task" : Context.ACTIVITY_SERVICE;
+    }
+
+    private static String resolveAtmInterfaceName() {
+        return Build.VERSION.SDK_INT >= 29
+                ? "android.app.IActivityTaskManager"
+                : "android.app.IActivityManager";
+    }
+
+    private static IBinder getSystemService(String name) throws Exception {
+        Class<?> serviceManager = Class.forName("android.os.ServiceManager");
+        return (IBinder) serviceManager.getMethod("getService", String.class).invoke(null, name);
+    }
+
+    private static Object bindInterface(String stubClassName, IBinder binder) throws Exception {
+        return Class.forName(stubClassName)
+                .getMethod("asInterface", IBinder.class)
+                .invoke(null, binder);
+    }
+
+    private static Method findForegroundMethod(Object atm) {
+        List<String> candidates = Arrays.asList(FOREGROUND_METHOD_CANDIDATES);
+        for (Method method : atm.getClass().getDeclaredMethods()) {
+            if (candidates.contains(method.getName())) {
+                method.setAccessible(true);
+                return method;
+            }
+        }
+        return null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Status writing
+    // -------------------------------------------------------------------------
+
     private static void writeStatus() {
+        String currentStatus = buildStatus();
+        if (currentStatus.equals(lastStatus)) {
+            return;
+        }
+
         try {
-            String focused = getFocusedAppInfo();
-            int awake = (powerManager != null && powerManager.isInteractive()) ? 1 : 0;
-            int saver = (powerManager != null && powerManager.isPowerSaveMode()) ? 1 : 0;
-            int zen = 0;
-
-            try {
-                if (notificationManager != null && getZenModeMethod != null)
-                    zen = (int) getZenModeMethod.invoke(notificationManager);
-            } catch (Exception ignored) {
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("focused_app ").append(focused).append("\n");
-            sb.append("screen_awake ").append(awake).append("\n");
-            sb.append("battery_saver ").append(saver).append("\n");
-            sb.append("zen_mode ").append(zen).append("\n");
-
-            String currentStatus = sb.toString();
-
-            if (!currentStatus.equals(lastStatus)) {
-                File file = new File(OUTPUT_PATH);
-                if (file.getParentFile() != null && !file.getParentFile().exists())
-                    file.getParentFile().mkdirs();
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                    writer.write(currentStatus);
-                    writer.flush();
-                }
-
-                lastStatus = currentStatus;
-            }
-        } catch (Exception e) {
+            writeToFile(OUTPUT_PATH, currentStatus);
+            lastStatus = currentStatus;
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private static String buildStatus() {
+        String focusedApp = getFocusedAppInfo();
+        int screenAwake = isScreenAwake() ? 1 : 0;
+        int batterySaver = isBatterySaverOn() ? 1 : 0;
+        int zenMode = getZenMode();
+
+        return "focused_app " + focusedApp + "\n"
+                + "screen_awake " + screenAwake + "\n"
+                + "battery_saver " + batterySaver + "\n"
+                + "zen_mode " + zenMode + "\n";
+    }
+
+    private static boolean isScreenAwake() {
+        return powerManager != null && powerManager.isInteractive();
+    }
+
+    private static boolean isBatterySaverOn() {
+        return powerManager != null && powerManager.isPowerSaveMode();
+    }
+
+    private static int getZenMode() {
+        try {
+            if (notificationManager != null && getZenModeMethod != null) {
+                return (int) getZenModeMethod.invoke(notificationManager);
+            }
+        } catch (Exception ignored) {
+        }
+        return 0;
+    }
+
+    private static void writeToFile(String path, String content) throws IOException {
+        File file = new File(path);
+        File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Foreground app detection
+    // -------------------------------------------------------------------------
 
     private static String getFocusedAppInfo() {
         try {
-            Object res = invokeForegroundMethod();
-            if (res == null)
-                return "unknown 0 0";
-
-            // if list, inspect elements
-            if (res instanceof List) {
-                List<?> list = (List<?>) res;
-                if (list.isEmpty())
-                    return "none 0 0";
-
-                for (Object elem : list) {
-                    ComponentName c = extractComponentName(elem);
-                    if (c != null)
-                        return pkgPidUid(c.getPackageName());
-                }
-
-                // try first element's fields if none found
-                ComponentName c0 = extractComponentName(list.get(0));
-                if (c0 != null)
-                    return pkgPidUid(c0.getPackageName());
-                return "unknown 0 0";
+            Object result = invokeForegroundMethod();
+            if (result == null) {
+                return UNKNOWN_APP;
             }
-
-            ComponentName c = extractComponentName(res);
-            if (c != null)
-                return pkgPidUid(c.getPackageName());
-
-            // try to find a package-like string in toString() or string fields
-            String pkg = findPackageLikeString(res);
-            if (pkg != null)
-                return pkgPidUid(pkg);
-
-            return "unknown 0 0";
+            if (result instanceof List) {
+                return getFocusedAppFromList((List<?>) result);
+            }
+            return resolveAppInfoFromObject(result);
         } catch (Exception e) {
             e.printStackTrace();
-            return "unknown 0 0";
+            return UNKNOWN_APP;
         }
     }
 
-    private static Object invokeForegroundMethod() {
-        if (foregroundMethod == null)
-            return null;
-        try {
-            String name = foregroundMethod.getName();
-            if (name.equals("getTasks") || name.equals("getRunningTasks")) {
-                // try common signatures
-                try {
-                    return foregroundMethod.invoke(activityTaskManager, 1);
-                } catch (IllegalArgumentException ignored) {
-                }
-
-                try {
-                    return foregroundMethod.invoke(activityTaskManager, 1, 0);
-                } catch (IllegalArgumentException ignored) {
-                }
-
-                try {
-                    return foregroundMethod.invoke(activityTaskManager, 1, false, false);
-                } catch (IllegalArgumentException ignored) {
-                }
-            } else {
-                if (foregroundMethod.getParameterTypes().length == 0)
-                    return foregroundMethod.invoke(activityTaskManager);
-
-                // try invoking with single int if method wants it
-                try {
-                    return foregroundMethod.invoke(activityTaskManager, 0);
-                } catch (IllegalArgumentException ignored) {
-                }
+    private static String getFocusedAppFromList(List<?> list) {
+        if (list.isEmpty()) {
+            return NONE_APP;
+        }
+        for (Object element : list) {
+            ComponentName component = extractComponentName(element);
+            if (component != null) {
+                return buildAppInfo(component.getPackageName());
             }
-        } catch (Exception e) {
-            // fall through to brute-force attempts
+        }
+        return resolveAppInfoFromObject(list.get(0));
+    }
+
+    private static String resolveAppInfoFromObject(Object obj) {
+        ComponentName component = extractComponentName(obj);
+        if (component != null) {
+            return buildAppInfo(component.getPackageName());
+        }
+        String pkg = findPackageLikeString(obj);
+        return pkg != null ? buildAppInfo(pkg) : UNKNOWN_APP;
+    }
+
+    private static Object invokeForegroundMethod() {
+        if (foregroundMethod == null) {
+            return null;
         }
 
-        // brute-force: try other ATM methods that look relevant
+        Object result = tryInvokeForegroundMethod();
+        if (result != null) {
+            return result;
+        }
+
+        return bruteForceForegroundMethod();
+    }
+
+    private static Object tryInvokeForegroundMethod() {
+        String name = foregroundMethod.getName();
         try {
-            for (Method m : activityTaskManager.getClass().getDeclaredMethods()) {
-                String n = m.getName().toLowerCase();
-                if (n.contains("focus") || n.contains("top") || n.contains("task")) {
-                    try {
-                        m.setAccessible(true);
-                        if (m.getParameterTypes().length == 0) {
-                            Object r = m.invoke(activityTaskManager);
-                            if (r != null)
-                                return r;
-                        } else if (m.getParameterTypes().length == 1) {
-                            Object r = m.invoke(activityTaskManager, 1);
-                            if (r != null)
-                                return r;
-                        }
-                    } catch (Exception ignored) {
-                    }
+            if (name.equals("getTasks") || name.equals("getRunningTasks")) {
+                return tryInvokeWithArgs(foregroundMethod, activityTaskManager,
+                        new Object[]{1},
+                        new Object[]{1, 0},
+                        new Object[]{1, false, false});
+            } else if (foregroundMethod.getParameterTypes().length == 0) {
+                return foregroundMethod.invoke(activityTaskManager);
+            } else {
+                return tryInvokeWithArgs(foregroundMethod, activityTaskManager, new Object[]{0});
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    @SafeVarargs
+    private static Object tryInvokeWithArgs(Method method, Object target, Object[]... argSets) {
+        for (Object[] args : argSets) {
+            try {
+                return method.invoke(target, args);
+            } catch (IllegalArgumentException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private static Object bruteForceForegroundMethod() {
+        try {
+            for (Method method : activityTaskManager.getClass().getDeclaredMethods()) {
+                String nameLower = method.getName().toLowerCase();
+                if (!nameLower.contains("focus") && !nameLower.contains("top") && !nameLower.contains("task")) {
+                    continue;
+                }
+                method.setAccessible(true);
+                Object result = tryInvokeNoArgOrSingleInt(method, activityTaskManager);
+                if (result != null) {
+                    return result;
                 }
             }
         } catch (Exception ignored) {
         }
-
         return null;
     }
 
-    private static ComponentName extractComponentName(Object obj) {
-        if (obj == null)
-            return null;
-
-        if (obj instanceof ComponentName)
-            return (ComponentName) obj;
-
-        String[] common = {
-                "topActivity",
-                "topActivityComponent",
-                "realActivity",
-                "baseActivity",
-                "origActivity",
-                "activity"
-        };
-
-        for (String fName : common) {
-            try {
-                Field f = obj.getClass().getDeclaredField(fName);
-                f.setAccessible(true);
-                Object v = f.get(obj);
-                if (v instanceof ComponentName)
-                    return (ComponentName) v;
-            } catch (Exception ignored) {
+    private static Object tryInvokeNoArgOrSingleInt(Method method, Object target) {
+        try {
+            if (method.getParameterTypes().length == 0) {
+                return method.invoke(target);
+            } else if (method.getParameterTypes().length == 1) {
+                return method.invoke(target, 1);
             }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Reflection helpers
+    // -------------------------------------------------------------------------
+
+    private static ComponentName extractComponentName(Object obj) {
+        if (obj == null) return null;
+        if (obj instanceof ComponentName) return (ComponentName) obj;
+
+        // Check known field names first
+        for (String fieldName : COMPONENT_NAME_FIELDS) {
+            ComponentName result = getComponentNameFromField(obj, obj.getClass(), fieldName);
+            if (result != null) return result;
         }
 
-        // scan declared fields
+        // Fall back to scanning all declared fields in the class hierarchy
+        return scanHierarchyForComponentName(obj);
+    }
+
+    private static ComponentName getComponentNameFromField(Object obj, Class<?> cls, String fieldName) {
+        try {
+            Field field = cls.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object value = field.get(obj);
+            if (value instanceof ComponentName) return (ComponentName) value;
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private static ComponentName scanHierarchyForComponentName(Object obj) {
         Class<?> cls = obj.getClass();
         while (cls != null && cls != Object.class) {
-            for (Field f : cls.getDeclaredFields()) {
+            for (Field field : cls.getDeclaredFields()) {
                 try {
-                    f.setAccessible(true);
-                    Object v = f.get(obj);
-                    if (v instanceof ComponentName)
-                        return (ComponentName) v;
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+                    if (value instanceof ComponentName) return (ComponentName) value;
                 } catch (Exception ignored) {
                 }
             }
             cls = cls.getSuperclass();
         }
-
         return null;
     }
 
     private static String findPackageLikeString(Object obj) {
-        if (obj == null)
-            return null;
+        if (obj == null) return null;
 
         try {
-            String s = obj.toString();
-            String p = extractPkgFromString(s);
-            if (p != null)
-                return p;
+            String pkg = extractPackageName(obj.toString());
+            if (pkg != null) return pkg;
         } catch (Exception ignored) {
         }
 
         try {
-            for (Field f : obj.getClass().getDeclaredFields()) {
-                if (!f.getType().equals(String.class))
-                    continue;
-
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                if (!field.getType().equals(String.class)) continue;
                 try {
-                    f.setAccessible(true);
-                    Object v = f.get(obj);
-                    if (v instanceof String) {
-                        String p = extractPkgFromString((String) v);
-                        if (p != null)
-                            return p;
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+                    if (value instanceof String) {
+                        String pkg = extractPackageName((String) value);
+                        if (pkg != null) return pkg;
                     }
                 } catch (Exception ignored) {
                 }
             }
         } catch (Exception ignored) {
         }
+
         return null;
     }
 
-    private static String extractPkgFromString(String s) {
-        if (s == null)
-            return null;
-        // quick heuristic for package names
-        int idx = s.indexOf('.');
-        if (idx <= 0)
-            return null;
+    /**
+     * Extracts the first token that looks like a Java package name (e.g. "com.example.app").
+     */
+    private static String extractPackageName(String input) {
+        if (input == null || input.indexOf('.') <= 0) return null;
 
-        s = s.replaceAll("[^a-z0-9._-]", " ");
-        String[] parts = s.split("\\s+");
-
-        for (String part : parts) {
-            if (part.contains(".") && part.matches("[a-z0-9]+(\\.[a-z0-9]+)+"))
-                return part;
+        String normalized = input.replaceAll("[^a-z0-9._-]", " ");
+        for (String token : normalized.split("\\s+")) {
+            if (token.contains(".") && token.matches("[a-z0-9]+(\\.[a-z0-9]+)+")) {
+                return token;
+            }
         }
-
         return null;
     }
 
-    private static String pkgPidUid(String pkg) {
-        String piduid = getPidUid(pkg);
-        return pkg + " " + (piduid != null ? piduid : "0 0");
+    // -------------------------------------------------------------------------
+    // Process info
+    // -------------------------------------------------------------------------
+
+    private static String buildAppInfo(String pkg) {
+        String pidUid = getPidUid(pkg);
+        return pkg + " " + pidUid;
     }
 
     private static String getPidUid(String pkg) {
         try {
             ActivityManager am = (ActivityManager) systemContext.getSystemService(Context.ACTIVITY_SERVICE);
-            List<ActivityManager.RunningAppProcessInfo> procs = am.getRunningAppProcesses();
-            if (procs != null) {
-                for (ActivityManager.RunningAppProcessInfo p : procs) {
-                    if (pkg.equals(p.processName) || contains(p.pkgList, pkg)) {
-                        return p.pid + " " + p.uid;
+            List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
+            if (processes != null) {
+                for (ActivityManager.RunningAppProcessInfo process : processes) {
+                    if (pkg.equals(process.processName) || containsPackage(process.pkgList, pkg)) {
+                        return process.pid + " " + process.uid;
                     }
                 }
             }
         } catch (Exception ignored) {
         }
-
         return "0 0";
     }
 
-    private static boolean contains(String[] list, String pkg) {
-        if (list == null)
-            return false;
-
-        for (String s : list)
-            if (pkg.equals(s))
-                return true;
-
+    private static boolean containsPackage(String[] pkgList, String pkg) {
+        if (pkgList == null) return false;
+        for (String entry : pkgList) {
+            if (pkg.equals(entry)) return true;
+        }
         return false;
     }
 }
