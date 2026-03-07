@@ -11,6 +11,7 @@ on:
     paths:
       - '.github/workflows/build.yml'
       - '.github/scripts/**'
+      - 'java/**'
       - 'jni/**'
       - 'scripts/**'
       - 'module/**'
@@ -60,7 +61,7 @@ jobs:
         run: ndk-build -j$(nproc --all)
 
       - name: Compile Java
-        working-directory: ./java
+        working-directory: java
         run: |
           ANDROID_JAR="$ANDROID_HOME/platforms/android-34/android.jar"
           BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
@@ -70,7 +71,7 @@ jobs:
           mv classes.dex system_monitor.dex
 
       - name: Build WebUI
-        working-directory: ./webui
+        working-directory: webui
         run: |
           bun install
           bun run build
