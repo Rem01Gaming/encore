@@ -86,9 +86,8 @@ void is_kanged(void);
 
 /**
  * @brief Sets all environment variables for the profiler
- * @param lite_mode Whether lite mode is enabled from gameregistry
  */
-void set_profiler_env_vars(bool lite_mode);
+void set_profiler_env_vars();
 
 void run_perfcommon(void);
 void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_pid);

@@ -19,8 +19,10 @@
 #include <iostream>
 #include <thread>
 
+#include <poll.h>
+#include <sys/eventfd.h>
+
 #include <DeviceMitigationStore.hpp>
-#include <Dumpsys.hpp>
 #include <Encore.hpp>
 #include <EncoreCLI.hpp>
 #include <EncoreConfig.hpp>
@@ -33,6 +35,7 @@
 #include <PIDTracker.hpp>
 #include <ShellUtility.hpp>
 #include <SignalHandler.hpp>
+#include <SystemStatus.hpp>
 
 // ---------------------------------------------------------------------------
 // Global registry
@@ -46,6 +49,7 @@ GameRegistry game_registry;
 
 static constexpr auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
 static constexpr auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(7);
+static constexpr int POLL_TIMEOUT_MS = 50; // 50ms for responsive event handling
 
 static_assert(
     NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
@@ -53,12 +57,26 @@ static_assert(
 );
 
 // ---------------------------------------------------------------------------
+// Global event signaling for immediate daemon wake-up
+// ---------------------------------------------------------------------------
+
+int system_status_event_fd = -1;
+
+void signal_daemon_update() {
+    if (system_status_event_fd >= 0) {
+        uint64_t val = 1;
+        ssize_t ret = write(system_status_event_fd, &val, sizeof(val));
+        (void)ret; // Suppress unused warning
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Daemon States
 // ---------------------------------------------------------------------------
 
 struct DaemonState {
     EncoreProfileMode cur_mode = PERFCOMMON;
-    DumpsysWindowDisplays window_displays = {};
+    SystemStatus system_status = {};
 
     std::string active_package;
     std::chrono::steady_clock::time_point last_full_check = std::chrono::steady_clock::now();
@@ -85,9 +103,9 @@ struct DaemonState {
  * @brief Returns the package name of the focused registered game,
  *        or an empty string if none is active.
  */
-[[nodiscard]] static std::string get_active_game(const DumpsysWindowDisplays &window_info, GameRegistry &registry) {
-    if (registry.is_game_registered(window_info.focused_app)) {
-        return window_info.focused_app;
+[[nodiscard]] static std::string get_active_game(const SystemStatus &status, GameRegistry &registry) {
+    if (registry.is_game_registered(status.focused_app)) {
+        return status.focused_app;
     }
     return {};
 }
@@ -111,7 +129,7 @@ struct DaemonState {
     }
 
     // Check if the app is still focused
-    if (state.window_displays.focused_app == state.active_package) {
+    if (state.system_status.focused_app == state.active_package) {
         state.focus_loss_count = 0;
         return true;
     }
@@ -131,56 +149,32 @@ struct DaemonState {
 /**
  * @brief Queries the current battery-saver state.
  *
- * Tries the fast `cmd settings` path first, then falls back to DumpsysPower.
+ * Reads the battery_saver field from the inotify-fed SystemStatusCache.
  * Returns std::nullopt when both methods fail.
  */
 [[nodiscard]] static std::optional<bool> get_battery_saver_state() {
-    static bool use_settings_method = true;
-
-    if (use_settings_method) {
-        auto pipe = popen_direct({"/system/bin/cmd", "settings", "get", "global", "low_power"});
-        if (pipe.stream) {
-            char buffer[16];
-            if (fgets(buffer, sizeof(buffer), pipe.stream)) {
-                std::string result = buffer;
-                result.erase(
-                    std::remove_if(
-                        result.begin(),
-                        result.end(),
-                        [](unsigned char c) {
-                            return std::isspace(c);
-                        }
-                    ),
-                    result.end()
-                );
-                if (result == "1") return true;
-                if (result == "0") return false;
-            }
-        }
-        use_settings_method = false;
-    }
-
-    try {
-        DumpsysPower dumpsys_power;
-        Dumpsys::Power(dumpsys_power);
-        return dumpsys_power.battery_saver;
-    } catch (const std::runtime_error &e) {
-        LOGE_TAG("DumpsysPower", "{}", e.what());
+    SystemStatus status;
+    if (!system_status_cache.get(status)) {
         return std::nullopt;
     }
+    return status.battery_saver;
 }
 
 /**
  * @brief Returns the PID of @p package_name, or 0 on failure.
- * @note This function uses dumpsys to grep exact PID of the app, different from EncoreUtility's @p pidof()
  */
 [[nodiscard]] static pid_t pidof_game(const std::string &package_name) {
-    try {
-        return Dumpsys::GetAppPID(package_name);
-    } catch (const std::runtime_error &e) {
-        LOGE_TAG("DumpsysGetAppPID", "{}", e.what());
-        return 0;
+    // Fast path: the focused app's PID is already in the cache.
+    SystemStatus status;
+    if (system_status_cache.get(status) && status.focused_app == package_name && status.focused_pid > 0) {
+        return status.focused_pid;
     }
+
+    // Fallback: scan /proc for the process name.
+    const pid_t pid = pidof(package_name, false);
+    if (pid != 0) return pid;
+    LOGE_TAG("pidof_game", "Could not find PID for {}", package_name);
+    return 0;
 }
 
 /**
@@ -189,34 +183,28 @@ struct DaemonState {
  * @return false if zen_mode is 0 or if the shell command fails.
  */
 bool is_dnd_enabled() {
-    PipeResult result = popen_direct({"settings", "get", "global", "zen_mode"});
-
-    if (result.stream == nullptr) {
-        return false; // Failed to fork or execute
-    }
-
-    char buffer[16];
-    if (fgets(buffer, sizeof(buffer), result.stream) != nullptr) {
-        // We check if the first character is NOT '0'
-        return buffer[0] != '0';
+    SystemStatus status;
+    if (system_status_cache.get(status)) {
+        return status.zen_mode != 0;
     }
 
     return false;
 }
 
 /**
- * @brief Attempt to refresh window-display data.
- * @return true on success, false if the dumpsys call threw.
+ * @brief Pull the latest system-status snapshot from the inotify-fed cache.
+ *
+ * Returns true as long as at least one snapshot has been written by
+ * SystemMonitor.java.  The function is non-blocking and never spawns a shell.
  */
-[[nodiscard]] static bool refresh_window_displays(DaemonState &state) {
-    try {
-        Dumpsys::WindowDisplays(state.window_displays);
-        state.last_full_check = std::chrono::steady_clock::now();
-        return true;
-    } catch (const std::runtime_error &e) {
-        LOGE_TAG("DumpsysWindowDisplays", "{}", e.what());
+[[nodiscard]] static bool refresh_system_status(DaemonState &state) {
+    if (!system_status_cache.get(state.system_status)) {
+        LOGW_TAG("SystemStatus", "Cache not yet populated — waiting for SystemMonitor");
         return false;
     }
+
+    state.last_full_check = std::chrono::steady_clock::now();
+    return true;
 }
 
 /**
@@ -247,8 +235,8 @@ static void handle_game_exit(DaemonState &state) {
 
     // Refresh immediately so the balance/powersave decision below sees
     // the current foreground app rather than stale data.
-    if (!refresh_window_displays(state)) {
-        LOGE_TAG("DumpsysWindowDisplays", "Failed to refresh after game exit");
+    if (!refresh_system_status(state)) {
+        LOGE_TAG("SystemStatus", "Failed to refresh system status after game exit");
     }
 }
 
@@ -322,7 +310,7 @@ static void handle_game_exit(DaemonState &state) {
  * Each branch is a no-op when the current mode already matches.
  */
 static void select_profile(DaemonState &state) {
-    if (!state.active_package.empty() && state.window_displays.screen_awake) {
+    if (!state.active_package.empty() && state.system_status.screen_awake) {
         if (!state.need_profile_checkup && state.cur_mode == PERFORMANCE_PROFILE) return;
         if (apply_game_profile(state)) return;
     }
@@ -366,8 +354,10 @@ static void encore_main_daemon() {
         const auto now = std::chrono::steady_clock::now();
         const bool do_full_check = !state.in_game_session || (now - state.last_full_check) >= NORMAL_LOOP_INTERVAL;
 
-        if (do_full_check && !refresh_window_displays(state)) {
-            std::this_thread::sleep_for(INGAME_LOOP_INTERVAL);
+        if (do_full_check && !refresh_system_status(state)) {
+            // Cache not yet populated, wait briefly before retrying
+            struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
+            poll(&pfd, 1, POLL_TIMEOUT_MS);
             continue;
         }
 
@@ -390,7 +380,7 @@ static void encore_main_daemon() {
 
         // Discover active game
         if (state.active_package.empty()) {
-            state.active_package = get_active_game(state.window_displays, game_registry);
+            state.active_package = get_active_game(state.system_status, game_registry);
             if (!state.active_package.empty()) {
                 state.in_game_session = true;
                 LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
@@ -411,8 +401,27 @@ static void encore_main_daemon() {
         // Profile selection
         select_profile(state);
 
-        // Sleep
-        std::this_thread::sleep_for(state.in_game_session ? INGAME_LOOP_INTERVAL : NORMAL_LOOP_INTERVAL);
+        // Calculate timeout: use remaining time until next full check, or INGAME_LOOP_INTERVAL
+        int poll_timeout_ms = POLL_TIMEOUT_MS;
+        if (state.in_game_session) {
+            poll_timeout_ms = static_cast<int>(INGAME_LOOP_INTERVAL.count());
+        } else {
+            const auto elapsed = std::chrono::steady_clock::now() - state.last_full_check;
+            const auto remaining = NORMAL_LOOP_INTERVAL - elapsed;
+            if (remaining.count() > 0) {
+                poll_timeout_ms = std::min(static_cast<int>(remaining.count()), static_cast<int>(NORMAL_LOOP_INTERVAL.count()));
+            }
+        }
+
+        // Wait on eventfd with timeout, drain eventfd if signaled
+        struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
+        int poll_ret = poll(&pfd, 1, poll_timeout_ms);
+
+        if (poll_ret > 0 && (pfd.revents & POLLIN)) {
+            uint64_t val;
+            ssize_t ret = read(system_status_event_fd, &val, sizeof(val));
+            (void)ret;
+        }
     }
 }
 
@@ -448,13 +457,6 @@ int run_daemon() {
         return EXIT_FAILURE;
     }
 
-    if (!check_dumpsys_sanity()) {
-        std::cerr << "\033[31mERROR:\033[0m Dumpsys sanity check failed\n";
-        notify_fatal_error("Dumpsys sanity check failed");
-        LOGC("Dumpsys sanity check failed");
-        return EXIT_FAILURE;
-    }
-
     if (access(ENCORE_GAMELIST, F_OK) != 0) {
         std::cerr << "\033[31mERROR:\033[0m " << ENCORE_GAMELIST << " is missing\n";
         notify_fatal_error("gamelist.json is missing");
@@ -482,10 +484,22 @@ int run_daemon() {
         return EXIT_FAILURE;
     }
 
+    // Create eventfd for immediate daemon wake-up on system_status changes
+    system_status_event_fd = eventfd(0, EFD_CLOEXEC | EFD_SEMAPHORE);
+    if (system_status_event_fd < 0) {
+        LOGC("Failed to create eventfd: {}", strerror(errno));
+        notify_fatal_error("Failed to create eventfd");
+        return EXIT_FAILURE;
+    }
+
     InotifyWatcher file_watcher;
     if (!init_file_watcher(file_watcher)) {
         LOGC("Failed to initialize file watcher");
         notify_fatal_error("Failed to initialize file watcher");
+        if (system_status_event_fd >= 0) {
+            close(system_status_event_fd);
+            system_status_event_fd = -1;
+        }
         return EXIT_FAILURE;
     }
 
@@ -494,6 +508,12 @@ int run_daemon() {
     encore_main_daemon();
 
     LOGW("Encore Tweaks daemon exited");
+
+    if (system_status_event_fd >= 0) {
+        close(system_status_event_fd);
+        system_status_event_fd = -1;
+    }
+
     SignalHandler::cleanup_before_exit();
     return EXIT_SUCCESS;
 }

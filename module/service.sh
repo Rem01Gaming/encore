@@ -82,4 +82,7 @@ if [ -f "$ENABLE_PPM" ]; then
 fi
 
 # Start Encore Daemon
+export CLASSPATH="$MODDIR/system_monitor.dex"
+app_process $MODDIR SystemMonitor
+
 encored daemon

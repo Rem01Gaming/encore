@@ -9,7 +9,7 @@ LOCAL_SRC_FILES := \
     EncoreConfigStore.cpp \
 	DeviceMitigationStore.cpp
 
-LOCAL_STATIC_LIBRARIES := GameRegistry DeviceInfo EncoreUtility
+LOCAL_STATIC_LIBRARIES := SystemStatus GameRegistry DeviceInfo EncoreUtility
 
 LOCAL_C_INCLUDES := \
 	$(ROOT_PATH)/include \

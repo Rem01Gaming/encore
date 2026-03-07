@@ -2,9 +2,9 @@ LOCAL_PATH := $(call my-dir)
 ROOT_PATH := $(call my-dir)/../..
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := Dumpsys
+LOCAL_MODULE := SystemStatus
 
-LOCAL_SRC_FILES := Dumpsys.cpp
+LOCAL_SRC_FILES := SystemStatus.cpp
 
 LOCAL_C_INCLUDES := $(ROOT_PATH)/include
 
