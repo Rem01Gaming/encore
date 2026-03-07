@@ -395,14 +395,14 @@ tensor_performance() {
 	gpu_path=$(find /sys/devices/platform/ -type d -iname "*.mali" -print -quit 2>/dev/null)
 	[ -n "$gpu_path" ] && {
 		max_freq=$(which_maxfreq "$gpu_path/available_frequencies")
-		apply "max_freq" "$gpu_path/scaling_max_freq"
+		apply "$max_freq" "$gpu_path/scaling_max_freq"
 
 		if [ $LITE_MODE -eq 0 ]; then
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/scaling_min_freq"
 		else
 			mid_freq=$(which_minfreq "$gpu_path/available_frequencies")
-			apply "$min_freq" "$gpu_path/scaling_min_freq"
+			apply "$mid_freq" "$gpu_path/scaling_min_freq"
 		fi
 	}
 
@@ -452,7 +452,7 @@ mediatek_normal() {
 
 	# Reset min freq via GED
 	if [ -d /proc/gpufreqv2 ]; then
-		mid_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreqv2/gpu_working_opp_table)
+		min_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreqv2/gpu_working_opp_table)
 	else
 		min_oppfreq=$(mtk_gpufreq_minfreq_index /proc/gpufreq/gpufreq_opp_dump)
 	fi
