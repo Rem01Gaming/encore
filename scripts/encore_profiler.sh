@@ -401,8 +401,8 @@ tensor_performance() {
 			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
 			apply "$mid_freq" "$gpu_path/scaling_min_freq"
 		else
-			mid_freq=$(which_minfreq "$gpu_path/available_frequencies")
-			apply "$mid_freq" "$gpu_path/scaling_min_freq"
+			min_freq=$(which_minfreq "$gpu_path/available_frequencies")
+			apply "$min_freq" "$gpu_path/scaling_min_freq"
 		fi
 	}
 
