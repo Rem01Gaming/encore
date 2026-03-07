@@ -18,6 +18,7 @@
 
 #include <DeviceMitigationStore.hpp>
 #include <Encore.hpp>
+#include <EncoreUtility.hpp>
 #include <EncoreConfigStore.hpp>
 #include <EncoreLog.hpp>
 #include <GameRegistry.hpp>

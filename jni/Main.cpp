@@ -352,7 +352,7 @@ static void encore_main_daemon() {
     pthread_setname_np(pthread_self(), "MainThread");
 
     while (true) {
-        if (daemon_stop_requested.load(std::memory_order_relaxed) [[unlikely]] {
+        if (daemon_stop_requested.load(std::memory_order_relaxed)) [[unlikely]] {
             break;
         }
 
