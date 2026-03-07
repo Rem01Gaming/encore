@@ -83,6 +83,5 @@ fi
 
 # Start Encore Daemon
 export CLASSPATH="$MODDIR/system_monitor.dex"
-app_process $MODDIR SystemMonitor
-
+nohup app_process "$MODDIR" SystemMonitor >/dev/null 2>&1 &
 encored daemon
