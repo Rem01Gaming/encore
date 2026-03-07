@@ -23,7 +23,7 @@
 #include <GameRegistry.hpp>
 #include <SystemStatus.hpp>
 
-// Forward declaration: signal_daemon_update is defined in Main.cpp
+// signal_daemon_update is defined in Main.cpp
 extern void signal_daemon_update();
 
 enum WatchContext {
@@ -60,7 +60,8 @@ void on_json_modified(const struct inotify_event *event, const std::string &path
     };
 
     auto OnSystemStatusModified = [&](const std::string &path) -> void {
-        LOGD_TAG("InotifyHandler", "Callback OnSystemStatusModified reached");
+        // Spammy log...
+        // LOGD_TAG("InotifyHandler", "Callback OnSystemStatusModified reached");
 
         SystemStatus status;
         if (SystemStatusReader::read(status, path.c_str())) {
