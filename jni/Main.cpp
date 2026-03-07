@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <atomic>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -49,7 +50,7 @@ GameRegistry game_registry;
 
 static constexpr auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
 static constexpr auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(7);
-static constexpr int POLL_TIMEOUT_MS = 50; // 50ms for responsive event handling
+static constexpr int POLL_TIMEOUT_MS = 50;
 
 static_assert(
     NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
@@ -62,12 +63,20 @@ static_assert(
 
 int system_status_event_fd = -1;
 
+std::atomic<bool> daemon_stop_requested{false};
+
 void signal_daemon_update() {
     if (system_status_event_fd >= 0) {
         uint64_t val = 1;
         ssize_t ret = write(system_status_event_fd, &val, sizeof(val));
         (void)ret; // Suppress unused warning
     }
+}
+
+void signal_daemon_stop() {
+    daemon_stop_requested.store(true, std::memory_order_relaxed);
+    // Wake the daemon poll loop immediately
+    signal_daemon_update();
 }
 
 // ---------------------------------------------------------------------------
@@ -343,10 +352,7 @@ static void encore_main_daemon() {
     pthread_setname_np(pthread_self(), "MainThread");
 
     while (true) {
-        // Module update check
-        if (access(MODULE_UPDATE, F_OK) == 0) [[unlikely]] {
-            LOGI("Module update detected, exiting");
-            notify("Please reboot your device to complete module update.");
+        if (daemon_stop_requested.load(std::memory_order_relaxed) [[unlikely]] {
             break;
         }
 
@@ -401,7 +407,7 @@ static void encore_main_daemon() {
         // Profile selection
         select_profile(state);
 
-        // Calculate timeout: use remaining time until next full check, or INGAME_LOOP_INTERVAL
+        // Use remaining time until next full check, or INGAME_LOOP_INTERVAL
         int poll_timeout_ms = POLL_TIMEOUT_MS;
         if (state.in_game_session) {
             poll_timeout_ms = static_cast<int>(INGAME_LOOP_INTERVAL.count());

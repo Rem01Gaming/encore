@@ -23,14 +23,16 @@
 #include <GameRegistry.hpp>
 #include <SystemStatus.hpp>
 
-// signal_daemon_update is defined in Main.cpp
+// signal_daemon_update and signal_daemon_stop are defined in Main.cpp
 extern void signal_daemon_update();
+extern void signal_daemon_stop();
 
 enum WatchContext {
     WATCH_CONTEXT_GAMELIST,
     WATCH_CONTEXT_CONFIG,
     WATCH_CONTEXT_DEVICE_MITIGATION,
     WATCH_CONTEXT_SYSTEM_STATUS,
+    WATCH_CONTEXT_MODULE_UPDATE,
 };
 
 void on_json_modified(const struct inotify_event *event, const std::string &path, int context, void *additional_data) {
@@ -72,6 +74,12 @@ void on_json_modified(const struct inotify_event *event, const std::string &path
         }
     };
 
+    auto OnModuleUpdateCreated = [&]() -> void {
+        LOGI_TAG("InotifyHandler", "Module update file detected, signaling daemon to stop");
+        notify("Please reboot your device to complete module update.");
+        signal_daemon_stop();
+    };
+
     // React immediately after the writer has closed the file
     if (event->mask & IN_CLOSE_WRITE) {
         switch (context) {
@@ -80,6 +88,13 @@ void on_json_modified(const struct inotify_event *event, const std::string &path
             case WATCH_CONTEXT_DEVICE_MITIGATION: OnDeviceMitigationModified(path); break;
             case WATCH_CONTEXT_SYSTEM_STATUS: OnSystemStatusModified(path); break;
             default: break;
+        }
+    }
+
+    // React when MODULE_UPDATE is created inside MODPATH directory
+    if ((event->mask & IN_CREATE) && context == WATCH_CONTEXT_MODULE_UPDATE) {
+        if (std::string(event->name) == "update") {
+            OnModuleUpdateCreated();
         }
     }
 }
@@ -118,6 +133,10 @@ bool init_file_watcher(InotifyWatcher &watcher) {
             SYSTEM_STATUS_FILE, on_json_modified, WATCH_CONTEXT_SYSTEM_STATUS, nullptr
         };
 
+        // Watch the module directory for creation of the "update" file.
+        // The file does not exist yet, so we must watch the parent directory.
+        InotifyWatcher::WatchReference module_update_ref{MODPATH, on_json_modified, WATCH_CONTEXT_MODULE_UPDATE, nullptr};
+
         if (!watcher.addFile(gamelist_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add gamelist watch");
             return false;
@@ -135,6 +154,11 @@ bool init_file_watcher(InotifyWatcher &watcher) {
 
         if (!watcher.addFile(system_status_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add system_status watch");
+            return false;
+        }
+
+        if (!watcher.addFile(module_update_ref)) {
+            LOGE_TAG("InotifyWatcher", "Failed to add module update watch");
             return false;
         }
 
