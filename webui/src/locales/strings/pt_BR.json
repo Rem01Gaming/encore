@@ -1,96 +1,175 @@
 {
-    "toast": {
-        "reboot_to_apply": "Reinicie o seu aparelho para aplicar as mudanças.",
-        "has_shortcut": "Atalho já existe."
+  "home_page": {
+    "title": "Encore Tweaks",
+
+    "status_card": {
+      "running": "Funcionando ✨",
+      "stopped": "Parado 💤",
+      "error": "Erro ~",
+      "daemonPID": "PID do Daemon: {pid}",
+      "daemon_inactive": "Serviço inativo",
+      "loading_daemon": "Um momento, por favor…"
     },
-    "home_page": {
-        "status_card": {
-            "running": "Funcionando ✨",
-            "stopped": "Parado 💤",
-            "daemon_inactive": "Serviço inativo",
-            "loading_daemon": "Só um momento, por favor…",
-            "error": "Erro ~",
-            "daemonPID": "Daemon PID: {pid}"
-        },
-        "support_button": {
-            "description": "O Encore Tweaks é, e sempre será, gratuito para você e para todos. No entanto, você pode demonstrar seu apoio fazendo uma doação.",
-            "title": "Apoie-me"
-        },
-        "learn_encore": {
-            "title": "Aprenda Encore",
-            "description": "Aprenda a usar o Encore Tweaks e suas funcionalidades."
-        },
-        "info_card": {
-            "profile": "Perfil atual",
-            "kernel": "Kernel",
-            "chipset": "Chipset",
-            "androidSDK": "Android SDK"
-        }
+
+    "info_card": {
+      "module": "Encore Tweaks",
+      "profile": "Perfil Atual",
+      "kernel": "Kernel",
+      "chipset": "Chipset",
+      "androidSDK": "SDK do Android"
     },
-    "games_page": {
-        "title": "Meus Jogos",
-        "search_placeholder": "Procurar aplicativos",
-        "no_apps_found": "Nenhum aplicativo encontrado",
-        "badges": {
-            "tweak_enabled": "Habilitado"
-        }
+
+    "support_button": {
+      "title": "Me Apoie",
+      "description": "O Encore Tweaks é, e sempre será, gratuito para você e todos. Você pode, no entanto, mostrar que se importa fazendo uma doação."
     },
-    "settings_page": {
-        "title": "Configurações",
-        "section": {
-            "preferences": "Preferências",
-            "system": "Sistema",
-            "others": "Outros"
-        },
-        "lite_mode": {
-            "description": "Ative o Modo Lite por padrão para todos os jogos",
-            "title": "Impor Modo Lite"
-        },
-        "language": {
-            "title": "Linguagem"
-        },
-        "device_mitigation": {
-            "title": "Mitigação de Dispositivos",
-            "description": "Corrija problemas específicos do dispositivo no Encore Tweaks"
-        },
-        "cpu_governor": {
-            "title": "Governador da CPU",
-            "description": "Personalize o governador da CPU por perfil"
-        },
-        "log_level": {
-            "title": "Nível de registro",
-            "description": "Escolha o nível de detalhamento do registro operacional do Encore Tweaks"
-        },
-        "save_log": {
-            "title": "Salvar Registros",
-            "description": "Registro operacional do Export Encore Tweaks"
-        },
-        "create_shortcut": {
-            "title": "Criar atalho",
-            "description": "Crie um atalho na tela inicial para acesso rápido ao Encore Tweaks"
-        }
-    },
-    "game_settings": {
-        "title": "Configurações dos Jogos",
-        "application": "Aplicativo",
-        "preferences": "Preferências",
-        "enable_tweaks": "Habilitar Tweaks",
-        "lite_mode": "Modo Lite",
-        "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo",
-        "dnd_mode": "Não incomodar",
-        "dnd_mode_description": "Bloqueie notificações e chamadas enquanto joga",
-        "launch_app": "Lançar",
-        "app_info": "Informações sodo aplicativo"
-    },
-    "language_selection": {
-        "title": "Linguagem",
-        "follow_system": "Seguir o sistema"
-    },
-    "log_level_selection": {
-        "title": "Nível de registro"
-    },
-    "lite_mode": {
-        "title": "Modo lite",
-        "toggle_title": "Impor o modo leve"
+
+    "learn_encore": {
+      "title": "Aprenda Encore",
+      "description": "Aprenda como usar o Encore Tweaks e seus recursos."
     }
+  },
+
+  "games_page": {
+    "title": "Meus Jogos",
+    "search_placeholder": "Pesquisar apps",
+    "no_apps_found": "Nenhum app encontrado",
+
+    "badges": {
+      "tweak_enabled": "Ativado"
+    }
+  },
+
+  "settings_page": {
+    "title": "Configurações",
+
+    "section": {
+      "preferences": "Preferências",
+      "system": "Sistema",
+      "others": "Outros"
+    },
+
+    "lite_mode": {
+      "title": "Forçar Modo Leve",
+      "description": "Ativar Modo Leve por padrão para todos os jogos"
+    },
+
+    "language": {
+      "title": "Idioma"
+    },
+
+    "device_mitigation": {
+      "title": "Mitigação do Dispositivo",
+      "description": "Mitigar problemas específicos do dispositivo no Encore Tweaks"
+    },
+
+    "cpu_governor": {
+      "title": "Governador da CPU",
+      "description": "Personalize o governador da CPU por perfil"
+    },
+
+    "log_level": {
+      "title": "Nível de Log",
+      "description": "Escolha quão detalhado deve ser o log operacional do Encore Tweaks"
+    },
+
+    "save_log": {
+      "title": "Salvar Log",
+      "description": "Exportar log operacional do Encore Tweaks"
+    },
+
+    "create_shortcut": {
+      "title": "Criar Atalho",
+      "description": "Criar um atalho na tela inicial para acesso rápido ao Encore Tweaks"
+    }
+  },
+
+  "game_settings": {
+    "title": "Configurações do Jogo",
+    "application": "Aplicativo",
+    "preferences": "Preferências",
+    "enable_tweaks": "Ativar Tweaks",
+    "lite_mode": "Modo Leve",
+    "lite_mode_description": "Otimiza para maior duração da bateria em vez de desempenho máximo",
+    "dnd_mode": "Não Perturbe",
+    "dnd_mode_description": "Bloquear notificações e chamadas durante o jogo",
+    "launch_app": "Abrir",
+    "app_info": "Informações do app"
+  },
+
+  "language_selection": {
+    "title": "Idioma",
+    "follow_system": "Seguir o sistema"
+  },
+
+  "log_level_selection": {
+    "title": "Nível de Log",
+    "level_0": "Crítico",
+    "level_1": "Erro",
+    "level_2": "Aviso",
+    "level_3": "Informação",
+    "level_4": "Depuração",
+    "level_5": "Rastreamento"
+  },
+
+  "lite_mode": {
+    "title": "Modo Leve",
+    "toggle_title": "Forçar modo leve",
+    "brief": "O modo leve reduz superaquecimento e consumo de energia durante o jogo, diminuindo as frequências da CPU e dos componentes. Esta configuração se aplica a todos os jogos quando ativada."
+  },
+
+  "device_mitigation": {
+    "title": "Mitigação do Dispositivo",
+    "toggle_title": "Ativar mitigação de dispositivo",
+    "brief": "A mitigação de dispositivo desativa tweaks potencialmente incompatíveis para dispositivos específicos. Mantenha desativado a menos que você tenha problemas."
+  },
+
+  "cpu_governor": {
+    "title": "Governador da CPU",
+    "default_title": "Governador de CPU Padrão",
+    "default_description": "Aplicado aos perfis balanceado e desempenho quando o modo leve está ativo",
+    "powersave_title": "Governador de CPU Economizador",
+    "powersave_description": "Usado exclusivamente para o perfil de economia de energia",
+    "brief": "O governador da CPU é um algoritmo que ajusta dinamicamente a frequência do processador em tempo real, afetando diretamente o desempenho do sistema e o consumo de energia.",
+    "modal": {
+      "default_select_title": "Selecionar Governador de CPU Padrão",
+      "powersave_select_title": "Selecionar Governador de CPU Economizador",
+      "performance_warning": "Configurar o governador para desempenho causará superaquecimento e consumo rápido da bateria. Tem certeza que deseja continuar?",
+      "performance_warning_confirm": "Entendo, Aplicar",
+      "initial_warn": "Observe que o Encore Tweaks configurou automaticamente o governador de CPU ideal. Alterações manuais não são recomendadas a menos que você seja um usuário avançado.",
+      "initial_warn_checkbox": "Não mostrar novamente"
+    }
+  },
+
+  "profiles": {
+    "initializing": "Inicializando",
+    "balanced": "Balanceado",
+    "powersave": "Economia de Energia",
+    "performance": "Desempenho"
+  },
+
+  "toast": {
+    "reboot_to_apply": "Reinicie seu dispositivo para aplicar as alterações.",
+    "has_shortcut": "Atalho já existe.",
+    "shortcut_unavailable": "Nenhuma API disponível para este recurso, use o WebUI X para usar este recurso.",
+    "failed_open_extrenal_browser": "Falha ao abrir o navegador externo.",
+    "success_save_log": "Logs salvos com sucesso em {path}",
+    "failed_save_log": "Falha ao salvar os logs."
+  },
+
+  "navigation": {
+    "home": "Início",
+    "games": "Jogos",
+    "settings": "Configurações"
+  },
+
+  "common": {
+    "loading": "Carregando",
+    "unknown": "Desconhecido",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "cancel": "Cancelar",
+    "warning": "Aviso",
+    "ok": "Ok"
+  }
 }
