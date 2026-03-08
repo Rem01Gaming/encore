@@ -4,7 +4,8 @@
         "has_shortcut": "الإختصار موجود بالفعل.",
         "shortcut_unavailable": "لا يوجد API متاح لتلك الميزة، استخدم WebUI X لاستخدام تلك الميزة.",
         "failed_open_extrenal_browser": "فشل في فتح متصفح خارجي.",
-        "failed_save_log": "فشل في حفظ السجلات."
+        "failed_save_log": "فشل في حفظ السجلات.",
+        "success_save_log": "تم حفظ السجلات بنجاح في {path}"
     },
     "home_page": {
         "status_card": {
@@ -81,7 +82,9 @@
         "lite_mode": "الوضع البسيط",
         "lite_mode_description": "تحسين لعمر بطارية أطول مقابل اقصى أداء",
         "dnd_mode": "عدم الإزعاج",
-        "dnd_mode_description": "منع المكالمات و الإشعارات عند اللعب"
+        "dnd_mode_description": "منع المكالمات و الإشعارات عند اللعب",
+        "launch_app": "‬يطلق",
+        "app_info": "معلومات التطبيق"
     },
     "language_selection": {
         "title": "اللغة",
@@ -109,7 +112,11 @@
         "brief": "وضعية المعالج هي خوارزمية تقوم بتعديل ترددات المعالج في الوقت الحقيقي، يقوم بالتأثير على أداء النظام و استهلاك الطاقة.",
         "modal": {
             "default_select_title": "اختر وضع المعالج الافتراضي",
-            "powersave_select_title": "اختر وضعية المعالج Powersave"
+            "powersave_select_title": "اختر وضعية المعالج Powersave",
+            "performance_warning": "ضبط منظم السرعة على وضع الأداء العالي سيؤدي إلى ارتفاع درجة الحرارة واستنزاف البطارية بسرعة. هل أنت متأكد من رغبتك في المتابعة؟",
+            "performance_warning_confirm": "أفهم، قدم طلبك",
+            "initial_warn": "يرجى ملاحظة أن برنامج Encore Tweaks قد قام تلقائيًا بضبط مُتحكم وحدة المعالجة المركزية الأمثل. لا يُنصح بإجراء تغييرات يدوية إلا إذا كنت مستخدمًا متقدمًا.",
+            "initial_warn_checkbox": "لا تعرض هذا مرة أخرى"
         }
     },
     "profiles": {
@@ -128,6 +135,8 @@
         "unknown": "غير معروف",
         "enabled": "مُفعَّل",
         "disabled": "مُعطَّل",
-        "cancel": "إلغاء"
+        "cancel": "إلغاء",
+        "warning": "تحذير",
+        "ok": "تمام"
     }
 }
