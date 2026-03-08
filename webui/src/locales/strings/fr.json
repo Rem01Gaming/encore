@@ -1,0 +1,150 @@
+{
+  "home_page": {
+    "title": "Encore Tweaks",
+    "status_card": {
+      "running": "Fonctionne ✨",
+      "stopped": "Arrêté 💤",
+      "error": "Erreur ~",
+      "daemonPID": "PID du Daemon : {pid}",
+      "daemon_inactive": "Service inactif",
+      "loading_daemon": "Un instant, s'il vous plaît…"
+    },
+    "info_card": {
+      "module": "Encore Tweaks",
+      "profile": "Profil actuel",
+      "kernel": "Kernel",
+      "chipset": "Chipset",
+      "androidSDK": "SDK Android"
+    },
+    "support_button": {
+      "title": "Soutenez-moi",
+      "description": "Encore Tweaks est et restera gratuit pour tous. Vous pouvez toutefois montrer votre soutien en faisant un don."
+    },
+    "learn_encore": {
+      "title": "Apprendre Encore",
+      "description": "Apprenez à utiliser Encore Tweaks et ses fonctionnalités."
+    }
+  },
+  "games_page": {
+    "title": "Mes Jeux",
+    "search_placeholder": "Rechercher des applications",
+    "no_apps_found": "Aucune application trouvée",
+    "badges": {
+      "tweak_enabled": "Activé"
+    }
+  },
+  "settings_page": {
+    "title": "Paramètres",
+    "section": {
+      "preferences": "Préférences",
+      "system": "Système",
+      "others": "Autres"
+    },
+    "lite_mode": {
+      "title": "Activer le Mode Lite",
+      "description": "Activer le Mode Lite par défaut pour tous les jeux"
+    },
+    "language": {
+      "title": "Langue"
+    },
+    "device_mitigation": {
+      "title": "Atténuation du périphérique",
+      "description": "Corrigez les problèmes spécifiques à votre appareil dans Encore Tweaks"
+    },
+    "cpu_governor": {
+      "title": "Gouverneur CPU",
+      "description": "Personnalisez le gouverneur CPU par profil"
+    },
+    "log_level": {
+      "title": "Niveau de log",
+      "description": "Choisissez le niveau de détail du journal opérationnel d'Encore Tweaks"
+    },
+    "save_log": {
+      "title": "Enregistrer le log",
+      "description": "Exporter les logs opérationnels d'Encore Tweaks"
+    },
+    "create_shortcut": {
+      "title": "Créer un raccourci",
+      "description": "Créez un raccourci sur l'écran d'accueil pour un accès rapide à Encore Tweaks"
+    }
+  },
+  "game_settings": {
+    "title": "Paramètres du Jeu",
+    "application": "Application",
+    "preferences": "Préférences",
+    "enable_tweaks": "Activer les Tweaks",
+    "lite_mode": "Mode Lite",
+    "lite_mode_description": "Priorise la durée de la batterie plutôt que les performances maximales",
+    "dnd_mode": "Ne pas déranger",
+    "dnd_mode_description": "Bloque les notifications et appels pendant le jeu",
+    "launch_app": "Lancer",
+    "app_info": "Infos de l'application"
+  },
+  "language_selection": {
+    "title": "Langue",
+    "follow_system": "Suivre le système"
+  },
+  "log_level_selection": {
+    "title": "Niveau de log",
+    "level_0": "Critique",
+    "level_1": "Erreur",
+    "level_2": "Avertissement",
+    "level_3": "Info",
+    "level_4": "Débogage",
+    "level_5": "Trace"
+  },
+  "lite_mode": {
+    "title": "Mode Lite",
+    "toggle_title": "Activer le Mode Lite",
+    "brief": "Le Mode Lite réduit la surchauffe et la consommation d'énergie pendant le jeu en diminuant la fréquence du CPU et des composants. Ce réglage s'applique à tous les jeux lorsqu'il est activé."
+  },
+  "device_mitigation": {
+    "title": "Atténuation du périphérique",
+    "toggle_title": "Activer l'atténuation du périphérique",
+    "brief": "L'atténuation du périphérique désactive les tweaks potentiellement incompatibles pour certains appareils. Gardez-le désactivé sauf en cas de problème."
+  },
+  "cpu_governor": {
+    "title": "Gouverneur CPU",
+    "default_title": "Gouverneur par défaut",
+    "default_description": "Appliqué aux profils Balanced et Performance lorsque le Mode Lite est actif",
+    "powersave_title": "Gouverneur Powersave",
+    "powersave_description": "Utilisé exclusivement pour le profil Powersave",
+    "brief": "Le gouverneur CPU est un algorithme qui ajuste dynamiquement la fréquence du processeur en temps réel, affectant directement les performances et la consommation d'énergie.",
+    "modal": {
+      "default_select_title": "Sélectionner le gouverneur par défaut",
+      "powersave_select_title": "Sélectionner le gouverneur Powersave",
+      "performance_warning": "Définir le gouverneur sur Performance peut entraîner une surchauffe et une décharge rapide de la batterie. Voulez-vous continuer ?",
+      "performance_warning_confirm": "Je comprends, Appliquer",
+      "initial_warn": "Encore Tweaks a configuré automatiquement le gouverneur CPU optimal. Les modifications manuelles ne sont pas recommandées sauf si vous êtes un utilisateur avancé.",
+      "initial_warn_checkbox": "Ne plus afficher"
+    }
+  },
+  "profiles": {
+    "initializing": "Initialisation",
+    "balanced": "Balanced",
+    "powersave": "Économie d'énergie",
+    "performance": "Performance"
+  },
+  "toast": {
+    "reboot_to_apply": "Redémarrez votre appareil pour appliquer les modifications.",
+    "has_shortcut": "Le raccourci existe déjà.",
+    "shortcut_unavailable": "Aucune API disponible pour cette fonctionnalité, utilisez WebUI X pour y accéder.",
+    "failed_open_extrenal_browser": "Impossible d'ouvrir le navigateur externe.",
+    "success_save_log": "Logs enregistrés avec succès à {path}",
+    "failed_save_log": "Échec de l'enregistrement des logs."
+  },
+  "navigation": {
+    "home": "Accueil",
+    "games": "Jeux",
+    "settings": "Paramètres"
+  },
+  "common": {
+    "loading": "Chargement",
+    "unknown": "Inconnu",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "cancel": "Annuler",
+    "warning": "Avertissement",
+    "ok": "Ok"
+  }
+}
