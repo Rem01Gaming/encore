@@ -5,7 +5,7 @@
             "stopped": "중지됨 💤",
             "error": "오류 ~",
             "daemonPID": "데몬 PID: {pid}",
-            "daemon_inactive": "서비스 비활성",
+            "daemon_inactive": "서비스 비활성화됨",
             "loading_daemon": "잠시만 기다려 주세요…"
         },
         "info_card": {
@@ -17,10 +17,21 @@
         "support_button": {
             "title": "후원하기",
             "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
+        },
+        "learn_encore": {
+            "title": "배우다 Encore"
         }
     },
     "game_settings": {
-        "dnd_mode_description": "게임 중 알림과 전화 차단"
+        "dnd_mode_description": "게임 중 알림과 전화 차단",
+        "title": "게임 설정",
+        "application": "애플리케이션",
+        "preferences": "환경설정",
+        "enable_tweaks": "트윅 활성화",
+        "lite_mode": "라이트 모드",
+        "dnd_mode": "방해하지 마세요",
+        "launch_app": "시작하다",
+        "app_info": "앱 정보"
     },
     "language_selection": {
         "title": "언어",
@@ -28,5 +39,86 @@
     },
     "log_level_selection": {
         "title": "로그 수준"
+    },
+    "games_page": {
+        "title": "내 게임",
+        "search_placeholder": "앱 검색",
+        "no_apps_found": "앱을 찾을 수 없습니다",
+        "badges": {
+            "tweak_enabled": "활성화됨"
+        }
+    },
+    "settings_page": {
+        "title": "설정",
+        "section": {
+            "preferences": "환경설정",
+            "system": "체계",
+            "others": "기타"
+        },
+        "lite_mode": {
+            "title": "라이트 모드 강제 적용"
+        },
+        "language": {
+            "title": "언어"
+        },
+        "device_mitigation": {
+            "title": "장치 완화"
+        },
+        "cpu_governor": {
+            "title": "CPU 거버너"
+        },
+        "log_level": {
+            "title": "로그 레벨"
+        },
+        "save_log": {
+            "title": "저장 로그"
+        },
+        "create_shortcut": {
+            "title": "바로가기 만들기"
+        }
+    },
+    "lite_mode": {
+        "title": "라이트 모드",
+        "toggle_title": "라이트 모드 적용"
+    },
+    "device_mitigation": {
+        "title": "장치 완화",
+        "toggle_title": "장치 완화 기능을 활성화합니다"
+    },
+    "cpu_governor": {
+        "title": "CPU 거버너",
+        "default_title": "기본 CPU 거버너",
+        "powersave_title": "절전형 CPU 거버너",
+        "modal": {
+            "default_select_title": "기본 CPU 거버너 선택",
+            "powersave_select_title": "절전형 CPU 거버너를 선택하세요",
+            "performance_warning_confirm": "이해했습니다. 지원하세요",
+            "initial_warn_checkbox": "이 메시지를 다시 표시하지 마세요"
+        }
+    },
+    "profiles": {
+        "initializing": "초기화 중",
+        "balanced": "균형 잡힌",
+        "powersave": "절전 모드",
+        "performance": "성능"
+    },
+    "toast": {
+        "has_shortcut": "바로가기가 이미 존재합니다.",
+        "success_save_log": "로그가 {path} 에 성공적으로 저장되었습니다",
+        "failed_save_log": "로그 저장에 실패했습니다."
+    },
+    "navigation": {
+        "home": "집",
+        "games": "계략",
+        "settings": "설정"
+    },
+    "common": {
+        "loading": "로딩 중",
+        "unknown": "알려지지 않은",
+        "enabled": "활성화됨",
+        "disabled": "장애가 있는",
+        "cancel": "취소",
+        "warning": "경고",
+        "ok": "좋아요"
     }
 }
