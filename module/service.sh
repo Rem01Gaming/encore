@@ -40,7 +40,6 @@ while [ -z "$(getprop sys.boot_completed)" ]; do
 done
 
 # Handle case when 'default_gov' is performance
-# Skip this routine if custom_default_cpu_gov is defined
 default_gov_preferred_array="
 scx
 schedhorizon
@@ -56,7 +55,7 @@ conservative
 powersave
 "
 
-if [ "$default_gov" == "performance" ] && [ ! -f $MODULE_CONFIG/custom_default_cpu_gov ]; then
+if [ "$default_gov" == "performance" ]; then
 	for gov in $default_gov_preferred_array; do
 		grep -q "$gov" "$CPUFREQ/scaling_available_governors" && {
 			echo "$gov" >$MODULE_CONFIG/default_cpu_gov
@@ -67,10 +66,7 @@ if [ "$default_gov" == "performance" ] && [ ! -f $MODULE_CONFIG/custom_default_c
 fi
 
 # Revert to normal CPU governor
-custom_gov="$MODULE_CONFIG/custom_default_cpu_gov"
-[ -f "$custom_gov" ] && default_gov=$(cat "$custom_gov")
 echo "$default_gov" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-[ ! -f $MODULE_CONFIG/powersave_cpu_gov ] && echo "$default_gov" >$MODULE_CONFIG/powersave_cpu_gov
 
 # Mitigate buggy thermal throttling on post-startup
 # in old MediaTek devices.
