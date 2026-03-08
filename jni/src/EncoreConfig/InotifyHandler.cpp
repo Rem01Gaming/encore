@@ -158,7 +158,7 @@ bool init_file_watcher(InotifyWatcher &watcher) {
             return false;
         }
 
-        if (!watcher.addFile(module_update_ref)) {
+        if (!watcher.addDirectory(module_update_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add module update watch");
             return false;
         }
