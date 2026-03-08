@@ -202,13 +202,10 @@ bool is_dnd_enabled() {
 
 /**
  * @brief Pull the latest system-status snapshot from the inotify-fed cache.
- *
- * Returns true as long as at least one snapshot has been written by
- * SystemMonitor.java.  The function is non-blocking and never spawns a shell.
  */
 [[nodiscard]] static bool refresh_system_status(DaemonState &state) {
     if (!system_status_cache.get(state.system_status)) {
-        LOGW_TAG("SystemStatus", "Cache not yet populated — waiting for SystemMonitor");
+        LOGW_TAG("SystemStatus", "Cache not yet populated, waiting for SystemMonitor");
         return false;
     }
 
@@ -460,6 +457,11 @@ int run_daemon() {
 
     if (!create_lock_file()) {
         std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n";
+        return EXIT_FAILURE;
+    }
+
+    if (access(MODULE_UPDATE, F_OK) == 0) {
+        notify("Please reboot your device to complete module update.");
         return EXIT_FAILURE;
     }
 
