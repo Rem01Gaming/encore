@@ -85,6 +85,7 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
     write2file(PROFILE_MODE, static_cast<int>(PERFORMANCE_PROFILE), "\n");
 
     if (lite_mode) {
+        LOGD("Lite mode is enabled");
         if (system("encore_profiler performance_lite") != 0) {
             LOGE("Unable to execute profiler changes to performance_lite");
         }
