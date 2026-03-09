@@ -19,7 +19,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
 
@@ -103,7 +102,6 @@ public class SystemMonitor {
 
     private static void setupSystemContext() {
         try {
-            Looper.prepare();
             Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
             Object thread = activityThreadClass.getMethod("systemMain").invoke(null);
             systemContext = (Context) activityThreadClass.getMethod("getSystemContext").invoke(thread);
