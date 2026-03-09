@@ -1,4 +1,4 @@
-name: Build Encore Zip
+name: Build Encore Tweaks
 
 on:
   pull_request:
@@ -30,26 +30,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
 
       - name: NDK Setup
-        uses: nttld/setup-ndk@v1.5.0
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r29
 
-      - name: Set up JDK
+      - name: JDK Setup
         uses: actions/setup-java@v5
         with:
           java-version: "17"
           distribution: "temurin"
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2.0.2
+      - name: Bun Setup
+        uses: oven-sh/setup-bun@v2
 
-      - name: Build Encore JNI
+      - name: Build Encore Daemon
         run: ndk-build -j$(nproc --all)
 
       - name: Compile Java
@@ -74,7 +74,7 @@ jobs:
         run: bash .github/scripts/compile_zip.sh
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v4
         with:
           name: encore-build
           path: ${{ steps.compileZip.outputs.zipName }}

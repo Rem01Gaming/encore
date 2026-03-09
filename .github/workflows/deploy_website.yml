@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/deploy-website.yml'
+      - '.github/workflows/deploy_website.yml'
       - 'website/**'
   workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
