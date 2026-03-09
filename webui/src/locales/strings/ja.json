@@ -11,9 +11,9 @@
         "status_card": {
             "daemon_inactive": "サービスが停止中",
             "loading_daemon": "ちょっとお待ちください…",
-            "running": "仕事中",
-            "stopped": "停止💤",
-            "error": "エラー ~",
+            "running": "稼働中 ✨",
+            "stopped": "停止中 💤",
+            "error": "エラー発生 ~",
             "daemonPID": "デーモン PID: {pid}"
         },
         "info_card": {
@@ -23,19 +23,19 @@
             "androidSDK": "Android SDK"
         },
         "support_button": {
-            "title": "支援してね",
-            "description": "Encore Tweaks は、これからもずっと、あなたとすべての人にとって無料です。もしよろしければ、寄付をしていただけると嬉しいです。"
+            "title": "開発者を支援",
+            "description": "Encore Tweaksは、現在も、そしてこれからもずっと、あなたとすべての人にとって無料です。もしよろしければ、寄付を通じて開発を応援していただけると幸いです。"
         },
         "learn_encore": {
-            "title": "学ぶ Encore",
-            "description": "Encore Tweaks とその機能の使い方を学びます。"
+            "title": "Encoreについて学ぶ",
+            "description": "Encore Tweaks の使い方と各機能について学びましょう。"
         }
     },
     "settings_page": {
         "title": "設定",
         "section": {
             "system": "システム",
-            "preferences": "設定",
+            "preferences": "環境設定",
             "others": "その他"
         },
         "language": {
@@ -50,12 +50,12 @@
             "description": "Encore Tweaks に素早くアクセスするためのホーム画面ショートカットを作成します"
         },
         "lite_mode": {
-            "title": "ライトモードを強制する",
-            "description": "すべてのゲームでライトモードをデフォルトで有効にする"
+            "title": "Liteモードを強制",
+            "description": "すべてのゲームでLiteモードをデフォルトで有効にする"
         },
         "device_mitigation": {
             "title": "デバイスの緩和",
-            "description": "Encore Tweaks のデバイス固有の問題を軽減する"
+            "description": "Encore Tweaksにおけるデバイス固有の問題を軽減する"
         },
         "cpu_governor": {
             "title": "CPUガバナー",
@@ -84,11 +84,11 @@
     },
     "games_page": {
         "badges": {
-            "tweak_enabled": "有効化"
+            "tweak_enabled": "有効化済み"
         },
         "search_placeholder": "アプリ検索",
         "no_apps_found": "アプリが見つかりませんでした",
-        "title": "私のゲーム"
+        "title": "マイゲーム"
     },
     "log_level_selection": {
         "title": "ログレベル"
