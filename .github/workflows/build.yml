@@ -58,8 +58,13 @@ jobs:
           ANDROID_JAR="$ANDROID_HOME/platforms/android-34/android.jar"
           BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
           D8_TOOL="$BUILD_TOOLS_DIR/d8"
-          javac -cp "$ANDROID_JAR" SystemMonitor.java
-          "$D8_TOOL" SystemMonitor.class --lib "$ANDROID_JAR" --output .
+
+          curl -fsSL "https://repo1.maven.org/maven2/org/lsposed/hiddenapibypass/hiddenapibypass/4.3/hiddenapibypass-4.3.aar" -o hiddenapibypass.aar
+          unzip -j hiddenapibypass.aar classes.jar -d .
+          mv classes.jar hiddenapibypass.jar
+
+          javac -cp "$ANDROID_JAR:hiddenapibypass.jar" SystemMonitor.java
+          "$D8_TOOL" SystemMonitor.class hiddenapibypass.jar --lib "$ANDROID_JAR" --output .
           mv classes.dex system_monitor.dex
 
       - name: Build WebUI

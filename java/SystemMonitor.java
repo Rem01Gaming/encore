@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -72,8 +74,8 @@ public class SystemMonitor {
     // -------------------------------------------------------------------------
 
     public static void main(String[] args) {
-        setupSystemContext();
         bypassHiddenApiRestrictions();
+        setupSystemContext();
 
         if (!initializeServices()) {
             System.err.println("Failed to initialize services, exiting.");
@@ -113,14 +115,7 @@ public class SystemMonitor {
     }
 
     private static void bypassHiddenApiRestrictions() {
-        try {
-            Class<?> vmRuntime = Class.forName("dalvik.system.VMRuntime");
-            Object runtime = vmRuntime.getDeclaredMethod("getRuntime").invoke(null);
-            Method setExemptions = vmRuntime.getDeclaredMethod("setHiddenApiExemptions", String[].class);
-            setExemptions.invoke(runtime, new Object[]{new String[]{"L"}});
-        } catch (Exception e) {
-            System.err.println("Failed to bypass hidden API restrictions: " + e.getMessage());
-        }
+        HiddenApiBypass.addHiddenApiExemptions("");
     }
 
     private static boolean initializeServices() {
@@ -144,7 +139,14 @@ public class SystemMonitor {
     private static void initNotificationManager() throws Exception {
         IBinder binder = getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager = bindInterface("android.app.INotificationManager$Stub", binder);
-        getZenModeMethod = notificationManager.getClass().getMethod("getZenMode");
+        for (Object member : HiddenApiBypass.getDeclaredMethods(notificationManager.getClass())) {
+            if (!(member instanceof Method)) continue;
+            Method m = (Method) member;
+            if (m.getName().equals("getZenMode") && m.getParameterTypes().length == 0) {
+                getZenModeMethod = m;
+                break;
+            }
+        }
     }
 
     private static String resolveAtmServiceName() {
@@ -170,7 +172,9 @@ public class SystemMonitor {
 
     private static Method findForegroundMethod(Object atm) {
         List<String> candidates = Arrays.asList(FOREGROUND_METHOD_CANDIDATES);
-        for (Method method : atm.getClass().getDeclaredMethods()) {
+        for (Object member : HiddenApiBypass.getDeclaredMethods(atm.getClass())) {
+            if (!(member instanceof Method)) continue;
+            Method method = (Method) member;
             if (candidates.contains(method.getName())) {
                 method.setAccessible(true);
                 return method;
@@ -358,7 +362,9 @@ public class SystemMonitor {
 
     private static Object bruteForceForegroundMethod() {
         try {
-            for (Method method : activityTaskManager.getClass().getDeclaredMethods()) {
+            for (Object member : HiddenApiBypass.getDeclaredMethods(activityTaskManager.getClass())) {
+                if (!(member instanceof Method)) continue;
+                Method method = (Method) member;
                 String nameLower = method.getName().toLowerCase();
                 if (!nameLower.contains("focus") && !nameLower.contains("top") && !nameLower.contains("task")) {
                     continue;
@@ -418,7 +424,9 @@ public class SystemMonitor {
     private static ComponentName scanHierarchyForComponentName(Object obj) {
         Class<?> cls = obj.getClass();
         while (cls != null && cls != Object.class) {
-            for (Field field : cls.getDeclaredFields()) {
+            for (Object member : HiddenApiBypass.getInstanceFields(cls)) {
+                if (!(member instanceof Field)) continue;
+                Field field = (Field) member;
                 try {
                     field.setAccessible(true);
                     Object value = field.get(obj);
@@ -441,7 +449,9 @@ public class SystemMonitor {
         }
 
         try {
-            for (Field field : obj.getClass().getDeclaredFields()) {
+            for (Object member : HiddenApiBypass.getInstanceFields(obj.getClass())) {
+                if (!(member instanceof Field)) continue;
+                Field field = (Field) member;
                 if (!field.getType().equals(String.class)) continue;
                 try {
                     field.setAccessible(true);
