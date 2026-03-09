@@ -43,7 +43,7 @@ jobs:
       - name: JDK Setup
         uses: actions/setup-java@v5
         with:
-          java-version: "17"
+          java-version: "25"
           distribution: "temurin"
 
       - name: Bun Setup
@@ -55,7 +55,7 @@ jobs:
       - name: Compile Java
         working-directory: java
         run: |
-          ANDROID_JAR="$ANDROID_HOME/platforms/android-34/android.jar"
+          ANDROID_JAR="$ANDROID_HOME/platforms/android-26/android.jar"
           BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
           D8_TOOL="$BUILD_TOOLS_DIR/d8"
           javac -cp "$ANDROID_JAR" SystemMonitor.java
