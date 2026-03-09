@@ -1,54 +1,142 @@
 {
     "toast": {
         "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
-        "has_shortcut": "ショートカットは既に存在します。"
+        "has_shortcut": "ショートカットは既に存在します。",
+        "shortcut_unavailable": "この機能には使用できる API がありません。この機能を使用するには、WebUI X を使用してください。",
+        "failed_open_extrenal_browser": "外部ブラウザを開けませんでした。",
+        "success_save_log": "ログは {path} に正常に保存されました",
+        "failed_save_log": "ログの保存に失敗しました。"
     },
     "home_page": {
         "status_card": {
             "daemon_inactive": "サービスが停止中",
             "loading_daemon": "ちょっとお待ちください…",
-            "running": "仕事中",
-            "stopped": "停止💤",
-            "error": "エラー ~",
+            "running": "稼働中 ✨",
+            "stopped": "停止中 💤",
+            "error": "エラー発生 ~",
             "daemonPID": "デーモン PID: {pid}"
         },
         "info_card": {
             "profile": "現在のプロフィール",
             "chipset": "チップセット",
-            "kernel": "カーネル"
+            "kernel": "カーネル",
+            "androidSDK": "Android SDK"
         },
         "support_button": {
-            "title": "支援してね"
+            "title": "開発者を支援",
+            "description": "Encore Tweaksは、現在も、そしてこれからもずっと、あなたとすべての人にとって無料です。もしよろしければ、寄付を通じて開発を応援していただけると幸いです。"
+        },
+        "learn_encore": {
+            "title": "Encoreについて学ぶ",
+            "description": "Encore Tweaks の使い方と各機能について学びましょう。"
         }
     },
     "settings_page": {
         "title": "設定",
         "section": {
-            "system": "システム"
+            "system": "システム",
+            "preferences": "環境設定",
+            "others": "その他"
         },
         "language": {
             "title": "言語"
         },
         "save_log": {
-            "title": "保存ログ"
+            "title": "保存ログ",
+            "description": "Encore Tweaks 操作ログをエクスポート"
         },
         "create_shortcut": {
-            "title": "ショートカット作成"
+            "title": "ショートカット作成",
+            "description": "Encore Tweaks に素早くアクセスするためのホーム画面ショートカットを作成します"
+        },
+        "lite_mode": {
+            "title": "Liteモードを強制",
+            "description": "すべてのゲームでLiteモードをデフォルトで有効にする"
+        },
+        "device_mitigation": {
+            "title": "デバイスの緩和",
+            "description": "Encore Tweaksにおけるデバイス固有の問題を軽減する"
+        },
+        "cpu_governor": {
+            "title": "CPUガバナー",
+            "description": "プロファイルごとにCPUガバナーをカスタマイズ"
+        },
+        "log_level": {
+            "title": "ログレベル",
+            "description": "Encore Tweaks の操作ログの詳細度を選択します"
         }
     },
     "game_settings": {
         "title": "ゲーム設定",
         "dnd_mode_description": "ゲーム中は通知と電話をブロック",
-        "app_info": "アプリ情報"
+        "app_info": "アプリ情報",
+        "application": "応用",
+        "preferences": "設定",
+        "enable_tweaks": "調整を有効にする",
+        "lite_mode": "ライトモード",
+        "lite_mode_description": "ピークパフォーマンスよりもバッテリー寿命を延ばすために最適化",
+        "dnd_mode": "邪魔しないでください",
+        "launch_app": "打ち上げ"
     },
     "language_selection": {
-        "title": "言語"
+        "title": "言語",
+        "follow_system": "フォローシステム"
     },
     "games_page": {
         "badges": {
-            "tweak_enabled": "有効化"
+            "tweak_enabled": "有効化済み"
         },
         "search_placeholder": "アプリ検索",
-        "no_apps_found": "アプリが見つかりませんでした"
+        "no_apps_found": "アプリが見つかりませんでした",
+        "title": "マイゲーム"
+    },
+    "log_level_selection": {
+        "title": "ログレベル"
+    },
+    "lite_mode": {
+        "title": "ライトモード",
+        "toggle_title": "ライトモードを強制する",
+        "brief": "ライトモードは、CPUとコンポーネントの周波数を下げることで、ゲームプレイ中の過熱と消費電力を軽減します。この設定を有効にすると、すべてのゲームに適用されます。"
+    },
+    "device_mitigation": {
+        "title": "デバイスの緩和",
+        "toggle_title": "デバイスの軽減を有効にする",
+        "brief": "デバイス緩和機能は、特定のデバイスで互換性がない可能性のある調整を無効にします。問題が発生しない限り、無効にしておいてください。"
+    },
+    "cpu_governor": {
+        "title": "CPUガバナー",
+        "default_title": "デフォルトのCPUガバナー",
+        "default_description": "ライトモードがアクティブな場合、バランスおよびパフォーマンスプロファイルに適用されます",
+        "powersave_title": "省電力CPUガバナー",
+        "powersave_description": "省電力プロファイル専用",
+        "brief": "CPU ガバナーは、プロセッサの周波数をリアルタイムで動的に調整し、システムのパフォーマンスと電力消費に直接影響を与えるアルゴリズムです。",
+        "modal": {
+            "default_select_title": "デフォルトのCPUガバナーを選択",
+            "powersave_select_title": "省電力CPUガバナーを選択",
+            "performance_warning": "ガバナーをパフォーマンスに設定すると、過熱してバッテリーが急速に消耗します。続行してもよろしいですか？",
+            "performance_warning_confirm": "了解しました。応募する",
+            "initial_warn": "Encore TweaksはCPUガバナーを最適な値に自動設定します。上級ユーザーでない限り、手動での変更はお勧めしません。",
+            "initial_warn_checkbox": "今後表示しない"
+        }
+    },
+    "profiles": {
+        "initializing": "初期化中",
+        "balanced": "バランスの取れた",
+        "powersave": "省電力",
+        "performance": "パフォーマンス"
+    },
+    "navigation": {
+        "home": "家",
+        "games": "ゲーム",
+        "settings": "設定"
+    },
+    "common": {
+        "loading": "読み込み中",
+        "unknown": "未知",
+        "enabled": "有効",
+        "disabled": "無効",
+        "cancel": "キャンセル",
+        "warning": "警告",
+        "ok": "警告"
     }
 }

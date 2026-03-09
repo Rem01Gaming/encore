@@ -5,7 +5,7 @@
             "stopped": "중지됨 💤",
             "error": "오류 ~",
             "daemonPID": "데몬 PID: {pid}",
-            "daemon_inactive": "서비스 비활성",
+            "daemon_inactive": "서비스 비활성화됨",
             "loading_daemon": "잠시만 기다려 주세요…"
         },
         "info_card": {
@@ -17,10 +17,23 @@
         "support_button": {
             "title": "후원하기",
             "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
+        },
+        "learn_encore": {
+            "title": "배우다 Encore",
+            "description": "Encore Tweaks 및 그 기능을 사용하는 방법을 알아보십시오."
         }
     },
     "game_settings": {
-        "dnd_mode_description": "게임 중 알림과 전화 차단"
+        "dnd_mode_description": "게임 중 알림과 전화 차단",
+        "title": "게임 설정",
+        "application": "애플리케이션",
+        "preferences": "환경설정",
+        "enable_tweaks": "트윅 활성화",
+        "lite_mode": "라이트 모드",
+        "dnd_mode": "방해하지 마세요",
+        "launch_app": "시작하다",
+        "app_info": "앱 정보",
+        "lite_mode_description": "피크 성능에 더 긴 배터리 수명을 최적화"
     },
     "language_selection": {
         "title": "언어",
@@ -28,5 +41,102 @@
     },
     "log_level_selection": {
         "title": "로그 수준"
+    },
+    "games_page": {
+        "title": "내 게임",
+        "search_placeholder": "앱 검색",
+        "no_apps_found": "앱을 찾을 수 없습니다",
+        "badges": {
+            "tweak_enabled": "활성화됨"
+        }
+    },
+    "settings_page": {
+        "title": "설정",
+        "section": {
+            "preferences": "환경설정",
+            "system": "시스템",
+            "others": "기타"
+        },
+        "lite_mode": {
+            "title": "라이트 모드 강제 적용",
+            "description": "사용 약관 모든 게임의 기본 모드"
+        },
+        "language": {
+            "title": "언어"
+        },
+        "device_mitigation": {
+            "title": "장치 완화",
+            "description": "Encore Tweaks의 Mitigate 장치 특정 문제"
+        },
+        "cpu_governor": {
+            "title": "CPU 거버너",
+            "description": "CPU 사용자 정의 회사 소개"
+        },
+        "log_level": {
+            "title": "로그 레벨",
+            "description": "Encore Tweaks 운영 로그에 대한 자세한 내용은"
+        },
+        "save_log": {
+            "title": "저장 로그",
+            "description": "수출 Encore Tweaks 운영 로그"
+        },
+        "create_shortcut": {
+            "title": "바로가기 만들기",
+            "description": "Encore Tweaks에 대한 빠른 액세스를위한 홈 화면 단축키 생성"
+        }
+    },
+    "lite_mode": {
+        "title": "라이트 모드",
+        "toggle_title": "라이트 모드 적용",
+        "brief": "Lite 모드는 CPU 및 구성 요소 주파수를 낮추어 게임 플레이 중 과열 및 전력 소비를 줄입니다.이 설정은 활성화 된 경우 모든 게임에 적용됩니다."
+    },
+    "device_mitigation": {
+        "title": "장치 완화",
+        "toggle_title": "장치 완화 기능을 활성화합니다",
+        "brief": "장치 mitigation disables 잠재적으로 특정 장치에 대한 호환성 tweaks. 문제가 있으면 비활성화하십시오."
+    },
+    "cpu_governor": {
+        "title": "CPU 거버너",
+        "default_title": "기본 CPU 거버너",
+        "powersave_title": "절전형 CPU 거버너",
+        "modal": {
+            "default_select_title": "기본 CPU 거버너 선택",
+            "powersave_select_title": "절전형 CPU 거버너를 선택하세요",
+            "performance_warning_confirm": "이해했습니다. 지원하세요",
+            "initial_warn_checkbox": "이 메시지를 다시 표시하지 마세요",
+            "initial_warn": "Encore Tweaks는 최적의 CPU 홀더를 자동으로 구성했습니다. 수동 변경은 고급 사용자가 아닌 한 권장 사항을 권장하지 않습니다.",
+            "performance_warning": "성능에 거버넌스를 설정하면 과열 및 신속한 배터리 하수구가 발생할 수 있습니다. 진행하시겠습니까?"
+        },
+        "brief": "CPU 주관자는 역동적으로 순간에 가공업자의 빈도를, 직접 체계 성과 및 힘 consumtion 조정하는 알고리즘입니다.",
+        "default_description": "Lite 모드가 활성화 될 때 균형 및 성능 프로파일에 적용",
+        "powersave_description": "Powersave 프로파일에 독점적으로 사용됩니다"
+    },
+    "profiles": {
+        "initializing": "초기화 중",
+        "balanced": "균형 잡힌",
+        "powersave": "절전 모드",
+        "performance": "성능"
+    },
+    "toast": {
+        "has_shortcut": "바로가기가 이미 존재합니다.",
+        "success_save_log": "로그가 {path} 에 성공적으로 저장되었습니다",
+        "failed_save_log": "로그 저장에 실패했습니다.",
+        "shortcut_unavailable": "이 기능을 위해 API를 사용하지 않고 WebUI X를 사용하여이 기능을 사용합니다.",
+        "reboot_to_apply": "변경 사항을 적용하기 위해 장치를 재부팅합니다.",
+        "failed_open_extrenal_browser": "외부 브라우저를 엽니다."
+    },
+    "navigation": {
+        "home": "집",
+        "games": "계략",
+        "settings": "설정"
+    },
+    "common": {
+        "loading": "로딩 중",
+        "unknown": "알려지지 않은",
+        "enabled": "활성화됨",
+        "disabled": "장애가 있는",
+        "cancel": "취소",
+        "warning": "경고",
+        "ok": "좋아요"
     }
 }

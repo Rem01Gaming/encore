@@ -10,11 +10,11 @@
     "home_page": {
         "status_card": {
             "running": "Đang hoạt động ✨",
-            "stopped": "Đã dừng lại 💤",
-            "error": "Lỗi~",
+            "stopped": "Đã dừng 💤",
+            "error": "Lỗi ~",
             "daemon_inactive": "Dịch vụ không hoạt động",
             "loading_daemon": "Vui lòng chờ một lát…",
-            "daemonPID": "PID tiến trình: {pid}"
+            "daemonPID": "Daemon PID: {pid}"
         },
         "info_card": {
             "profile": "Hồ sơ hiện tại",

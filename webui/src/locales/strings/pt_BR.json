@@ -1,7 +1,11 @@
 {
     "toast": {
         "reboot_to_apply": "Reinicie o seu aparelho para aplicar as mudanças.",
-        "has_shortcut": "Atalho já existe."
+        "has_shortcut": "Atalho já existe.",
+        "shortcut_unavailable": "Não há API disponível para este recurso. Use a interface web X para utilizá-lo.",
+        "failed_open_extrenal_browser": "Não foi possível abrir o navegador externo.",
+        "success_save_log": "Registros salvos com sucesso em {path}",
+        "failed_save_log": "Falha ao salvar os registros."
     },
     "home_page": {
         "status_card": {
@@ -91,6 +95,48 @@
     },
     "lite_mode": {
         "title": "Modo lite",
-        "toggle_title": "Impor o modo leve"
+        "toggle_title": "Impor o modo leve",
+        "brief": "O modo Lite reduz o superaquecimento e o consumo de energia durante o jogo, diminuindo as frequências da CPU e dos componentes. Essa configuração se aplica a todos os jogos quando ativada."
+    },
+    "device_mitigation": {
+        "title": "Mitigação de Dispositivo",
+        "toggle_title": "Ativar mitigação de dispositivo",
+        "brief": "A mitigação de dispositivo desativa ajustes potencialmente incompatíveis para dispositivos específicos. Mantenha-a desativada, a menos que você tenha problemas."
+    },
+    "cpu_governor": {
+        "title": "Governador da CPU",
+        "default_title": "Governador de CPU padrão",
+        "default_description": "Aplicado aos perfis equilibrado e de desempenho quando o modo leve está ativo",
+        "powersave_title": "Governador de CPU Powersave",
+        "powersave_description": "Utilizado exclusivamente para o perfil powersave",
+        "brief": "O governador da CPU é um algoritmo que ajusta dinamicamente a frequência do processador em tempo real, afetando diretamente o desempenho do sistema e o consumo de energia.",
+        "modal": {
+            "default_select_title": "Selecione o governador de CPU padrão",
+            "powersave_select_title": "Selecione o governador de CPU Powersave",
+            "performance_warning": "Configurar o governador para o modo de alto desempenho causará superaquecimento e consumo rápido da bateria. Tem certeza de que deseja prosseguir?",
+            "performance_warning_confirm": "Entendo, aplicar",
+            "initial_warn": "Observe que o Encore Tweaks configurou automaticamente o governador de CPU ideal. Alterações manuais não são recomendadas, a menos que você seja um usuário avançado.",
+            "initial_warn_checkbox": "Não mostrar isso novamente"
+        }
+    },
+    "profiles": {
+        "initializing": "Inicializando",
+        "balanced": "Balanceado",
+        "powersave": "Economia de energia",
+        "performance": "Desempenho"
+    },
+    "navigation": {
+        "home": "Lar",
+        "games": "Jogos",
+        "settings": "Configurações"
+    },
+    "common": {
+        "loading": "Carregando",
+        "unknown": "Desconhecido",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "cancel": "Cancelar",
+        "warning": "Aviso",
+        "ok": "Ok"
     }
 }
