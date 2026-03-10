@@ -21,8 +21,8 @@
 MODULE_CONFIG="/data/adb/.config/encore"
 
 change_cpu_gov() {
-  chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-  chmod 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
+	chmod 644 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	chmod 644 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
 	chown 0:0 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	chown 0:0 /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
 	echo "$1" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null
@@ -30,8 +30,10 @@ change_cpu_gov() {
 }
 
 save_logs() {
-	[ ! -d /sdcard/Download ] && mkdir /sdcard/Download
-	log_file="/sdcard/Download/encore_bugreport_$(date +"%Y-%m-%d_%H_%M").txt"
+	report_dir="$MODULE_CONFIG/encore_bugreport_temp"
+	mkdir -p "$report_dir/pstore"
+
+	log_file="encore_bugreport_$(date +"%Y-%m-%d_%H_%M").tar.gz"
 	SOC="Unknown"
 
 	case $(<$MODULE_CONFIG/soc_recognition) in
@@ -45,20 +47,35 @@ save_logs() {
 	8) SOC="Kirin" ;;
 	esac
 
-	echo "$log_file"
-	cat <<EOF >"$log_file"
-*****************************************************
-Encore Tweaks Log
+	{
+		echo "*****************************************************"
+		echo "Encore Tweaks Log"
+		echo "Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)"
+		echo "Chipset: $SOC $(getprop ro.board.platform)"
+		echo "Fingerprint: $(getprop ro.build.fingerprint)"
+		echo "Android SDK: $(getprop ro.build.version.sdk)"
+		echo "Kernel: $(uname -r -m)"
+		echo "*****************************************************"
+		echo ""
+		[ -f "$MODULE_CONFIG/encore.log" ] && cat "$MODULE_CONFIG/encore.log"
+	} >"$report_dir/encore.log"
 
-Module Version: $(awk -F'=' '/version=/ {print $2}' /data/adb/modules/encore/module.prop)
-Chipset: $SOC $(getprop ro.board.platform)
-Fingerprint: $(getprop ro.build.fingerprint)
-Android SDK: $(getprop ro.build.version.sdk)
-Kernel: $(uname -r -m)
-*****************************************************
+	[ -f "$MODULE_CONFIG/sysmon.log" ] && cp "$MODULE_CONFIG/sysmon.log" "$report_dir/"
+	cp -r /sys/fs/pstore/. "$report_dir/pstore/" 2>/dev/null
+	(cd "$report_dir" && tar -czf "$log_file" .)
 
-$(<$MODULE_CONFIG/encore.log)
-EOF
+	target_dir="/sdcard/Download"
+	[ ! -d "$target_dir" ] && mkdir -p "$target_dir"
+
+	if [ -f "$report_dir/$log_file" ]; then
+		cp "$report_dir/$log_file" "$target_dir/$log_file"
+		echo "$target_dir/$log_file"
+		rm -rf "$report_dir"
+		return 0
+	else
+		rm -rf "$report_dir"
+		return 1
+	fi
 }
 
 logcat() {
