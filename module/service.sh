@@ -20,7 +20,7 @@ CLEANUP_SCRIPT="/data/adb/service.d/.encore_cleanup.sh"
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
 # Clear old logs
-rm -f "$MODULE_CONFIG/encore.log"
+rm -f "$MODULE_CONFIG/encore.log" "$MODULE_CONFIG/sysmon.log"
 
 # Parse Governor to use
 chmod 644 "$CPUFREQ/scaling_governor"
@@ -78,5 +78,5 @@ if [ -f "$ENABLE_PPM" ]; then
 fi
 
 # Start Encore Daemon
-nohup app_process -Djava.class.path="$MODDIR/system_monitor.dex" --nice-name=EncoreSysMon / SystemMonitor >/dev/null 2>&1 &
+nohup app_process -Djava.class.path="$MODDIR/system_monitor.dex" --nice-name=EncoreSysMon / SystemMonitor >"$MODULE_CONFIG/sysmon.log" 2>&1 &
 encored daemon
