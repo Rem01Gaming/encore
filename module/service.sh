@@ -78,6 +78,5 @@ if [ -f "$ENABLE_PPM" ]; then
 fi
 
 # Start Encore Daemon
-export CLASSPATH="$MODDIR/system_monitor.dex"
-nohup app_process "$MODDIR" SystemMonitor >/dev/null 2>&1 &
+nohup app_process -Djava.class.path="$MODDIR/system_monitor.dex" --nice-name=EncoreSysMon / SystemMonitor >/dev/null 2>&1 &
 encored daemon
