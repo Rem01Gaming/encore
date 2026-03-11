@@ -1,7 +1,7 @@
 {
     "home_page": {
         "status_card": {
-            "running": "生效中 ✨",
+            "running": "运行中 ✨",
             "stopped": "已停止 💤",
             "error": "出错了~",
             "daemonPID": "进程 PID: {pid}",
@@ -17,8 +17,8 @@
             "androidSDK": "Android SDK"
         },
         "support_button": {
-            "title": "支持我",
-            "description": "Encore Tweaks 一直并永远是自由免费的软件，你可以通过向我捐赠来促进项目发展。"
+            "title": "支持开发",
+            "description": "Encore Tweaks 对所有人永远免费。如果你觉得好用，可以通过捐赠来表达你的支持。"
         },
         "learn_encore": {
             "title": "了解 Encore",
@@ -46,7 +46,7 @@
         "section": {
             "preferences": "偏好",
             "system": "系统",
-            "others": "其他"
+            "others": "更多"
         },
         "lite_mode": {
             "title": "强制轻量模式",
@@ -101,9 +101,9 @@
         "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
     },
     "device_mitigation": {
-        "title": "设备兼容模式",
-        "toggle_title": "启用设备兼容模式",
-        "brief": "设备兼容模式会禁用针对特定设备的可能不兼容的调整。如无异常，请勿开启。"
+        "title": "兼容性修复",
+        "toggle_title": "开启兼容性修复",
+        "brief": "兼容性修复会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
     },
     "cpu_governor": {
         "title": "CPU 调速器",
@@ -113,9 +113,9 @@
         "modal": {
             "default_select_title": "设置默认 CPU 调速器",
             "powersave_select_title": "选择省电 CPU 调速器",
-            "performance_warning": "将调速器设置为性能模式可能导致手机过热并影响电池寿命，确认继续操作吗?",
-            "performance_warning_confirm": "我知晓风险，应用更改",
-            "initial_warn": "Encore Tweaks 已经自动应用了最优 CPU 调速器。除非您是专业用户，否则不建议您手动更改配置。",
+            "performance_warning": "将调速器设置为 Performance (性能) 模式会导致设备发热量显著增加并加快耗电。确定要继续吗？",
+            "performance_warning_confirm": "我已知晓，确认应用",
+            "initial_warn": "Encore Tweaks 已自动配置最佳 CPU 调速器。除非你是高级用户，否则不建议手动修改。",
             "initial_warn_checkbox": "不再提示"
         },
         "powersave_title": "省电 CPU 调速器",
