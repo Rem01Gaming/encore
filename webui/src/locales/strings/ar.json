@@ -12,7 +12,7 @@
             "running": "يعمل ✨",
             "stopped": "متوقف 💤",
             "error": "خطأ ~",
-            "daemonPID": "معرف البرنامج: {pid}",
+            "daemonPID": "معرف العملية: {pid}",
             "daemon_inactive": "الخدمة غير نشطة",
             "loading_daemon": "لحظة من فضلك…"
         },
@@ -83,7 +83,7 @@
         "lite_mode_description": "تحسين لعمر بطارية أطول مقابل اقصى أداء",
         "dnd_mode": "عدم الإزعاج",
         "dnd_mode_description": "منع المكالمات و الإشعارات عند اللعب",
-        "launch_app": "‬يطلق",
+        "launch_app": "تشغيل",
         "app_info": "معلومات التطبيق"
     },
     "language_selection": {
@@ -116,7 +116,7 @@
             "performance_warning": "ضبط منظم السرعة على وضع الأداء العالي سيؤدي إلى ارتفاع درجة الحرارة واستنزاف البطارية بسرعة. هل أنت متأكد من رغبتك في المتابعة؟",
             "performance_warning_confirm": "أفهم، قدم طلبك",
             "initial_warn": "يرجى ملاحظة أن برنامج Encore Tweaks قد قام تلقائيًا بضبط مُتحكم وحدة المعالجة المركزية الأمثل. لا يُنصح بإجراء تغييرات يدوية إلا إذا كنت مستخدمًا متقدمًا.",
-            "initial_warn_checkbox": "لا تعرض هذا مرة أخرى"
+            "initial_warn_checkbox": "عدم الإظهار مجدداً"
         }
     },
     "profiles": {
