@@ -70,17 +70,17 @@
         "title": "ゲーム設定",
         "dnd_mode_description": "ゲーム中は通知と電話をブロック",
         "app_info": "アプリ情報",
-        "application": "応用",
+        "application": "アプリ",
         "preferences": "設定",
         "enable_tweaks": "調整を有効にする",
         "lite_mode": "ライトモード",
         "lite_mode_description": "ピークパフォーマンスよりもバッテリー寿命を延ばすために最適化",
-        "dnd_mode": "邪魔しないでください",
-        "launch_app": "打ち上げ"
+        "dnd_mode": "集中モード",
+        "launch_app": "アプリを起動"
     },
     "language_selection": {
         "title": "言語",
-        "follow_system": "フォローシステム"
+        "follow_system": "システム設定"
     },
     "games_page": {
         "badges": {
@@ -114,29 +114,29 @@
             "default_select_title": "デフォルトのCPUガバナーを選択",
             "powersave_select_title": "省電力CPUガバナーを選択",
             "performance_warning": "ガバナーをパフォーマンスに設定すると、過熱してバッテリーが急速に消耗します。続行してもよろしいですか？",
-            "performance_warning_confirm": "了解しました。応募する",
+            "performance_warning_confirm": "了解しました。適用する",
             "initial_warn": "Encore TweaksはCPUガバナーを最適な値に自動設定します。上級ユーザーでない限り、手動での変更はお勧めしません。",
             "initial_warn_checkbox": "今後表示しない"
         }
     },
     "profiles": {
         "initializing": "初期化中",
-        "balanced": "バランスの取れた",
-        "powersave": "省電力",
+        "balanced": "バランス",
+        "powersave": "バッテリー節約",
         "performance": "パフォーマンス"
     },
     "navigation": {
-        "home": "家",
+        "home": "ホーム",
         "games": "ゲーム",
         "settings": "設定"
     },
     "common": {
         "loading": "読み込み中",
-        "unknown": "未知",
+        "unknown": "不明",
         "enabled": "有効",
         "disabled": "無効",
         "cancel": "キャンセル",
         "warning": "警告",
-        "ok": "警告"
+        "ok": "確定"
     }
 }
