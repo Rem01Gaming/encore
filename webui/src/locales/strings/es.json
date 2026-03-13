@@ -10,7 +10,7 @@
     "home_page": {
         "title": "Encore Tweaks",
         "status_card": {
-            "running": "Ejecutandose ✨",
+            "running": "Ejecutándose ✨",
             "stopped": "Detenido 💤",
             "error": "Error ~",
             "daemonPID": "PID de Daemon: {pid}",
@@ -25,7 +25,7 @@
             "androidSDK": "SDK de Android"
         },
         "support_button": {
-            "title": "Apoyame",
+            "title": "Apóyame",
             "description": "Encore Tweaks es, y siempre será, gratuito para ti y para todos. Sin embargo, puedes demostrar que te importa haciendo una donación."
         },
         "learn_encore": {
@@ -90,7 +90,7 @@
     },
     "language_selection": {
         "title": "Idioma",
-        "follow_system": "El del Sistema"
+        "follow_system": "Idioma del sistema"
     },
     "log_level_selection": {
         "title": "Nivel de Registro"
@@ -139,6 +139,6 @@
         "disabled": "Desactivado",
         "cancel": "Cancelar",
         "warning": "Advertencia",
-        "ok": "De acuerdo"
+        "ok": "OK"
     }
 }
