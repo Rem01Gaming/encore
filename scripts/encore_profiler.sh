@@ -27,9 +27,6 @@ MODULE_CONFIG="/data/adb/.config/encore"
 # SoC recognition
 SOC=$(<$MODULE_CONFIG/soc_recognition)
 
-# PPM policies settings for MediaTek devices
-PPM_POLICY=$(<$MODULE_CONFIG/ppm_policies_mediatek)
-
 # Default CPU Governor
 DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 
@@ -220,7 +217,7 @@ qcom_cpudcvs_min_perf() {
 mediatek_performance() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		grep -E "$PPM_POLICY" /proc/ppm/policy_status | while read -r row; do
+		grep -E "PWR_THRO|THERMAL" /proc/ppm/policy_status | while read -r row; do
 			apply "${row:1:1} 0" /proc/ppm/policy_status
 		done
 	fi
@@ -425,7 +422,7 @@ tensor_performance() {
 mediatek_normal() {
 	# PPM policies
 	if [ -d /proc/ppm ]; then
-		grep -E "$PPM_POLICY" /proc/ppm/policy_status | while read -r row; do
+		grep -E "PWR_THRO|THERMAL" /proc/ppm/policy_status | while read -r row; do
 			apply "${row:1:1} 1" /proc/ppm/policy_status
 		done
 	fi
