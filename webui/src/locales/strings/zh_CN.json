@@ -46,7 +46,7 @@
         "section": {
             "preferences": "偏好",
             "system": "系统",
-            "others": "更多"
+            "others": "其他"
         },
         "lite_mode": {
             "title": "强制轻量模式",
@@ -57,7 +57,7 @@
         },
         "device_mitigation": {
             "title": "设备兼容模式",
-            "description": "兼容 Encore Tweaks 中设备特定的问题"
+            "description": "缓解 Encore Tweaks 中设备特定的兼容问题"
         },
         "cpu_governor": {
             "title": "CPU 调速器",
@@ -101,9 +101,9 @@
         "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
     },
     "device_mitigation": {
-        "title": "兼容性修复",
-        "toggle_title": "开启兼容性修复",
-        "brief": "兼容性修复会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
+        "title": "设备兼容模式",
+        "toggle_title": "开启设备兼容模式",
+        "brief": "设备兼容模式会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
     },
     "cpu_governor": {
         "title": "CPU 调速器",
