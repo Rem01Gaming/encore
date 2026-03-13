@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: true
@@ -40,32 +40,19 @@ jobs:
         with:
           ndk-version: r29
 
-      - name: JDK Setup
-        uses: actions/setup-java@v5
-        with:
-          java-version: "25"
-          distribution: "temurin"
-
       - name: Bun Setup
         uses: oven-sh/setup-bun@v2
 
       - name: Build Encore Daemon
         run: ndk-build -j$(nproc --all)
 
-      - name: Compile Java
-        working-directory: java
+      - name: Download System Monitor app
+        working-directory: module
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ANDROID_JAR="$ANDROID_HOME/platforms/android-34/android.jar"
-          BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -n 1)
-          D8_TOOL="$BUILD_TOOLS_DIR/d8"
-
-          curl -fsSL "https://repo1.maven.org/maven2/org/lsposed/hiddenapibypass/hiddenapibypass/4.3/hiddenapibypass-4.3.aar" -o hiddenapibypass.aar
-          unzip -j hiddenapibypass.aar classes.jar -d .
-          mv classes.jar hiddenapibypass.jar
-
-          javac -cp "$ANDROID_JAR:hiddenapibypass.jar" SystemMonitor.java
-          "$D8_TOOL" SystemMonitor.class hiddenapibypass.jar --lib "$ANDROID_JAR" --output .
-          mv classes.dex system_monitor.dex
+          gh release download --repo Rem01Gaming/SystemMonitor --pattern "app-release.apk"
+          mv app-release.apk system_monitor.apk
 
       - name: Build WebUI
         working-directory: webui
@@ -79,7 +66,7 @@ jobs:
         run: bash .github/scripts/compile_zip.sh
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: encore-build
           path: ${{ steps.compileZip.outputs.zipName }}

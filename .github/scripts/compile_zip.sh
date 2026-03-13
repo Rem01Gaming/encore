@@ -22,7 +22,6 @@ sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 # Copy module files
 cp -r ./libs module
 cp -r ./scripts/* module/system/bin
-cp ./java/system_monitor.dex module
 cp gamelist.txt module
 cp LICENSE module
 cp NOTICE.md module
