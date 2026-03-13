@@ -7,7 +7,7 @@
             "error": "Error ~",
             "daemonPID": "PID Daemon: {pid}",
             "daemon_inactive": "Layanan tidak aktif",
-            "loading_daemon": "Sebentar ya…"
+            "loading_daemon": "Sedang memuat…"
         },
         "info_card": {
             "module": "Encore Tweaks",
@@ -113,7 +113,7 @@
         "modal": {
             "default_select_title": "Pilih Governor CPU Default",
             "powersave_select_title": "Pilih Governor CPU Hemat Daya",
-            "performance_warning": "Mengatur governor ke performance akan menyebabkan panas berlebih dan baterai cepat habis. Kamu yakin mau pake governor ini?",
+            "performance_warning": "Mengatur governor ke performance akan menyebabkan panas berlebih dan baterai cepat habis. Apakah Anda yakin ingin melanjutkan??",
             "performance_warning_confirm": "Saya mengerti, Terapkan",
             "initial_warn": "Harap dicatat bahwa Encore Tweaks telah mengonfigurasi CPU Governor secara otomatis. Jangan mengubahnya secara manual kecuali Anda sudah berpengalaman.",
             "initial_warn_checkbox": "Jangan munculkan pesan ini lagi"
