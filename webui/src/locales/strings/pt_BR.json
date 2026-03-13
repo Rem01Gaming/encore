@@ -1,6 +1,6 @@
 {
     "toast": {
-        "reboot_to_apply": "Reinicie o seu aparelho para aplicar as mudanças.",
+        "reboot_to_apply": "Reinicie o seu dispositivo para aplicar as mudanças.",
         "has_shortcut": "Atalho já existe.",
         "shortcut_unavailable": "Não há API disponível para este recurso. Use a interface web X para utilizá-lo.",
         "failed_open_extrenal_browser": "Não foi possível abrir o navegador externo.",
@@ -51,7 +51,7 @@
             "title": "Impor Modo Lite"
         },
         "language": {
-            "title": "Linguagem"
+            "title": "Idioma"
         },
         "device_mitigation": {
             "title": "Mitigação de Dispositivos",
@@ -67,7 +67,7 @@
         },
         "save_log": {
             "title": "Salvar Registros",
-            "description": "Registro operacional do Export Encore Tweaks"
+            "description": "Exportar o registro operacional do Encore Tweaks"
         },
         "create_shortcut": {
             "title": "Criar atalho",
@@ -83,19 +83,19 @@
         "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo",
         "dnd_mode": "Não incomodar",
         "dnd_mode_description": "Bloqueie notificações e chamadas enquanto joga",
-        "launch_app": "Lançar",
-        "app_info": "Informações sodo aplicativo"
+        "launch_app": "Abrir",
+        "app_info": "Informações do aplicativo"
     },
     "language_selection": {
-        "title": "Linguagem",
-        "follow_system": "Seguir o sistema"
+        "title": "Idioma",
+        "follow_system": "Usar padrão do sistema"
     },
     "log_level_selection": {
         "title": "Nível de registro"
     },
     "lite_mode": {
         "title": "Modo lite",
-        "toggle_title": "Impor o modo leve",
+        "toggle_title": "Impor o modo lite",
         "brief": "O modo Lite reduz o superaquecimento e o consumo de energia durante o jogo, diminuindo as frequências da CPU e dos componentes. Essa configuração se aplica a todos os jogos quando ativada."
     },
     "device_mitigation": {
@@ -106,7 +106,7 @@
     "cpu_governor": {
         "title": "Governador da CPU",
         "default_title": "Governador de CPU padrão",
-        "default_description": "Aplicado aos perfis equilibrado e de desempenho quando o modo leve está ativo",
+        "default_description": "Aplicado aos perfis equilibrado e de desempenho quando o modo lite está ativo",
         "powersave_title": "Governador de CPU Powersave",
         "powersave_description": "Utilizado exclusivamente para o perfil powersave",
         "brief": "O governador da CPU é um algoritmo que ajusta dinamicamente a frequência do processador em tempo real, afetando diretamente o desempenho do sistema e o consumo de energia.",
@@ -126,7 +126,7 @@
         "performance": "Desempenho"
     },
     "navigation": {
-        "home": "Lar",
+        "home": "Início",
         "games": "Jogos",
         "settings": "Configurações"
     },
@@ -137,6 +137,6 @@
         "disabled": "Desativado",
         "cancel": "Cancelar",
         "warning": "Aviso",
-        "ok": "Ok"
+        "ok": "OK"
     }
 }
