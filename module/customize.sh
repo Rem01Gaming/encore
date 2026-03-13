@@ -50,6 +50,14 @@ abort_gamelist_error() {
 	abort "*********************************************************"
 }
 
+abort_android_version() {
+	ui_print "*********************************************************"
+	ui_print "! Your Android Version is not supported!"
+	ui_print "! Please use Android 9 (Pie) or higher."
+	ui_print "! Installation aborted."
+	abort "*********************************************************"
+}
+
 soc_recognition_extra() {
 	[ -d /sys/class/kgsl/kgsl-3d0/devfreq ] && {
 		SOC=2
@@ -126,6 +134,9 @@ generate_gamelist() {
   rm -f "$MODULE_CONFIG/gamelist.txt"
   [ $exit_code -gt 0 ] && abort_gamelist_error
 }
+
+# Check Android version
+[ "$API" -lt 28 ] && abort_android_version
 
 # Flashable integrity checkup
 ui_print "- Extracting verify.sh"
