@@ -13,11 +13,11 @@
             "loading_daemon": "ちょっとお待ちください…",
             "running": "稼働中 ✨",
             "stopped": "停止中 💤",
-            "error": "エラー発生 ~",
+            "error": "エラー ~",
             "daemonPID": "デーモン PID: {pid}"
         },
         "info_card": {
-            "profile": "現在のプロフィール",
+            "profile": "プロファイル",
             "chipset": "チップセット",
             "kernel": "カーネル",
             "androidSDK": "Android SDK"
@@ -42,7 +42,7 @@
             "title": "言語"
         },
         "save_log": {
-            "title": "保存ログ",
+            "title": "ログを保存",
             "description": "Encore Tweaks 操作ログをエクスポート"
         },
         "create_shortcut": {
@@ -80,7 +80,7 @@
     },
     "language_selection": {
         "title": "言語",
-        "follow_system": "システム設定"
+        "follow_system": "システム言語を使用"
     },
     "games_page": {
         "badges": {
@@ -137,6 +137,6 @@
         "disabled": "無効",
         "cancel": "キャンセル",
         "warning": "警告",
-        "ok": "確定"
+        "ok": "OK"
     }
 }
