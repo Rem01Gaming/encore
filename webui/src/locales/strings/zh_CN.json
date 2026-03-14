@@ -113,7 +113,7 @@
         "modal": {
             "default_select_title": "设置默认 CPU 调速器",
             "powersave_select_title": "选择省电 CPU 调速器",
-            "performance_warning": "将调速器设置为 Performance (性能) 模式会导致设备发热量显著增加并加快耗电。确定要继续吗？",
+            "performance_warning": "将调速器设置为 performance (性能) 模式会导致设备发热量显著增加并加快耗电。确定要继续吗？",
             "performance_warning_confirm": "我已知晓，确认应用",
             "initial_warn": "Encore Tweaks 已自动配置最佳 CPU 调速器。除非你是高级用户，否则不建议手动修改。",
             "initial_warn_checkbox": "不再提示"
