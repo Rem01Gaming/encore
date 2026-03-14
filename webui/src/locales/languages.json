@@ -31,18 +31,6 @@
     "name": "日本語",
     "dir": "ltr"
   },
-  "ko": {
-    "name": "한국어",
-    "dir": "ltr"
-  },
-  "jv": {
-    "name": "Basa Jawa",
-    "dir": "ltr"
-  },
-  "vi": {
-    "name": "Tiếng Việt",
-    "dir": "ltr"
-  },
   "zh_CN": {
     "name": "中文 (简体)",
     "dir": "ltr"
