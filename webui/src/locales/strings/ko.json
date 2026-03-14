@@ -16,7 +16,7 @@
         },
         "support_button": {
             "title": "후원하기",
-            "description": "Encore Tweaks는 지금도, 앞으로도 여러분과 모두를 위해 항상 무료입니다. 다만 기부를 통해 응원의 마음을 표현해 주실 수 있습니다."
+            "description": "Encore Tweaks는 여러분과 모두를 위해 항상 무료로 제공됩니다. 개발자에게 응원의 마음을 전하고 싶다면 기부를 통해 도움을 주실 수 있습니다."
         },
         "learn_encore": {
             "title": "배우다 Encore",
@@ -31,7 +31,7 @@
         "enable_tweaks": "트윅 활성화",
         "lite_mode": "라이트 모드",
         "dnd_mode": "방해하지 마세요",
-        "launch_app": "시작하다",
+        "launch_app": "실행",
         "app_info": "앱 정보",
         "lite_mode_description": "피크 성능에 더 긴 배터리 수명을 최적화"
     },
@@ -45,7 +45,7 @@
     "games_page": {
         "title": "내 게임",
         "search_placeholder": "앱 검색",
-        "no_apps_found": "앱을 찾을 수 없습니다",
+        "no_apps_found": "검색된 앱이 없습니다",
         "badges": {
             "tweak_enabled": "활성화됨"
         }
@@ -70,15 +70,15 @@
         },
         "cpu_governor": {
             "title": "CPU 거버너",
-            "description": "CPU 사용자 정의 회사 소개"
+            "description": "프로필마다 CPU 거버너 설정"
         },
         "log_level": {
             "title": "로그 레벨",
             "description": "Encore Tweaks 운영 로그에 대한 자세한 내용은"
         },
         "save_log": {
-            "title": "저장 로그",
-            "description": "수출 Encore Tweaks 운영 로그"
+            "title": "로그 저장",
+            "description": "Encore Tweaks 작업 로그 내보내기"
         },
         "create_shortcut": {
             "title": "바로가기 만들기",
@@ -104,10 +104,10 @@
             "powersave_select_title": "절전형 CPU 거버너를 선택하세요",
             "performance_warning_confirm": "이해했습니다. 지원하세요",
             "initial_warn_checkbox": "이 메시지를 다시 표시하지 마세요",
-            "initial_warn": "Encore Tweaks는 최적의 CPU 홀더를 자동으로 구성했습니다. 수동 변경은 고급 사용자가 아닌 한 권장 사항을 권장하지 않습니다.",
-            "performance_warning": "성능에 거버넌스를 설정하면 과열 및 신속한 배터리 하수구가 발생할 수 있습니다. 진행하시겠습니까?"
+            "initial_warn": "Encore Tweaks에서 최적의 CPU 거버너를 자동으로 설정했습니다. 숙련된 사용자가 아니라면 수동으로 변경하는 것을 권장하지 않습니다.",
+            "performance_warning": "거버너를 \"performance\"로 설정하면 발열과 급격한 배터리 소모가 발생할 수 있습니다. 계속하시겠습니까?"
         },
-        "brief": "CPU 주관자는 역동적으로 순간에 가공업자의 빈도를, 직접 체계 성과 및 힘 consumtion 조정하는 알고리즘입니다.",
+        "brief": "CPU 거버너는 프로세서의 클럭 주파수를 실시간으로 동적 조절하여, 시스템 성능과 전력 소비에 직접적인 영향을 주는 알고리즘입니다.",
         "default_description": "Lite 모드가 활성화 될 때 균형 및 성능 프로파일에 적용",
         "powersave_description": "Powersave 프로파일에 독점적으로 사용됩니다"
     },
@@ -126,15 +126,15 @@
         "failed_open_extrenal_browser": "외부 브라우저를 엽니다."
     },
     "navigation": {
-        "home": "집",
-        "games": "계략",
+        "home": "홈",
+        "games": "게임",
         "settings": "설정"
     },
     "common": {
         "loading": "로딩 중",
         "unknown": "알려지지 않은",
         "enabled": "활성화됨",
-        "disabled": "장애가 있는",
+        "disabled": "비활성화",
         "cancel": "취소",
         "warning": "경고",
         "ok": "좋아요"
