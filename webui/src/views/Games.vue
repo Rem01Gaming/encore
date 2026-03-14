@@ -30,9 +30,9 @@
 
       <!-- List -->
       <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5">
-        <LoadingSpinner class="text-primary py-8" v-if="gamesStore.isLoading" />
+        <LoadingSpinner class="text-primary pt-8" v-if="gamesStore.isLoading" />
 
-        <div v-else class="pb-2">
+        <div v-else class="pb-4">
           <div
             v-for="(app, index) in gamesStore.filteredApps"
             :key="app.packageName"

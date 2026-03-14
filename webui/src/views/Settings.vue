@@ -11,7 +11,7 @@
 
     <!-- Scrollable Settings List -->
     <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
-      <div class="max-w-3xl mx-auto p-5 pt-1">
+      <div class="max-w-3xl mx-auto p-5 py-1">
         <!-- Section Header - Preference -->
         <div class="px-4 py-2 mb-1">
           <h2 class="text-sm font-medium text-on-surface-variant">

@@ -3,10 +3,6 @@
 
 @import 'tailwindcss';
 
-:root {
-  --nav-height: 5rem;
-}
-
 html,
 body,
 #app {
@@ -24,9 +20,13 @@ body,
     -ms-overflow-style: none;
   }
 
-  /* Unified padding that accounts for the navbar + system insets */
+  /* 
+   * Unified padding that accounts for the navbar + system insets
+   * nav-height is the height of the navbar, automatically set by Navigation.vue
+   * window-inset-bottom is the system inset, set by KSU's insets.css
+   */
   .pb-safe-nav {
-    padding-bottom: calc(var(--nav-height) + var(--window-inset-bottom, 0px) + 3rem);
+    padding-bottom: calc(var(--nav-height) - var(--window-inset-bottom, 0px));
   }
 
   .md3-list {

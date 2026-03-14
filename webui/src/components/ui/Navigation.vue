@@ -1,5 +1,5 @@
 <template>
-  <nav
+  <nav ref="navEl"
     class="footer fixed bottom-0 left-0 right-0 w-full flex items-end bg-surface-container shadow-lg z-50 md:left-0 md:top-0 md:bottom-0 md:w-23 md:h-full md:flex-col backdrop-blur-md"
     :style="{
       paddingBottom: 'var(--window-inset-bottom, 0px)',
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -67,6 +67,19 @@ const isActive = (item) => {
   if (item.path === '/') return currentPath === '/'
   return currentPath.startsWith(item.path)
 }
+
+const navEl = ref(null)
+let ro = null
+
+onMounted(() => {
+  ro = new ResizeObserver(([entry]) => {
+    const h = entry.borderBoxSize?.[0]?.blockSize ?? entry.target.offsetHeight
+    document.documentElement.style.setProperty('--nav-height', `${h}px`)
+  })
+  ro.observe(navEl.value)
+})
+
+onBeforeUnmount(() => ro?.disconnect())
 </script>
 
 <style scoped>

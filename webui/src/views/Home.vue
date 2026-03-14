@@ -11,7 +11,7 @@
 
     <!-- Scrollable Content -->
     <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
-      <div class="max-w-3xl mx-auto p-5 pt-1">
+      <div class="max-w-3xl mx-auto p-5 py-1">
         <!-- Daemon Status -->
         <div
           class="bg-secondary-container mb-4 p-4 rounded-xl flex items-center justify-between text-on-secondary-container"
