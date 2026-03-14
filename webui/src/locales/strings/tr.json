@@ -133,7 +133,7 @@
         "modal": {
             "default_select_title": "Varsayılan CPU yönetimini seç",
             "powersave_select_title": "Pil tasarrufu yönetimine geç",
-            "performance_warning": "Performans yönetim ayarı sistemin aşırı ısınmasına ve batarya ömrünün azalmasına sebep olur. Yine de devam edilsin mi?",
+            "performance_warning": "\"performance\" moduna geçmek aşırı ısınmaya ve hızlı pil tüketimine neden olur. Devam etmek istiyor musunuz?",
             "performance_warning_confirm": "Anlıyorum ve uygula",
             "initial_warn": "CPU yönetiminin Encore Tweaks tarafından otomatik olarak yönetildiğini unutmayın. Eğer bilgili bir kullanıcı değilseniz bunun elle yapılandırılması tavsiye edilmez.",
             "initial_warn_checkbox": "Bunu tekrar gösterme"
