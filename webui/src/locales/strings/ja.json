@@ -113,7 +113,7 @@
         "modal": {
             "default_select_title": "デフォルトのCPUガバナーを選択",
             "powersave_select_title": "省電力CPUガバナーを選択",
-            "performance_warning": "ガバナーをパフォーマンスに設定すると、過熱してバッテリーが急速に消耗します。続行してもよろしいですか？",
+            "performance_warning": "ガバナーを 'performance' に設定すると、発熱およびバッテリーの急激な消耗を招く恐れがあります。続行しますか？",
             "performance_warning_confirm": "了解しました。適用する",
             "initial_warn": "Encore TweaksはCPUガバナーを最適な値に自動設定します。上級ユーザーでない限り、手動での変更はお勧めしません。",
             "initial_warn_checkbox": "今後表示しない"
