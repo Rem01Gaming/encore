@@ -113,7 +113,7 @@
         "modal": {
             "default_select_title": "Selecione o governador de CPU padrão",
             "powersave_select_title": "Selecione o governador de CPU Powersave",
-            "performance_warning": "Configurar o governador para o modo de alto desempenho causará superaquecimento e consumo rápido da bateria. Tem certeza de que deseja prosseguir?",
+            "performance_warning": "Definir o governor para 'performance' causará superaquecimento e drenagem rápida da bateria. Tem certeza de que deseja continuar?",
             "performance_warning_confirm": "Entendo, aplicar",
             "initial_warn": "Observe que o Encore Tweaks configurou automaticamente o governador de CPU ideal. Alterações manuais não são recomendadas, a menos que você seja um usuário avançado.",
             "initial_warn_checkbox": "Não mostrar isso novamente"
