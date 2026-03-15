@@ -34,15 +34,6 @@
 bool create_lock_file(void);
 
 /**
- * @brief Checks if the /system/bin/dumpsys executable is sane.
- *
- * This function performs a basic sanity check on the dumpsys binary to ensure it has not been
- * tampered with (e.g., emptied by a kill logger module).
- * @return true if the dumpsys binary appears to be sane, false otherwise.
- */
-bool check_dumpsys_sanity(void);
-
-/**
  * @brief  Fetches PID of a process.
  * @param  target_name: The package name.
  * @param  strict: Strict matching mode. If true, "com.mobile.legends" will NOT match "com.mobile.legends:UnityKillsMe"

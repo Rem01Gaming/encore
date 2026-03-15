@@ -32,33 +32,3 @@ bool create_lock_file(void) {
 
     return true;
 }
-
-bool check_dumpsys_sanity(void) {
-    FILE *file = fopen("/system/bin/dumpsys", "rb");
-    int ch;
-    if (!file) {
-        fprintf(stderr, "/system/bin/dumpsys: %s\n", strerror(errno));
-        LOGC("/system/bin/dumpsys: {}", strerror(errno));
-        goto insane;
-    }
-
-    ch = fgetc(file);
-    if (ch == EOF) {
-        if (feof(file)) {
-            fprintf(stderr, "/system/bin/dumpsys was tampered by kill logger module\n");
-            LOGC("/system/bin/dumpsys was tampered by kill logger module");
-            goto insane;
-        }
-
-        fprintf(stderr, "/system/bin/dumpsys: %s\n", strerror(errno));
-        LOGC("/system/bin/dumpsys: {}", strerror(errno));
-        goto insane;
-    }
-
-    fclose(file);
-    return true;
-
-insane:
-    fclose(file);
-    return false;
-}
