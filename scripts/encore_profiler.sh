@@ -284,17 +284,9 @@ snapdragon_performance() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		# Latency Nodes
-		for path in /sys/class/devfreq/*memlat* /sys/class/devfreq/*latfloor*; do
-			devfreq_max_perf "$path"
-		done
-
-		# Bandwith & Bus
-		for path in /sys/class/devfreq/*cpu*-bw \
-			/sys/class/devfreq/*l3-cpu* \
-			/sys/class/devfreq/*bus_ddr* \
-			/sys/class/devfreq/*bus_llcc* \
-			/sys/class/devfreq/*llccbw* \
-			/sys/class/devfreq/*kgsl-ddr-qos*; do
+		for path in /sys/class/devfreq/*memlat* \
+			/sys/class/devfreq/*latfloor* \
+			/sys/class/devfreq/*ddr-lat*; do
 
 			if [ $LITE_MODE -eq 0 ]; then
 				devfreq_max_perf "$path"
@@ -482,17 +474,9 @@ snapdragon_normal() {
 	# Qualcomm CPU Bus and DRAM frequencies
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		# Latency Nodes
-		for path in /sys/class/devfreq/*memlat* /sys/class/devfreq/*latfloor*; do
-			devfreq_unlock "$path"
-		done
-
-		# Bandwith & Bus
-		for path in /sys/class/devfreq/*cpu*-bw \
-			/sys/class/devfreq/*l3-cpu* \
-			/sys/class/devfreq/*bus_ddr* \
-			/sys/class/devfreq/*bus_llcc* \
-			/sys/class/devfreq/*llccbw* \
-			/sys/class/devfreq/*kgsl-ddr-qos*; do
+		for path in /sys/class/devfreq/*memlat* \
+			/sys/class/devfreq/*latfloor* \
+			/sys/class/devfreq/*ddr-lat*; do
 			devfreq_unlock "$path"
 		done
 
