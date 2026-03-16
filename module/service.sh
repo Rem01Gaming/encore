@@ -78,5 +78,5 @@ if [ -f "$ENABLE_PPM" ]; then
 fi
 
 # Start Encore Daemon
-nohup app_process -Djava.class.path="$MODDIR/system_monitor.apk" / --nice-name=EncoreSysMon com.rem01gaming.systemmonitor.MainKt >"$MODULE_CONFIG/sysmon.log" 2>&1 &
+nohup app_process -Djava.class.path="$MODDIR/system_monitor.apk" / --nice-name=EncoreSysMon com.rem01gaming.systemmonitor.MainKt "$MODULE_CONFIG/system_status" "$MODULE_CONFIG/java.lock" >"$MODULE_CONFIG/sysmon.log" 2>&1 &
 encored daemon
