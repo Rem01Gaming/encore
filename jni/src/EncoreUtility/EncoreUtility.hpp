@@ -34,6 +34,13 @@
 bool create_lock_file(void);
 
 /**
+ * @brief Check if java daemon is running from it's lock file.
+ *
+ * @return true if the lock file acquired by other process, false otherwise.
+ */
+bool check_java_daemon(void);
+
+/**
  * @brief  Fetches PID of a process.
  * @param  target_name: The package name.
  * @param  strict: Strict matching mode. If true, "com.mobile.legends" will NOT match "com.mobile.legends:UnityKillsMe"

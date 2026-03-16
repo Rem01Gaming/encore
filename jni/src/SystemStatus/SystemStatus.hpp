@@ -22,32 +22,19 @@
 
 #include <Encore.hpp>
 
-/**
- * Snapshot of the system_status file written by SystemMonitor.java.
- *
- * File format (one key per line):
- *   focused_app  <package> <pid> <uid>
- *   screen_awake <0|1>
- *   battery_saver <0|1>
- *   zen_mode     <0|1|2|3>
- */
 struct SystemStatus {
-    std::string focused_app; ///< foreground package name, or "unknown"
+    std::string focused_app;
     pid_t focused_pid = 0;
     uid_t focused_uid = 0;
     bool screen_awake = false;
     bool battery_saver = false;
-    int zen_mode = 0; ///< 0 = off, 1-3 = various DND levels
+    int zen_mode = 0;
 };
 
 namespace SystemStatusReader {
 
 /**
  * @brief Parse SYSTEM_STATUS_FILE into @p out.
- *
- * Reads the file written by SystemMonitor.java and fills every field of
- * @p out.  Fields that are missing in the file are left at their zero-
- * initialised defaults so the caller always receives a valid struct.
  *
  * @param out   Destination struct.
  * @param path  Path to the status file (defaults to SYSTEM_STATUS_FILE).
@@ -66,7 +53,7 @@ bool read(SystemStatus &out, const char *path = SYSTEM_STATUS_FILE);
  */
 class SystemStatusCache {
 public:
-    /** Replace the cached snapshot (called from inotify thread). */
+    /** Update the cached snapshot (called from inotify thread). */
     void update(const SystemStatus &s) {
         std::lock_guard<std::mutex> lk(mtx_);
         status_ = s;
@@ -74,7 +61,7 @@ public:
     }
 
     /**
-     * Copy the latest snapshot into @p out.
+     * @brief Copy the latest snapshot into @p out
      * @return false if no snapshot has been stored yet.
      */
     bool get(SystemStatus &out) const {

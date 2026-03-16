@@ -25,6 +25,7 @@
 #define MODPATH "/data/adb/modules/encore"
 
 #define LOCK_FILE CONFIG_DIR "/.lock"
+#define JAVA_LOCK_FILE CONFIG_DIR "/java.lock"
 #define LOG_FILE CONFIG_DIR "/encore.log"
 #define PROFILE_MODE CONFIG_DIR "/current_profile"
 #define GAME_INFO CONFIG_DIR "/gameinfo"

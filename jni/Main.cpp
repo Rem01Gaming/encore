@@ -50,7 +50,10 @@ GameRegistry game_registry;
 
 static constexpr auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
 static constexpr auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(7);
+static constexpr auto JAVA_CHECK_INTERVAL = std::chrono::seconds(1);
+
 static constexpr int POLL_TIMEOUT_MS = 50;
+static constexpr int JAVA_CHECK_MAX_ERRORS = 10;
 
 static_assert(
     NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
@@ -99,6 +102,9 @@ struct DaemonState {
     bool is_mlbb = false;
 
     int focus_loss_count = 0;
+
+    int java_check_fail_count = 0;
+    std::chrono::steady_clock::time_point last_java_check = std::chrono::steady_clock::now();
 
     PIDTracker pid_tracker;
     PIDTracker mlbb_tracker;
@@ -351,6 +357,26 @@ static void encore_main_daemon() {
     while (true) {
         if (daemon_stop_requested.load(std::memory_order_relaxed)) [[unlikely]] {
             break;
+        }
+
+        {
+            const auto now_jc = std::chrono::steady_clock::now();
+            if ((now_jc - state.last_java_check) >= JAVA_CHECK_INTERVAL) {
+                state.last_java_check = now_jc;
+
+                if (!check_java_daemon()) {
+                    if (state.java_check_fail_count) LOGW("Waiting for Java daemon...");
+                    ++state.java_check_fail_count;
+
+                    if (state.java_check_fail_count >= JAVA_CHECK_MAX_ERRORS) {
+                        LOGC("Java daemon absent for {} consecutive checks, stopping daemon", JAVA_CHECK_MAX_ERRORS);
+                        signal_daemon_stop();
+                    }
+                } else if (state.java_check_fail_count > 0) {
+                    LOGI("Java daemon recovered");
+                    state.java_check_fail_count = 0;
+                }
+            }
         }
 
         // Decide whether a full (slow) check is due
