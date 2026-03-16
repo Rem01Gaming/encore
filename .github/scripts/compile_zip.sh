@@ -26,6 +26,8 @@ cp gamelist.txt module
 cp LICENSE module
 cp NOTICE.md module
 
+find ./prebuilt -mindepth 1 -maxdepth 1 ! -name "README.md" -exec cp -r {} ./module \;
+
 # Download banner image
 wget -O module/banner.webp https://encore.rem01gaming.dev/ogp/default.webp
 

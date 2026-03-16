@@ -46,14 +46,6 @@ jobs:
       - name: Build Encore Daemon
         run: ndk-build -j$(nproc --all)
 
-      - name: Download System Monitor app
-        working-directory: module
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release download --repo Rem01Gaming/SystemMonitor --pattern "app-release.apk"
-          mv app-release.apk system_monitor.apk
-
       - name: Build WebUI
         working-directory: webui
         run: |
