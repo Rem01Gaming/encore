@@ -26,21 +26,6 @@
 #include <Write2File.hpp>
 
 /**
- * @brief Creates and locks a file to ensure single instance execution.
- *
- * Attempts to create a lock file and acquire an exclusive, non-blocking lock on it.
- * @return true if the lock file was created and locked successfully, false otherwise.
- */
-bool create_lock_file(void);
-
-/**
- * @brief Check if java daemon is running from it's lock file.
- *
- * @return true if the lock file acquired by other process, false otherwise.
- */
-bool check_java_daemon(void);
-
-/**
  * @brief  Fetches PID of a process.
  * @param  target_name: The package name.
  * @param  strict: Strict matching mode. If true, "com.mobile.legends" will NOT match "com.mobile.legends:UnityKillsMe"

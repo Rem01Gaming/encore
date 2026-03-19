@@ -8,7 +8,7 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/external/rapidjson/include \
     $(LOCAL_PATH)/external/spdlog/include
 
-LOCAL_STATIC_LIBRARIES := SystemStatus EncoreCLI GameRegistry EncoreConfig EncoreUtility DeviceInfo
+LOCAL_STATIC_LIBRARIES := SystemStatus PIDTracker InotifyWatcher LockFile EncoreCLI GameRegistry EncoreConfig EncoreUtility DeviceInfo
 
 LOCAL_SRC_FILES := Main.cpp
 

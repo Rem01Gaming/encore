@@ -10,7 +10,6 @@ LOCAL_C_INCLUDES := \
     $(ROOT_PATH)/external/spdlog/include
 
 LOCAL_SRC_FILES := \
-	FileUtility.cpp \
 	MiscUtility.cpp \
 	ProcessUtility.cpp \
 	Profiler.cpp

@@ -32,6 +32,7 @@
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
 #include <InotifyWatcher.hpp>
+#include <LockFile.hpp>
 #include <ModuleProperty.hpp>
 #include <PIDTracker.hpp>
 #include <ShellUtility.hpp>
@@ -45,22 +46,6 @@
 GameRegistry game_registry;
 
 // ---------------------------------------------------------------------------
-// Daemon timing constants
-// ---------------------------------------------------------------------------
-
-static constexpr auto INGAME_LOOP_INTERVAL = std::chrono::milliseconds(500);
-static constexpr auto NORMAL_LOOP_INTERVAL = std::chrono::seconds(7);
-static constexpr auto JAVA_CHECK_INTERVAL = std::chrono::seconds(1);
-
-static constexpr int POLL_TIMEOUT_MS = 50;
-static constexpr int JAVA_CHECK_MAX_ERRORS = 10;
-
-static_assert(
-    NORMAL_LOOP_INTERVAL % INGAME_LOOP_INTERVAL == std::chrono::milliseconds(0),
-    "NORMAL_LOOP_INTERVAL must be a multiple of INGAME_LOOP_INTERVAL"
-);
-
-// ---------------------------------------------------------------------------
 // Global event signaling for immediate daemon wake-up
 // ---------------------------------------------------------------------------
 
@@ -68,6 +53,9 @@ int system_status_event_fd = -1;
 
 std::atomic<bool> daemon_stop_requested{false};
 
+/**
+ * @brief Signal the daemon to wake pool loop
+ */
 void signal_daemon_update() {
     if (system_status_event_fd >= 0) {
         uint64_t val = 1;
@@ -76,10 +64,44 @@ void signal_daemon_update() {
     }
 }
 
+/**
+ * @brief Signal the daemon to stop immediately
+ */
 void signal_daemon_stop() {
     daemon_stop_requested.store(true, std::memory_order_relaxed);
-    // Wake the daemon poll loop immediately
     signal_daemon_update();
+}
+
+// ---------------------------------------------------------------------------
+// Lock file management
+// ---------------------------------------------------------------------------
+
+static LockFile daemon_lock{LOCK_FILE};
+static LockFile java_lock{JAVA_LOCK_FILE};
+
+/**
+ * @brief Acquire the daemon singleton lock (non-blocking)
+ *
+ * Creates LOCK_FILE if absent and tries F_SETLK. Returns false (and leaves
+ * the file unlocked) when another daemon instance is already running.
+ */
+[[nodiscard]] bool create_lock_file() {
+    return daemon_lock.acquire(LockFile::AcquireMode::NonBlocking, LockFile::LockType::Exclusive);
+}
+
+/**
+ * @brief Arm the Java companion daemon liveness watch
+ *
+ * Installs a LockFile::watch() on JAVA_LOCK_FILE. The watch callback fires
+ * signal_daemon_stop() the instant the Java daemon releases its lock.
+ */
+void watch_java_lock() {
+    java_lock.watch([](bool became_free) {
+        if (became_free) {
+            LOGC("Java daemon lock released, companion daemon exited or crashed, stopping daemon");
+            signal_daemon_stop();
+        }
+    });
 }
 
 // ---------------------------------------------------------------------------
@@ -91,7 +113,6 @@ struct DaemonState {
     SystemStatus system_status = {};
 
     std::string active_package;
-    std::chrono::steady_clock::time_point last_full_check = std::chrono::steady_clock::now();
 
     bool in_game_session = false;
     bool battery_saver_state = false;
@@ -99,15 +120,10 @@ struct DaemonState {
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
     bool prev_dnd_state = false;
-    bool is_mlbb = false;
 
     int focus_loss_count = 0;
 
-    int java_check_fail_count = 0;
-    std::chrono::steady_clock::time_point last_java_check = std::chrono::steady_clock::now();
-
     PIDTracker pid_tracker;
-    PIDTracker mlbb_tracker;
 };
 
 // ---------------------------------------------------------------------------
@@ -126,30 +142,19 @@ struct DaemonState {
 }
 
 /**
- * @brief Returns true if @p package_name is still running.
+ * @brief Returns true if the active game still holds focus.
  *
- * Handle cases where a game is still boosted when it already closed.
+ * Uses a 3-strike debounce so transient focus blips (e.g. in-game overlays)
+ * are not mistaken for a genuine exit. Process-death is handled exclusively
+ * by the PID tracker callback, so this function only examines focus state.
  */
 [[nodiscard]] static bool is_game_still_active(DaemonState &state) {
-    // Check if MLBB sub-process is still alive
-    if (state.is_mlbb && !state.mlbb_tracker.is_valid()) {
-        const pid_t new_mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
-        if (new_mlbb_pid == 0) {
-            LOGI("UnityKillsMe thread of {} no longer active", state.active_package);
-            return false;
-        } else {
-            LOGI("New UnityKillsMe thread detected for {} (PID: {})", state.active_package, new_mlbb_pid);
-            state.mlbb_tracker.set_pid(new_mlbb_pid);
-        }
-    }
-
-    // Check if the app is still focused
     if (state.system_status.focused_app == state.active_package) {
         state.focus_loss_count = 0;
         return true;
     }
 
-    // Only return false if the focus lost persists for 3 checks
+    // Only return false if the focus lost persists for 3 consecutive status updates
     state.focus_loss_count++;
     if (state.focus_loss_count < 3) {
         LOGD("is_game_still_active: Focus lost for {}, strike {}/3", state.active_package, state.focus_loss_count);
@@ -179,13 +184,12 @@ struct DaemonState {
  * @brief Returns the PID of @p package_name, or 0 on failure.
  */
 [[nodiscard]] static pid_t pidof_game(const std::string &package_name) {
-    // Fast path: the focused app's PID is already in the cache.
     SystemStatus status;
     if (system_status_cache.get(status) && status.focused_app == package_name && status.focused_pid > 0) {
         return status.focused_pid;
     }
 
-    // Fallback: scan /proc for the process name.
+    // Fallback to scan /proc for the process name
     const pid_t pid = pidof(package_name, false);
     if (pid != 0) return pid;
     LOGE_TAG("pidof_game", "Could not find PID for {}", package_name);
@@ -194,8 +198,8 @@ struct DaemonState {
 
 /**
  * @brief Checks if Do Not Disturb mode is currently enabled.
- * * @return true if zen_mode is 1 (Priority), 2 (Total Silence), or 3 (Alarms Only).
- * @return false if zen_mode is 0 or if the shell command fails.
+ * @return true if zen_mode is 1 (Priority), 2 (Total Silence), or 3 (Alarms Only).
+ * @return false if zen_mode is 0 or if the java daemon fails to fetch zen_mode.
  */
 bool is_dnd_enabled() {
     SystemStatus status;
@@ -215,7 +219,6 @@ bool is_dnd_enabled() {
         return false;
     }
 
-    state.last_full_check = std::chrono::steady_clock::now();
     return true;
 }
 
@@ -232,7 +235,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
 /**
  * @brief Handle the transition when the tracked game process exits.
  *
- * Clears session state and does an immediate window-display refresh so the
+ * Clears session state and does an immediate system-status refresh so the
  * next profile decision is based on fresh data.
  */
 static void handle_game_exit(DaemonState &state) {
@@ -240,10 +243,8 @@ static void handle_game_exit(DaemonState &state) {
     clear_dnd_if_needed(state);
     state.active_package.clear();
     state.pid_tracker.invalidate();
-    state.mlbb_tracker.invalidate();
     state.in_game_session = false;
     state.need_profile_checkup = true;
-    state.is_mlbb = false;
 
     // Refresh immediately so the balance/powersave decision below sees
     // the current foreground app rather than stale data.
@@ -256,8 +257,7 @@ static void handle_game_exit(DaemonState &state) {
  * @brief Apply the performance profile for the active game.
  *
  * Resolves the game entry and PID, applies the profile, and arms the PID
- * tracker. On any failure it clears the session so the loop falls back to
- * the balance/powersave path.
+ * tracker.
  *
  * @return true if the profile was applied; false if the session was cleared.
  */
@@ -280,24 +280,22 @@ static void handle_game_exit(DaemonState &state) {
         return false;
     }
 
-    // Handle MLBB process
-    const pid_t mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
-    if (mlbb_pid != 0) {
-        LOGD("Found UnityKillsMe thread for {} (PID: {})", state.active_package, mlbb_pid);
-        state.is_mlbb = true;
-        state.mlbb_tracker.set_pid(mlbb_pid);
-    } else {
-        state.is_mlbb = false;
-        state.mlbb_tracker.invalidate();
-    }
-
     state.need_profile_checkup = false;
     state.cur_mode = PERFORMANCE_PROFILE;
 
     LOGI("Applying performance profile for {} (PID: {})", state.active_package, game_pid);
     const bool lite_mode = active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
     apply_performance_profile(lite_mode, state.active_package, game_pid);
-    state.pid_tracker.set_pid(game_pid);
+
+    // For MLBB and other games by Moonton, UnityKillsMe is the foreground process.
+    // For all other games, track the main game PID.
+    const pid_t mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
+    if (mlbb_pid != 0) {
+        LOGD("Found UnityKillsMe thread for {} (PID: {}), tracking as game process", state.active_package, mlbb_pid);
+        state.pid_tracker.set_pid(mlbb_pid);
+    } else {
+        state.pid_tracker.set_pid(game_pid);
+    }
 
     // DND handling
     if (active_game->enable_dnd) {
@@ -354,102 +352,87 @@ static void encore_main_daemon() {
     run_perfcommon();
     pthread_setname_np(pthread_self(), "MainThread");
 
-    while (true) {
-        if (daemon_stop_requested.load(std::memory_order_relaxed)) [[unlikely]] {
+    // On any tracked process death, immediately wake the
+    // main poll so handle_game_exit runs without delay.
+    state.pid_tracker.set_callback([](pid_t) {
+        signal_daemon_update();
+    });
+
+    // Spin until the inotify-fed cache has its first snapshot.
+    // The InotifyWatcher will call signal_daemon_update() as soon as the
+    // watched file changes, so we can block here rather than busy-wait.
+    while (!daemon_stop_requested.load(std::memory_order_relaxed)) {
+        if (refresh_system_status(state)) break;
+        struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
+        poll(&pfd, 1, -1); // block until InotifyWatcher signals
+        uint64_t val;
+        ssize_t ret = read(system_status_event_fd, &val, sizeof(val));
+        (void)ret;
+    }
+
+    // Single event source: system_status_event_fd
+    //   - inotify updates from InotifyWatcher
+    //   - pid_tracker process-death callbacks
+    //   - signal_daemon_stop() wakeups (from java_lock watch or signal handler)
+    struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
+
+    while (!daemon_stop_requested.load(std::memory_order_relaxed)) {
+        const int ret = poll(&pfd, 1, -1); // sleep until something happens
+        if (ret < 0) {
+            if (errno == EINTR) continue;
+            LOGE_TAG("MainThread", "poll() failed: {}", strerror(errno));
             break;
         }
 
-        {
-            const auto now_jc = std::chrono::steady_clock::now();
-            if ((now_jc - state.last_java_check) >= JAVA_CHECK_INTERVAL) {
-                state.last_java_check = now_jc;
+        if (daemon_stop_requested.load(std::memory_order_relaxed)) [[unlikely]]
+            break;
 
-                if (!check_java_daemon()) {
-                    if (state.java_check_fail_count) LOGW("Waiting for Java daemon...");
-                    ++state.java_check_fail_count;
+        if (pfd.revents & POLLIN) {
+            // Drain all accumulated wakeups in one read.
+            uint64_t val;
+            ssize_t rd = read(system_status_event_fd, &val, sizeof(val));
+            (void)rd;
 
-                    if (state.java_check_fail_count >= JAVA_CHECK_MAX_ERRORS) {
-                        LOGC("Java daemon absent for {} consecutive checks, stopping daemon", JAVA_CHECK_MAX_ERRORS);
-                        signal_daemon_stop();
-                    }
-                } else if (state.java_check_fail_count > 0) {
-                    LOGI("Java daemon recovered");
-                    state.java_check_fail_count = 0;
+            if (state.in_game_session && state.pid_tracker.get_current_pid() == 0) {
+                handle_game_exit(state);
+                // Fall through, select_profile below will apply balance/powersave.
+            }
+
+            if (!refresh_system_status(state)) continue;
+
+            // Focus-loss check (3-strike debounce against transient blips)
+            if (state.in_game_session && !state.active_package.empty()) {
+                if (!is_game_still_active(state)) [[unlikely]] {
+                    handle_game_exit(state);
                 }
             }
-        }
 
-        // Decide whether a full (slow) check is due
-        const auto now = std::chrono::steady_clock::now();
-        const bool do_full_check = !state.in_game_session || (now - state.last_full_check) >= NORMAL_LOOP_INTERVAL;
-
-        if (do_full_check && !refresh_system_status(state)) {
-            // Cache not yet populated, wait briefly before retrying
-            struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
-            poll(&pfd, 1, POLL_TIMEOUT_MS);
-            continue;
-        }
-
-        // Stale-activity check (fixes profile stuck in MLBB etc.)
-        if (state.in_game_session && !state.active_package.empty() && do_full_check) {
-            if (!is_game_still_active(state)) [[unlikely]] {
-                handle_game_exit(state);
+            // Track user's DND preference while we are not overriding it
+            if (!state.game_requested_dnd) {
+                state.prev_dnd_state = is_dnd_enabled();
             }
-        }
 
-        // PID liveness check
-        if (state.in_game_session && !state.pid_tracker.is_valid()) [[unlikely]] {
-            handle_game_exit(state);
-        }
-
-        // Monitor DND state whenever the daemon isn't overriding it
-        if (!state.game_requested_dnd && do_full_check) {
-            state.prev_dnd_state = is_dnd_enabled();
-        }
-
-        // Discover active game
-        if (state.active_package.empty()) {
-            state.active_package = get_active_game(state.system_status, game_registry);
-            if (!state.active_package.empty()) {
-                state.in_game_session = true;
-                LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
+            // Discover a newly focused game
+            if (state.active_package.empty()) {
+                state.active_package = get_active_game(state.system_status, game_registry);
+                if (!state.active_package.empty()) {
+                    state.in_game_session = true;
+                    LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
+                }
             }
-        }
 
-        // Battery-saver poll (idle only, while method is still working)
-        if (state.active_package.empty() && !state.battery_saver_state_oops && do_full_check) {
-            const auto bs_state = get_battery_saver_state();
-            state.battery_saver_state_oops = !bs_state.has_value();
-            state.battery_saver_state = bs_state.value_or(false);
+            // Battery-saver poll (idle only, while method is still working)
+            if (state.active_package.empty() && !state.battery_saver_state_oops) {
+                const auto bs_state = get_battery_saver_state();
+                state.battery_saver_state_oops = !bs_state.has_value();
+                state.battery_saver_state = bs_state.value_or(false);
 
-            if (state.battery_saver_state_oops) {
-                LOGE("get_battery_saver_state is out of order!");
+                if (state.battery_saver_state_oops) {
+                    LOGE("get_battery_saver_state is out of order!");
+                }
             }
-        }
 
-        // Profile selection
-        select_profile(state);
-
-        // Use remaining time until next full check, or INGAME_LOOP_INTERVAL
-        int poll_timeout_ms = POLL_TIMEOUT_MS;
-        if (state.in_game_session) {
-            poll_timeout_ms = static_cast<int>(INGAME_LOOP_INTERVAL.count());
-        } else {
-            const auto elapsed = std::chrono::steady_clock::now() - state.last_full_check;
-            const auto remaining = NORMAL_LOOP_INTERVAL - elapsed;
-            if (remaining.count() > 0) {
-                poll_timeout_ms = std::min(static_cast<int>(remaining.count()), static_cast<int>(NORMAL_LOOP_INTERVAL.count()));
-            }
-        }
-
-        // Wait on eventfd with timeout, drain eventfd if signaled
-        struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
-        int poll_ret = poll(&pfd, 1, poll_timeout_ms);
-
-        if (poll_ret > 0 && (pfd.revents & POLLIN)) {
-            uint64_t val;
-            ssize_t ret = read(system_status_event_fd, &val, sizeof(val));
-            (void)ret;
+            select_profile(state);
         }
     }
 }
@@ -518,22 +501,26 @@ int run_daemon() {
         return EXIT_FAILURE;
     }
 
-    // Create eventfd for immediate daemon wake-up on system_status changes
-    system_status_event_fd = eventfd(0, EFD_CLOEXEC | EFD_SEMAPHORE);
+    // eventfd for immediate daemon wake-up on system_status changes and PID
+    // tracker callbacks.
+    system_status_event_fd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
     if (system_status_event_fd < 0) {
         LOGC("Failed to create eventfd: {}", strerror(errno));
         notify_fatal_error("Failed to create eventfd");
         return EXIT_FAILURE;
     }
 
+    // Watch the Java companion daemon lock for its entire lifetime.
+    // The watch thread blocks on F_SETLKW; signal_daemon_stop() is called
+    // the instant the Java daemon releases JAVA_LOCK_FILE.
+    watch_java_lock();
+
     InotifyWatcher file_watcher;
     if (!init_file_watcher(file_watcher)) {
         LOGC("Failed to initialize file watcher");
         notify_fatal_error("Failed to initialize file watcher");
-        if (system_status_event_fd >= 0) {
-            close(system_status_event_fd);
-            system_status_event_fd = -1;
-        }
+        close(system_status_event_fd);
+        system_status_event_fd = -1;
         return EXIT_FAILURE;
     }
 
