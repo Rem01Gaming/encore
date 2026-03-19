@@ -46,6 +46,25 @@
 GameRegistry game_registry;
 
 // ---------------------------------------------------------------------------
+// module.prop management
+// ---------------------------------------------------------------------------
+
+void set_module_description_status(const std::string &status) {
+    const std::string description = "[" + status + "] Special performance module for your Device.";
+    const std::vector<ModuleProperties> props{{"description", description}};
+    try {
+        ModuleProperty::Change(MODULE_PROP, props);
+    } catch (const std::runtime_error &e) {
+        LOGE("Failed to apply module properties: {}", e.what());
+    }
+}
+
+void notify_fatal_error(const std::string &error_msg) {
+    notify(("ERROR: " + error_msg).c_str());
+    set_module_description_status("\xE2\x9D\x8C " + error_msg);
+}
+
+// ---------------------------------------------------------------------------
 // Global event signaling for immediate daemon wake-up
 // ---------------------------------------------------------------------------
 
@@ -99,6 +118,7 @@ void watch_java_lock() {
     java_lock.watch([](bool became_free) {
         if (became_free) {
             LOGC("Java daemon lock released, companion daemon exited or crashed, stopping daemon");
+            notify_fatal_error("Java companion daemon crashed");
             signal_daemon_stop();
         }
     });
@@ -440,21 +460,6 @@ static void encore_main_daemon() {
 
 // Will be called by EncoreCLI
 int run_daemon() {
-    auto set_module_description_status = [](const std::string &status) {
-        const std::string description = "[" + status + "] Special performance module for your Device.";
-        const std::vector<ModuleProperties> props{{"description", description}};
-        try {
-            ModuleProperty::Change(MODULE_PROP, props);
-        } catch (const std::runtime_error &e) {
-            LOGE("Failed to apply module properties: {}", e.what());
-        }
-    };
-
-    auto notify_fatal_error = [&set_module_description_status](const std::string &error_msg) {
-        notify(("ERROR: " + error_msg).c_str());
-        set_module_description_status("\xE2\x9D\x8C " + error_msg);
-    };
-
     std::atexit([]() {
         SignalHandler::cleanup_before_exit();
     });
@@ -507,9 +512,23 @@ int run_daemon() {
         return EXIT_FAILURE;
     }
 
-    // Watch the Java companion daemon lock for its entire lifetime.
-    // The watch thread blocks on F_SETLKW; signal_daemon_stop() is called
-    // the instant the Java daemon releases JAVA_LOCK_FILE.
+    // Check for the Java companion daemon lock before proceeding
+    {
+        int check = 0;
+        const int max_retries = 10;
+        while (!java_lock.is_locked()) {
+            if (++check > max_retries) {
+                LOGC("Java companion daemon absent after {} checks, exiting", max_retries);
+                notify_fatal_error("Java companion daemon crashed");
+                return EXIT_FAILURE;
+            }
+
+            LOGW("Java companion daemon lock not held, waiting... ({}/{})", check, max_retries);
+            sleep(1);
+        }
+    }
+
+    // Watch the Java companion daemon lock
     watch_java_lock();
 
     InotifyWatcher file_watcher;

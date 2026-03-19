@@ -79,4 +79,5 @@ fi
 
 # Start Encore Daemon
 nohup app_process -Djava.class.path="$MODDIR/system_monitor.apk" / --nice-name=EncoreSysMon com.rem01gaming.systemmonitor.MainKt "$MODULE_CONFIG/system_status" "$MODULE_CONFIG/java.lock" >"$MODULE_CONFIG/sysmon.log" 2>&1 &
+sleep 1 # Buffer
 encored daemon
