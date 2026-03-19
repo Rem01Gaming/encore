@@ -87,7 +87,7 @@ soc_recognition_extra() {
 }
 
 get_soc_getprop() {
-	local SOC_PROP="
+	SOC_PROP="
 ro.board.platform
 ro.soc.model
 ro.hardware
@@ -239,7 +239,7 @@ soc_recognition_extra
 echo $SOC >"$MODULE_CONFIG/soc_recognition"
 
 # Easter Egg
-case "$((RANDOM % 8 + 1))" in
+case "$((RANDOM % 9 + 1))" in
 1) ui_print "- Wooly's Fairy Tale" ;;
 2) ui_print "- Sheep-counting Lullaby" ;;
 3) ui_print "- Fog? The Black Shores!" ;;
@@ -248,4 +248,5 @@ case "$((RANDOM % 8 + 1))" in
 6) ui_print "- Woolies Save the World!" ;;
 7) ui_print "- How much people will let you live for Encore?" ;;
 8) ui_print "- Wen Donate?" ;;
+9) ui_print "- Welcome to Encore Tweaks!" ;;
 esac
