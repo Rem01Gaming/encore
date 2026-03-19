@@ -21,19 +21,19 @@ if [ -n "$MMRL" ]; then
 fi
 
 if [ -n "$MAGISKTMP" ]; then
-	pm path io.github.a13e300.ksuwebui >/dev/null 2>&1 && {
-		echo "- Launching WebUI in KSUWebUIStandalone..."
-		am start -n "io.github.a13e300.ksuwebui/.WebUIActivity" -e id "encore"
-		exit 0
-	}
 	pm path com.dergoogler.mmrl.webuix >/dev/null 2>&1 && {
 		echo "- Launching WebUI in WebUI X..."
 		am start -n "com.dergoogler.mmrl.webuix/.ui.activity.webui.WebUIActivity" -e MOD_ID "encore"
 		exit 0
 	}
+	pm path io.github.a13e300.ksuwebui >/dev/null 2>&1 && {
+		echo "- Launching WebUI in KSUWebUIStandalone..."
+		am start -n "io.github.a13e300.ksuwebui/.WebUIActivity" -e id "encore"
+		exit 0
+	}
 fi
 
-echo "! Install KsuWebUI for WebUI access"
+echo "! Install WebUI X for WebUI access"
 sleep 2
-am start -a android.intent.action.VIEW -d https://github.com/5ec1cff/KsuWebUIStandalone/releases
+am start -a android.intent.action.VIEW -d https://github.com/MMRLApp/WebUI-X-Portable/releases
 exit 0
