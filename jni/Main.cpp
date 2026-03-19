@@ -116,7 +116,6 @@ struct DaemonState {
 
     bool in_game_session = false;
     bool battery_saver_state = false;
-    bool battery_saver_state_oops = false;
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
     bool prev_dnd_state = false;
@@ -421,14 +420,12 @@ static void encore_main_daemon() {
                 }
             }
 
-            // Battery-saver poll (idle only, while method is still working)
-            if (state.active_package.empty() && !state.battery_saver_state_oops) {
+            if (state.active_package.empty()) {
                 const auto bs_state = get_battery_saver_state();
-                state.battery_saver_state_oops = !bs_state.has_value();
-                state.battery_saver_state = bs_state.value_or(false);
-
-                if (state.battery_saver_state_oops) {
-                    LOGE("get_battery_saver_state is out of order!");
+                if (bs_state.has_value()) {
+                    state.battery_saver_state = *bs_state;
+                } else {
+                    LOGW("get_battery_saver_state: cache not yet populated, retaining last known value");
                 }
             }
 
