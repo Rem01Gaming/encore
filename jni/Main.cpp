@@ -515,7 +515,7 @@ int run_daemon() {
     // Check for the Java companion daemon lock before proceeding
     {
         int check = 0;
-        const int max_retries = 10;
+        const int max_retries = 120;
         while (!java_lock.is_locked()) {
             if (++check > max_retries) {
                 LOGC("Java companion daemon absent after {} checks, exiting", max_retries);
