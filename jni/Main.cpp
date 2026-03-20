@@ -529,7 +529,7 @@ int run_daemon() {
                 return EXIT_FAILURE;
             }
 
-            LOGW("Java companion daemon lock not held, waiting... ({}/{})", check, max_retries);
+            if (check <= 1) LOGW("Java companion daemon lock not held, waiting...");
             sleep(1);
         }
     }
