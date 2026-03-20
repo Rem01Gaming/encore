@@ -466,7 +466,7 @@ int run_daemon() {
 
     SignalHandler::setup_signal_handlers();
 
-    if (!create_lock_file()) {
+    if (daemon_lock.is_locked()) {
         std::cerr << "\033[31mERROR:\033[0m Another instance of Encore Daemon is already running!\n";
         return EXIT_FAILURE;
     }
@@ -500,6 +500,12 @@ int run_daemon() {
     if (daemon(0, 0) != 0) {
         LOGC("Failed to daemonize service");
         notify_fatal_error("Failed to daemonize service");
+        return EXIT_FAILURE;
+    }
+
+    if (!create_lock_file()) {
+        LOGC("Failed acquire daemon lock after daemonize");
+        notify_fatal_error("Failed to acquire lock");
         return EXIT_FAILURE;
     }
 
