@@ -27,6 +27,7 @@ cp LICENSE module
 cp NOTICE.md module
 
 find ./prebuilt -mindepth 1 -maxdepth 1 ! -name "README.md" -exec cp -r {} ./module \;
+find ./config -mindepth 1 -maxdepth 1 ! -name "README.md" -exec cp -r {} ./module/config \;
 
 # Download banner image
 wget -O module/banner.webp https://encore.rem01gaming.dev/ogp/default.webp

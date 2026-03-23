@@ -198,7 +198,9 @@ unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" -x "*.sha256" >&2
 # Set configs
 ui_print "- Encore Tweaks configuration setup"
 make_dir "$MODULE_CONFIG"
-extract "$ZIPFILE" 'device_mitigation.json' "$MODULE_CONFIG"
+unzip -o "$ZIPFILE" "config/*" -d "$MODULE_CONFIG" -x "*.sha256" >&2
+mv "$MODULE_CONFIG/config/"* "$MODULE_CONFIG/"
+rm -rf "$MODULE_CONFIG/config"
 
 # Permission settings
 ui_print "- Permission setup"
