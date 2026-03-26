@@ -9,7 +9,7 @@ Encore Tweaks is a Magisk Module created to enhance device performance during ga
 
 ## Features
 
-The main feature of Encore tweaks is that it's **fully automatic**. Unlike traditional performance modules and tweaks that requires manual selection of a performance profile whenever you wish to engage in gaming or conserve battery life, or even worse, locks everything to a performance setting and continously draining battery power, Encore Tweaks monitors system information periodically to determine the most appropriate performance profile at any given moment.
+The main feature of Encore tweaks is that it's **fully automatic**. Unlike traditional performance modules and tweaks that requires manual selection of a performance profile whenever you wish to engage in gaming or conserve battery life, or even worse, locks everything to a performance setting and continously draining battery power, Encore Tweaks monitors system information continuously to determine the most appropriate performance profile at any given moment.
 
 For example, running a game that have been listed on Encore's gamelist will apply the performance profile, enabling battery saver on quick settings will apply powersave profile, everything will be applied automatically without any manual settings.
 
