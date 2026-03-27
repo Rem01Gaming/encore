@@ -3,27 +3,29 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 5.0
+# Encore Tweaks 5.1
 
 ## Changelog
 
-While this release may appear minor on the surface, the entire codebase has undergone significant refactoring and migration. The previously C-based daemon has been completely rewritten in C++ to leverage abstraction and object-oriented programming. Similarly, the WebUI has been fully rebuilt in VueJS, enabling a native-like single-page application experience.
-
-- Massive internal refactoring and code migration
-- UI/UX improvements in WebUI
-- Drop support for logging system interface to other processes/module
-- Fix performance profile stuck when exiting games
+- Implement Java companion daemon for system info fetching, replacing `dumpsys` use
+- Fix performance regression caused by incorrect Inotify implementation
+- Implement event-driven architecture on native daemon
+- Any tweaks now will be applied instantly without any delay
+- Performance profile will no longer lock GPU frequency at highest frequency to prevent overheating and rapid battery drain
+- Adjust tweak for Snapdragon CPU Bus and DDR to prevent overheating and rapid battery drain
+- Update WebUI translation
 - Other misc changes and optimizations
 
 ## Download
-- [Download](https://github.com/Rem01Gaming/encore/releases/tag/5.0)
+- [Download](https://github.com/Rem01Gaming/encore/releases/tag/5.1)
 - [Telegram Channel](https://rem01schannel.t.me)
 
-::: tip Support our project
-Please consider support our project by not sharing direct module file
+::: tip Thanks for using Encore Tweaks!
+Your continued support keeps this project going. If you enjoy the improvements and want to see more features in the future, [consider supporting the developer with a small donation](https://t.me/rem01schannel/670). Every bit helps!
 :::
 
 ## Download older version
+- [Version 5.0](/download/version/5.0)
 - [Version 4.6](/download/version/4.6)
 - [Version 4.5](/download/version/4.5)
 - [Version 4.4](/download/version/4.4)
