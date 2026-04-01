@@ -13,7 +13,7 @@ LOCAL_STATIC_LIBRARIES := SystemStatus PIDTracker InotifyWatcher LockFile Encore
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
-LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O0 -flto
+LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O2 -flto
 LOCAL_CPPFLAGS += -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized
 
 LOCAL_LDFLAGS += -flto
