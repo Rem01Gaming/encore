@@ -4,7 +4,8 @@ ROOT_PATH := $(call my-dir)/../..
 include $(CLEAR_VARS)
 LOCAL_MODULE := PIDTracker
 
-LOCAL_SRC_FILES := PIDTracker.cpp
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_C_INCLUDES := \
 	$(ROOT_PATH)/include \

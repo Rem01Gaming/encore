@@ -4,10 +4,9 @@ ROOT_PATH := $(call my-dir)/../..
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := EncoreConfig
-LOCAL_SRC_FILES := \
-    InotifyHandler.cpp \
-    EncoreConfigStore.cpp \
-	DeviceMitigationStore.cpp
+
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_STATIC_LIBRARIES := SystemStatus InotifyWatcher GameRegistry DeviceInfo EncoreUtility
 

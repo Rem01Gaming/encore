@@ -10,7 +10,8 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_STATIC_LIBRARIES := SystemStatus PIDTracker InotifyWatcher LockFile EncoreCLI GameRegistry EncoreConfig EncoreUtility DeviceInfo
 
-LOCAL_SRC_FILES := Main.cpp
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_CPPFLAGS += -fexceptions -std=c++23 -O0 -flto
 LOCAL_CPPFLAGS += -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized

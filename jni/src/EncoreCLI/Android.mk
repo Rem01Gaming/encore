@@ -4,7 +4,8 @@ ROOT_PATH := $(call my-dir)/../..
 include $(CLEAR_VARS)
 LOCAL_MODULE := EncoreCLI
 
-LOCAL_SRC_FILES := EncoreCLI.cpp
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_STATIC_LIBRARIES := GameRegistry
 
