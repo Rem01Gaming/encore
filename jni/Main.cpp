@@ -138,7 +138,6 @@ struct DaemonState {
     bool battery_saver_state = false;
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
-    bool dnd_temporarily_disabled = false;
     bool prev_dnd_state = false;
 
     int focus_loss_count = 0;
@@ -217,28 +216,6 @@ struct DaemonState {
 }
 
 /**
- * @brief Updates DND state based on whether the DND‑enabled game currently has focus.
- */
-static void update_dnd_for_focus(DaemonState &state) {
-    if (!state.game_requested_dnd)
-        return;
-
-    bool has_focus = (state.system_status.focused_app == state.active_package);
-
-    if (!has_focus && !state.dnd_temporarily_disabled) {
-        // Focus lost, turn DND off immediately
-        set_do_not_disturb(false);
-        state.dnd_temporarily_disabled = true;
-        LOGD("DND disabled due to focus loss (game: {})", state.active_package);
-    } else if (has_focus && state.dnd_temporarily_disabled) {
-        // Focus regained, restore DND
-        set_do_not_disturb(true);
-        state.dnd_temporarily_disabled = false;
-        LOGD("DND re-enabled because game {} regained focus", state.active_package);
-    }
-}
-
-/**
  * @brief Checks if Do Not Disturb mode is currently enabled.
  * @return true if zen_mode is 1 (Priority), 2 (Total Silence), or 3 (Alarms Only).
  * @return false if zen_mode is 0 or if the java daemon fails to fetch zen_mode.
@@ -271,7 +248,6 @@ static void clear_dnd_if_needed(DaemonState &state) {
     if (state.game_requested_dnd) {
         set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
         state.game_requested_dnd = false;
-        state.dnd_temporarily_disabled = false;
     }
 }
 
@@ -343,11 +319,9 @@ static void handle_game_exit(DaemonState &state) {
     // DND handling
     if (active_game->enable_dnd) {
         state.game_requested_dnd = true;
-        state.dnd_temporarily_disabled = false;
         set_do_not_disturb(true);
     } else {
         state.game_requested_dnd = false;
-        state.dnd_temporarily_disabled = false;
         set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
     }
 
@@ -444,9 +418,6 @@ static void encore_main_daemon() {
             }
 
             if (!refresh_system_status(state)) continue;
-
-            // Update DND based on focus (for games that requested DND)
-            update_dnd_for_focus(state);
 
             // Focus-loss check (3-strike debounce against transient blips)
             if (state.in_game_session && !state.active_package.empty()) {
