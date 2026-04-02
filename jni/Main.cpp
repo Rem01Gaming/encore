@@ -139,6 +139,7 @@ struct DaemonState {
     bool need_profile_checkup = false;
     bool game_requested_dnd = false;
     bool prev_dnd_state = false;
+    bool dnd_just_cleared = false;
 
     int focus_loss_count = 0;
 
@@ -246,8 +247,9 @@ bool is_dnd_enabled() {
  */
 static void clear_dnd_if_needed(DaemonState &state) {
     if (state.game_requested_dnd) {
-        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
+        set_do_not_disturb(state.prev_dnd_state);
         state.game_requested_dnd = false;
+        state.dnd_just_cleared = true;
     }
 }
 
@@ -309,12 +311,28 @@ static void handle_game_exit(DaemonState &state) {
     // For MLBB and other games by Moonton, UnityKillsMe is the foreground process.
     // For all other games, track the main game PID.
     const pid_t mlbb_pid = pidof(state.active_package + ":UnityKillsMe", true);
+    const pid_t tracked_pid = (mlbb_pid != 0) ? mlbb_pid : game_pid;
+
     if (mlbb_pid != 0) {
         LOGD("Found UnityKillsMe thread for {} (PID: {}), tracking as game process", state.active_package, mlbb_pid);
-        state.pid_tracker.set_pid(mlbb_pid);
-    } else {
-        state.pid_tracker.set_pid(game_pid);
     }
+
+    if (kill(tracked_pid, 0) != 0) {
+        LOGW(
+            "Game {} (PID: {}) exited while applying profile ({}), aborting session",
+            state.active_package,
+            tracked_pid,
+            strerror(errno)
+        );
+
+        state.active_package.clear();
+        state.pid_tracker.invalidate();
+        state.in_game_session = false;
+        state.need_profile_checkup = true;
+        return false;
+    }
+
+    state.pid_tracker.set_pid(tracked_pid);
 
     // DND handling
     if (active_game->enable_dnd) {
@@ -322,7 +340,7 @@ static void handle_game_exit(DaemonState &state) {
         set_do_not_disturb(true);
     } else {
         state.game_requested_dnd = false;
-        set_do_not_disturb(state.prev_dnd_state); // Respect User's DND setting
+        set_do_not_disturb(state.prev_dnd_state);
     }
 
     return true;
@@ -428,7 +446,11 @@ static void encore_main_daemon() {
 
             // Track user's DND preference while we are not overriding it
             if (!state.game_requested_dnd) {
-                state.prev_dnd_state = is_dnd_enabled();
+                if (state.dnd_just_cleared) {
+                    state.dnd_just_cleared = false;
+                } else {
+                    state.prev_dnd_state = is_dnd_enabled();
+                }
             }
 
             // Discover a newly focused game
