@@ -182,6 +182,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   homeStore.stopProfileMonitoring()
+  homeStore.stopDaemonMonitoring()
 })
 
 function handleGuideClick() {

@@ -20,6 +20,7 @@ export const useHomeStore = defineStore('home', () => {
   const isInitialized = ref(false)
 
   let profileInterval = null
+  let daemonInterval = null
 
   // Actions
   async function initializeData() {
@@ -35,6 +36,7 @@ export const useHomeStore = defineStore('home', () => {
     ])
 
     startProfileMonitoring()
+    startDaemonMonitoring()
     isInitialized.value = true
   }
 
@@ -53,6 +55,21 @@ export const useHomeStore = defineStore('home', () => {
     }
   }
 
+  function startDaemonMonitoring() {
+    stopDaemonMonitoring()
+
+    daemonInterval = setInterval(() => {
+      getServiceState()
+    }, 1000)
+  }
+
+  function stopDaemonMonitoring() {
+    if (daemonInterval) {
+      clearInterval(daemonInterval)
+      daemonInterval = null
+    }
+  }
+
   async function getServiceState() {
     try {
       if (!KernelSU.isKSUWebUI()) {
@@ -60,15 +77,18 @@ export const useHomeStore = defineStore('home', () => {
       }
 
       const { errno, stdout } = await exec('/system/bin/toybox pidof encored')
-      if (errno !== 0) {
-        setDaemonStopped()
+      const pid = stdout.trim()
+
+      if (errno === 0 && pid) {
+        daemonPidRaw.value = pid
+        daemonStatusRaw.value = 'running'
+        daemonError.value = ''
+        logoImage.value = '/encore_happy.avif'
         return
       }
 
-      daemonPidRaw.value = stdout.trim()
-      daemonStatusRaw.value = 'running'
-      daemonError.value = ''
-      logoImage.value = '/encore_happy.avif'
+      setDaemonStopped()
+      return
     } catch (error) {
       setDaemonError(error.message)
     }
@@ -201,6 +221,7 @@ export const useHomeStore = defineStore('home', () => {
     // Actions
     initializeData,
     stopProfileMonitoring,
+    stopDaemonMonitoring,
     getServiceState,
     getAndroidSDK,
     getModuleVersion,
