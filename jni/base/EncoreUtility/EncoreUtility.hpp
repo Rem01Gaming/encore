@@ -23,7 +23,6 @@
 
 #include <Encore.hpp>
 #include <EncoreLog.hpp>
-#include <Write2File.hpp>
 
 /**
  * @brief  Fetches PID of a process.
@@ -66,13 +65,3 @@ void set_do_not_disturb(bool do_not_disturb);
  * sends a notification, and terminates the program.
  */
 void is_kanged(void);
-
-/**
- * @brief Sets all environment variables for the profiler
- */
-void set_profiler_env_vars();
-
-void run_perfcommon(void);
-void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_pid);
-void apply_balance_profile();
-void apply_powersave_profile();

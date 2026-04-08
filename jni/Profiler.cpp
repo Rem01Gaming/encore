@@ -17,8 +17,14 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include <DeviceMitigationStore.hpp>
-#include <EncoreConfigStore.hpp>
+#include "Encore.hpp"
+#include "EncoreLog.hpp"
+#include "Profiler.hpp"
+#include "Write2File.hpp"
+
+#include "DeviceMitigationStore.hpp"
+#include "EncoreConfigStore.hpp"
+
 #include <EncoreUtility.hpp>
 #include <SystemStatus.hpp>
 

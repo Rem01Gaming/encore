@@ -2,16 +2,15 @@ LOCAL_PATH := $(call my-dir)
 ROOT_PATH := $(call my-dir)/../..
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := EncoreCLI
-
-LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
-LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
-
-LOCAL_STATIC_LIBRARIES := GameRegistry
+LOCAL_MODULE := EncoreUtility
 
 LOCAL_C_INCLUDES := \
 	$(ROOT_PATH)/include \
+	$(ROOT_PATH)/external/rapidjson/include \
     $(ROOT_PATH)/external/spdlog/include
+
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

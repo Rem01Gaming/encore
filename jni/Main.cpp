@@ -23,15 +23,16 @@
 #include <poll.h>
 #include <sys/eventfd.h>
 
-#include <DeviceMitigationStore.hpp>
+#include "DeviceMitigationStore.hpp"
+#include "EncoreCLI.hpp"
+#include "EncoreConfigStore.hpp"
+#include "InotifyHandler.hpp"
+#include "Profiler.hpp"
+
 #include <Encore.hpp>
-#include <EncoreCLI.hpp>
-#include <EncoreConfig.hpp>
-#include <EncoreConfigStore.hpp>
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
-#include <InotifyWatcher.hpp>
 #include <LockFile.hpp>
 #include <ModuleProperty.hpp>
 #include <PIDTracker.hpp>

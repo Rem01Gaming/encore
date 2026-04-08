@@ -25,6 +25,7 @@
 #include <rapidjson/stringbuffer.h>
 
 #include "DeviceMitigationStore.hpp"
+
 #include <DeviceInfo.hpp>
 #include <EncoreUtility.hpp>
 

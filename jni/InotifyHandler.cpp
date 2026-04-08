@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-#include "EncoreConfig.hpp"
+#include "InotifyHandler.hpp"
 
-#include <DeviceMitigationStore.hpp>
+#include "DeviceMitigationStore.hpp"
+#include "EncoreConfigStore.hpp"
+
 #include <Encore.hpp>
-#include <EncoreUtility.hpp>
-#include <EncoreConfigStore.hpp>
 #include <EncoreLog.hpp>
+#include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
 #include <SystemStatus.hpp>
 

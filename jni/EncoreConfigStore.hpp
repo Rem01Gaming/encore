@@ -24,8 +24,8 @@
 
 #include <rapidjson/document.h>
 
-#include "Encore.hpp"
-#include "EncoreLog.hpp"
+#include <Encore.hpp>
+#include <EncoreLog.hpp>
 
 class EncoreConfigStore {
 public:
