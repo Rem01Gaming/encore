@@ -169,6 +169,9 @@ extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
 cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/system/bin"
 rm -rf "$TMPDIR/libs"
 
+# Skip mountify
+touch "$MODPATH/skip_mountify"
+
 if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
   ui_print "- KSU/AP Detected, skipping module mount (skip_mount)"
 	rm "$MODPATH/action.sh"
