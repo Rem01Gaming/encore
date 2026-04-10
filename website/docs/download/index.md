@@ -3,21 +3,17 @@ title: "Download"
 description: "Download the latest version of Encore Tweaks Magisk Module here"
 ---
 
-# Encore Tweaks 5.1
+# Encore Tweaks 5.1.1
 
 ## Changelog
 
-- Implement Java companion daemon for system info fetching, replacing `dumpsys` use
-- Fix performance regression caused by incorrect Inotify implementation
-- Implement event-driven architecture on native daemon
-- Any tweaks now will be applied instantly without any delay
-- Performance profile will no longer lock GPU frequency at highest frequency to prevent overheating and rapid battery drain
-- Adjust tweak for Snapdragon CPU Bus and DDR to prevent overheating and rapid battery drain
-- Update WebUI translation
+- Fix daemon status reported incorrectly as stopped
+- Fix issue where module will not start service daemon due Mountify issue on Magisk
+- Fix race condition on DND setting causing incorrect value applied
 - Other misc changes and optimizations
 
 ## Download
-- [Download](https://github.com/Rem01Gaming/encore/releases/tag/5.1)
+- [Download](https://github.com/Rem01Gaming/encore/releases/tag/5.1.1)
 - [Telegram Channel](https://rem01schannel.t.me)
 
 ::: tip Thanks for using Encore Tweaks!
@@ -25,6 +21,7 @@ Your continued support keeps this project going. If you enjoy the improvements a
 :::
 
 ## Download older version
+- [Version 5.1](/download/version/5.1)
 - [Version 5.0](/download/version/5.0)
 - [Version 4.6](/download/version/4.6)
 - [Version 4.5](/download/version/4.5)
