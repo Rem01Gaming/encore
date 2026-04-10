@@ -139,6 +139,13 @@ export default defineConfig({
           { text: "Sociabuzz", link: "https://sociabuzz.com/Rem01Gaming" },
         ],
       },
+      {
+        text: "Legal",
+        items: [
+          { text: "Apache License 2.0", link: "/legal/apache-2.0" },
+          { text: "Third-Party Notices", link: "/legal/third-party" },
+        ],
+      },
       { text: "Download", link: "/download" },
     ],
 
