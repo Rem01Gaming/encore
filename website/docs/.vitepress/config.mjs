@@ -119,35 +119,43 @@ export default defineConfig({
         ],
       },
       { text: "Download", link: "/download" },
+      { text: "Legal", link: "/legal/" },
     ],
 
-    sidebar: [
-      {
-        text: "Guide",
-        items: [
-          { text: "What is Encore Tweaks?", link: "/guide/" },
-          { text: "Getting Started", link: "/guide/getting-started" },
-          { text: "Lite Mode", link: "/guide/lite-mode" },
-          { text: "Encore Tweaks Addon", link: "/guide/addon" },
-          { text: "FAQ", link: "/guide/faq" },
-        ],
-      },
-      {
-        text: "Donate",
-        items: [
-          { text: "Saweria", link: "https://saweria.co/Rem01Gaming" },
-          { text: "Sociabuzz", link: "https://sociabuzz.com/Rem01Gaming" },
-        ],
-      },
-      {
-        text: "Legal",
-        items: [
-          { text: "Apache License 2.0", link: "/legal/apache-2.0" },
-          { text: "Third-Party Notices", link: "/legal/third-party" },
-        ],
-      },
-      { text: "Download", link: "/download" },
-    ],
+    sidebar: {
+      "/guide/": [
+        {
+          text: "Guide",
+          items: [
+            { text: "What is Encore Tweaks?", link: "/guide/" },
+            { text: "Getting Started", link: "/guide/getting-started" },
+            { text: "Lite Mode", link: "/guide/lite-mode" },
+            { text: "Encore Tweaks Addon", link: "/guide/addon" },
+            { text: "FAQ", link: "/guide/faq" },
+          ],
+        },
+        {
+          text: "Donate",
+          items: [
+            { text: "Saweria", link: "https://saweria.co/Rem01Gaming" },
+            { text: "Sociabuzz", link: "https://sociabuzz.com/Rem01Gaming" },
+          ],
+        },
+        { text: "Download", link: "/download/" },
+      ],
+      "/download": [
+        { text: "Download", link: "/download/" },
+      ],
+      "/legal/": [
+        {
+          text: "Legal",
+          items: [
+            { text: "Apache License 2.0", link: "/legal/" },
+            { text: "Third-Party Notices", link: "/legal/third-party" },
+          ],
+        },
+      ],
+    },
 
     search: {
       provider: "local",
