@@ -1,4 +1,4 @@
-## Encore Tweaks 5.0
+## Encore Tweaks 5.1.1
 
 **Thanks for using Encore Tweaks!**
 
@@ -6,10 +6,7 @@ Your continued support keeps this project going. If you enjoy the improvements a
 
 ### Changelog
 
-While this release may appear minor on the surface, the entire codebase has undergone significant refactoring and migration. The previously C-based daemon has been completely rewritten in C++ to leverage abstraction and object-oriented programming. Similarly, the WebUI has been fully rebuilt in VueJS, enabling a native-like single-page application experience.
-
-- Massive internal refactoring and code migration
-- UI/UX improvements in WebUI
-- Drop support for logging system interface to other processes/module
-- Fix performance profile stuck when exiting games
+- Fix daemon status reported incorrectly as stopped
+- Fix issue where module will not start service daemon due Mountify issue on Magisk
+- Fix race condition on DND setting causing incorrect value applied
 - Other misc changes and optimizations
