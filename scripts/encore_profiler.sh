@@ -242,16 +242,14 @@ mediatek_performance() {
 	apply 0 /proc/gpufreq/gpufreq_opp_freq
 	apply -1 /proc/gpufreqv2/fix_target_opp_index
 
-	if [ $LITE_MODE -eq 0 ]; then
-		# Set min freq via GED
+	[ $LITE_MODE -eq 0 ] && {
 		if [ -d /proc/gpufreqv2 ]; then
-			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreqv2/gpu_working_opp_table)
+			apply 0 /proc/gpufreqv2/fix_target_opp_index
 		else
-			mid_oppfreq=$(mtk_gpufreq_midfreq_index /proc/gpufreq/gpufreq_opp_dump)
+			gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | head -n 1)
+			apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
 		fi
-
-		apply "$mid_oppfreq" /sys/kernel/ged/hal/custom_boost_gpu_freq
-	fi
+	}
 
 	# Disable GPU Power limiter
 	[ -f "/proc/gpufreq/gpufreq_power_limited" ] && {
@@ -308,7 +306,7 @@ snapdragon_performance() {
 	# GPU tweak
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
 	if [ "$LITE_MODE" -eq 0 ]; then
-		devfreq_mid_perf "$gpu_path"
+		devfreq_max_perf "$gpu_path"
 	else
 		devfreq_unlock "$gpu_path"
 	fi
@@ -327,8 +325,7 @@ tegra_performance() {
 		apply "$max_freq" "$gpu_path/gpu_cap_rate"
 
 		if [ $LITE_MODE -eq 0 ]; then
-			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
-			apply "$mid_freq" "$gpu_path/gpu_floor_rate"
+			apply "$max_freq" "$gpu_path/gpu_floor_rate"
 		else
 			min_freq=$(which_minfreq "$gpu_path/available_frequencies")
 			apply "$min_freq" "$gpu_path/gpu_floor_rate"
@@ -344,8 +341,7 @@ exynos_performance() {
 		apply "$max_freq" "$gpu_path/gpu_max_clock"
 
 		if [ $LITE_MODE -eq 0 ]; then
-			mid_freq=$(which_midfreq "$gpu_path/gpu_available_frequencies")
-			apply "$mid_freq" "$gpu_path/gpu_min_clock"
+			apply "$max_freq" "$gpu_path/gpu_min_clock"
 		else
 			min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
 			apply "$min_freq" "$gpu_path/gpu_min_clock"
@@ -372,7 +368,7 @@ unisoc_performance() {
 	gpu_path=$(find /sys/class/devfreq/ -type d -iname "*.gpu" -print -quit 2>/dev/null)
 	[ -n "$gpu_path" ] && {
 		if [ $LITE_MODE -eq 0 ]; then
-			devfreq_mid_perf "$gpu_path"
+			devfreq_max_perf "$gpu_path"
 		else
 			devfreq_unlock "$gpu_path"
 		fi
@@ -387,8 +383,7 @@ tensor_performance() {
 		apply "$max_freq" "$gpu_path/scaling_max_freq"
 
 		if [ $LITE_MODE -eq 0 ]; then
-			mid_freq=$(which_midfreq "$gpu_path/available_frequencies")
-			apply "$mid_freq" "$gpu_path/scaling_min_freq"
+			apply "$max_freq" "$gpu_path/scaling_min_freq"
 		else
 			min_freq=$(which_minfreq "$gpu_path/available_frequencies")
 			apply "$min_freq" "$gpu_path/scaling_min_freq"
