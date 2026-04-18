@@ -1,3 +1,10 @@
+---
+title: Third Party Notices
+description: Third Party Notices for Encore Tweaks
+outline: false
+editLink: false
+---
+
 # Third Party Notices
 
 This project, Encore Tweaks, incorporates code from the following open source projects.

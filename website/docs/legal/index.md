@@ -1,3 +1,10 @@
+---
+title: Apache License
+description: Terms and Conditions for Encore Tweaks use, reproduction, and distribution
+outline: false
+editLink: false
+---
+
 Apache License
 ==============
 

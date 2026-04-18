@@ -152,6 +152,7 @@ export default defineConfig({
           items: [
             { text: "Apache License 2.0", link: "/legal/" },
             { text: "Third Party Notices", link: "/legal/third-party" },
+            { text: "Paid Addon EULA", link: "/legal/paid-addon-eula" }
           ],
         },
       ],
