@@ -67,7 +67,10 @@
         },
         "save_log": {
             "title": "حفظ السجل",
-            "description": "تصدير سجلات تشغيل Encore Tweaks"
+            "description": "تصدير سجلات تشغيل Encore Tweaks",
+            "exporting": "جاري حزم السجلات، يرجى الانتظار…",
+            "success": "تم حفظ السجل بنجاح",
+            "failure": "فشل حفظ السجل"
         },
         "create_shortcut": {
             "title": "إنشاء اختصار",
