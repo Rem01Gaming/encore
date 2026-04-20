@@ -62,7 +62,12 @@ save_logs() {
 
 	[ -f "$MODULE_CONFIG/sysmon.log" ] && cp "$MODULE_CONFIG/sysmon.log" "$report_dir/"
 	cp -r /sys/fs/pstore/. "$report_dir/pstore/" 2>/dev/null
-	(cd "$report_dir" && tar -czf "$log_file" .)
+
+	(
+		cd "$report_dir"
+		[ -f "$log_file" ] && rm -f "$log_file"
+		tar -czf "$log_file" .
+	)
 
 	target_dir="/sdcard/Download"
 	[ ! -d "$target_dir" ] && mkdir -p "$target_dir"
