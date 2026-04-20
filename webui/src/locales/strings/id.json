@@ -61,7 +61,10 @@
         },
         "save_log": {
             "title": "Simpan Log",
-            "description": "Ekspor log operasional Encore Tweaks"
+            "description": "Ekspor log operasional Encore Tweaks",
+            "exporting": "Menyimpan log, tunggu sebentar ya…",
+            "success": "Log berhasil disimpan",
+            "failure": "Gagal menyimpan log"
         },
         "create_shortcut": {
             "title": "Buat Pintasan",
