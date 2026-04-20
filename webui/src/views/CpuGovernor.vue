@@ -65,7 +65,7 @@
       </div>
       <template #actions>
         <button @click="closeSelectionModal"
-          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
           {{ $t('common.cancel') }}
         </button>
       </template>
@@ -80,11 +80,11 @@
 
       <template #actions>
         <button @click="cancelPerformanceSelection"
-          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
           {{ $t('common.cancel') }}
         </button>
         <button @click="confirmPerformanceSelection"
-          class="px-4 py-2 text-sm font-medium text-error hover:bg-error/10 transition-colors">
+          class="px-4 py-2 text-sm font-medium text-error hover:bg-error/10 rounded-full transition-colors">
           {{ $t('cpu_governor.modal.performance_warning_confirm') }}
         </button>
       </template>
@@ -104,7 +104,7 @@
       </div>
       <template #actions>
         <button @click="dismissInitialWarning"
-          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
+          class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
           {{ $t('common.ok') }}
         </button>
       </template>

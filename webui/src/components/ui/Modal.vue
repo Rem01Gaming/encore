@@ -18,12 +18,7 @@
                 </div>
 
                 <div class="p-6 pt-4 flex justify-end gap-2">
-                    <slot name="actions">
-                        <button @click="$emit('close')"
-                            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
-                            Cancel
-                        </button>
-                    </slot>
+                    <slot name="actions" />
                 </div>
             </div>
         </div>
