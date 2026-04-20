@@ -18,7 +18,10 @@
         },
         "save_log": {
             "title": "Сохранить журнал",
-            "description": "Экспорт журнала операций Encore Tweaks"
+            "description": "Экспорт журнала операций Encore Tweaks",
+            "exporting": "Упаковка логов, пожалуйста, подождите…",
+            "success": "Лог успешно сохранен",
+            "failure": "Не удалось сохранить лог"
         },
         "create_shortcut": {
             "title": "Создать ярлык",
