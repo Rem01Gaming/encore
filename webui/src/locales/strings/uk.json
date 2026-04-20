@@ -61,7 +61,10 @@
         },
         "save_log": {
             "title": "Зберегти Логи",
-            "description": "Експортувати робочий лог Encore Tweaks"
+            "description": "Експортувати робочий лог Encore Tweaks",
+            "exporting": "Пакування логів, будь ласка, зачекайте…",
+            "success": "Лог успішно збережено",
+            "failure": "Не вдалося зберегти лог"
         },
         "create_shortcut": {
             "title": "Створити Ярлик",
