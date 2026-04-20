@@ -11,7 +11,7 @@ export default defineConfig({
   },
 
   head: [
-    ["link", { rel: "icon", type: "image/png", href: "/favicon.ico" }],
+    ["link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     ["meta", { name: "hostname", content: "encore.rem01gaming.dev" }],
     ["meta", { name: "expected-hostname", content: "encore.rem01gaming.dev" }],
     ["meta", { property: "og:type", content: "website" }],
@@ -137,7 +137,9 @@ export default defineConfig({
         },
         { text: "Download", link: "/download/" },
       ],
-      "/download": [{ text: "Download", link: "/download/" }],
+      "/download": [
+        { text: "Download", link: "/download/" }
+      ],
       "/legal/": [
         {
           text: "Legal",
