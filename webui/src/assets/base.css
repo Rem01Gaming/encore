@@ -29,6 +29,16 @@ body,
     padding-bottom: calc(var(--nav-height) - var(--window-inset-bottom, 0px));
   }
 
+  /*
+   * On desktop, we can just add the system inset to the padding, since the navbar is not present
+   * with additional 2rem buffer so there's enough space between the content and the edge of the screen.
+   */
+  @media (min-width: 768px) {
+    .pb-safe-nav {
+      padding-bottom: calc(2rem + var(--window-inset-bottom, 0px));
+    }
+  }
+
   .md3-list {
     @apply mb-1 last:mb-4;
   }
