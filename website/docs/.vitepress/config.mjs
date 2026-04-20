@@ -12,20 +12,9 @@ export default defineConfig({
   },
 
   head: [
-    [
-      "link",
-      { rel: "icon", type: "image/png", href: "/favicon.ico" },
-    ],
+    ["link", { rel: "icon", type: "image/png", href: "/favicon.ico" }],
     ["meta", { name: "hostname", content: "encore.rem01gaming.dev" }],
     ["meta", { name: "expected-hostname", content: "encore.rem01gaming.dev" }],
-    [
-      "meta",
-      {
-        name: "keywords",
-        content:
-          "Encore Tweaks, Tweak, Magisk Module, apk, module, performance module, Gaming, Android, Module magisk, gaming performance",
-      },
-    ],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:locale", content: "en-US" }],
     ["meta", { property: "og:site_name", content: "Encore Tweaks" }],
@@ -99,9 +88,15 @@ export default defineConfig({
         { type: "application/ld+json" },
         JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
+          "@type": "SoftwareApplication",
           name: "Encore Tweaks",
-          alternateName: "Encore Tweak",
+          operatingSystem: "Android",
+          applicationCategory: "UtilitiesApplication",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
           url: "https://encore.rem01gaming.dev/",
         }),
       ]);
@@ -143,16 +138,14 @@ export default defineConfig({
         },
         { text: "Download", link: "/download/" },
       ],
-      "/download": [
-        { text: "Download", link: "/download/" },
-      ],
+      "/download": [{ text: "Download", link: "/download/" }],
       "/legal/": [
         {
           text: "Legal",
           items: [
             { text: "Apache License 2.0", link: "/legal/" },
             { text: "Third Party Notices", link: "/legal/third-party" },
-            { text: "Paid Addon EULA", link: "/legal/paid-addon-eula" }
+            { text: "Paid Addon EULA", link: "/legal/paid-addon-eula" },
           ],
         },
       ],
