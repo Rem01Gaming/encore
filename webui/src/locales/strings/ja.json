@@ -43,7 +43,10 @@
         },
         "save_log": {
             "title": "ログを保存",
-            "description": "Encore Tweaks 操作ログをエクスポート"
+            "description": "Encore Tweaks 操作ログをエクスポート",
+            "exporting": "ログをパッケージ化しています。しばらくお待ちください…",
+            "success": "ログの保存に成功しました",
+            "failure": "ログの保存に失敗しました"
         },
         "create_shortcut": {
             "title": "ショートカット作成",
