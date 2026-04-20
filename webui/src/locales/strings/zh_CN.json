@@ -69,7 +69,10 @@
         },
         "save_log": {
             "title": "保存日志",
-            "description": "导出 Encore Tweaks 的操作日志"
+            "description": "导出 Encore Tweaks 的操作日志",
+            "exporting": "正在打包日志，请稍候…",
+            "success": "日志保存成功",
+            "failure": "日志保存失败"
         },
         "create_shortcut": {
             "title": "创建快捷方式",
