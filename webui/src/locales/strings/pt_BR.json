@@ -67,7 +67,10 @@
         },
         "save_log": {
             "title": "Salvar Registros",
-            "description": "Exportar o registro operacional do Encore Tweaks"
+            "description": "Exportar o registro operacional do Encore Tweaks",
+            "exporting": "Empacotando logs, aguarde…",
+            "success": "Log salvo com sucesso",
+            "failure": "Falha ao salvar o log"
         },
         "create_shortcut": {
             "title": "Criar atalho",
