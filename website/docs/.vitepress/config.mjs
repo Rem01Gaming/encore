@@ -4,7 +4,6 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Encore Tweaks",
   lang: "en-US",
-  ignoreDeadLinks: true,
   cleanUrls: true,
 
   sitemap: {
