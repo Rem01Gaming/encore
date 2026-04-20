@@ -59,7 +59,10 @@
         },
         "save_log": {
             "title": "Günlüğü Kaydet",
-            "description": "Encore Tweaks günlüğünü dışa aktar"
+            "description": "Encore Tweaks günlüğünü dışa aktar",
+            "exporting": "Günlükler paketleniyor, lütfen bekleyin…",
+            "success": "Günlük başarıyla kaydedildi",
+            "failure": "Günlük kaydedilemedi"
         },
         "create_shortcut": {
             "title": "Kısayol Oluştur",
