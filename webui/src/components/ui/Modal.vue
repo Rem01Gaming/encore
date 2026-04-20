@@ -1,7 +1,7 @@
 <template>
     <Transition name="modal">
         <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-            @click="$emit('close')">
+            @click="handleOutsideClick">
             <div class="bg-surface rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col overflow-hidden modal-container shadow-xl mx-3"
                 @click.stop>
                 <div class="p-6 pb-4 border-b border-outline-variant/0">
@@ -26,13 +26,23 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
     show: Boolean,
     title: String,
     description: String,
+    closeOnOutsideClick: {
+        type: Boolean,
+        default: true
+    }
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
+
+const handleOutsideClick = () => {
+    if (props.closeOnOutsideClick) {
+        emit('close')
+    }
+}
 </script>
 
 <style scoped>
