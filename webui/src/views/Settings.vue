@@ -1,6 +1,5 @@
 <template>
   <div class="page settings-page h-full flex flex-col overflow-hidden">
-    <!-- Header -->
     <div class="sticky top-0 z-10 bg-background">
       <div class="max-w-3xl mx-auto p-5 pb-3">
         <div class="flex justify-between items-center text-on-surface">
@@ -9,19 +8,15 @@
       </div>
     </div>
 
-    <!-- Scrollable Settings List -->
     <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
       <div class="max-w-3xl mx-auto p-5 py-1">
-        <!-- Section Header - Preference -->
         <div class="px-4 py-2 mb-1">
           <h2 class="text-sm font-medium text-on-surface-variant">
             {{ $t('settings_page.section.preferences') }}
           </h2>
         </div>
 
-        <!-- Preferences Section -->
         <div class="space-y-1.5 mb-4">
-          <!-- Enforce Lite Mode -->
           <div class="md3-list">
             <RippleComponent @click="openLiteModeView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -47,7 +42,6 @@
             </RippleComponent>
           </div>
 
-          <!-- Language -->
           <div class="md3-list">
             <RippleComponent @click="openLanguageView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -74,16 +68,13 @@
           </div>
         </div>
 
-        <!-- Section Header - System -->
         <div class="px-4 py-2 mb-1">
           <h2 class="text-sm font-medium text-on-surface-variant">
             {{ $t('settings_page.section.system') }}
           </h2>
         </div>
 
-        <!-- System Section -->
         <div class="space-y-1.5 mb-4">
-          <!-- Device Mitigation -->
           <div class="md3-list">
             <RippleComponent @click="openDeviceMitigationView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -109,7 +100,6 @@
             </RippleComponent>
           </div>
 
-          <!-- CPU Governor -->
           <div class="md3-list">
             <RippleComponent @click="openCpuGovernorView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -134,7 +124,6 @@
             </RippleComponent>
           </div>
 
-          <!-- Log Level -->
           <div class="md3-list">
             <RippleComponent @click="openLogLvlView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -161,18 +150,15 @@
           </div>
         </div>
 
-        <!-- Section Header - Others -->
         <div class="px-4 py-2 mb-1">
           <h2 class="text-sm font-medium text-on-surface-variant">
             {{ $t('settings_page.section.others') }}
           </h2>
         </div>
 
-        <!-- Others Section -->
         <div class="space-y-1.5 mb-4">
-          <!-- Export Log -->
           <div class="md3-list">
-            <RippleComponent @click="exportEncoreLog" class="md3-list-item" tabindex="0">
+            <RippleComponent @click="openExportModal" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
                   <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
@@ -196,7 +182,6 @@
             </RippleComponent>
           </div>
 
-          <!-- Create Shortcut -->
           <div class="md3-list">
             <RippleComponent @click="createShortcut" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
@@ -224,6 +209,40 @@
         </div>
       </div>
     </div>
+
+    <Modal :show="showExportModal" :title="$t('settings_page.save_log.title')" @close="closeExportModal"
+      :closeOnOutsideClick="false">
+      <div class="px-4 pb-2">
+        <div v-if="exportStatus === 'loading'" class="flex flex-col items-center gap-4 py-6">
+          <LoadingSpinner :size="40" class="text-primary" />
+          <p class="text-on-surface-variant text-sm">{{ $t('settings_page.save_log.exporting') }}</p>
+        </div>
+
+        <div v-else-if="exportStatus === 'success'" class="flex flex-col items-center gap-3 py-4">
+          <CheckCircle :size="48" class="text-primary" />
+          <p class="text-on-surface font-medium text-center">{{ $t('settings_page.save_log.success') }}</p>
+          <p
+            class="text-on-surface-variant text-xs break-all text-center bg-surface-container-low px-4 py-3 rounded-xl w-full">
+            {{ exportPath }}
+          </p>
+        </div>
+
+        <div v-else-if="exportStatus === 'error'" class="flex flex-col items-center gap-3 py-4">
+          <ErrorIcon :size="48" class="text-error" />
+          <p class="text-on-surface font-medium text-center">{{ $t('settings_page.save_log.failure') }}</p>
+          <p class="text-on-surface-variant text-sm text-center">{{ exportErrorMsg }}</p>
+        </div>
+      </div>
+
+      <template #actions>
+        <div v-if="exportStatus !== 'loading'" class="flex gap-2">
+          <button @click="closeExportModal"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+            {{ exportStatus === 'success' ? 'Close' : $t('common.ok') }}
+          </button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -232,7 +251,6 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguageStore } from '@/stores/Language'
-import { getTranslation } from '@/helpers/Locales'
 
 import RippleComponent from '@/components/ui/Ripple.vue'
 import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
@@ -243,13 +261,23 @@ import BugIcon from '@/components/icons/Bug.vue'
 import TextIcon from '@/components/icons/Text.vue'
 import HomePlusIcon from '@/components/icons/HomePlus.vue'
 import ContentSaveIcon from '@/components/icons/ContentSave.vue'
+import ErrorIcon from '@/components/icons/Error.vue'
+import Modal from '@/components/ui/Modal.vue'
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
+import CheckCircle from '@/components/icons/CheckCircle.vue'
 
 import * as KernelSU from '@/helpers/KernelSU'
-import { exec, toast } from 'kernelsu'
+import { exec } from 'kernelsu'
 
 const router = useRouter()
 const { t } = useI18n()
 const languageStore = useLanguageStore()
+
+// Modal state
+const showExportModal = ref(false)
+const exportStatus = ref('idle') // 'idle', 'loading', 'success', 'error'
+const exportPath = ref('')
+const exportErrorMsg = ref('')
 
 // Computed property for current language display
 const currentLanguage = computed(() => {
@@ -262,49 +290,53 @@ const currentLanguage = computed(() => {
   }
 })
 
-const openLiteModeView = () => {
-  router.push('/settings/lite_mode')
-}
+const openLiteModeView = () => router.push('/settings/lite_mode')
+const openLanguageView = () => router.push('/settings/language')
+const openDeviceMitigationView = () => router.push('/settings/device_mitigation')
+const openCpuGovernorView = () => router.push('/settings/cpu_governor')
+const openLogLvlView = () => router.push('/settings/log_level')
+const createShortcut = () => KernelSU.createShortcut()
 
-const openLanguageView = () => {
-  router.push('/settings/language')
-}
+const openExportModal = () => {
+  exportStatus.value = 'loading'
+  exportPath.value = ''
+  exportErrorMsg.value = ''
+  showExportModal.value = true
 
-const openDeviceMitigationView = () => {
-  router.push('/settings/device_mitigation')
-}
-
-const openCpuGovernorView = () => {
-  router.push('/settings/cpu_governor')
-}
-
-const openLogLvlView = () => {
-  router.push('/settings/log_level')
-}
-
-const createShortcut = () => {
-  KernelSU.createShortcut()
-}
-
-const exportEncoreLog = () => {
   setTimeout(() => {
-    exec(`/data/adb/modules/encore/system/bin/encore_utility save_logs`).then(({ errno, stdout }) => {
-      if (errno !== 0) {
-        const failed_toast = getTranslation("toast.failed_save_log")
-        toast(failed_toast)
-      } else {
-        const success_toast = getTranslation("toast.success_save_log", { path: stdout.trim() })
-        toast(success_toast)
-      }
-    })
-  }, 1000)
+    exec(`/data/adb/modules/encore/system/bin/encore_utility save_logs`)
+      .then(({ errno, stdout, stderr }) => {
+        if (errno !== 0) {
+          exportStatus.value = 'error'
+          exportErrorMsg.value = stderr.trim()
+        } else {
+          exportStatus.value = 'success'
+          exportPath.value = stdout.trim()
+        }
+      })
+      .catch((err) => {
+        console.error('Export error:', err)
+        exportStatus.value = 'error'
+        exportErrorMsg.value = err.message
+      })
+  }, 100)
+}
+
+const closeExportModal = () => {
+  showExportModal.value = false
+  setTimeout(() => {
+    if (exportStatus.value !== 'loading') {
+      exportStatus.value = 'idle'
+      exportPath.value = ''
+      exportErrorMsg.value = ''
+    }
+  }, 200)
 }
 </script>
 
 <style scoped>
 .line-clamp-2 {
   display: -webkit-box;
-  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
