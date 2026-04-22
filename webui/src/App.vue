@@ -3,7 +3,9 @@
     <main class="main-content flex-1 md:ml-20 overflow-hidden relative">
       <router-view v-slot="{ Component, route }">
         <transition :name="transitionName" @after-enter="onAfterEnter">
-          <component :is="Component" :key="route.path" ref="pageComponent" />
+          <keep-alive>
+            <component :is="Component" :key="route.path" ref="pageComponent" />
+          </keep-alive>
         </transition>
       </router-view>
     </main>
