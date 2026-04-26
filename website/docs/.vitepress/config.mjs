@@ -122,8 +122,13 @@ export default defineConfig({
             { text: "FAQ", link: "/guide/faq" },
           ],
         },
-        { text: "Download", link: "/download/" },
-        { text: "Donate", link: "/download/donate" },
+        {
+          text: "Other Resources",
+          items: [
+            { text: "Download", link: "/download/" },
+            { text: "Donate", link: "/download/donate" },
+          ]
+        }
       ],
       "/download": [
         { text: "Download", link: "/download/" },
