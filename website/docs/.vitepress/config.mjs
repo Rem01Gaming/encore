@@ -105,13 +105,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "Guide", link: "/guide/" },
-      {
-        text: "Donate",
-        items: [
-          { text: "Saweria", link: "https://saweria.co/Rem01Gaming" },
-          { text: "Sociabuzz", link: "https://sociabuzz.com/Rem01Gaming" },
-        ],
-      },
+      { text: "Donate", link: "/download/donate" },
       { text: "Download", link: "/download" },
       { text: "Legal", link: "/legal/" },
     ],
@@ -128,17 +122,12 @@ export default defineConfig({
             { text: "FAQ", link: "/guide/faq" },
           ],
         },
-        {
-          text: "Donate",
-          items: [
-            { text: "Saweria", link: "https://saweria.co/Rem01Gaming" },
-            { text: "Sociabuzz", link: "https://sociabuzz.com/Rem01Gaming" },
-          ],
-        },
         { text: "Download", link: "/download/" },
+        { text: "Donate", link: "/download/donate" },
       ],
       "/download": [
-        { text: "Download", link: "/download/" }
+        { text: "Download", link: "/download/" },
+        { text: "Donate", link: "/download/donate" },
       ],
       "/legal/": [
         {
