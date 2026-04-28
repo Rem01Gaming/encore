@@ -21,6 +21,10 @@ Encore Tweaks dynamically adjusts your device's performance based on real-time d
 
 In contrast, from scheduler modules such as Uperf and Tritium, Encore Tweaks works in more traditional way compared to them, this gives more stability and compatibility to older devices that doesn't support eBPF.
 
+:::info 
+Internal behavior of Encore Tweaks between profiles is not written to make this guide more concise and easy to understand for everyone.
+:::
+
 ### Performance Profile
 
 Performance profile will boost your device performance to improve responsiveness and stability during intensive tasks, automatically applied when launching your favorite game.
@@ -43,6 +47,6 @@ The Encore Tweaks settings is accessible through the Module WebUI, a feature of 
 
 While KernelSU and APatch support WebUI natively in their managers, Magisk does not. If you're using Magisk, you can still access the WebUI using the [WebUI X](https://github.com/MMRLApp/WebUI-X-Portable).
 
-:::tip Note
-You may need to [update your WebView](https://play.google.com/store/apps/details?id=com.google.android.webview) to use the WebUI, old WebView versions are not supported by Encore Tweaks WebUI.
+:::tip NOTE
+You may need to [update your WebView](https://play.google.com/store/apps/details?id=com.google.android.webview) to use the WebUI, old WebView versions are not supported by Encore Tweaks WebUI and can cause styling issues.
 :::

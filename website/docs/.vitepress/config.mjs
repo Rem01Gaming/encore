@@ -121,13 +121,6 @@ export default defineConfig({
             { text: "Encore Tweaks Addon", link: "/guide/addon" },
             { text: "FAQ", link: "/guide/faq" },
           ],
-        },
-        {
-          text: "Other Resources",
-          items: [
-            { text: "Download", link: "/download/" },
-            { text: "Donate", link: "/download/donate" },
-          ]
         }
       ],
       "/download": [
