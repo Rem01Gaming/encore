@@ -112,7 +112,7 @@
         "default_description": "Applied to balanced and performance profiles when lite mode is active",
         "powersave_title": "Powersave CPU Governor",
         "powersave_description": "Exclusively used for the powersave profile",
-        "brief": "CPU governor is an algorithm that dynamically adjusts the processor's frequency in real time, directly affecting system performance and power consumtion.",
+        "brief": "CPU governor is an algorithm that dynamically adjusts the processor's frequency in real time, directly affecting system performance and power consumption.",
         "modal": {
             "default_select_title": "Select Default CPU Governor",
             "powersave_select_title": "Select Powersave CPU Governor",
