@@ -810,8 +810,8 @@ balance_profile() {
 		# We are not concerned with prioritizing latency
 		apply 0 /dev/stune/top-app/schedtune.prefer_idle
 
-		# Mark top-app as boosted, find high-performing CPUs
-		apply 1 /dev/stune/top-app/schedtune.boost
+		# Don't boost foreground tasks, let the governor handle it
+		apply 0 /dev/stune/top-app/schedtune.boost
 	fi
 
 	# Oppo/Oplus/Realme Touchpanel
