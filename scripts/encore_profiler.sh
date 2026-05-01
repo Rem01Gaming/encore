@@ -858,6 +858,9 @@ balance_profile() {
 powersave_profile() {
 	balance_profile
 
+	# Allow cores to go idle, we are not concerned with prioritizing latency
+    [ -d "/dev/stune/" ] && apply 1 /dev/stune/top-app/schedtune.prefer_idle
+
 	# Enable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
