@@ -53,8 +53,8 @@
             "description": "Encore Tweaks に素早くアクセスするためのホーム画面ショートカットを作成します"
         },
         "lite_mode": {
-            "title": "Liteモードを強制",
-            "description": "すべてのゲームでLiteモードをデフォルトで有効にする"
+            "title": "ライトモードを強制",
+            "description": "すべてのゲームでライトモードをデフォルトで有効にする"
         },
         "device_mitigation": {
             "title": "デバイスの緩和",
