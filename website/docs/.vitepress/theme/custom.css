@@ -180,3 +180,17 @@ html {
     --enter-stage: 20;
   }
 }
+
+@media (min-width: 1440px) {
+  /* Make the content wider when no sidebar are present */
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: 1800px !important;
+    margin-left: 14%;
+  }
+  .VPDoc:not(.has-sidebar) .container {
+    max-width: 2000px !important;
+  }
+  .VPDoc.has-aside .content-container {
+    max-width: 1200px !important;
+  }
+}

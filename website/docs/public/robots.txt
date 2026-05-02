@@ -2,6 +2,7 @@
 
 User-agent: *
 Disallow: /download/version/*
+Disallow: /download/addon_legal_preview
 Allow: /
 
 Sitemap: https://encore.rem01gaming.dev/sitemap.xml
