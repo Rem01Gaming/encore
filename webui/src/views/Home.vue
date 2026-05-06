@@ -186,7 +186,7 @@ onUnmounted(() => {
 })
 
 function handleGuideClick() {
-  KernelSU.openWebsite('https://encore.rem01gaming.dev/guide/what-is-encore-tweaks')
+  KernelSU.openWebsite('https://encore.rem01gaming.dev')
 }
 
 function handleDonateClick() {
