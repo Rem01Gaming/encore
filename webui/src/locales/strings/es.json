@@ -2,7 +2,7 @@
     "toast": {
         "reboot_to_apply": "Reinicia tu dispositivo para aplicar los cambios.",
         "has_shortcut": "Ya existe un atajo.",
-        "shortcut_unavailable": "No hay una API disponible para esta función; usa WebUI X para utilizarla.",
+        "shortcut_unavailable": "No hay una API disponible para esta función, usa WebUI X para utilizar esta funcionalidad.",
         "failed_open_extrenal_browser": "No se pudo abrir el navegador externo.",
         "failed_save_log": "No se pudieron guardar los registros.",
         "success_save_log": "Los registros se guardaron correctamente en {path}"
@@ -20,7 +20,7 @@
         "info_card": {
             "module": "Encore Tweaks",
             "profile": "Perfil actual",
-            "kernel": "Núcleo",
+            "kernel": "Kernel",
             "chipset": "Chipset",
             "androidSDK": "SDK de Android"
         },
@@ -120,7 +120,7 @@
             "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía",
             "performance_warning": "Configurar el gobernador en 'performance' provocará sobrecalentamiento y un agotamiento rápido de la batería. ¿Estás seguro de que deseas continuar?",
             "performance_warning_confirm": "Lo entiendo, Aplicar",
-            "initial_warn": "Ten en cuenta que Encore Tweaks ha configurado automáticamente el gobernador de CPU óptimo. No se recomiendan cambios manuales a menos que sea un usuario avanzado.",
+            "initial_warn": "Ten en cuenta que Encore Tweaks ha configurado automáticamente el gobernador de CPU más óptimo. No se recomiendan cambios manuales a menos que seas un usuario avanzado.",
             "initial_warn_checkbox": "No mostrar otra vez"
         }
     },
