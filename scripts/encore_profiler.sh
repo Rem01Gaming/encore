@@ -858,14 +858,6 @@ balance_profile() {
 powersave_profile() {
 	balance_profile
 
-	if [ -f "/sys/kernel/debug/sched_features" ]; then
-		# Consider scheduling tasks that are eager to run
-		apply NO_NEXT_BUDDY /sys/kernel/debug/sched_features
-
-		# Prioritize power over cache hits
-		apply NO_TTWU_QUEUE /sys/kernel/debug/sched_features
-	fi
-
 	# Allow cores to go idle, we are not concerned with prioritizing latency
     [ -d "/dev/stune/" ] && apply 1 /dev/stune/top-app/schedtune.prefer_idle
 
