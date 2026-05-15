@@ -158,6 +158,7 @@ com.hermes.mk
 com.herogame.gplay.magicminecraft.mmorpg
 com.hg.cosmicshake
 com.hg.lbw
+com.hottagames.nte
 com.hottapkgs.hotta
 com.humo.yqqsqz.yw
 com.hypergryph.arknights
