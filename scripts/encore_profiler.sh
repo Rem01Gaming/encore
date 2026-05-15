@@ -802,8 +802,8 @@ balance_profile() {
 		# Consider scheduling tasks that are eager to run
 		apply NEXT_BUDDY /sys/kernel/debug/sched_features
 
-		# Prioritize power over cache hits
-		apply NO_TTWU_QUEUE /sys/kernel/debug/sched_features
+		# Schedule tasks on their origin CPU if possible
+		apply TTWU_QUEUE /sys/kernel/debug/sched_features
 	fi
 
 	if [ -d "/dev/stune/" ]; then
@@ -859,7 +859,7 @@ powersave_profile() {
 	balance_profile
 
 	if [ -f "/sys/kernel/debug/sched_features" ]; then
-		# Prevent frequent load spikes
+		# Consider scheduling tasks that are eager to run
 		apply NO_NEXT_BUDDY /sys/kernel/debug/sched_features
 
 		# Prioritize power over cache hits
