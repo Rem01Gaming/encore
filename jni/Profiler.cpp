@@ -27,6 +27,11 @@
 
 #include <EncoreUtility.hpp>
 #include <SystemStatus.hpp>
+#include <UtilityAwareScheduler.hpp>
+
+#ifdef __aarch64__
+static UtilityAwareScheduler::Scheduler utility_scheduler;
+#endif
 
 void set_profiler_env_vars() {
     // Get preferences from config store
@@ -92,6 +97,11 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
 
     if (lite_mode) {
         LOGD("Lite mode is enabled");
+
+#ifdef __aarch64__
+        utility_scheduler.start();
+#endif
+
         if (system("encore_profiler performance_lite") != 0) {
             LOGE("Unable to execute profiler changes to performance_lite");
         }
@@ -111,6 +121,10 @@ void apply_balance_profile() {
     write2file(GAME_INFO, "NULL 0 0\n");
     write2file(PROFILE_MODE, static_cast<int>(BALANCE_PROFILE), "\n");
 
+#ifdef __aarch64__
+    utility_scheduler.stop();
+#endif
+
     if (system("encore_profiler balance") != 0) {
         LOGE("Unable to execute profiler changes to balance");
     }
@@ -122,6 +136,10 @@ void apply_powersave_profile() {
 
     write2file(GAME_INFO, "NULL 0 0\n");
     write2file(PROFILE_MODE, static_cast<int>(POWERSAVE_PROFILE), "\n");
+
+#ifdef __aarch64__
+    utility_scheduler.stop();
+#endif
 
     if (system("encore_profiler powersave") != 0) {
         LOGE("Unable to execute profiler changes to powersave");
