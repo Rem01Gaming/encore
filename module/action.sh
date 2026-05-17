@@ -15,12 +15,17 @@
 #
 
 if [ -n "$MMRL" ]; then
-	echo "- This action script is NOT intended to run on MMRL..."
+	echo "- This action script is not intended to run on MMRL."
 	echo "- Please open Encore Tweaks WebUI by clicking the module card."
 	exit 0
 fi
 
 if [ -n "$MAGISKTMP" ]; then
+	pm path com.dergoogler.mmrl.wx >/dev/null 2>&1 && {
+		echo "- Launching WebUI in WebUI X..."
+		am start -n "com.dergoogler.mmrl.wx/.ui.activity.webui.WebUIActivity" -e MOD_ID "encore"
+		exit 0
+	}
 	pm path com.dergoogler.mmrl.webuix >/dev/null 2>&1 && {
 		echo "- Launching WebUI in WebUI X..."
 		am start -n "com.dergoogler.mmrl.webuix/.ui.activity.webui.WebUIActivity" -e MOD_ID "encore"
