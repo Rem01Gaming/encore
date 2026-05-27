@@ -33,6 +33,7 @@ struct Config {
     int burst_hold_ticks = 20;
     int burst_floor_steps = 2;
     int spike_cooldown_ticks = 20;
+    float normal_max_boost_percent = 0.62f;
     std::chrono::milliseconds poll_interval{250};
 };
 

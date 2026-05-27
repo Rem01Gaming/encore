@@ -17,6 +17,7 @@
 #include "Cluster.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace UtilityAwareScheduler::internal {
 
@@ -29,6 +30,7 @@ int update_cluster(ClusterState &state, float raw_util, const UtilityAwareSchedu
 
     int old_floor = state.floor_index;
     int max_index = static_cast<int>(state.opp_table.size()) - 1;
+    int normal_max_index = static_cast<int>(std::round(cfg.normal_max_boost_percent * max_index));
 
     if (!state.in_burst && state.spike_cooldown_remaining == 0) {
         if (deviation >= cfg.spike_threshold) {
@@ -63,10 +65,10 @@ int update_cluster(ClusterState &state, float raw_util, const UtilityAwareSchedu
 
         if (state.raise_counter >= cfg.raise_confirm_ticks) {
             state.raise_counter = 0;
-            int new_floor = std::min(state.floor_index + 1, max_index);
-            if (new_floor != state.floor_index) {
-                state.floor_index = new_floor;
-                return new_floor;
+            int next_floor = state.floor_index + 1;
+            if (next_floor <= normal_max_index) {
+                state.floor_index = next_floor;
+                return next_floor;
             }
         }
     } else if (fast < cfg.drop_threshold && trend < 0.0f) {
