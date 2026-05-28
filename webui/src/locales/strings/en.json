@@ -131,6 +131,12 @@
             "initial_warn_checkbox": "Don't show this again"
         }
     },
+    "reboot_modal": {
+        "title": "Reboot Required",
+        "description": "This change requires a reboot to take effect. Would you like to reboot now?",
+        "reboot": "Reboot Now",
+        "later": "Do It Later"
+    },
     "profiles": {
         "initializing": "Initializing",
         "balanced": "Balanced",

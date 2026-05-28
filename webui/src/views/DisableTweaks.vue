@@ -37,6 +37,29 @@
         </div>
       </div>
     </div>
+
+    <Modal :show="showRebootModal" :title="$t('reboot_modal.title')" @close="closeRebootModal"
+      :closeOnOutsideClick="false">
+      <div class="px-4 pb-2">
+        <div class="flex flex-col items-center gap-4 py-6">
+          <RefreshIcon :size="48" class="text-primary" />
+          <p class="text-on-surface-variant text-sm text-center">{{ $t('reboot_modal.description') }}</p>
+        </div>
+      </div>
+
+      <template #actions>
+        <div class="flex gap-2">
+          <button @click="skipReboot"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+            {{ $t('reboot_modal.later') }}
+          </button>
+          <button @click="rebootDevice"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+            {{ $t('reboot_modal.reboot') }}
+          </button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -44,16 +67,21 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useEncoreConfigStore } from '@/stores/EncoreConfig'
+import { exec } from 'kernelsu'
 
 import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
+import RefreshIcon from '@/components/icons/Refresh.vue'
 import ToggleSwitch from '@/components/ui/ToggleSwitch.vue'
 import InformationOutlineIcon from '@/components/icons/InformationOutline.vue'
+import Modal from '@/components/ui/Modal.vue'
 
 const router = useRouter()
 const encoreConfigStore = useEncoreConfigStore()
 
 const isDeviceMitigationEnabled = ref(false)
+const initialValue = ref(false)
 const hasUnsavedChanges = ref(false)
+const showRebootModal = ref(false)
 
 onMounted(async () => {
   try {
@@ -61,6 +89,7 @@ onMounted(async () => {
       await encoreConfigStore.loadConfig()
     }
     isDeviceMitigationEnabled.value = encoreConfigStore.isDisableTweaksEnabled
+    initialValue.value = encoreConfigStore.isDisableTweaksEnabled
   } catch (error) {
     console.error('Failed to load disable tweaks setting:', error)
   }
@@ -90,10 +119,37 @@ async function toggleDisableTweaks(enabled) {
 
     encoreConfigStore.setDisableTweaks(enabled)
     hasUnsavedChanges.value = true
+    
+    // Save config immediately
+    await encoreConfigStore.saveConfig()
+    hasUnsavedChanges.value = false
+    
     console.log(`Disable tweaks ${enabled ? 'enabled' : 'disabled'}`)
+    
+    // Show reboot modal if the setting actually changed
+    if (initialValue.value !== isDeviceMitigationEnabled.value) {
+      showRebootModal.value = true
+    }
   } catch (error) {
     console.error('Failed to set disable tweaks:', error)
     isDeviceMitigationEnabled.value = encoreConfigStore.isDisableTweaksEnabled
+  }
+}
+
+function closeRebootModal() {
+  showRebootModal.value = false
+  initialValue.value = isDeviceMitigationEnabled.value
+}
+
+function skipReboot() {
+  closeRebootModal()
+}
+
+async function rebootDevice() {
+  try {
+    await exec('reboot')
+  } catch (error) {
+    console.error('Failed to reboot device:', error)
   }
 }
 
