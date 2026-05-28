@@ -43,6 +43,31 @@
           </div>
 
           <div class="md3-list">
+            <RippleComponent @click="openDisableTweaksView" class="md3-list-item" tabindex="0">
+              <div class="flex items-center justify-between px-5 py-4">
+                <div class="flex items-center gap-4 min-w-0 flex-1">
+                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <TuneIcon class="w-5 h-5 text-on-primary-container" />
+                  </div>
+
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-medium text-on-surface">
+                      {{ $t('settings_page.disable_tweaks.title') }}
+                    </h3>
+                    <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">
+                      {{ $t('settings_page.disable_tweaks.description') }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                </div>
+              </div>
+            </RippleComponent>
+          </div>
+
+          <div class="md3-list">
             <RippleComponent @click="openLanguageView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
@@ -256,6 +281,7 @@ import RippleComponent from '@/components/ui/Ripple.vue'
 import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
 import LanguageIcon from '@/components/icons/Language.vue'
 import FeatherIcon from '@/components/icons/Feather.vue'
+import TuneIcon from '@/components/icons/Tune.vue'
 import ChipsetIcon from '@/components/icons/Chipset.vue'
 import BugIcon from '@/components/icons/Bug.vue'
 import TextIcon from '@/components/icons/Text.vue'
@@ -295,6 +321,7 @@ const openLanguageView = () => router.push('/settings/language')
 const openDeviceMitigationView = () => router.push('/settings/device_mitigation')
 const openCpuGovernorView = () => router.push('/settings/cpu_governor')
 const openLogLvlView = () => router.push('/settings/log_level')
+const openDisableTweaksView = () => router.push('/settings/disable_tweaks')
 const createShortcut = () => KernelSU.createShortcut()
 
 const openExportModal = () => {

@@ -75,6 +75,7 @@ bool EncoreConfigStore::save_config(const std::string &config_path) {
     rapidjson::Value prefs_obj(rapidjson::kObjectType);
     prefs_obj.AddMember("enforce_lite_mode", config_.preferences.enforce_lite_mode, allocator);
     prefs_obj.AddMember("use_device_mitigation", config_.preferences.use_device_mitigation, allocator);
+    prefs_obj.AddMember("disable_tweaks", config_.preferences.disable_tweaks, allocator);
     prefs_obj.AddMember("log_level", config_.preferences.log_level, allocator);
     doc.AddMember("preferences", prefs_obj, allocator);
 
@@ -163,6 +164,7 @@ bool EncoreConfigStore::create_default_config() {
         .preferences = {
             .enforce_lite_mode = false,
             .use_device_mitigation = false,
+            .disable_tweaks = false,
             .log_level = 4
         },
         .cpu_governor = {
@@ -193,6 +195,10 @@ bool EncoreConfigStore::parse_config(const rapidjson::Document &doc) {
 
         if (prefs.HasMember("use_device_mitigation") && prefs["use_device_mitigation"].IsBool()) {
             new_config.preferences.use_device_mitigation = prefs["use_device_mitigation"].GetBool();
+        }
+
+        if (prefs.HasMember("disable_tweaks") && prefs["disable_tweaks"].IsBool()) {
+            new_config.preferences.disable_tweaks = prefs["disable_tweaks"].GetBool();
         }
 
         if (prefs.HasMember("log_level") && prefs["log_level"].IsInt()) {

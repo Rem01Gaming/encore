@@ -20,6 +20,7 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
   const isDeviceMitigationEnabled = computed(
     () => config.value?.preferences?.use_device_mitigation ?? false,
   )
+  const isDisableTweaksEnabled = computed(() => config.value?.preferences?.disable_tweaks ?? false)
   const balanceGovernor = computed(() => config.value?.cpu_governor?.balance ?? 'schedutil')
   const powersaveGovernor = computed(() => config.value?.cpu_governor?.powersave ?? 'schedutil')
 
@@ -71,6 +72,9 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     if (config.value.preferences.use_device_mitigation === undefined) {
       config.value.preferences.use_device_mitigation = false
     }
+    if (config.value.preferences.disable_tweaks === undefined) {
+      config.value.preferences.disable_tweaks = false
+    }
     if (config.value.preferences.enforce_lite_mode === undefined) {
       config.value.preferences.enforce_lite_mode = false
     }
@@ -96,6 +100,11 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
   function setDeviceMitigation(enabled) {
     ensureConfigStructure()
     config.value.preferences.use_device_mitigation = enabled
+  }
+
+  function setDisableTweaks(enabled) {
+    ensureConfigStructure()
+    config.value.preferences.disable_tweaks = enabled
   }
 
   function setBalanceGovernor(governor) {
@@ -164,6 +173,7 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     isLiteModeEnabled,
     logLevel,
     isDeviceMitigationEnabled,
+    isDisableTweaksEnabled,
     balanceGovernor,
     powersaveGovernor,
     isLoaded,
@@ -173,6 +183,7 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     setLiteMode,
     setLogLevel,
     setDeviceMitigation,
+    setDisableTweaks,
     setBalanceGovernor,
     setPowersaveGovernor,
     setCpuGovernorProfile,

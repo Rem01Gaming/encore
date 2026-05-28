@@ -73,6 +73,11 @@ void set_profiler_env_vars() {
 }
 
 void run_perfcommon(void) {
+    if (config_store.get_preferences().disable_tweaks) {
+        LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping perfcommon");
+        return;
+    }
+
     set_profiler_env_vars();
 
     if (system("encore_profiler perfcommon")) {
@@ -81,6 +86,11 @@ void run_perfcommon(void) {
 }
 
 void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_pid) {
+    if (config_store.get_preferences().disable_tweaks) {
+        LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping performance profile");
+        return;
+    }
+
     is_kanged();
     set_profiler_env_vars();
 
@@ -115,6 +125,11 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
 }
 
 void apply_balance_profile() {
+    if (config_store.get_preferences().disable_tweaks) {
+        LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping balance profile");
+        return;
+    }
+
     is_kanged();
     set_profiler_env_vars();
 
@@ -131,6 +146,11 @@ void apply_balance_profile() {
 }
 
 void apply_powersave_profile() {
+    if (config_store.get_preferences().disable_tweaks) {
+        LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping powersave profile");
+        return;
+    }
+
     is_kanged();
     set_profiler_env_vars();
 

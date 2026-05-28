@@ -69,6 +69,10 @@
         "create_shortcut": {
             "title": "Create Shortcut",
             "description": "Create a home screen shortcut for quick access to Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "Disable Tweaks",
+            "description": "Disable all performance tweaks set by Encore Tweaks, useful for addon-only users."
         }
     },
     "game_settings": {
@@ -100,6 +104,11 @@
         "title": "Lite Mode",
         "toggle_title": "Enforce lite mode",
         "brief": "Lite mode reduces overheating and power consumption during gameplay by lowering CPU and component frequencies. This setting applies to all games when enabled."
+    },
+    "disable_tweaks": {
+        "title": "Disable Tweaks",
+        "toggle_title": "Disable Tweaks",
+        "brief": "When enabled, this setting turns off all built-in performance optimizations on Encore Tweaks, allowing you to use this module strictly as a host for Encore Addon modules."
     },
     "device_mitigation": {
         "title": "Device Mitigation",

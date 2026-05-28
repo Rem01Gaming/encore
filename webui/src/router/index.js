@@ -8,6 +8,7 @@ import Settings from '@/views/Settings.vue'
 
 // Setting pages
 import LiteMode from '@/views/LiteMode.vue'
+import DisableTweaks from '@/views/DisableTweaks.vue'
 import GameSettings from '@/views/GameSettings.vue'
 import LanguageSelection from '@/views/LanguageSelection.vue'
 import LogLevelSelection from '@/views/LogLevelSelection.vue'
@@ -43,6 +44,11 @@ const routes = [
     path: '/settings/lite_mode',
     name: 'LiteMode',
     component: LiteMode,
+  },
+  {
+    path: '/settings/disable_tweaks',
+    name: 'DisableTweaks',
+    component: DisableTweaks,
   },
   {
     path: '/settings/language',
