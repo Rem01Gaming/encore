@@ -35,7 +35,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -60,7 +60,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -85,7 +85,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -118,7 +118,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -142,7 +142,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -167,7 +167,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -200,7 +200,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
@@ -225,7 +225,7 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ml-3">
+                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
                   <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
                 </div>
               </div>
