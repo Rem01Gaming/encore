@@ -26,7 +26,7 @@
                   {{ $t('disable_tweaks.toggle_title') }}
                 </h2>
               </div>
-              <ToggleSwitch v-model="isDeviceMitigationEnabled" @update:modelValue="toggleDisableTweaks" />
+              <ToggleSwitch v-model="isDisableTweaksEnabled" @update:modelValue="toggleDisableTweaks" />
             </div>
           </div>
 
@@ -78,7 +78,7 @@ import Modal from '@/components/ui/Modal.vue'
 const router = useRouter()
 const encoreConfigStore = useEncoreConfigStore()
 
-const isDeviceMitigationEnabled = ref(false)
+const isDisableTweaksEnabled = ref(false)
 const initialValue = ref(false)
 const hasUnsavedChanges = ref(false)
 const showRebootModal = ref(false)
@@ -88,7 +88,7 @@ onMounted(async () => {
     if (!encoreConfigStore.isLoaded) {
       await encoreConfigStore.loadConfig()
     }
-    isDeviceMitigationEnabled.value = encoreConfigStore.isDisableTweaksEnabled
+    isDisableTweaksEnabled.value = encoreConfigStore.isDisableTweaksEnabled
     initialValue.value = encoreConfigStore.isDisableTweaksEnabled
   } catch (error) {
     console.error('Failed to load disable tweaks setting:', error)
@@ -110,7 +110,7 @@ onBeforeRouteLeave(async (to, from, next) => {
 })
 
 async function toggleDisableTweaks(enabled) {
-  isDeviceMitigationEnabled.value = enabled
+  isDisableTweaksEnabled.value = enabled
 
   try {
     if (!encoreConfigStore.isLoaded) {
@@ -127,18 +127,18 @@ async function toggleDisableTweaks(enabled) {
     console.log(`Disable tweaks ${enabled ? 'enabled' : 'disabled'}`)
     
     // Show reboot modal if the setting actually changed
-    if (initialValue.value !== isDeviceMitigationEnabled.value) {
+    if (initialValue.value !== isDisableTweaksEnabled.value) {
       showRebootModal.value = true
     }
   } catch (error) {
     console.error('Failed to set disable tweaks:', error)
-    isDeviceMitigationEnabled.value = encoreConfigStore.isDisableTweaksEnabled
+    isDisableTweaksEnabled.value = encoreConfigStore.isDisableTweaksEnabled
   }
 }
 
 function closeRebootModal() {
   showRebootModal.value = false
-  initialValue.value = isDeviceMitigationEnabled.value
+  initialValue.value = isDisableTweaksEnabled.value
 }
 
 function skipReboot() {
