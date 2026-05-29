@@ -8,7 +8,7 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/external/rapidjson/include \
     $(LOCAL_PATH)/external/spdlog/include
 
-LOCAL_STATIC_LIBRARIES := UtilityAwareScheduler SystemStatus PIDTracker InotifyWatcher LockFile GameRegistry EncoreUtility DeviceInfo
+LOCAL_STATIC_LIBRARIES := SystemStatus PIDTracker InotifyWatcher LockFile GameRegistry EncoreUtility DeviceInfo
 
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
