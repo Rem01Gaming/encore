@@ -703,9 +703,6 @@ performance_profile() {
 	LITE_MODE=0
 	[ "$1" = "lite" ] && LITE_MODE=1
 
-	# Enable Do not Disturb
-	[ "$(<$MODULE_CONFIG/dnd_gameplay)" -eq 1 ] && set_dnd 1
-
 	# Disable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
 		if grep -qo '[0-9]\+' /sys/module/battery_saver/parameters/enabled; then
