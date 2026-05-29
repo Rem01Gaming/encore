@@ -77,6 +77,10 @@
         "create_shortcut": {
             "title": "创建快捷方式",
             "description": "在主屏幕创建一个快捷方式以快速访问 Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "禁用 Tweaks",
+            "description": "禁用 Encore Tweaks 的性能优化，适用于只使用附加模块的用户。"
         }
     },
     "game_settings": {
@@ -143,5 +147,16 @@
         "cancel": "取消",
         "warning": "警告",
         "ok": "好"
+    },
+    "disable_tweaks": {
+        "title": "禁用 Tweaks",
+        "toggle_title": "禁用 Tweaks",
+        "brief": "启用后，该设置会关闭 Encore Tweaks 的所有内置性能优化，允许你将该模块严格用作 Encore 附加模块的宿主模块。"
+    },
+    "reboot_modal": {
+        "title": "需要重启",
+        "description": "此更改需要重启设备以生效。是否立即重启？",
+        "reboot": "立即重启",
+        "later": "稍后"
     }
 }

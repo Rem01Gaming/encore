@@ -69,6 +69,10 @@
         "create_shortcut": {
             "title": "Buat Pintasan",
             "description": "Buat pintasan di layar utama untuk akses cepat ke Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "Matikan Tweak",
+            "description": "Nonaktifkan semua penyesuaian performa yang diatur oleh Encore Tweaks, berguna untuk pengguna yang hanya menggunakan add-on."
         }
     },
     "game_settings": {
@@ -150,5 +154,16 @@
         "cancel": "Batal",
         "warning": "Peringatan",
         "ok": "Oke"
+    },
+    "disable_tweaks": {
+        "title": "Matikan Tweak",
+        "toggle_title": "Matikan Tweak",
+        "brief": "Saat diaktifkan, pengaturan ini akan menonaktifkan semua tweak performa bawaan pada Encore Tweaks, sehingga Anda dapat menggunakan modul ini murni sebagai host untuk modul Add-on."
+    },
+    "reboot_modal": {
+        "title": "Reboot Diperlukan",
+        "description": "Perubahan ini memerlukan reboot agar berlaku. Apakah Anda ingin melakukan reboot sekarang?",
+        "reboot": "Reboot Sekarang",
+        "later": "Nanti"
     }
 }
