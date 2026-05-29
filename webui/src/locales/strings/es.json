@@ -77,6 +77,10 @@
         "create_shortcut": {
             "title": "Crear Atajo",
             "description": "Crear un atajo en la pantalla de inicio para un acceso rápido a Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "Desactivar Tweaks",
+            "description": "Desactivar todos los ajustes de rendimiento configurados por Encore Tweaks; útil para los usuarios que solo utilizan addons."
         }
     },
     "game_settings": {
@@ -143,5 +147,16 @@
         "cancel": "Cancelar",
         "warning": "Advertencia",
         "ok": "OK"
+    },
+    "disable_tweaks": {
+        "title": "Desactivar Tweaks",
+        "toggle_title": "Desactivar Tweaks",
+        "brief": "Cuando se activa, esta opción desactiva todas las optimizaciones de rendimiento de Encore Tweaks, lo que te permite utilizar este módulo exclusivamente como host para los módulos complementarios de Encore."
+    },
+    "reboot_modal": {
+        "title": "Reinicio Requerido",
+        "description": "Este cambio requiere reiniciar. ¿Desea reiniciar ahora?",
+        "reboot": "Reiniciar Ahora",
+        "later": "Hacer después"
     }
 }
