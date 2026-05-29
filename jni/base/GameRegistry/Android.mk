@@ -7,10 +7,9 @@ LOCAL_MODULE := GameRegistry
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
-LOCAL_C_INCLUDES := \
-	$(ROOT_PATH)/include \
-    $(ROOT_PATH)/external/rapidjson/include \
-    $(ROOT_PATH)/external/spdlog/include
+LOCAL_STATIC_LIBRARIES := rapidjson spdlog
+
+LOCAL_C_INCLUDES := $(ROOT_PATH)/include
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

@@ -3,12 +3,9 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE := encored
 
-LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/include \
-    $(LOCAL_PATH)/external/rapidjson/include \
-    $(LOCAL_PATH)/external/spdlog/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 
-LOCAL_STATIC_LIBRARIES := UtilityAwareScheduler SystemStatus PIDTracker InotifyWatcher LockFile GameRegistry EncoreUtility DeviceInfo
+LOCAL_STATIC_LIBRARIES := rapidjson spdlog UtilityAwareScheduler SystemStatus PIDTracker InotifyWatcher LockFile GameRegistry EncoreUtility DeviceInfo
 
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
@@ -20,4 +17,4 @@ LOCAL_LDFLAGS += -flto
 
 include $(BUILD_EXECUTABLE)
 
-include $(LOCAL_PATH)/base/Android.mk
+include $(LOCAL_PATH)/external/Android.mk $(LOCAL_PATH)/base/Android.mk
