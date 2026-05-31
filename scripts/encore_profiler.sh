@@ -120,7 +120,7 @@ cpufreq_max_perf() {
 
 		[ $LITE_MODE -eq 1 ] && {
 			cpu_midfreq=$(which_midfreq "$path/scaling_available_frequencies")
-			write "$cpu_midfreq" "$path/scaling_min_freq"
+			apply "$cpu_midfreq" "$path/scaling_min_freq"
 			continue
 		}
 
