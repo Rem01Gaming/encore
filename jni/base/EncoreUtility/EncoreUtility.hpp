@@ -55,13 +55,3 @@ void notify(const char *message);
  * @note It is only intended for use in an Android environment.
  */
 void set_do_not_disturb(bool do_not_disturb);
-
-/**
- * @brief Verifies the module's integrity.
- *
- * This function checks the `module.prop` file for specific 'name' and 'author'
- * fields to ensure the module has not been modified or redistributed by
- * unauthorized third parties. If the check fails, it logs a critical error,
- * sends a notification, and terminates the program.
- */
-void is_kanged(void);

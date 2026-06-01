@@ -86,7 +86,6 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
         return;
     }
 
-    is_kanged();
     set_profiler_env_vars();
 
     uid_t game_uid = 0;
@@ -120,7 +119,6 @@ void apply_balance_profile() {
         return;
     }
 
-    is_kanged();
     set_profiler_env_vars();
 
     write2file(GAME_INFO, "NULL 0 0\n");
@@ -137,7 +135,6 @@ void apply_powersave_profile() {
         return;
     }
 
-    is_kanged();
     set_profiler_env_vars();
 
     write2file(GAME_INFO, "NULL 0 0\n");

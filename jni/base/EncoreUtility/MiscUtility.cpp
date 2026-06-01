@@ -76,30 +76,3 @@ void notify(const char *message) {
         LOGE("fork failed: {}", strerror(errno));
     }
 }
-
-void is_kanged(void) {
-    std::vector<ModuleProperties> module_properties;
-
-    try {
-        ModuleProperty::Get(MODULE_PROP, module_properties);
-
-        for (const auto &property : module_properties) {
-            if (property.key == "name" && property.value != "Encore Tweaks") {
-                goto doorprize;
-            }
-
-            if (property.key == "author" && property.value != "Rem01Gaming") {
-                goto doorprize;
-            }
-        }
-    } catch (const std::exception &e) {
-        LOGE_TAG("ModuleProperty", "{}", e.what());
-    }
-
-    return;
-
-doorprize:
-    LOGC("Module modified by 3rd party, exiting");
-    notify("Trying to rename me?");
-    exit(EXIT_FAILURE);
-}
