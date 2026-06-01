@@ -19,6 +19,11 @@ MODULE_CONFIG="/data/adb/.config/encore"
 CLEANUP_SCRIPT="/data/adb/service.d/.encore_cleanup.sh"
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"
 
+# Restore original module.prop
+[ -f "$MODDIR/module.prop.orig" ] && {
+  cp "$MODDIR/module.prop.orig" "$MODDIR/module.prop"
+}
+
 # Clear old logs
 rm -f "$MODULE_CONFIG/encore.log" "$MODULE_CONFIG/sysmon.log"
 

@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-#include <iostream>
-#include <filesystem>
-
 #include "EncoreUtility.hpp"
 
 #include <ModuleProperty.hpp>
 #include <ShellUtility.hpp>
-
-namespace fs = std::filesystem;
-
 
 void set_do_not_disturb(bool do_not_disturb) {
     pid_t pid = fork();
@@ -81,30 +75,4 @@ void notify(const char *message) {
     } else {
         LOGE("fork failed: {}", strerror(errno));
     }
-}
-
-void check_module_prop() {
-    auto RestoreModuleProp = []() {
-        fs::path source = MODULE_PROP;
-        fs::path destination = MODULE_PROP ".orig";
-
-        try {
-            fs::copy_file(source, destination, fs::copy_options::overwrite_existing);
-        } catch (...) {
-        }
-    };
-
-    std::vector<ModuleProperties> module_properties;
-
-    try {
-        ModuleProperty::Get(MODULE_PROP, module_properties);
-
-        for (const auto &property : module_properties) {
-            if (property.key == "description") return;
-        }
-    } catch (...) {
-    }
-
-    // If we reach this it means the module.prop is corrupted
-    RestoreModuleProp();
 }

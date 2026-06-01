@@ -55,8 +55,3 @@ void notify(const char *message);
  * @note It is only intended for use in an Android environment.
  */
 void set_do_not_disturb(bool do_not_disturb);
-
-/**
- * @brief Check and restore module.prop from corruption due to failed writes.
- */
-void check_module_prop(void);

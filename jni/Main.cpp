@@ -389,7 +389,6 @@ static void encore_main_daemon() {
     DaemonState state;
     pthread_setname_np(pthread_self(), "MainThread");
 
-    check_module_prop();
     run_perfcommon();
 
     // On any tracked process death, immediately wake the
