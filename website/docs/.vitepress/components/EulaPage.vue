@@ -102,7 +102,6 @@
 </template>
 
 <script setup>
-/* Scripts remain identical to the original EulaPage.vue[cite: 2] */
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import EulaEn from './paid_addon/_eula-en.md'
 import EulaId from './paid_addon/_eula-id.md'
@@ -182,11 +181,22 @@ watch(lang, () => {
   nextTick(setupObserver)
 })
 
+function getFilenameFromUrl(url) {
+  const cleanUrl = url.split('?')[0].split('#')[0];
+  let filename = cleanUrl.split('/').pop();
+  if (!filename.toLowerCase().endsWith('.zip')) {
+    filename += '.zip';
+  }
+  return filename;
+}
+
 function triggerDownload() {
   if (!agreed.value || !moduleInfo.value?.zipUrl) return
   const a = document.createElement('a')
-  a.href = moduleInfo.value.zipUrl
-  a.download = ''
+  const url = moduleInfo.value.zipUrl
+
+  a.href = url
+  a.download = getFilenameFromUrl(url)
   a.rel = 'noopener noreferrer'
   document.body.appendChild(a)
   a.click()
@@ -275,7 +285,6 @@ onUnmounted(() => observer?.disconnect())
   padding: 10px 16px;
   border-bottom: 1px solid var(--vp-c-divider);
   margin: 0 -1rem 2rem;
-  /* Masks EULA text that might scroll into the nav gap */
   box-shadow: 0 -50px 0 0 var(--vp-c-bg);
 }
 
@@ -445,8 +454,6 @@ onUnmounted(() => observer?.disconnect())
 }
 
 @media (max-width: 960px) {
-
-  /* Adjust sticky top for VitePress mobile/tablet navbar height[cite: 2] */
   .lang-switcher {
     top: var(--vp-nav-height-mobile, 48px);
   }
