@@ -387,8 +387,10 @@ static void select_profile(DaemonState &state) {
 
 static void encore_main_daemon() {
     DaemonState state;
-    run_perfcommon();
     pthread_setname_np(pthread_self(), "MainThread");
+
+    check_module_prop();
+    run_perfcommon();
 
     // On any tracked process death, immediately wake the
     // main poll so handle_game_exit runs without delay.
