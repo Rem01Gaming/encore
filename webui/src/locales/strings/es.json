@@ -79,7 +79,7 @@
             "description": "Crear un atajo en la pantalla de inicio para un acceso rápido a Encore Tweaks"
         },
         "disable_tweaks": {
-            "title": "Desactivar Tweaks",
+            "title": "Desactivar correcciones",
             "description": "Desactivar todos los ajustes de rendimiento configurados por Encore Tweaks; útil para los usuarios que solo utilizan addons."
         }
     },
