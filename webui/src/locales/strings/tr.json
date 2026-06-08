@@ -16,7 +16,7 @@
         },
         "support_button": {
             "title": "Beni Destekle",
-            "description": "Encore Tweaks ,her zaman, sizin ve herkes için ücretsiz olmuştur ve öyle kalacaktır. Ancak, bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
+            "description": "Encore Tweaks, her zaman, sizin ve herkes için ücretsiz olmuştur ve öyle kalacaktır. Ancak bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
         },
         "learn_encore": {
             "title": "Encore'u Öğren",
@@ -67,6 +67,10 @@
         "create_shortcut": {
             "title": "Kısayol Oluştur",
             "description": "Hızlı erişim için Encore Tweaks'in kısayolunu ana ekrana ekleyin"
+        },
+        "disable_tweaks": {
+            "title": "Özelleştirmeleri kapat",
+            "description": "Encore Tweaks'in ayarladığı tüm performans özelleştirmelerini kapat, sadece eklenti olarak kullanan kullanıcılar için yararlıdır."
         }
     },
     "profiles": {
@@ -141,5 +145,16 @@
             "initial_warn": "CPU yönetiminin Encore Tweaks tarafından otomatik olarak yönetildiğini unutmayın. Eğer bilgili bir kullanıcı değilseniz bunun elle yapılandırılması tavsiye edilmez.",
             "initial_warn_checkbox": "Bunu tekrar gösterme"
         }
+    },
+    "disable_tweaks": {
+        "title": "Özelleştirmeleri kapat",
+        "toggle_title": "Özelleştirmeleri kapat",
+        "brief": "Etkinleştirildiğinde bu ayar, Encore Tweaks üzerindeki tüm yerleşik performans optimizasyonlarını kapatır ve bu modülü yalnızca Encore Addon modülleri için bir host olarak kullanmanıza olanak tanır."
+    },
+    "reboot_modal": {
+        "title": "Yeniden başlatılması gerekiyor",
+        "description": "Bu değişikliğin uygulanması için yeniden başlatılması gerekiyor, şimdi yeniden başlatılsın mı?",
+        "reboot": "Şimdi yeniden başlat",
+        "later": "Daha sonra yap"
     }
 }
