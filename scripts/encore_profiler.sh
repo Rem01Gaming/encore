@@ -89,7 +89,7 @@ mtk_gpufreq_minfreq_index() {
 mtk_gpufreq_midfreq_index() {
 	total_opp=$(wc -l <"$1")
 	mid_opp=$(((total_opp + 1) / 2))
-	awk -F'[][]' '{print $2}' "$1" | head -n $mid_opp | tail -n 1
+	awk -F'[][]' '{print $2}' "$1" | head -n "$mid_opp" | tail -n 1
 }
 
 ###################################
@@ -210,6 +210,21 @@ qcom_cpudcvs_min_perf() {
 	apply "$freq" "$1/hw_max_freq"
 }
 
+snapdragon_force_kgsl_pwrlevel() {
+	mode="$1"
+
+	case "$mode" in
+	0) # Default
+		cat /sys/class/kgsl/kgsl-3d0/num_pwrlevels >/sys/class/kgsl/kgsl-3d0/min_pwrlevel
+		echo 0 >/sys/class/kgsl/kgsl-3d0/max_pwrlevel
+		;;
+	1) # Performance
+		echo 0 >/sys/class/kgsl/kgsl-3d0/min_pwrlevel
+		echo 0 >/sys/class/kgsl/kgsl-3d0/max_pwrlevel
+		;;
+	esac
+}
+
 ###################################
 # Device-specific performance profile
 ###################################
@@ -307,8 +322,10 @@ snapdragon_performance() {
 	gpu_path="/sys/class/kgsl/kgsl-3d0/devfreq"
 	if [ "$LITE_MODE" -eq 0 ]; then
 		devfreq_max_perf "$gpu_path"
+		snapdragon_force_kgsl_pwrlevel 1
 	else
 		devfreq_unlock "$gpu_path"
+		snapdragon_force_kgsl_pwrlevel 0
 	fi
 
 	# Disable GPU Bus split
@@ -482,6 +499,7 @@ snapdragon_normal() {
 
 	# Revert GPU tweak
 	devfreq_unlock /sys/class/kgsl/kgsl-3d0/devfreq
+	snapdragon_force_kgsl_pwrlevel 0
 
 	# Enable back GPU Bus split
 	apply 1 /sys/class/kgsl/kgsl-3d0/bus_split
@@ -856,7 +874,7 @@ powersave_profile() {
 	balance_profile
 
 	# Allow cores to go idle, we are not concerned with prioritizing latency
-    [ -d "/dev/stune/" ] && apply 1 /dev/stune/top-app/schedtune.prefer_idle
+	[ -d "/dev/stune/" ] && apply 1 /dev/stune/top-app/schedtune.prefer_idle
 
 	# Enable battery saver module
 	[ -f /sys/module/battery_saver/parameters/enabled ] && {
