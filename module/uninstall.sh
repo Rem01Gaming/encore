@@ -1,3 +1,4 @@
+#!/system/bin/sh
 #
 # Copyright (C) 2024-2026 Rem01Gaming
 #
@@ -13,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 rm -rf /data/adb/.config/encore
 rm -f /data/adb/service.d/.encore_cleanup.sh
 

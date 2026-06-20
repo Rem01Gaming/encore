@@ -170,7 +170,6 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
 }
 
 void GameRegistry::update_gamelist(const std::vector<EncoreGameList> &new_list) {
-    std::unique_lock lock(mutex_);
     game_packages_.clear();
 
     for (const auto &game : new_list) {
@@ -183,7 +182,6 @@ void GameRegistry::update_gamelist(const std::vector<EncoreGameList> &new_list) 
 }
 
 std::optional<EncoreGameList> GameRegistry::find_game(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
     auto it = game_packages_.find(package_name);
     if (it != game_packages_.end()) {
         return it->second;
@@ -193,7 +191,6 @@ std::optional<EncoreGameList> GameRegistry::find_game(const std::string &package
 }
 
 const EncoreGameList *GameRegistry::find_game_ptr(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
     auto it = game_packages_.find(package_name);
     if (it != game_packages_.end()) {
         return &it->second;
@@ -203,17 +200,14 @@ const EncoreGameList *GameRegistry::find_game_ptr(const std::string &package_nam
 }
 
 bool GameRegistry::is_game_registered(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
     return game_packages_.find(package_name) != game_packages_.end();
 }
 
 size_t GameRegistry::size() const {
-    std::shared_lock lock(mutex_);
     return game_packages_.size();
 }
 
 std::vector<std::string> GameRegistry::get_all_package_names() const {
-    std::shared_lock lock(mutex_);
     std::vector<std::string> packages;
     packages.reserve(game_packages_.size());
 

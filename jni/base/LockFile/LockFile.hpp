@@ -1,15 +1,6 @@
 #pragma once
 
-#include <atomic>
-#include <functional>
-#include <future>
 #include <string>
-#include <thread>
-
-#ifndef LOCKFILE_CANCEL_SIGNAL
-    #include <signal.h>
-    #define LOCKFILE_CANCEL_SIGNAL SIGUSR1
-#endif
 
 /**
  * @brief POSIX advisory lock management via fcntl.
@@ -20,11 +11,7 @@ public:
     enum class AcquireMode { Blocking, NonBlocking };
     enum class LockType { Exclusive, Shared };
 
-    /**
-     * @brief Callback for watch()
-     * @param lock_became_free True if the lock was released by another process.
-     */
-    using WatchCallback = std::function<void(bool lock_became_free)>;
+
 
     explicit LockFile(std::string path);
     ~LockFile();
@@ -54,15 +41,6 @@ public:
      */
     bool is_locked() const;
 
-    /**
-     * @brief Monitors the file and triggers the callback when the lock is released.
-     */
-    void watch(WatchCallback callback);
-
-    /**
-     * @brief Stops an active watcher thread.
-     */
-    void unwatch();
 
     const std::string &path() const noexcept {
         return path_;
@@ -76,11 +54,7 @@ private:
     int fd_ = -1;
     bool locked_ = false;
 
-    // Watcher thread state
-    std::thread watcher_;
-    std::atomic<bool> stop_watch_{false};
-    std::promise<pthread_t> tid_promise_;
-    std::future<pthread_t> tid_future_;
+
 
     int internal_open() const noexcept;
     bool ensure_open() noexcept;

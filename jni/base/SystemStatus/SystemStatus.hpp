@@ -45,42 +45,4 @@ bool read(SystemStatus &out, const char *path = SYSTEM_STATUS_FILE);
 
 } // namespace SystemStatusReader
 
-/**
- * @brief Thread-safe wrapper around the latest SystemStatus snapshot.
- *
- * The InotifyHandler writes a fresh snapshot on every IN_CLOSE_WRITE
- * event; the main daemon loop reads the snapshot without blocking.
- */
-class SystemStatusCache {
-public:
-    /** Update the cached snapshot (called from inotify thread). */
-    void update(const SystemStatus &s) {
-        std::lock_guard<std::mutex> lk(mtx_);
-        status_ = s;
-        valid_ = true;
-    }
 
-    /**
-     * @brief Copy the latest snapshot into @p out
-     * @return false if no snapshot has been stored yet.
-     */
-    bool get(SystemStatus &out) const {
-        std::lock_guard<std::mutex> lk(mtx_);
-        if (!valid_) return false;
-        out = status_;
-        return true;
-    }
-
-    bool is_valid() const {
-        std::lock_guard<std::mutex> lk(mtx_);
-        return valid_;
-    }
-
-private:
-    mutable std::mutex mtx_;
-    SystemStatus status_;
-    bool valid_ = false;
-};
-
-/** Global cache shared between the inotify thread and the main daemon. */
-extern SystemStatusCache system_status_cache;

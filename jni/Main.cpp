@@ -21,12 +21,14 @@
 #include <thread>
 
 #include <poll.h>
-#include <sys/eventfd.h>
+#include <sys/syscall.h>
+#include <sys/inotify.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "DeviceMitigationStore.hpp"
 #include "EncoreCLI.hpp"
 #include "EncoreConfigStore.hpp"
-#include "InotifyHandler.hpp"
 #include "Profiler.hpp"
 
 #include <Encore.hpp>
@@ -35,7 +37,6 @@
 #include <GameRegistry.hpp>
 #include <LockFile.hpp>
 #include <ModuleProperty.hpp>
-#include <PIDTracker.hpp>
 #include <ShellUtility.hpp>
 #include <SignalHandler.hpp>
 #include <SystemStatus.hpp>
@@ -69,27 +70,10 @@ void notify_fatal_error(const std::string &error_msg) {
 // Global event signaling for immediate daemon wake-up
 // ---------------------------------------------------------------------------
 
-int system_status_event_fd = -1;
-
 std::atomic<bool> daemon_stop_requested{false};
 
-/**
- * @brief Signal the daemon to wake pool loop
- */
-void signal_daemon_update() {
-    if (system_status_event_fd >= 0) {
-        uint64_t val = 1;
-        ssize_t ret = write(system_status_event_fd, &val, sizeof(val));
-        (void)ret; // Suppress unused warning
-    }
-}
-
-/**
- * @brief Signal the daemon to stop immediately
- */
 void signal_daemon_stop() {
     daemon_stop_requested.store(true, std::memory_order_relaxed);
-    signal_daemon_update();
 }
 
 // ---------------------------------------------------------------------------
@@ -107,22 +91,6 @@ static LockFile java_lock{JAVA_LOCK_FILE};
  */
 [[nodiscard]] bool create_lock_file() {
     return daemon_lock.acquire(LockFile::AcquireMode::NonBlocking, LockFile::LockType::Exclusive);
-}
-
-/**
- * @brief Arm the Java companion daemon liveness watch
- *
- * Installs a LockFile::watch() on JAVA_LOCK_FILE. The watch callback fires
- * signal_daemon_stop() the instant the Java daemon releases its lock.
- */
-void watch_java_lock() {
-    java_lock.watch([](bool became_free) {
-        if (became_free) {
-            LOGC("Java daemon lock released, companion daemon exited or crashed, stopping daemon");
-            notify_fatal_error("Java companion daemon crashed");
-            signal_daemon_stop();
-        }
-    });
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +112,8 @@ struct DaemonState {
 
     int focus_loss_count = 0;
 
-    PIDTracker pid_tracker;
+    int pidfd = -1;
+    pid_t tracked_pid = 0;
 };
 
 // ---------------------------------------------------------------------------
@@ -187,28 +156,14 @@ struct DaemonState {
     return false;
 }
 
-/**
- * @brief Queries the current battery-saver state.
- *
- * Reads the battery_saver field from the inotify-fed SystemStatusCache.
- * Returns std::nullopt when both methods fail.
- */
-[[nodiscard]] static std::optional<bool> get_battery_saver_state() {
-    SystemStatus status;
-    if (!system_status_cache.get(status)) {
-        return std::nullopt;
-    }
-    return status.battery_saver;
-}
 
 /**
  * @brief Returns the PID of @p package_name, or 0 on failure.
  */
 [[nodiscard]] static pid_t pidof_game(const std::string &package_name) {
-    SystemStatus status;
-    if (system_status_cache.get(status) && status.focused_app == package_name && status.focused_pid > 0) {
-        return status.focused_pid;
-    }
+    // We don't have a background cache, so we just check /proc directly.
+    // The poll loop already updates state.system_status, but pidof_game is called inside apply_game_profile.
+    // We can just rely on the fallback pidof() below.
 
     // Fallback to scan /proc for the process name
     const pid_t pid = pidof(package_name, false);
@@ -222,25 +177,15 @@ struct DaemonState {
  * @return true if zen_mode is 1 (Priority), 2 (Total Silence), or 3 (Alarms Only).
  * @return false if zen_mode is 0 or if the java daemon fails to fetch zen_mode.
  */
-bool is_dnd_enabled() {
-    SystemStatus status;
-    if (system_status_cache.get(status)) {
-        return status.zen_mode != 0;
-    }
-
-    return false;
+bool is_dnd_enabled(const DaemonState &state) {
+    return state.system_status.zen_mode != 0;
 }
 
 /**
  * @brief Pull the latest system-status snapshot from the inotify-fed cache.
  */
 [[nodiscard]] static bool refresh_system_status(DaemonState &state) {
-    if (!system_status_cache.get(state.system_status)) {
-        LOGW_TAG("SystemStatus", "Cache not yet populated, waiting for SystemMonitor");
-        return false;
-    }
-
-    return true;
+    return SystemStatusReader::read(state.system_status);
 }
 
 /**
@@ -264,7 +209,7 @@ static void handle_game_exit(DaemonState &state) {
     LOGI("Game {} exited", state.active_package);
     clear_dnd_if_needed(state);
     state.active_package.clear();
-    state.pid_tracker.invalidate();
+    if (state.pidfd != -1) { close(state.pidfd); state.pidfd = -1; } state.tracked_pid = 0;
     state.in_game_session = false;
     state.need_profile_checkup = true;
 
@@ -288,7 +233,7 @@ static void handle_game_exit(DaemonState &state) {
     if (!active_game) {
         LOGI("Game {} is no longer listed in registry", state.active_package);
         state.active_package.clear();
-        state.pid_tracker.invalidate();
+        if (state.pidfd != -1) { close(state.pidfd); state.pidfd = -1; } state.tracked_pid = 0;
         state.in_game_session = false;
         return false;
     }
@@ -297,7 +242,7 @@ static void handle_game_exit(DaemonState &state) {
     if (game_pid == 0) {
         LOGE("Unable to fetch PID of {}", state.active_package);
         state.active_package.clear();
-        state.pid_tracker.invalidate();
+        if (state.pidfd != -1) { close(state.pidfd); state.pidfd = -1; } state.tracked_pid = 0;
         state.in_game_session = false;
         return false;
     }
@@ -327,13 +272,21 @@ static void handle_game_exit(DaemonState &state) {
         );
 
         state.active_package.clear();
-        state.pid_tracker.invalidate();
+        if (state.pidfd != -1) { close(state.pidfd); state.pidfd = -1; } state.tracked_pid = 0;
         state.in_game_session = false;
         state.need_profile_checkup = true;
         return false;
     }
 
-    state.pid_tracker.set_pid(tracked_pid);
+    state.tracked_pid = tracked_pid;
+#ifndef __NR_pidfd_open
+#define __NR_pidfd_open 434
+#endif
+    if (state.pidfd != -1) { close(state.pidfd); state.pidfd = -1; }
+    state.pidfd = syscall(__NR_pidfd_open, tracked_pid, 0);
+    if (state.pidfd < 0) {
+        LOGD("pidfd_open not available or failed for PID {}: {}", tracked_pid, strerror(errno));
+    }
 
     // DND handling
     if (active_game->enable_dnd) {
@@ -391,32 +344,38 @@ static void encore_main_daemon() {
 
     run_perfcommon();
 
-    // On any tracked process death, immediately wake the
-    // main poll so handle_game_exit runs without delay.
-    state.pid_tracker.set_callback([](pid_t) {
-        signal_daemon_update();
-    });
-
-    // Spin until the inotify-fed cache has its first snapshot.
-    // The InotifyWatcher will call signal_daemon_update() as soon as the
-    // watched file changes, so we can block here rather than busy-wait.
-    while (!daemon_stop_requested.load(std::memory_order_relaxed)) {
-        if (refresh_system_status(state)) break;
-        struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
-        poll(&pfd, 1, -1); // block until InotifyWatcher signals
-        uint64_t val;
-        ssize_t ret = read(system_status_event_fd, &val, sizeof(val));
-        (void)ret;
+    int inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
+    if (inotify_fd < 0) {
+        LOGC("Failed to init inotify: {}", strerror(errno));
+        return;
     }
 
-    // Single event source: system_status_event_fd
-    //   - inotify updates from InotifyWatcher
-    //   - pid_tracker process-death callbacks
-    //   - signal_daemon_stop() wakeups (from java_lock watch or signal handler)
-    struct pollfd pfd = {system_status_event_fd, POLLIN, 0};
+    int wd_status = inotify_add_watch(inotify_fd, SYSTEM_STATUS_FILE, IN_CLOSE_WRITE);
+    int wd_gamelist = inotify_add_watch(inotify_fd, ENCORE_GAMELIST, IN_CLOSE_WRITE);
+    int wd_config = inotify_add_watch(inotify_fd, CONFIG_FILE, IN_CLOSE_WRITE);
+    int wd_mitigation = inotify_add_watch(inotify_fd, DEVICE_MITIGATION_FILE, IN_CLOSE_WRITE);
+    int wd_modpath = inotify_add_watch(inotify_fd, MODPATH, IN_CREATE);
+
+    // Initial read
+    (void)refresh_system_status(state);
 
     while (!daemon_stop_requested.load(std::memory_order_relaxed)) {
-        const int ret = poll(&pfd, 1, -1); // sleep until something happens
+        struct pollfd pfds[2];
+        pfds[0].fd = inotify_fd;
+        pfds[0].events = POLLIN;
+        pfds[0].revents = 0;
+
+        int nfds = 1;
+        if (state.pidfd != -1) {
+            pfds[1].fd = state.pidfd;
+            pfds[1].events = POLLIN;
+            pfds[1].revents = 0;
+            nfds = 2;
+        }
+
+        // Poll with a 5000ms timeout to periodically check java_lock and fallback PID check
+        const int ret = poll(pfds, nfds, 5000);
+        
         if (ret < 0) {
             if (errno == EINTR) continue;
             LOGE_TAG("MainThread", "poll() failed: {}", strerror(errno));
@@ -426,56 +385,100 @@ static void encore_main_daemon() {
         if (daemon_stop_requested.load(std::memory_order_relaxed)) [[unlikely]]
             break;
 
-        if (pfd.revents & POLLIN) {
-            // Drain all accumulated wakeups in one read.
-            uint64_t val;
-            ssize_t rd = read(system_status_event_fd, &val, sizeof(val));
-            (void)rd;
-
-            if (state.in_game_session && state.pid_tracker.get_current_pid() == 0) {
-                handle_game_exit(state);
-                // Fall through, select_profile below will apply balance/powersave.
-            }
-
-            if (!refresh_system_status(state)) continue;
-
-            // Focus-loss check (3-strike debounce against transient blips)
-            if (state.in_game_session && !state.active_package.empty()) {
-                if (!is_game_still_active(state)) [[unlikely]] {
-                    handle_game_exit(state);
-                }
-            }
-
-            // Track user's DND preference while we are not overriding it
-            if (!state.game_requested_dnd) {
-                if (state.dnd_just_cleared) {
-                    state.dnd_just_cleared = false;
-                } else {
-                    state.prev_dnd_state = is_dnd_enabled();
-                }
-            }
-
-            // Discover a newly focused game
-            if (state.active_package.empty()) {
-                state.active_package = get_active_game(state.system_status, game_registry);
-                if (!state.active_package.empty()) {
-                    state.in_game_session = true;
-                    LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
-                }
-            }
-
-            if (state.active_package.empty()) {
-                const auto bs_state = get_battery_saver_state();
-                if (bs_state.has_value()) {
-                    state.battery_saver_state = *bs_state;
-                } else {
-                    LOGW("get_battery_saver_state: cache not yet populated, retaining last known value");
-                }
-            }
-
-            select_profile(state);
+        // Periodic watchdog checks
+        if (!java_lock.is_locked()) {
+            LOGC("Java daemon lock released, companion daemon exited or crashed, stopping daemon");
+            notify_fatal_error("Java companion daemon crashed");
+            break;
         }
+
+        // Fallback PID check if pidfd is not supported
+        if (state.in_game_session && state.pidfd == -1 && state.tracked_pid > 0) {
+            if (kill(state.tracked_pid, 0) != 0) {
+                handle_game_exit(state);
+            }
+        }
+
+        // Process exit detected via pidfd
+        if (nfds == 2 && (pfds[1].revents & POLLIN)) {
+            handle_game_exit(state);
+        }
+
+        bool status_changed = false;
+
+        // Inotify events
+        if (pfds[0].revents & POLLIN) {
+            char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
+            ssize_t len;
+            while ((len = read(inotify_fd, buf, sizeof(buf))) > 0) {
+                const struct inotify_event *event;
+                for (char *ptr = buf; ptr < buf + len; ptr += sizeof(struct inotify_event) + event->len) {
+                    event = (const struct inotify_event *)ptr;
+                    
+                    if (event->wd == wd_status) {
+                        status_changed = true;
+                    } else if (event->wd == wd_gamelist) {
+                        LOGD("Gamelist modified");
+                        game_registry.load_from_json(ENCORE_GAMELIST);
+                    } else if (event->wd == wd_config) {
+                        if (config_store.reload()) {
+                            EncoreLog::set_log_level(config_store.get_preferences().log_level);
+                        }
+                    } else if (event->wd == wd_mitigation) {
+                        device_mitigation_store.load_config(DEVICE_MITIGATION_FILE);
+                    } else if (event->wd == wd_modpath && event->len > 0) {
+                        if (std::string(event->name) == "update") {
+                            notify("Please reboot your device to complete module update.");
+                            daemon_stop_requested.store(true, std::memory_order_relaxed);
+                        }
+                    }
+                }
+            }
+            if (len < 0 && errno != EAGAIN) {
+                LOGE("inotify read error: {}", strerror(errno));
+            }
+        }
+
+        if (status_changed) {
+            (void)refresh_system_status(state);
+        }
+
+        // Handle profile selection logic periodically or when status changes
+        if (state.in_game_session && state.pidfd == -1 && state.tracked_pid == 0) {
+            handle_game_exit(state);
+        }
+
+        if (!state.active_package.empty() && state.in_game_session) {
+            if (!is_game_still_active(state)) [[unlikely]] {
+                handle_game_exit(state);
+            }
+        }
+
+        if (!state.game_requested_dnd) {
+            if (state.dnd_just_cleared) {
+                state.dnd_just_cleared = false;
+            } else {
+                state.prev_dnd_state = is_dnd_enabled(state);
+            }
+        }
+
+        if (state.active_package.empty()) {
+            state.active_package = get_active_game(state.system_status, game_registry);
+            if (!state.active_package.empty()) {
+                state.in_game_session = true;
+                LOGD("DND state before in_game_session: {}", state.prev_dnd_state ? "ON" : "OFF");
+            }
+        }
+
+        if (state.active_package.empty()) {
+            state.battery_saver_state = state.system_status.battery_saver;
+        }
+
+        select_profile(state);
     }
+    
+    close(inotify_fd);
+    if (state.pidfd != -1) close(state.pidfd);
 }
 
 // ---------------------------------------------------------------------------
@@ -514,6 +517,8 @@ int run_daemon() {
         return EXIT_FAILURE;
     }
 
+    config_store.load_config();
+
     if (!device_mitigation_store.load_config()) {
         std::cerr << "\033[31mERROR:\033[0m Failed to parse " << DEVICE_MITIGATION_FILE << '\n';
         notify_fatal_error("Failed to parse device_mitigation.json");
@@ -535,12 +540,8 @@ int run_daemon() {
 
     // eventfd for immediate daemon wake-up on system_status changes and PID
     // tracker callbacks.
-    system_status_event_fd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
-    if (system_status_event_fd < 0) {
-        LOGC("Failed to create eventfd: {}", strerror(errno));
-        notify_fatal_error("Failed to create eventfd");
-        return EXIT_FAILURE;
-    }
+    
+    
 
     // Check for the Java companion daemon lock before proceeding
     {
@@ -559,16 +560,7 @@ int run_daemon() {
     }
 
     // Watch the Java companion daemon lock
-    watch_java_lock();
-
-    InotifyWatcher file_watcher;
-    if (!init_file_watcher(file_watcher)) {
-        LOGC("Failed to initialize file watcher");
-        notify_fatal_error("Failed to initialize file watcher");
-        close(system_status_event_fd);
-        system_status_event_fd = -1;
-        return EXIT_FAILURE;
-    }
+    
 
     LOGI("Encore Tweaks daemon started");
     set_module_description_status("\xF0\x9F\x98\x8B Tweaks applied successfully");
@@ -576,10 +568,7 @@ int run_daemon() {
 
     LOGW("Encore Tweaks daemon exited");
 
-    if (system_status_event_fd >= 0) {
-        close(system_status_event_fd);
-        system_status_event_fd = -1;
-    }
+    
 
     SignalHandler::cleanup_before_exit();
     return EXIT_SUCCESS;

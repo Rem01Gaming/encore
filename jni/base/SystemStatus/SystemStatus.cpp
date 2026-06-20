@@ -20,8 +20,7 @@
 #include <cstdio>
 #include <cstring>
 
-// Global singleton
-SystemStatusCache system_status_cache;
+
 
 namespace SystemStatusReader {
 

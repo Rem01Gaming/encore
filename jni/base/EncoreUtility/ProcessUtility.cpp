@@ -15,61 +15,52 @@
  */
 
 #include <EncoreLog.hpp>
-#include <algorithm>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
-
+#include <dirent.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string_view>
 #include "EncoreUtility.hpp"
-
-namespace fs = std::filesystem;
 
 pid_t pidof(std::string_view target_name, bool strict) {
     if (target_name.empty()) return 0;
+    
+    DIR* dir = opendir("/proc");
+    if (!dir) return 0;
 
     pid_t found_pid = 0;
+    struct dirent* entry;
+    char cmdline_path[256];
+    char buffer[256];
 
-    try {
-        for (const auto &entry : fs::directory_iterator("/proc")) {
-            const std::string dir_name = entry.path().filename().string();
+    while ((entry = readdir(dir)) != nullptr) {
+        // Skip non-directories and non-numeric directories
+        if (entry->d_type != DT_DIR && entry->d_type != DT_UNKNOWN) continue;
+        if (!isdigit(entry->d_name[0])) continue;
 
-            // Skip non-process directories
-            if (!entry.is_directory() || !std::all_of(dir_name.begin(), dir_name.end(), ::isdigit)) {
-                continue;
-            }
+        snprintf(cmdline_path, sizeof(cmdline_path), "/proc/%s/cmdline", entry->d_name);
+        int fd = open(cmdline_path, O_RDONLY | O_CLOEXEC);
+        if (fd < 0) continue;
 
-            std::ifstream cmd_file(entry.path() / "cmdline", std::ios::binary);
-            if (!cmd_file.is_open()) continue;
+        ssize_t bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+        close(fd);
 
-            // Read ONLY the first null-terminated string
-            std::string actual_name;
-            if (!std::getline(cmd_file, actual_name, '\0')) {
-                continue;
-            }
-
-            bool is_match = false;
-            if (strict) {
-                // "com.mobile.legends" matches ONLY "com.mobile.legends"
-                is_match = (actual_name == target_name);
-            } else {
-                // "com.mobile.legends" matches "com.mobile.legends:anything"
-                is_match = (actual_name.find(target_name) != std::string::npos);
-            }
-
+        if (bytes_read > 0) {
+            // First string in cmdline is null-terminated
+            buffer[bytes_read] = '\0';
+            std::string_view actual_name(buffer);
+            
+            bool is_match = strict ? (actual_name == target_name) 
+                                   : (actual_name.find(target_name) != std::string_view::npos);
+            
             if (is_match) {
-                found_pid = static_cast<pid_t>(std::stoul(dir_name));
+                found_pid = static_cast<pid_t>(std::atoi(entry->d_name));
                 break;
             }
         }
-    } catch (const fs::filesystem_error &e) {
-        LOGE_TAG("pidof", "Filesystem error: %s", e.what());
-    } catch (const std::exception &e) {
-        LOGE_TAG("pidof", "Error: %s", e.what());
-    } catch (...) {
-        LOGE_TAG("pidof", "Unknown exception occurred");
     }
-
+    
+    closedir(dir);
     return found_pid;
 }
 

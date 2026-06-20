@@ -17,7 +17,6 @@
 #pragma once
 
 #include <optional>
-#include <shared_mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -28,7 +27,6 @@
 class GameRegistry {
 private:
     std::unordered_map<std::string, EncoreGameList> game_packages_;
-    mutable std::shared_mutex mutex_;
 
 public:
     /**

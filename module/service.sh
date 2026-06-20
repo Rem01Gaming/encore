@@ -1,3 +1,4 @@
+#!/system/bin/sh
 #
 # Copyright (C) 2024-2026 Rem01Gaming
 #
@@ -14,7 +15,7 @@
 # limitations under the License.
 #
 
-MODDIR=$(dirname "$0")
+MODDIR="${0%/*}"
 MODULE_CONFIG="/data/adb/.config/encore"
 CLEANUP_SCRIPT="/data/adb/service.d/.encore_cleanup.sh"
 CPUFREQ="/sys/devices/system/cpu/cpu0/cpufreq"

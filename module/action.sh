@@ -1,3 +1,4 @@
+#!/system/bin/sh
 #
 # Copyright (C) 2024-2026 Rem01Gaming
 #

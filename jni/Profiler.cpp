@@ -88,13 +88,7 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
 
     set_profiler_env_vars();
 
-    uid_t game_uid = 0;
-    SystemStatus status;
-    if (system_status_cache.get(status) && status.focused_app == game_pkg && status.focused_uid > 0) {
-        game_uid = status.focused_uid;
-    } else {
-        game_uid = get_uid_by_package_name(game_pkg);
-    }
+    uid_t game_uid = get_uid_by_package_name(game_pkg);
 
     write2file(GAME_INFO, game_pkg, " ", game_pid, " ", game_uid, "\n");
     write2file(PROFILE_MODE, static_cast<int>(PERFORMANCE_PROFILE), "\n");
