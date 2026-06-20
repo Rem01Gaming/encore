@@ -354,14 +354,23 @@ exynos_performance() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 	[ -d "$gpu_path" ] && {
-		max_freq=$(which_maxfreq "$gpu_path/gpu_available_frequencies")
-		apply "$max_freq" "$gpu_path/gpu_max_clock"
+		freq_node=""
+		if [ -f "$gpu_path/gpu_available_frequencies" ]; then
+			freq_node="$gpu_path/gpu_available_frequencies"
+		elif [ -f "$gpu_path/gpu_freq_table" ]; then
+			freq_node="$gpu_path/gpu_freq_table"
+		fi
 
-		if [ $LITE_MODE -eq 0 ]; then
-			apply "$max_freq" "$gpu_path/gpu_min_clock"
-		else
-			min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
-			apply "$min_freq" "$gpu_path/gpu_min_clock"
+		if [ -n "$freq_node" ]; then
+			max_freq=$(which_maxfreq "$freq_node")
+			apply "$max_freq" "$gpu_path/gpu_max_clock"
+
+			if [ $LITE_MODE -eq 0 ]; then
+				apply "$max_freq" "$gpu_path/gpu_min_clock"
+			else
+				min_freq=$(which_minfreq "$freq_node")
+				apply "$min_freq" "$gpu_path/gpu_min_clock"
+			fi
 		fi
 	}
 
@@ -522,10 +531,19 @@ exynos_normal() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 	[ -d "$gpu_path" ] && {
-		max_freq=$(which_maxfreq "$gpu_path/gpu_available_frequencies")
-		min_freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
-		write "$max_freq" "$gpu_path/gpu_max_clock"
-		write "$min_freq" "$gpu_path/gpu_min_clock"
+		freq_node=""
+		if [ -f "$gpu_path/gpu_available_frequencies" ]; then
+			freq_node="$gpu_path/gpu_available_frequencies"
+		elif [ -f "$gpu_path/gpu_freq_table" ]; then
+			freq_node="$gpu_path/gpu_freq_table"
+		fi
+
+		if [ -n "$freq_node" ]; then
+			max_freq=$(which_maxfreq "$freq_node")
+			min_freq=$(which_minfreq "$freq_node")
+			write "$max_freq" "$gpu_path/gpu_max_clock"
+			write "$min_freq" "$gpu_path/gpu_min_clock"
+		fi
 	}
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
@@ -602,9 +620,18 @@ exynos_powersave() {
 	# GPU Frequency
 	gpu_path="/sys/kernel/gpu"
 	[ -d "$gpu_path" ] && {
-		freq=$(which_minfreq "$gpu_path/gpu_available_frequencies")
-		apply "$freq" "$gpu_path/gpu_min_clock"
-		apply "$freq" "$gpu_path/gpu_max_clock"
+		freq_node=""
+		if [ -f "$gpu_path/gpu_available_frequencies" ]; then
+			freq_node="$gpu_path/gpu_available_frequencies"
+		elif [ -f "$gpu_path/gpu_freq_table" ]; then
+			freq_node="$gpu_path/gpu_freq_table"
+		fi
+
+		if [ -n "$freq_node" ]; then
+			freq=$(which_minfreq "$freq_node")
+			apply "$freq" "$gpu_path/gpu_min_clock"
+			apply "$freq" "$gpu_path/gpu_max_clock"
+		fi
 	}
 }
 
