@@ -273,6 +273,10 @@ mediatek_performance() {
 		done
 	}
 
+	# GPU Power Policy
+	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
+	apply always_on "$mali_sysfs/power_policy"
+
 	# Disable battery current limiter
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
@@ -416,6 +420,9 @@ tensor_performance() {
 		fi
 	}
 
+	# GPU Power Policy
+	apply always_on "$gpu_path/power_policy"
+
 	# DRAM frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
@@ -475,6 +482,10 @@ mediatek_normal() {
 			apply "$setting 0" /proc/gpufreq/gpufreq_power_limited
 		done
 	}
+
+	# GPU Power Policy
+	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
+	apply coarse_demand "$mali_sysfs/power_policy"
 
 	# Enable battery current limiter
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
@@ -573,6 +584,9 @@ tensor_normal() {
 		write "$min_freq" "$gpu_path/scaling_min_freq"
 	}
 
+	# GPU Power Policy
+	apply coarse_demand "$gpu_path/power_policy"
+
 	# DRAM frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
 		for path in /sys/class/devfreq/*devfreq_mif*; do
@@ -596,6 +610,14 @@ mediatek_powersave() {
 	else
 		gpu_freq=$(sed -n 's/.*freq = \([0-9]\{1,\}\).*/\1/p' /proc/gpufreq/gpufreq_opp_dump | tail -n 1)
 		apply "$gpu_freq" /proc/gpufreq/gpufreq_opp_freq
+	fi
+
+	# GPU Power Policy
+	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
+	if grep -q "adaptive" "$mali_sysfs/power_policy" 2>/dev/null; then
+		apply adaptive "$mali_sysfs/power_policy"
+	else
+		apply coarse_demand "$mali_sysfs/power_policy"
 	fi
 }
 
@@ -633,6 +655,14 @@ exynos_powersave() {
 			apply "$freq" "$gpu_path/gpu_max_clock"
 		fi
 	}
+
+	# GPU Power Policy
+	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
+	if grep -q "adaptive" "$mali_sysfs/power_policy" 2>/dev/null; then
+		apply adaptive "$mali_sysfs/power_policy"
+	else
+		apply coarse_demand "$mali_sysfs/power_policy"
+	fi
 }
 
 unisoc_powersave() {
@@ -649,6 +679,13 @@ tensor_powersave() {
 		apply "$freq" "$gpu_path/scaling_min_freq"
 		apply "$freq" "$gpu_path/scaling_max_freq"
 	}
+
+	# GPU Power Policy
+	if grep -q "adaptive" "$gpu_path/power_policy" 2>/dev/null; then
+		apply adaptive "$gpu_path/power_policy"
+	else
+		apply coarse_demand "$gpu_path/power_policy"
+	fi
 }
 
 ###################################
