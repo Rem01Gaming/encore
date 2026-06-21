@@ -275,7 +275,7 @@ mediatek_performance() {
 
 	# GPU Power Policy
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply always_on "$mali_sysfs/power_policy"
+	apply "always_on" "$mali_sysfs/power_policy"
 
 	# Disable battery current limiter
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
@@ -379,7 +379,7 @@ exynos_performance() {
 	}
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply always_on "$mali_sysfs/power_policy"
+	apply "always_on" "$mali_sysfs/power_policy"
 
 	# DRAM and Buses Frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
@@ -421,7 +421,7 @@ tensor_performance() {
 	}
 
 	# GPU Power Policy
-	apply always_on "$gpu_path/power_policy"
+	apply "always_on" "$gpu_path/power_policy"
 
 	# DRAM frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
@@ -485,7 +485,11 @@ mediatek_normal() {
 
 	# GPU Power Policy
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply coarse_demand "$mali_sysfs/power_policy"
+	if grep -q "adaptive" "$gpu_path/power_policy" 2>/dev/null; then
+    apply "adaptive" "$gpu_path/power_policy"
+  else
+    apply "coarse_demand" "$gpu_path/power_policy"
+  fi
 
 	# Enable battery current limiter
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
@@ -558,7 +562,11 @@ exynos_normal() {
 	}
 
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	apply coarse_demand "$mali_sysfs/power_policy"
+	if grep -q "adaptive" "$gpu_path/power_policy" 2>/dev/null; then
+  	apply "adaptive" "$gpu_path/power_policy"
+  else
+  	apply "coarse_demand" "$gpu_path/power_policy"
+  fi
 
 	# DRAM frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
@@ -585,7 +593,11 @@ tensor_normal() {
 	}
 
 	# GPU Power Policy
-	apply coarse_demand "$gpu_path/power_policy"
+	if grep -q "adaptive" "$gpu_path/power_policy" 2>/dev/null; then
+  		apply "adaptive" "$gpu_path/power_policy"
+  	else
+  		apply "coarse_demand" "$gpu_path/power_policy"
+  	fi
 
 	# DRAM frequency
 	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
@@ -614,11 +626,7 @@ mediatek_powersave() {
 
 	# GPU Power Policy
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	if grep -q "adaptive" "$mali_sysfs/power_policy" 2>/dev/null; then
-		apply adaptive "$mali_sysfs/power_policy"
-	else
-		apply coarse_demand "$mali_sysfs/power_policy"
-	fi
+	apply "coarse_demand" "$mali_sysfs/power_policy"
 }
 
 snapdragon_powersave() {
@@ -658,11 +666,7 @@ exynos_powersave() {
 
 	# GPU Power Policy
 	mali_sysfs=$(find /sys/devices/platform/ -iname "*.mali" -print -quit 2>/dev/null)
-	if grep -q "adaptive" "$mali_sysfs/power_policy" 2>/dev/null; then
-		apply adaptive "$mali_sysfs/power_policy"
-	else
-		apply coarse_demand "$mali_sysfs/power_policy"
-	fi
+	apply "coarse_demand" "$mali_sysfs/power_policy"
 }
 
 unisoc_powersave() {
@@ -681,11 +685,7 @@ tensor_powersave() {
 	}
 
 	# GPU Power Policy
-	if grep -q "adaptive" "$gpu_path/power_policy" 2>/dev/null; then
-		apply adaptive "$gpu_path/power_policy"
-	else
-		apply coarse_demand "$gpu_path/power_policy"
-	fi
+	apply "coarse_demand" "$gpu_path/power_policy"
 }
 
 ###################################
