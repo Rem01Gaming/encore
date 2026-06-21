@@ -2,12 +2,10 @@ name: Build Encore Tweaks
 
 on:
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
   push:
     branches:
-      - main
+      - '**'
     paths:
       - '.github/workflows/build.yml'
       - '.github/scripts/**'
@@ -19,9 +17,8 @@ on:
       - 'gamelist.txt'
       - 'version'
 
-# Allow only one concurrent build workflows
 concurrency:
-  group: build
+  group: build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -70,6 +67,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           COMMIT_URL: ${{ github.event.head_commit.url }}
+          BRANCH: ${{ github.ref_name }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           TITLE: Encore Tweaks
         run: |

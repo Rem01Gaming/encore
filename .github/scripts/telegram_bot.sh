@@ -1,6 +1,9 @@
 #!/bin/env bash
 
+BRANCH_ESC="${BRANCH//_/\\_}"
+
 msg="*$TITLE*
+Branch: $BRANCH_ESC
 \\#ci\\_$VERSION
 \`\`\`
 $COMMIT_MESSAGE
