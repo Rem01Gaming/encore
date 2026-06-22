@@ -2,5 +2,6 @@
   "title": "Encore Tweaks",
   "icon": "icon.webp",
   "exitConfirm": false,
-  "backInterceptor": "javascript"
+  "backInterceptor": "javascript",
+  "contentSecurityPolicy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' ksu:; font-src 'self' data:; connect-src 'self'"
 }
