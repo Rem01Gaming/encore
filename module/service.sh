@@ -30,6 +30,15 @@ rm -f "$MODULE_CONFIG/encore.log" "$MODULE_CONFIG/sysmon.log"
 # Parse Governor to use
 chmod 644 "$CPUFREQ/scaling_governor"
 default_gov=$(cat "$CPUFREQ/scaling_governor")
+
+# Add mitigation for Samsung Snapdragon Bug
+SOC_ID=$(cat "$MODULE_CONFIG/soc_recognition" 2>/dev/null)
+if [ "$SOC_ID" = "2" ] && getprop ro.product.brand | grep -iq "samsung"; then
+	if [ "$default_gov" = "schedutil" ]; then
+		default_gov="walt"
+	fi
+fi
+
 echo "$default_gov" >$MODULE_CONFIG/default_cpu_gov
 
 # Create cleanup script

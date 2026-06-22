@@ -2,5 +2,24 @@
   "default": {
     "items": ["DISABLE_DDR_TWEAK", "NO_PERFORMANCE_CPUGOV", "QCOM_NO_GPU_POWERSAVE"]
   },
-  "device_rules": {}
+  "device_rules": {
+    "snapdragon_samsung_schedutil_bug": {
+      "name": "Snapdragon/Samsung Schedutil Mitigation",
+      "description": "Prevents 100% CPU usage deadlock on Prime Core by blacklisting schedutil on Samsung Snapdragon kernels.",
+      "filter_type": "all",
+      "items": [
+        "NO_SCHEDUTIL_CPUGOV"
+      ],
+      "filter_condition": {
+        "soc": {
+          "operator": "regex",
+          "value": "(?i)(sm[0-9]+|qcom|qualcomm|snapdragon)"
+        },
+        "model": {
+          "operator": "regex",
+          "value": "(?i)(sm-|samsung)"
+        }
+      }
+    }
+  }
 }

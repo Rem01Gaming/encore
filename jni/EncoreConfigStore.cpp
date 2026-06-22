@@ -25,6 +25,7 @@
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
 
+#include "DeviceMitigationStore.hpp"
 #include "EncoreConfigStore.hpp"
 
 bool EncoreConfigStore::load_config(const std::string &config_path) {
@@ -153,6 +154,14 @@ std::string EncoreConfigStore::read_default_cpu_governor() const {
     }
 
     file.close();
+
+    auto mitigations = device_mitigation_store.get_cached_mitigation_items(false);
+    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV")) {
+        if (default_governor == "schedutil") {
+            default_governor = "walt";
+        }
+    }
+
     return default_governor;
 }
 
@@ -217,6 +226,12 @@ bool EncoreConfigStore::parse_config(const rapidjson::Document &doc) {
         if (gov.HasMember("powersave") && gov["powersave"].IsString()) {
             new_config.cpu_governor.powersave = gov["powersave"].GetString();
         }
+    }
+
+    auto mitigations = device_mitigation_store.get_cached_mitigation_items(new_config.preferences.use_device_mitigation);
+    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV")) {
+        if (new_config.cpu_governor.balance == "schedutil") new_config.cpu_governor.balance = "walt";
+        if (new_config.cpu_governor.powersave == "schedutil") new_config.cpu_governor.powersave = "walt";
     }
 
     {
