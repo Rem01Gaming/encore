@@ -138,6 +138,21 @@ bool EncoreConfigStore::reload() {
     return load_config(config_path_);
 }
 
+// Skip bypass on pre-GKI kernels where 'walt' doesn't exist and 'schedutil' is safe.
+static bool is_governor_supported(const std::string &gov) {
+    std::ifstream file("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
+    if (!file.is_open()) {
+        return false;
+    }
+    std::string available_gov;
+    while (file >> available_gov) {
+        if (available_gov == gov) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::string EncoreConfigStore::read_default_cpu_governor() const {
     // Fallback governor
     std::string default_governor = "schedutil";
@@ -156,7 +171,7 @@ std::string EncoreConfigStore::read_default_cpu_governor() const {
     file.close();
 
     auto mitigations = device_mitigation_store.get_cached_mitigation_items(false);
-    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV")) {
+    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV") && is_governor_supported("walt")) {
         if (default_governor == "schedutil") {
             default_governor = "walt";
         }
@@ -229,7 +244,7 @@ bool EncoreConfigStore::parse_config(const rapidjson::Document &doc) {
     }
 
     auto mitigations = device_mitigation_store.get_cached_mitigation_items(new_config.preferences.use_device_mitigation);
-    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV")) {
+    if (mitigations.contains("NO_SCHEDUTIL_CPUGOV") && is_governor_supported("walt")) {
         if (new_config.cpu_governor.balance == "schedutil") new_config.cpu_governor.balance = "walt";
         if (new_config.cpu_governor.powersave == "schedutil") new_config.cpu_governor.powersave = "walt";
     }

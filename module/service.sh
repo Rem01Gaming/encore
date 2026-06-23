@@ -35,7 +35,9 @@ default_gov=$(cat "$CPUFREQ/scaling_governor")
 SOC_ID=$(cat "$MODULE_CONFIG/soc_recognition" 2>/dev/null)
 if [ "$SOC_ID" = "2" ] && getprop ro.product.brand | grep -iq "samsung"; then
 	if [ "$default_gov" = "schedutil" ]; then
-		default_gov="walt"
+		if grep -q "walt" "$CPUFREQ/scaling_available_governors"; then
+			default_gov="walt"
+		fi
 	fi
 fi
 
