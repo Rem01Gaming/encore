@@ -67,6 +67,10 @@
         "log_level": {
             "title": "ログレベル",
             "description": "Encore Tweaks の操作ログの詳細度を選択します"
+        },
+        "disable_tweaks": {
+            "title": "調整を無効にする",
+            "description": "Encore Tweaksによるすべてのパフォーマンス調整を無効にします。アドオンのみを使用するユーザーに便利です。"
         }
     },
     "game_settings": {
@@ -141,5 +145,16 @@
         "cancel": "キャンセル",
         "warning": "警告",
         "ok": "OK"
+    },
+    "disable_tweaks": {
+        "title": "調整を無効にする",
+        "toggle_title": "調整を無効にする",
+        "brief": "有効にすると、Encore Tweaksに組み込まれたパフォーマンス最適化をすべてオフにし、このモジュールをEncore Addonモジュール専用のホストとして使用できるようになります。"
+    },
+    "reboot_modal": {
+        "title": "再起動が必要",
+        "description": "変更を反映するには再起動が必要です。今すぐ再起動しますか？",
+        "reboot": "今すぐ再起動",
+        "later": "後で行う"
     }
 }
