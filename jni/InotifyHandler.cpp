@@ -15,7 +15,6 @@
  */
 
 #include "InotifyHandler.hpp"
-
 #include "DeviceMitigationStore.hpp"
 #include "EncoreConfigStore.hpp"
 
@@ -23,17 +22,14 @@
 #include <EncoreLog.hpp>
 #include <EncoreUtility.hpp>
 #include <GameRegistry.hpp>
-#include <SystemStatus.hpp>
 
-// signal_daemon_update and signal_daemon_stop are defined in Main.cpp
-extern void signal_daemon_update();
+// signal_daemon_stop is defined in Main.cpp
 extern void signal_daemon_stop();
 
 enum WatchContext {
     WATCH_CONTEXT_GAMELIST,
     WATCH_CONTEXT_CONFIG,
     WATCH_CONTEXT_DEVICE_MITIGATION,
-    WATCH_CONTEXT_SYSTEM_STATUS,
     WATCH_CONTEXT_MODULE_UPDATE,
 };
 
@@ -63,19 +59,6 @@ void on_json_modified(const struct inotify_event *event, const std::string &path
         EncoreLog::set_log_level(prefs.log_level);
     };
 
-    auto OnSystemStatusModified = [&](const std::string &path) -> void {
-        // Spammy log...
-        // LOGD_TAG("InotifyHandler", "Callback OnSystemStatusModified reached");
-
-        SystemStatus status;
-        if (SystemStatusReader::read(status, path.c_str())) {
-            system_status_cache.update(status);
-            signal_daemon_update(); // Wake up the daemon immediately
-        } else {
-            LOGW_TAG("InotifyHandler", "Failed to parse system_status file: {}", path);
-        }
-    };
-
     auto OnModuleUpdateCreated = [&]() -> void {
         LOGI_TAG("InotifyHandler", "Module update file detected, signaling daemon to stop");
         notify("Please reboot your device to complete module update.");
@@ -88,7 +71,6 @@ void on_json_modified(const struct inotify_event *event, const std::string &path
             case WATCH_CONTEXT_GAMELIST: OnGamelistModified(path); break;
             case WATCH_CONTEXT_CONFIG: OnConfigModified(path); break;
             case WATCH_CONTEXT_DEVICE_MITIGATION: OnDeviceMitigationModified(path); break;
-            case WATCH_CONTEXT_SYSTEM_STATUS: OnSystemStatusModified(path); break;
             default: break;
         }
     }
@@ -113,30 +95,14 @@ bool init_file_watcher(InotifyWatcher &watcher) {
         auto prefs = config_store.get_preferences();
         EncoreLog::set_log_level(prefs.log_level);
 
-        // Seed the cache with whatever is already on-disk (if any)
-        {
-            SystemStatus initial;
-            if (SystemStatusReader::read(initial)) {
-                system_status_cache.update(initial);
-                LOGD_TAG("InotifyHandler", "Pre-seeded SystemStatusCache from existing status file");
-            }
-        }
-
         // Set up file watchers
         InotifyWatcher::WatchReference gamelist_ref{ENCORE_GAMELIST, on_json_modified, WATCH_CONTEXT_GAMELIST, nullptr};
-
         InotifyWatcher::WatchReference config_ref{CONFIG_FILE, on_json_modified, WATCH_CONTEXT_CONFIG, nullptr};
-
         InotifyWatcher::WatchReference device_mitigation_ref{
-            DEVICE_MITIGATION_FILE, on_json_modified, WATCH_CONTEXT_DEVICE_MITIGATION, nullptr
-        };
-
-        InotifyWatcher::WatchReference system_status_ref{
-            SYSTEM_STATUS_FILE, on_json_modified, WATCH_CONTEXT_SYSTEM_STATUS, nullptr
+                DEVICE_MITIGATION_FILE, on_json_modified, WATCH_CONTEXT_DEVICE_MITIGATION, nullptr
         };
 
         // Watch the module directory for creation of the "update" file.
-        // The file does not exist yet, so we must watch the parent directory.
         InotifyWatcher::WatchReference module_update_ref{MODPATH, on_json_modified, WATCH_CONTEXT_MODULE_UPDATE, nullptr};
 
         if (!watcher.addFile(gamelist_ref)) {
@@ -151,11 +117,6 @@ bool init_file_watcher(InotifyWatcher &watcher) {
 
         if (!watcher.addFile(device_mitigation_ref)) {
             LOGE_TAG("InotifyWatcher", "Failed to add device mitigation watch");
-            return false;
-        }
-
-        if (!watcher.addFile(system_status_ref)) {
-            LOGE_TAG("InotifyWatcher", "Failed to add system_status watch");
             return false;
         }
 

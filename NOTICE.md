@@ -173,8 +173,8 @@ The following third-party components are used in this project:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-## System Monitor (Apache License 2.0)
-**Component:** System information monitoring
+## Binder Resolver (Apache License 2.0)
+**Component:** Binder transaction code resolver
 
     Copyright 2026 Rem01Gaming
 
