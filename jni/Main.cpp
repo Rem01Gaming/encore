@@ -235,6 +235,27 @@ static void encore_main_daemon() {
         }
     };
 
+    pocbs.onProcessStarted = [](int32_t pid, int32_t processUid, int32_t packageUid, const std::string &packageName, const std::string &processName) {
+        std::lock_guard<std::mutex> lk(g_state_mtx);
+        LOGT("onProcessStarted: pid={}, processUid={}, packageUid={}, packageName={}, processName={}",
+             processUid, processUid, packageUid, packageName, processName);
+
+        bool is_game = game_registry.is_game_registered(packageName);
+
+        if (is_game) {
+            if (g_state.active_game_pid != pid) {
+                // Switching to a new game (or starting a game)
+                if (g_state.active_game_pid != 0) {
+                    clear_dnd_if_needed(g_state);
+                }
+                g_state.active_package = packageName;
+                g_state.active_game_pid = pid;
+                LOGI("Game {} came to foreground (PID: {})", packageName, pid);
+                evaluate_and_apply_profile(g_state);
+            }
+        }
+    };
+
     pocbs.onProcessDied = [](int32_t pid, int32_t uid) {
         std::lock_guard<std::mutex> lk(g_state_mtx);
         LOGT("onProcessDied: pid={}, uid={}", pid, uid);
