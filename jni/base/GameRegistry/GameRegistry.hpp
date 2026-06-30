@@ -17,9 +17,8 @@
 #pragma once
 
 #include <optional>
-#include <shared_mutex>
+#include <mutex>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include "Encore.hpp"
@@ -27,8 +26,8 @@
 
 class GameRegistry {
 private:
-    std::unordered_map<std::string, EncoreGameList> game_packages_;
-    mutable std::shared_mutex mutex_;
+    std::vector <EncoreGameList> game_packages_;
+    mutable std::mutex mutex_;
 
 public:
     /**
@@ -50,14 +49,14 @@ public:
      * @brief Updates the game registry with new game list data
      * @param new_list The new list of games to register
      */
-    void update_gamelist(const std::vector<EncoreGameList> &new_list);
+    void update_gamelist(const std::vector <EncoreGameList> &new_list);
 
     /**
      * @brief Finds a game by package name
      * @param package_name The package name to search for
      * @return Optional containing the game if found, empty if not found
      */
-    std::optional<EncoreGameList> find_game(const std::string &package_name) const;
+    std::optional <EncoreGameList> find_game(const std::string &package_name) const;
 
     /**
      * @brief Finds a game by package name (pointer version for performance)
@@ -83,7 +82,7 @@ public:
      * @brief Gets all registered game package names
      * @return Vector of all package names
      */
-    std::vector<std::string> get_all_package_names() const;
+    std::vector <std::string> get_all_package_names() const;
 
 private:
     /**

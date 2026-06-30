@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -35,26 +36,22 @@ bool GameRegistry::load_from_json(const std::string &filename) {
         return false;
     }
 
-    std::ifstream ifs(filename, std::ios::in | std::ios::binary);
-    if (!ifs.is_open()) {
+    FILE *fp = fopen(filename.c_str(), "rb");
+    if (!fp) {
         LOGE_TAG("GameRegistry", "{}: {}", filename, strerror(errno));
         return false;
     }
 
-    std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-    ifs.close();
+    char readBuffer[65536];
+    rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
     rapidjson::Document doc;
-    doc.Parse(content.c_str());
+    doc.ParseStream(is);
+    fclose(fp);
 
     if (doc.HasParseError()) {
-        LOGE_TAG(
-            "GameRegistry",
-            "{}: parse error: {} (Offset: {})",
-            filename,
-            rapidjson::GetParseError_En(doc.GetParseError()),
-            doc.GetErrorOffset()
-        );
+        LOGE_TAG("GameRegistry", "{}: parse error: {} (Offset: {})",
+                 filename, rapidjson::GetParseError_En(doc.GetParseError()), doc.GetErrorOffset());
         return false;
     }
 
@@ -63,7 +60,8 @@ bool GameRegistry::load_from_json(const std::string &filename) {
         return false;
     }
 
-    std::vector<EncoreGameList> new_list;
+    std::vector <EncoreGameList> new_list;
+    new_list.reserve(doc.MemberCount());
 
     for (auto it = doc.MemberBegin(); it != doc.MemberEnd(); ++it) {
         if (!it->name.IsString()) {
@@ -80,27 +78,24 @@ bool GameRegistry::load_from_json(const std::string &filename) {
         EncoreGameList game;
         game.package_name = it->name.GetString();
 
-        // Validate package name
         if (game.package_name.empty()) {
             LOGE_TAG("GameRegistry", "Empty package name found, skipping");
             continue;
         }
 
-        // Parse lite_mode with default to false
         if (game_obj.HasMember("lite_mode") && game_obj["lite_mode"].IsBool()) {
             game.lite_mode = game_obj["lite_mode"].GetBool();
         } else {
             game.lite_mode = false;
         }
 
-        // Parse enable_dnd with default to false
         if (game_obj.HasMember("enable_dnd") && game_obj["enable_dnd"].IsBool()) {
             game.enable_dnd = game_obj["enable_dnd"].GetBool();
         } else {
             game.enable_dnd = false;
         }
 
-        new_list.push_back(game);
+        new_list.push_back(std::move(game));
     }
 
     update_gamelist(new_list);
@@ -110,7 +105,9 @@ bool GameRegistry::load_from_json(const std::string &filename) {
 
 bool GameRegistry::populate_from_base(const std::string &gamelist, const std::string &baselist) {
     auto IsAppInstalled = [](const std::string &package_name) -> bool {
-        return (access(("/data/data/" + package_name).c_str(), F_OK) == 0);
+        std::string path = "/data/data/";
+        path += package_name;
+        return (access(path.c_str(), F_OK) == 0);
     };
 
     std::ifstream base_file(baselist);
@@ -119,7 +116,7 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
         return false;
     }
 
-    std::vector<EncoreGameList> game_list;
+    std::vector <EncoreGameList> game_list;
     std::string package_name;
 
     while (std::getline(base_file, package_name)) {
@@ -128,10 +125,10 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
 
         if (IsAppInstalled(package_name)) {
             EncoreGameList game;
-            game.package_name = package_name;
+            game.package_name = std::move(package_name);
             game.lite_mode = false;
             game.enable_dnd = false;
-            game_list.push_back(game);
+            game_list.push_back(std::move(game));
         }
     }
 
@@ -141,7 +138,7 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     doc.SetObject();
     rapidjson::Document::AllocatorType &allocator = doc.GetAllocator();
 
-    for (const auto &game : game_list) {
+    for (const auto &game: game_list) {
         rapidjson::Value game_obj(rapidjson::kObjectType);
         game_obj.AddMember("lite_mode", game.lite_mode, allocator);
         game_obj.AddMember("enable_dnd", game.enable_dnd, allocator);
@@ -151,7 +148,7 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     }
 
     rapidjson::StringBuffer buffer;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    rapidjson::PrettyWriter <rapidjson::StringBuffer> writer(buffer);
     writer.SetIndent(' ', 2);
     doc.Accept(writer);
 
@@ -165,60 +162,65 @@ bool GameRegistry::populate_from_base(const std::string &gamelist, const std::st
     output_file.close();
 
     LOGI_TAG("GameRegistry", "Populated gamelist JSON with {} games", game_list.size());
-
     return true;
 }
 
-void GameRegistry::update_gamelist(const std::vector<EncoreGameList> &new_list) {
-    std::unique_lock lock(mutex_);
-    game_packages_.clear();
+void GameRegistry::update_gamelist(const std::vector <EncoreGameList> &new_list) {
+    std::lock_guard <std::mutex> lock(mutex_);
 
-    for (const auto &game : new_list) {
+    game_packages_.clear();
+    game_packages_.reserve(new_list.size());
+
+    for (const auto &game: new_list) {
         if (validate_game_entry(game)) {
-            game_packages_[game.package_name] = game;
+            game_packages_.push_back(game);
         }
     }
+
+    std::sort(game_packages_.begin(), game_packages_.end(),
+              [](const EncoreGameList &a, const EncoreGameList &b) {
+                  return a.package_name < b.package_name;
+              });
 
     LOGI_TAG("GameRegistry", "Updated registry with {} games", game_packages_.size());
 }
 
-std::optional<EncoreGameList> GameRegistry::find_game(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
-    auto it = game_packages_.find(package_name);
-    if (it != game_packages_.end()) {
-        return it->second;
-    }
-
-    return std::nullopt;
-}
-
 const EncoreGameList *GameRegistry::find_game_ptr(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
-    auto it = game_packages_.find(package_name);
-    if (it != game_packages_.end()) {
-        return &it->second;
+    std::lock_guard <std::mutex> lock(mutex_);
+
+    auto it = std::lower_bound(game_packages_.begin(), game_packages_.end(), package_name,
+                               [](const EncoreGameList &game, const std::string &name) {
+                                   return game.package_name < name;
+                               });
+
+    if (it != game_packages_.end() && it->package_name == package_name) {
+        return &(*it);
     }
 
     return nullptr;
 }
 
+std::optional <EncoreGameList> GameRegistry::find_game(const std::string &package_name) const {
+    const EncoreGameList *game = find_game_ptr(package_name);
+    return game ? std::make_optional(*game) : std::nullopt;
+}
+
 bool GameRegistry::is_game_registered(const std::string &package_name) const {
-    std::shared_lock lock(mutex_);
-    return game_packages_.find(package_name) != game_packages_.end();
+    return find_game_ptr(package_name) != nullptr;
 }
 
 size_t GameRegistry::size() const {
-    std::shared_lock lock(mutex_);
+    std::lock_guard <std::mutex> lock(mutex_);
     return game_packages_.size();
 }
 
-std::vector<std::string> GameRegistry::get_all_package_names() const {
-    std::shared_lock lock(mutex_);
-    std::vector<std::string> packages;
+std::vector <std::string> GameRegistry::get_all_package_names() const {
+    std::lock_guard <std::mutex> lock(mutex_);
+    std::vector <std::string> packages;
     packages.reserve(game_packages_.size());
 
-    for (const auto &[package_name, _] : game_packages_) {
-        packages.push_back(package_name);
+    for (const auto &game: game_packages_) {
+        packages.push_back(game.package_name);
     }
 
     return packages;
