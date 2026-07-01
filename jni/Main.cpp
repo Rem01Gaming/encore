@@ -101,6 +101,12 @@ static std::string get_package_name_by_pid(pid_t pid) {
     if (file.is_open()) {
         std::string pkg;
         std::getline(file, pkg, '\0');
+
+        // Remove sub-process suffix (e.g., ":hok_bu_service" or ":fbns")
+        size_t colon_pos = pkg.find(':');
+        if (colon_pos != std::string::npos) {
+            pkg = pkg.substr(0, colon_pos);
+        }
         return pkg;
     }
     return "";
@@ -111,6 +117,25 @@ static void clear_dnd_if_needed(DaemonState &state) {
         set_do_not_disturb(state.prev_dnd_state);
         state.game_requested_dnd = false;
     }
+}
+
+static std::string sanitize_string(const std::string &raw_name) {
+    if (raw_name.empty()) return "";
+
+    std::string name = raw_name;
+
+    // Remove embedded or trailing null terminators
+    size_t null_pos = name.find('\0');
+    if (null_pos != std::string::npos) {
+        name.resize(null_pos);
+    }
+
+    // Trim trailing whitespaces or garbage characters
+    while (!name.empty() && std::isspace(static_cast<unsigned char>(name.back()))) {
+        name.pop_back();
+    }
+
+    return name;
 }
 
 [[nodiscard]] static bool apply_game_profile(DaemonState &state) {
@@ -235,12 +260,14 @@ static void encore_main_daemon() {
         }
     };
 
-    pocbs.onProcessStarted = [](int32_t pid, int32_t processUid, int32_t packageUid, const std::string &packageName, const std::string &processName) {
+    pocbs.onProcessStarted = [](int32_t pid, int32_t processUid, int32_t packageUid, const std::string &packageName, const std::string /* &processName */) {
         std::lock_guard<std::mutex> lk(g_state_mtx);
-        LOGT("onProcessStarted: pid={}, processUid={}, packageUid={}, packageName={}, processName={}",
-             processUid, processUid, packageUid, packageName, processName);
+        std::string clean_pkg = sanitize_string(packageName);
 
-        bool is_game = game_registry.is_game_registered(packageName);
+        LOGT("onProcessStarted: pid={}, processUid={}, packageUid={}, packageName={}",
+             processUid, processUid, packageUid, clean_pkg);
+
+        bool is_game = game_registry.is_game_registered(clean_pkg);
 
         if (is_game) {
             if (g_state.active_game_pid != pid) {
@@ -248,9 +275,9 @@ static void encore_main_daemon() {
                 if (g_state.active_game_pid != 0) {
                     clear_dnd_if_needed(g_state);
                 }
-                g_state.active_package = packageName;
+                g_state.active_package = clean_pkg;
                 g_state.active_game_pid = pid;
-                LOGI("Game {} came to foreground (PID: {})", packageName, pid);
+                LOGI("Game {} came to foreground (PID: {})", clean_pkg, pid);
                 evaluate_and_apply_profile(g_state);
             }
         }
