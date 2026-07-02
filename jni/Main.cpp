@@ -119,25 +119,6 @@ static void clear_dnd_if_needed(DaemonState &state) {
     }
 }
 
-static std::string sanitize_string(const std::string &raw_name) {
-    if (raw_name.empty()) return "";
-
-    std::string name = raw_name;
-
-    // Remove embedded or trailing null terminators
-    size_t null_pos = name.find('\0');
-    if (null_pos != std::string::npos) {
-        name.resize(null_pos);
-    }
-
-    // Trim trailing whitespaces or garbage characters
-    while (!name.empty() && std::isspace(static_cast<unsigned char>(name.back()))) {
-        name.pop_back();
-    }
-
-    return name;
-}
-
 [[nodiscard]] static bool apply_game_profile(DaemonState &state) {
     auto *active_game = game_registry.find_game_ptr(state.active_package);
     if (!active_game) {
@@ -256,29 +237,6 @@ static void encore_main_daemon() {
             // The game latches on boost, so we do NOT clear the game state or reset the profile.
             if (g_state.active_game_pid == pid) {
                 LOGD("Game {} lost foreground", g_state.active_package);
-            }
-        }
-    };
-
-    pocbs.onProcessStarted = [](int32_t pid, int32_t processUid, int32_t packageUid, const std::string &packageName, const std::string /* &processName */) {
-        std::lock_guard<std::mutex> lk(g_state_mtx);
-        std::string clean_pkg = sanitize_string(packageName);
-
-        LOGT("onProcessStarted: pid={}, processUid={}, packageUid={}, packageName={}",
-             processUid, processUid, packageUid, clean_pkg);
-
-        bool is_game = game_registry.is_game_registered(clean_pkg);
-
-        if (is_game) {
-            if (g_state.active_game_pid != pid) {
-                // Switching to a new game (or starting a game)
-                if (g_state.active_game_pid != 0) {
-                    clear_dnd_if_needed(g_state);
-                }
-                g_state.active_package = clean_pkg;
-                g_state.active_game_pid = pid;
-                LOGI("Game {} came to foreground (PID: {})", clean_pkg, pid);
-                evaluate_and_apply_profile(g_state);
             }
         }
     };
