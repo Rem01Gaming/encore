@@ -22,6 +22,7 @@
 
 /**
  * @brief Callbacks fired by the IProcessObserver binder hosted in ActivityManagerService.
+ * @note String returned by these callbacks need to be sanitized before use.
  */
 struct ProcessObserverCallbacks {
     std::function<void(int32_t pid, int32_t uid, bool foreground)> onForegroundActivitiesChanged;
