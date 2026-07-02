@@ -214,10 +214,10 @@ static void encore_main_daemon() {
 
     pocbs.onForegroundActivitiesChanged = [](int32_t pid, int32_t uid, bool foreground) {
         std::lock_guard<std::mutex> lk(g_state_mtx);
-        LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
+        std::string pkg = get_package_name_by_pid(pid);
+        LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}, packageName={}", pid, uid, foreground, pkg);
 
         if (foreground) {
-            std::string pkg = get_package_name_by_pid(pid);
             bool is_game = !pkg.empty() && game_registry.is_game_registered(pkg);
 
             if (is_game) {
