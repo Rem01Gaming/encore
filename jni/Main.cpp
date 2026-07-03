@@ -95,21 +95,11 @@ void signal_daemon_stop() {
 // Helper functions
 // ---------------------------------------------------------------------------
 
-static std::string get_package_name_by_pid(pid_t pid) {
-    std::string path = "/proc/" + std::to_string(pid) + "/cmdline";
-    std::ifstream file(path);
-    if (file.is_open()) {
-        std::string pkg;
-        std::getline(file, pkg, '\0');
-
-        // Remove sub-process suffix (e.g., ":hok_bu_service" or ":fbns")
-        size_t colon_pos = pkg.find(':');
-        if (colon_pos != std::string::npos) {
-            pkg = pkg.substr(0, colon_pos);
-        }
-        return pkg;
+static std::string remove_null_char(std::string raw) {
+    if (auto null_pos = raw.find('\0'); null_pos != std::string::npos) {
+        raw.resize(null_pos);
     }
-    return "";
+    return raw;
 }
 
 static void clear_dnd_if_needed(DaemonState &state) {
@@ -212,12 +202,12 @@ static void encore_main_daemon() {
 
     ProcessObserverCallbacks pocbs;
 
-    pocbs.onForegroundActivitiesChanged = [](int32_t pid, int32_t uid, bool foreground) {
+    pocbs.onForegroundActivitiesChanged = [&binder](int32_t pid, int32_t uid, bool foreground) {
         std::lock_guard<std::mutex> lk(g_state_mtx);
-        std::string pkg = get_package_name_by_pid(pid);
-        LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}, packageName={}", pid, uid, foreground, pkg);
+        LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
 
         if (foreground) {
+            std::string pkg = remove_null_char(binder.getPackageNameForUid(uid));
             bool is_game = !pkg.empty() && game_registry.is_game_registered(pkg);
 
             if (is_game) {

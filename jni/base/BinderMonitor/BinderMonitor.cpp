@@ -43,7 +43,8 @@ enum class TxCode {
     OnForegroundServicesChanged,
     OnProcessDied,
     OnProcessStarted,
-    OnDisplayEvent
+    OnDisplayEvent,
+    GetPackageNameForUid
 };
 
 struct ResolverQuery {
@@ -63,6 +64,7 @@ static const std::unordered_map<TxCode, ResolverQuery> kResolverQueries = {
         {TxCode::OnProcessDied, {"android.app.IProcessObserver.Stub::TRANSACTION_onProcessDied", true, 0}},
         {TxCode::OnProcessStarted, {"android.app.IProcessObserver.Stub::TRANSACTION_onProcessStarted", false, 0}},
         {TxCode::OnDisplayEvent, {"android.hardware.display.IDisplayManagerCallback.Stub::TRANSACTION_onDisplayEvent", false, 1}},
+        {TxCode::GetPackageNameForUid, { "android.content.pm.IPackageManager.Stub::TRANSACTION_getNameForUid", true, 0}},
 };
 
 // =============================================================================
@@ -74,6 +76,7 @@ struct BinderMonitorState {
     AIBinder *notificationBinder = nullptr;
     AIBinder *activityBinder = nullptr;
     AIBinder *displayBinder = nullptr;
+    AIBinder *packageBinder = nullptr;
 
     // Held alive so the remote services keep strong refs to our callbacks.
     AIBinder *processObserverBinder = nullptr;
@@ -240,6 +243,48 @@ static int32_t transactReadInt32(AIBinder *binder, uint32_t tx, const char *ifTo
     return value;
 }
 
+/**
+ * @brief Executes a binder transaction with a single int32 argument and reads back a single string reply value.
+ */
+static std::string transactReadString(AIBinder *binder, uint32_t tx, const char *ifToken, int32_t arg, const std::string &onError = "") {
+    AParcel *in = nullptr, *out = nullptr;
+    if (AIBinder_prepareTransaction(binder, &in) != STATUS_OK) {
+        LOGE_TAG("BinderMonitor", "prepareTransaction failed for tx={} iface={}", tx, ifToken);
+        return onError;
+    }
+
+    AParcel_writeInterfaceToken(in, ifToken);
+    AParcel_writeInt32(in, arg);
+    binder_status_t status = AIBinder_transact(binder, tx, &in, &out, 0);
+
+    if (status != STATUS_OK) {
+        LOGE_TAG("BinderMonitor", "transact failed for tx={} iface={} status={}", tx, ifToken, status);
+        if (out) AParcel_delete(out);
+        return onError;
+    }
+
+    AStatus *st = nullptr;
+    AParcel_readStatusHeader(out, &st);
+    bool ok = st && AStatus_isOk(st);
+
+    if (!ok) {
+        const char *desc = st ? AStatus_getDescription(st) : "null status";
+        LOGE_TAG("BinderMonitor", "Reply status error for tx={} iface={}: {}", tx, ifToken, desc);
+        if (st) {
+            AStatus_deleteDescription(desc);
+            AStatus_delete(st);
+        }
+        AParcel_delete(out);
+        return onError;
+    }
+    if (st) AStatus_delete(st);
+
+    std::string value;
+    AParcel_readString(out, &value, stringAllocator);
+    AParcel_delete(out);
+    return value;
+}
+
 static bool queryIsInteractive() {
     return transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsInteractive), "android.os.IPowerManager", 0) != 0;
 }
@@ -343,6 +388,7 @@ bool BinderMonitor::initialize() {
         gState.txCodes[code] = q.fallback;
     }
 
+    LOGI_TAG("BinderMonitor", "Resolving transaction codes...");
     auto codes = runResolver(MODPATH "/binder_resolver.apk");
     for (const auto &[code, q] : kResolverQueries) {
         auto it = codes.find(q.query);
@@ -368,6 +414,7 @@ bool BinderMonitor::initialize() {
             {"notification", &gState.notificationBinder},
             {"activity",     &gState.activityBinder},
             {"display",      &gState.displayBinder},
+            {"package",      &gState.packageBinder},
     };
 
     for (auto &s: services) {
@@ -398,6 +445,10 @@ bool BinderMonitor::initialize() {
     AIBinder_Class *dmClazz = AIBinder_Class_define(
             "android.hardware.display.IDisplayManager", noopCreate, noopDestroy, noopTransact);
     AIBinder_associateClass(gState.displayBinder, dmClazz);
+
+    AIBinder_Class *pmClazz = AIBinder_Class_define(
+            "android.content.pm.IPackageManager", noopCreate, noopDestroy, noopTransact);
+    AIBinder_associateClass(gState.packageBinder, pmClazz);
 
     AIBinder_Class *processObserverClazz = AIBinder_Class_define(
             "android.app.IProcessObserver", noopCreate, noopDestroy, processObserver_transact);
@@ -505,6 +556,16 @@ int32_t BinderMonitor::getZenMode() {
     uint32_t tx = gState.getCode(TxCode::GetZenMode);
     if (!tx) return -1;
     return transactReadInt32(gState.notificationBinder, tx, "android.app.INotificationManager");
+}
+
+std::string BinderMonitor::getPackageNameForUid(int32_t uid) {
+    if (!gState.packageBinder) {
+        LOGE_TAG("BinderMonitor", "getPackageNameForUid called before successful initialize()");
+        return "";
+    }
+    uint32_t tx = gState.getCode(TxCode::GetPackageNameForUid);
+    if (!tx) return "";
+    return transactReadString(gState.packageBinder, tx, "android.content.pm.IPackageManager", uid);
 }
 
 void BinderMonitor::joinThreadPool() {

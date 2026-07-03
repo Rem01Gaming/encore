@@ -87,6 +87,14 @@ public:
     int32_t getZenMode();
 
     /**
+      * @brief Gets the package name for a given UID from PackageManagerService.
+      *
+      * @param uid The UID to query.
+      * @return The package name associated with the UID, or an empty string on failure.
+      */
+    std::string getPackageNameForUid(int32_t uid);
+
+    /**
      * @brief Blocks the calling thread by joining the binder thread pool.
      */
     void joinThreadPool();
