@@ -61,7 +61,7 @@ jobs:
           path: ${{ steps.compileZip.outputs.zipName }}
 
       - name: Upload To Telegram
-        if: env.CHAT_ID != '' && env.BOT_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.CHAT_ID != '' && env.BOT_TOKEN != ''
         env:
           CHAT_ID: ${{ secrets.CHAT_ID }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
