@@ -2,14 +2,10 @@ LOCAL_PATH := $(call my-dir)
 ROOT_PATH := $(call my-dir)/../..
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := PIDTracker
+LOCAL_MODULE := BinderNDK
 
 LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
-
-LOCAL_STATIC_LIBRARIES := spdlog
-
-LOCAL_C_INCLUDES := $(ROOT_PATH)/include
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

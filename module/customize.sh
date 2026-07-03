@@ -53,7 +53,7 @@ abort_gamelist_error() {
 abort_android_version() {
 	ui_print "*********************************************************"
 	ui_print "! Your Android Version is not supported!"
-	ui_print "! Please use Android 9 (Pie) or higher."
+	ui_print "! Please use Android 10 (Q) or higher."
 	ui_print "! Installation aborted."
 	abort "*********************************************************"
 }
@@ -136,7 +136,7 @@ generate_gamelist() {
 }
 
 # Check Android version
-[ "$API" -lt 28 ] && abort_android_version
+[ "$API" -lt 29 ] && abort_android_version
 
 # Flashable integrity checkup
 ui_print "- Extracting verify.sh"
@@ -152,7 +152,7 @@ extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"
 extract "$ZIPFILE" 'cleanup.sh' "$MODPATH"
-extract "$ZIPFILE" 'system_monitor.apk' "$MODPATH"
+extract "$ZIPFILE" 'binder_resolver.apk' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_profiler' "$MODPATH"
 extract "$ZIPFILE" 'system/bin/encore_utility' "$MODPATH"
 cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
