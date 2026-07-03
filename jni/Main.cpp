@@ -182,7 +182,6 @@ static void evaluate_and_apply_profile(DaemonState &state) {
 // ---------------------------------------------------------------------------
 
 static void encore_main_daemon() {
-    pthread_setname_np(pthread_self(), "MainThread");
     run_perfcommon();
 
     auto& binder = BinderMonitor::get();
