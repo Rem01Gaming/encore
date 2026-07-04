@@ -24,9 +24,9 @@
 #include <signal.h>
 #include <fstream>
 #include <string>
+#include <filesystem>
 
 #include "DeviceMitigationStore.hpp"
-#include "EncoreCLI.hpp"
 #include "EncoreConfigStore.hpp"
 #include "InotifyHandler.hpp"
 #include "Profiler.hpp"
@@ -39,6 +39,8 @@
 #include <ModuleProperty.hpp>
 #include <ShellUtility.hpp>
 #include <SignalHandler.hpp>
+
+namespace fs = std::filesystem;
 
 // ---------------------------------------------------------------------------
 // Global registry & state
@@ -284,10 +286,10 @@ static void encore_main_daemon() {
 }
 
 // ---------------------------------------------------------------------------
-// Daemon bootstrap
+// CMD Handler
 // ---------------------------------------------------------------------------
 
-int run_daemon() {
+int cmd_run_daemon() {
     std::atexit([]() {
         SignalHandler::cleanup_before_exit();
     });
@@ -339,6 +341,76 @@ int run_daemon() {
     return EXIT_SUCCESS;
 }
 
+std::string get_module_version() {
+    std::ifstream prop_file(MODULE_PROP);
+    std::string line;
+    std::string version = "unknown";
+
+    if (!prop_file.is_open()) {
+        std::cerr << "\033[33mERROR:\033[0m Could not open " << MODULE_PROP << std::endl;
+        return version;
+    }
+
+    while (std::getline(prop_file, line)) {
+        if (line.find("version=") == 0) {
+            // Remove "version=" prefix
+            version = line.substr(8);
+            // Remove quotes if present
+            if (!version.empty() && version.front() == '"' && version.back() == '"') {
+                version = version.substr(1, version.length() - 2);
+            }
+            break;
+        }
+    }
+    prop_file.close();
+    return version;
+}
+
+int cmd_version() {
+    std::string module_version = get_module_version();
+    std::cout << "Encore Tweaks " << module_version << std::endl;
+    std::cout << "Built on " << __TIME__ << " " << __DATE__ << std::endl;
+    return EXIT_SUCCESS;
+}
+
+int cmd_setup_gamelist(const std::string& base_file_path) {
+    bool success = GameRegistry::populate_from_base(ENCORE_GAMELIST, base_file_path);
+    if (!success) {
+        std::cerr << "\033[31mERROR:\033[0m Failed to setup gamelist from " << base_file_path << std::endl;
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
+}
+
+int cmd_check_gamelist() {
+    if (access(ENCORE_GAMELIST, F_OK) != 0) {
+        std::cerr << "\033[33mERROR:\033[0m " << ENCORE_GAMELIST << " does not exist" << std::endl;
+        return EXIT_FAILURE;
+    }
+    GameRegistry registry;
+    if (!registry.load_from_json(ENCORE_GAMELIST)) {
+        std::cerr << "\033[31mERROR:\033[0m Failed to parse " << ENCORE_GAMELIST << std::endl;
+        return EXIT_FAILURE;
+    }
+    // stderr output is intentional for module installation
+    std::cerr << ENCORE_GAMELIST << " is valid" << std::endl;
+    std::cerr << "Registered games: " << registry.size() << std::endl;
+    return EXIT_SUCCESS;
+}
+
+void print_usage(const std::string& program_name) {
+    std::cout << "Encore Tweaks CLI\n\n";
+    std::cout << "Usage: " << program_name << " <COMMAND>\n\n";
+    std::cout << "Commands:\n";
+    std::cout << "  daemon               Start Encore Tweaks daemon\n";
+    std::cout << "  setup_gamelist       Setup initial gamelist from base file\n";
+    std::cout << "  check_gamelist       Validate gamelist file\n";
+    std::cout << "  version              Show version information\n";
+    std::cout << "\nOptions:\n";
+    std::cout << "  -h, --help           Show this help message\n";
+    std::cout << "  -V, --version        Show version information\n";
+}
+
 // ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
@@ -348,5 +420,46 @@ int main(int argc, char *argv[]) {
         std::cerr << "\033[31mERROR:\033[0m Please run this program as root\n";
         return EXIT_FAILURE;
     }
-    return encore_cli(argc, argv);
+
+    if (argc == 0 || argv[0] == nullptr) return EXIT_FAILURE;
+
+    fs::path program_path = argv[0];
+    std::string program_name = program_path.stem().string();
+
+    if (argc < 2) {
+        print_usage(program_name);
+        return EXIT_FAILURE;
+    }
+
+    const std::string cmd = argv[1];
+
+    if (cmd == "-h" || cmd == "--help") {
+        print_usage(program_name);
+        return EXIT_SUCCESS;
+    }
+
+    if (cmd == "-V" || cmd == "--version" || cmd == "version") {
+        return cmd_version();
+    }
+
+    if (cmd == "daemon") {
+        return cmd_run_daemon();
+    }
+
+    if (cmd == "setup_gamelist") {
+        if (argc != 3) {
+            std::cerr << "\033[31mERROR:\033[0m Invalid arguments.\n";
+            std::cerr << "Usage: " << program_name << " setup_gamelist <base_file_path>\n";
+            return EXIT_FAILURE;
+        }
+        return cmd_setup_gamelist(argv[2]);
+    }
+
+    if (cmd == "check_gamelist") {
+        return cmd_check_gamelist();
+    }
+
+    std::cerr << "\033[31mERROR:\033[0m Unknown command: " << cmd << "\n";
+    std::cerr << "See '" << program_name << " --help' for available commands.\n";
+    return EXIT_FAILURE;
 }
