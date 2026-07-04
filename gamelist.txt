@@ -115,6 +115,7 @@ com.dxx.firenow
 com.ea.gp.apexlegendsmobilefps
 com.ea.gp.fifamobile
 com.ea.gp.nfsm
+com.elementa.silverpalace
 com.emulator.fpse64
 com.epicgames.fortnite
 com.epicgames.portal
