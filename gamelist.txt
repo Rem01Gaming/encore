@@ -528,3 +528,4 @@ vng.games.revelation.mobile
 www.townofmagic.com
 xd.sce.promotion
 xyz.aethersx2.android
+com.fun.lastwar.gp
