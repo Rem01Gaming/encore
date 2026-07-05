@@ -125,6 +125,7 @@ static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath
     if (child == 0) {
         dup2(stdinPipe[0], STDIN_FILENO);
         dup2(stdoutPipe[1], STDOUT_FILENO);
+        dup2(stdoutPipe[1], STDERR_FILENO);
         close(stdinPipe[0]); close(stdinPipe[1]);
         close(stdoutPipe[0]); close(stdoutPipe[1]);
 
