@@ -58,6 +58,11 @@ struct DaemonState {
     bool battery_saver_state = false;
     bool game_requested_dnd = false;
     bool prev_dnd_state = false;
+
+    // Set right after we restore DND ourselves so the next evaluate_and_apply_profile()
+    // does not immediately re-read zen mode back from the system, which can still race
+    // and return the stale (game-forced) value before it propagates.
+    bool skip_dnd_resync = false;
 };
 
 DaemonState g_state;
@@ -108,6 +113,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
     if (state.game_requested_dnd) {
         set_do_not_disturb(state.prev_dnd_state);
         state.game_requested_dnd = false;
+        state.skip_dnd_resync = true;
     }
 }
 
@@ -149,7 +155,11 @@ static void clear_dnd_if_needed(DaemonState &state) {
 static void evaluate_and_apply_profile(DaemonState &state) {
     // Track user's DND preference while we are not overriding it
     if (!state.game_requested_dnd) {
-        state.prev_dnd_state = (BinderMonitor::get().getZenMode() != 0);
+        if (state.skip_dnd_resync) {
+            state.skip_dnd_resync = false;
+        } else {
+            state.prev_dnd_state = (BinderMonitor::get().getZenMode() != 0);
+        }
     }
 
     if (state.active_game_pid != 0 && state.screen_awake) {
