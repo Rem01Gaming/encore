@@ -398,17 +398,39 @@ int cmd_check_gamelist() {
     return EXIT_SUCCESS;
 }
 
-void print_usage(const std::string& program_name) {
+// ---------------------------------------------------------------------------
+// Usage & Help
+// ---------------------------------------------------------------------------
+
+void print_usage(const std::string & program_name) {
     std::cout << "Encore Tweaks CLI\n\n";
-    std::cout << "Usage: " << program_name << " <COMMAND>\n\n";
+    std::cout << "Usage: " << program_name << " <COMMAND> [OPTIONS]\n\n";
     std::cout << "Commands:\n";
     std::cout << "  daemon               Start Encore Tweaks daemon\n";
     std::cout << "  setup_gamelist       Setup initial gamelist from base file\n";
     std::cout << "  check_gamelist       Validate gamelist file\n";
     std::cout << "  version              Show version information\n";
-    std::cout << "\nOptions:\n";
+    std::cout << "\nGlobal Options:\n";
     std::cout << "  -h, --help           Show this help message\n";
     std::cout << "  -V, --version        Show version information\n";
+    std::cout << "\nRun '" << program_name << " <COMMAND> --help' for more information on a command.\n";
+}
+
+void print_daemon_help(const std::string & program_name) {
+    std::cout << "Usage: " << program_name << " daemon\n\n";
+    std::cout << "Start the Encore Tweaks background daemon.\n";
+}
+
+void print_setup_gamelist_help(const std::string & program_name) {
+    std::cout << "Usage: " << program_name << " setup_gamelist <base_file_path>\n\n";
+    std::cout << "Setup initial gamelist from a base file.\n\n";
+    std::cout << "Arguments:\n";
+    std::cout << "  <base_file_path>     Path to the base gamelist JSON file\n";
+}
+
+void print_check_gamelist_help(const std::string & program_name) {
+    std::cout << "Usage: " << program_name << " check_gamelist\n\n";
+    std::cout << "Validate the gamelist file and print registered games count.\n";
 }
 
 // ---------------------------------------------------------------------------
@@ -432,6 +454,7 @@ int main(int argc, char *argv[]) {
     }
 
     const std::string cmd = argv[1];
+    bool is_sub_help = (argc >= 3 && (std::string(argv[2]) == "-h" || std::string(argv[2]) == "--help"));
 
     if (cmd == "-h" || cmd == "--help") {
         print_usage(program_name);
@@ -443,19 +466,35 @@ int main(int argc, char *argv[]) {
     }
 
     if (cmd == "daemon") {
+        if (is_sub_help) {
+            print_daemon_help(program_name);
+            return EXIT_SUCCESS;
+        }
+
         return cmd_run_daemon();
     }
 
     if (cmd == "setup_gamelist") {
+        if (is_sub_help) {
+            print_setup_gamelist_help(program_name);
+            return EXIT_SUCCESS;
+        }
+
         if (argc != 3) {
             std::cerr << "\033[31mERROR:\033[0m Invalid arguments.\n";
-            std::cerr << "Usage: " << program_name << " setup_gamelist <base_file_path>\n";
+            print_setup_gamelist_help(program_name);
             return EXIT_FAILURE;
         }
+
         return cmd_setup_gamelist(argv[2]);
     }
 
     if (cmd == "check_gamelist") {
+        if (is_sub_help) {
+            print_check_gamelist_help(program_name);
+            return EXIT_SUCCESS;
+        }
+
         return cmd_check_gamelist();
     }
 
