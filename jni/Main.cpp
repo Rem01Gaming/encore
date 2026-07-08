@@ -207,14 +207,10 @@ static void encore_main_daemon() {
         std::lock_guard<std::mutex> lk(g_state_mtx);
         LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
 
+        // Ignore background events to prevent clearing DND or game state.
+        // We can't rely on foreground info from some devices as it can be stale.
+        // DND will remain active as long as the game process is alive.
         if (!foreground) {
-            // The game latches on boost, do not clear the game state or reset the profile.
-            if (g_state.active_game_pid == pid) {
-                LOGD("Game {} lost foreground", g_state.active_package);
-                // Clear DND when the game goes to the background
-                clear_dnd_if_needed(g_state);
-            }
-
             return;
         }
 
@@ -224,21 +220,10 @@ static void encore_main_daemon() {
 
         if (g_state.active_game_pid != pid) {
             // Switching to a new game (or starting a game)
-            if (g_state.active_game_pid != 0) {
-                clear_dnd_if_needed(g_state);
-            }
             g_state.active_package = pkg;
             g_state.active_game_pid = pid;
             LOGI("Game {} came to foreground (PID: {})", pkg, pid);
             evaluate_and_apply_profile(g_state);
-        } else {
-            // Same game returned to foreground.
-            // Re-apply DND if it was cleared when the game went to the background.
-            auto *active_game = game_registry.find_game_ptr(pkg);
-            if (active_game && active_game->enable_dnd && !g_state.game_requested_dnd) {
-                g_state.game_requested_dnd = true;
-                set_do_not_disturb(true);
-            }
         }
     };
 
