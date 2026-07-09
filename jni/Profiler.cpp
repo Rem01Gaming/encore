@@ -16,16 +16,23 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <iostream>
+#include <filesystem>
 
 #include "Encore.hpp"
 #include "EncoreLog.hpp"
 #include "Profiler.hpp"
 #include "Write2File.hpp"
-
 #include "DeviceMitigationStore.hpp"
 #include "EncoreConfigStore.hpp"
 
 #include <EncoreUtility.hpp>
+
+namespace fs = std::filesystem;
+
+// ---------------------------------------------------------------------------
+// Helper functions
+// ---------------------------------------------------------------------------
 
 void set_profiler_env_vars() {
     // Get preferences from config store
@@ -66,6 +73,70 @@ void set_profiler_env_vars() {
     setenv("ENCORE_POWERSAVE_CPUGOV", cpu_governor_preference.powersave.c_str(), 1);
 }
 
+// ---------------------------------------------------------------------------
+// cpuctl management
+// ---------------------------------------------------------------------------
+
+static const fs::path cpuctl_path = "/dev/cpuctl/top-app/encore";
+static const fs::path stune_path = "/dev/stune/top-app/encore";
+
+void init_cpuctl() {
+    if (!fs::create_directories(cpuctl_path)) {
+        LOGE_TAG("Profiler", "Failed to create cpuctl directory");
+        return;
+    }
+
+    write2file(cpuctl_path / "cpu.shares", "2048");
+    write2file(cpuctl_path / "cpu.uclamp.latency_sensitive", "1");
+
+    fs::path min_uclamp_path = cpuctl_path / "cpu.uclamp.min";
+    if (fs::exists(min_uclamp_path)) {
+        write2file(min_uclamp_path, "25");
+    }
+
+    if (fs::exists("/dev/stune")) {
+        if (!fs::create_directories(stune_path)) {
+            LOGE_TAG("Profiler", "Failed to create stune directory");
+        }
+
+        fs::path min_stune_path = stune_path / "schedtune.util.min";
+        if (fs::exists(min_stune_path)) {
+            write2file(min_stune_path, "25");
+        }
+    }
+}
+
+void change_min_uclamp(int min_uclamp) {
+    if (min_uclamp < 0) min_uclamp = 0;
+    if (min_uclamp > 100) min_uclamp = 100;
+
+    fs::path min_uclamp_path = cpuctl_path / "cpu.uclamp.min";
+    if (fs::exists(min_uclamp_path)) {
+        write2file(min_uclamp_path, min_uclamp);
+    }
+
+    fs::path min_stune_path = stune_path / "schedtune.util.min";
+    if (fs::exists(min_stune_path)) {
+        write2file(min_stune_path, min_uclamp);
+    }
+}
+
+void add_process_to_cpuctl(pid_t pid) {
+    fs::path cpuctl_procs = cpuctl_path / "cgroup.procs";
+    if (fs::exists(cpuctl_procs)) {
+        write2file(cpuctl_procs, pid);
+    }
+
+    fs::path stune_procs = stune_path / "cgroup.procs";
+    if (fs::exists(stune_procs)) {
+        write2file(stune_procs, pid);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Profile management
+// ---------------------------------------------------------------------------
+
 void run_perfcommon(void) {
     write2file(GAME_INFO, "NULL 0 0\n");
     write2file(PROFILE_MODE, static_cast<int>(PERFCOMMON), "\n");
@@ -75,6 +146,7 @@ void run_perfcommon(void) {
         return;
     }
 
+    init_cpuctl();
     set_profiler_env_vars();
 
     if (system("encore_profiler perfcommon")) {
@@ -91,6 +163,7 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
         return;
     }
 
+    add_process_to_cpuctl(game_pid);
     set_profiler_env_vars();
 
     if (lite_mode) {
