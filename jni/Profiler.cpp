@@ -67,6 +67,9 @@ void set_profiler_env_vars() {
 }
 
 void run_perfcommon(void) {
+    write2file(GAME_INFO, "NULL 0 0\n");
+    write2file(PROFILE_MODE, static_cast<int>(PERFCOMMON), "\n");
+
     if (config_store.get_preferences().disable_tweaks) {
         LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping perfcommon");
         return;
@@ -79,17 +82,16 @@ void run_perfcommon(void) {
     }
 }
 
-void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_pid) {
+void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_pid, uid_t game_uid) {
+    write2file(GAME_INFO, game_pkg, " ", game_pid, " ", game_uid, "\n");
+    write2file(PROFILE_MODE, static_cast<int>(PERFORMANCE_PROFILE), "\n");
+
     if (config_store.get_preferences().disable_tweaks) {
         LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping performance profile");
         return;
     }
 
     set_profiler_env_vars();
-    uid_t game_uid = get_uid_by_package_name(game_pkg);
-
-    write2file(GAME_INFO, game_pkg, " ", game_pid, " ", game_uid, "\n");
-    write2file(PROFILE_MODE, static_cast<int>(PERFORMANCE_PROFILE), "\n");
 
     if (lite_mode) {
         LOGD("Lite mode is enabled");
@@ -105,6 +107,9 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
 }
 
 void apply_balance_profile() {
+    write2file(GAME_INFO, "NULL 0 0\n");
+    write2file(PROFILE_MODE, static_cast<int>(BALANCE_PROFILE), "\n");
+
     if (config_store.get_preferences().disable_tweaks) {
         LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping balance profile");
         return;
@@ -112,24 +117,21 @@ void apply_balance_profile() {
 
     set_profiler_env_vars();
 
-    write2file(GAME_INFO, "NULL 0 0\n");
-    write2file(PROFILE_MODE, static_cast<int>(BALANCE_PROFILE), "\n");
-
     if (system("encore_profiler balance") != 0) {
         LOGE("Unable to execute profiler changes to balance");
     }
 }
 
 void apply_powersave_profile() {
+    write2file(GAME_INFO, "NULL 0 0\n");
+    write2file(PROFILE_MODE, static_cast<int>(POWERSAVE_PROFILE), "\n");
+
     if (config_store.get_preferences().disable_tweaks) {
         LOGI_TAG("Profiler", "Tweaks are disabled in config, skipping powersave profile");
         return;
     }
 
     set_profiler_env_vars();
-
-    write2file(GAME_INFO, "NULL 0 0\n");
-    write2file(PROFILE_MODE, static_cast<int>(POWERSAVE_PROFILE), "\n");
 
     if (system("encore_profiler powersave") != 0) {
         LOGE("Unable to execute profiler changes to powersave");

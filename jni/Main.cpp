@@ -52,6 +52,7 @@ struct DaemonState {
     EncoreProfileMode cur_mode = PERFCOMMON;
     std::string active_package;
     pid_t active_game_pid = 0;
+    uid_t active_game_uid = 0;
     pid_t last_applied_pid = 0;
 
     bool screen_awake = true;
@@ -117,6 +118,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
         LOGI("Game {} is no longer listed in registry", state.active_package);
         state.active_package.clear();
         state.active_game_pid = 0;
+        state.active_game_uid = 0;
         state.last_applied_pid = 0;
         return false;
     }
@@ -126,6 +128,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
              state.active_package, state.active_game_pid);
         state.active_package.clear();
         state.active_game_pid = 0;
+        state.active_game_uid = 0;
         state.last_applied_pid = 0;
         return false;
     }
@@ -134,7 +137,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
     LOGI("Applying performance profile for {} (PID: {})", state.active_package, state.active_game_pid);
 
     const bool lite_mode = active_game->lite_mode || config_store.get_preferences().enforce_lite_mode;
-    apply_performance_profile(lite_mode, state.active_package, state.active_game_pid);
+    apply_performance_profile(lite_mode, state.active_package, state.active_game_pid, state.active_game_uid);
 
     if (active_game->enable_dnd) {
         state.game_requested_dnd = true;
@@ -165,6 +168,7 @@ static void evaluate_and_apply_profile(DaemonState &state) {
         if (state.cur_mode == POWERSAVE_PROFILE) return;
         state.cur_mode = POWERSAVE_PROFILE;
         state.last_applied_pid = 0;
+        state.active_game_uid = 0;
         LOGI("Applying powersave profile");
         apply_powersave_profile();
         clear_dnd_if_needed(state);
@@ -174,6 +178,7 @@ static void evaluate_and_apply_profile(DaemonState &state) {
     if (state.cur_mode == BALANCE_PROFILE) return;
     state.cur_mode = BALANCE_PROFILE;
     state.last_applied_pid = 0;
+    state.active_game_uid = 0;
     LOGI("Applying balance profile");
     apply_balance_profile();
     clear_dnd_if_needed(state);
@@ -222,6 +227,7 @@ static void encore_main_daemon() {
             // Switching to a new game (or starting a game)
             g_state.active_package = pkg;
             g_state.active_game_pid = pid;
+            g_state.active_game_uid = uid;
             LOGI("Game {} came to foreground (PID: {})", pkg, pid);
             evaluate_and_apply_profile(g_state);
         }
