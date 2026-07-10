@@ -276,6 +276,12 @@ namespace {
 
 extern "C" {
 
+bool BinderNDK_hasSymbol(const char *name) {
+    std::call_once(g_init_flag, load_binder_ndk);
+    if (!g_libbinder_handle) return false;
+    return dlsym(g_libbinder_handle, name) != nullptr;
+}
+
 AIBinder *AServiceManager_getService(const char *instance) {
     FORWARD(AServiceManager_getService, nullptr, instance);
 }
