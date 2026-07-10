@@ -1,4 +1,4 @@
-## Encore Tweaks 5.2
+## Encore Tweaks 5.2.1
 
 **Thanks for using Encore Tweaks!**
 
@@ -6,12 +6,5 @@ Your continued support keeps this project going. If you enjoy the improvements a
 
 ### Changelog
 
-- Implement binder monitor for system monitoring
-- Fix daemon crash due java companion issue on certain devices
-- Fix frequency locking on Adreno GPU
-- Fix `module.prop` corruption issue
-- GPU frequency now will be locked at high frequency on performance profile, reverting previous change on v5.1.1
-- [Add disable tweaks setting](https://t.me/rem01schannel/784)
-- DND setting now will reset if the focused window was changed
-- Various UI/UX optimization and translation update on WebUI
-- Other misc changes and optimizations
+- Fix addon modules doesn't working when disable tweaks is enabled
+- Fix DND mode did not reset after exiting the game
