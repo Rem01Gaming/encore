@@ -101,6 +101,18 @@ enum {
 extern "C" {
 
 // =============================================================================
+// Helper functions
+// =============================================================================
+
+/**
+ * @brief Checks whether a given libbinder_ndk.so symbol was found at load time.
+ *
+ * @param name Exact symbol name, e.g. "AServiceManager_waitForService".
+ * @return true if the symbol was resolved, false if it is missing or the library failed to load.
+ */
+bool BinderNDK_hasSymbol(const char *name);
+
+// =============================================================================
 // Service Manager
 // =============================================================================
 

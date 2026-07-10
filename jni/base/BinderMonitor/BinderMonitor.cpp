@@ -286,6 +286,25 @@ static std::string transactReadString(AIBinder *binder, uint32_t tx, const char 
     return value;
 }
 
+/**
+ * @brief Waits for a service to register.
+ */
+static AIBinder *waitForServiceCompat(const char *name, int timeoutMs = 10000) {
+    if (BinderNDK_hasSymbol("AServiceManager_waitForService")) {
+        return AServiceManager_waitForService(name);
+    }
+
+    const int intervalMs = 100;
+    int waited = 0;
+    while (waited < timeoutMs) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(intervalMs));
+        waited += intervalMs;
+        AIBinder *binder = AServiceManager_getService(name);
+        if (binder) return binder;
+    }
+    return nullptr;
+}
+
 static bool queryIsInteractive() {
     return transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsInteractive), "android.os.IPowerManager", 0) != 0;
 }
@@ -422,7 +441,7 @@ bool BinderMonitor::initialize() {
         *s.out = AServiceManager_getService(s.name);
         if (!*s.out) {
             LOGW_TAG("BinderMonitor", "Service '{}' not immediately available, waiting...", s.name);
-            *s.out = AServiceManager_waitForService(s.name);
+            *s.out = waitForServiceCompat(s.name);
         }
         if (!*s.out) {
             LOGE_TAG("BinderMonitor", "Failed to acquire service '{}'", s.name);
