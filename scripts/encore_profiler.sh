@@ -33,7 +33,7 @@ DEFAULT_CPU_GOV="$ENCORE_BALANCED_CPUGOV"
 # Just a note that lite mode is now controlled by script arg, check case
 # statement on the EOF and performance_profile() function.
 
-# ENCORE_* variables is set by daemon, see 'jni/src/EncoreUtility/Profiler.cpp'.
+# ENCORE_* variables is set by daemon, see 'jni/src/Profiler.cpp'.
 
 ###################################
 # Common Function
