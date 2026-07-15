@@ -51,10 +51,6 @@
             "title": "Device Mitigation",
             "description": "Mitigate device specific issues on Encore Tweaks"
         },
-        "cpu_governor": {
-            "title": "CPU Governor",
-            "description": "Customize CPU Governor per profile"
-        },
         "log_level": {
             "title": "Log Level",
             "description": "Choose how detailed the Encore Tweaks operational log should be"
@@ -114,22 +110,6 @@
         "title": "Device Mitigation",
         "toggle_title": "Enable device mitigation",
         "brief": "Device mitigation disables potentially incompatible tweaks for specific devices. Keep it disabled unless you have problems."
-    },
-    "cpu_governor": {
-        "title": "CPU Governor",
-        "default_title": "Default CPU Governor",
-        "default_description": "Applied to balanced and performance profiles when lite mode is active",
-        "powersave_title": "Powersave CPU Governor",
-        "powersave_description": "Exclusively used for the powersave profile",
-        "brief": "CPU governor is an algorithm that dynamically adjusts the processor's frequency in real time, directly affecting system performance and power consumption.",
-        "modal": {
-            "default_select_title": "Select Default CPU Governor",
-            "powersave_select_title": "Select Powersave CPU Governor",
-            "performance_warning": "Setting the governor to \"performance\" will cause overheating and rapid battery drain. Are you sure you want to proceed?",
-            "performance_warning_confirm": "I understand, Apply",
-            "initial_warn": "Please note that Encore Tweaks has automatically configured the optimal CPU Governor. Manual changes are not recommended unless you are an advanced user.",
-            "initial_warn_checkbox": "Don't show this again"
-        }
     },
     "reboot_modal": {
         "title": "Reboot Required",

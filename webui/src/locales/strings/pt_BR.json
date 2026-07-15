@@ -57,10 +57,6 @@
             "title": "Mitigação de Dispositivos",
             "description": "Corrija problemas específicos do dispositivo no Encore Tweaks"
         },
-        "cpu_governor": {
-            "title": "Governador da CPU",
-            "description": "Personalize o governador da CPU por perfil"
-        },
         "log_level": {
             "title": "Nível de registro",
             "description": "Escolha o nível de detalhamento do registro operacional do Encore Tweaks"
@@ -105,22 +101,6 @@
         "title": "Mitigação de Dispositivo",
         "toggle_title": "Ativar mitigação de dispositivo",
         "brief": "A mitigação de dispositivo desativa ajustes potencialmente incompatíveis para dispositivos específicos. Mantenha-a desativada, a menos que você tenha problemas."
-    },
-    "cpu_governor": {
-        "title": "Governador da CPU",
-        "default_title": "Governador de CPU padrão",
-        "default_description": "Aplicado aos perfis equilibrado e de desempenho quando o modo lite está ativo",
-        "powersave_title": "Governador de CPU Powersave",
-        "powersave_description": "Utilizado exclusivamente para o perfil powersave",
-        "brief": "O governador da CPU é um algoritmo que ajusta dinamicamente a frequência do processador em tempo real, afetando diretamente o desempenho do sistema e o consumo de energia.",
-        "modal": {
-            "default_select_title": "Selecione o governador de CPU padrão",
-            "powersave_select_title": "Selecione o governador de CPU Powersave",
-            "performance_warning": "Definir o governor para 'performance' causará superaquecimento e drenagem rápida da bateria. Tem certeza de que deseja continuar?",
-            "performance_warning_confirm": "Entendo, aplicar",
-            "initial_warn": "Observe que o Encore Tweaks configurou automaticamente o governador de CPU ideal. Alterações manuais não são recomendadas, a menos que você seja um usuário avançado.",
-            "initial_warn_checkbox": "Não mostrar isso novamente"
-        }
     },
     "profiles": {
         "initializing": "Inicializando",

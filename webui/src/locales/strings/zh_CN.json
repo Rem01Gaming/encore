@@ -59,10 +59,6 @@
             "title": "设备兼容模式",
             "description": "缓解 Encore Tweaks 中设备特定的兼容问题"
         },
-        "cpu_governor": {
-            "title": "CPU 调速器",
-            "description": "为每个配置自定义 CPU 调速器"
-        },
         "log_level": {
             "title": "日志级别",
             "description": "选择 Encore Tweaks 操作日志的详细程度"
@@ -111,22 +107,6 @@
         "title": "设备兼容模式",
         "toggle_title": "开启设备兼容模式",
         "brief": "设备兼容模式会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
-    },
-    "cpu_governor": {
-        "title": "CPU 调速器",
-        "default_title": "默认 CPU 调速器",
-        "default_description": "当轻量模式激活时，会应用平衡和性能配置",
-        "brief": "CPU调速器是一种实时动态调整处理器频率的算法，直接影响系统性能和功耗。",
-        "modal": {
-            "default_select_title": "设置默认 CPU 调速器",
-            "powersave_select_title": "选择省电 CPU 调速器",
-            "performance_warning": "将调速器设置为 performance (性能) 模式会导致设备发热量显著增加并加快耗电。确定要继续吗？",
-            "performance_warning_confirm": "我已知晓，确认应用",
-            "initial_warn": "Encore Tweaks 已自动配置最佳 CPU 调速器。除非你是高级用户，否则不建议手动修改。",
-            "initial_warn_checkbox": "不再提示"
-        },
-        "powersave_title": "省电 CPU 调速器",
-        "powersave_description": "仅用于省电配置"
     },
     "profiles": {
         "initializing": "初始化中",
