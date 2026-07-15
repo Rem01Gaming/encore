@@ -51,10 +51,6 @@
             "title": "Mitigasi Perangkat",
             "description": "Atasi masalah spesifik perangkat di Encore Tweaks"
         },
-        "cpu_governor": {
-            "title": "Governor CPU",
-            "description": "Kustomisasi Governor CPU per profil"
-        },
         "log_level": {
             "title": "Log Level",
             "description": "Pilih seberapa detail log operasional Encore Tweaks"
@@ -109,22 +105,6 @@
         "title": "Mitigasi Perangkat",
         "toggle_title": "Aktifkan mitigasi perangkat",
         "brief": "Mitigasi perangkat menonaktifkan tweak yang berpotensi tidak kompatibel untuk perangkat tertentu. Jangan aktifkan kecuali Anda mengalami masalah."
-    },
-    "cpu_governor": {
-        "title": "Governor CPU",
-        "default_title": "Governor CPU Default",
-        "default_description": "Diterapkan pada profil seimbang dan performa saat mode lite aktif",
-        "powersave_title": "Governor CPU Hemat Daya",
-        "powersave_description": "Digunakan khusus untuk profil hemat daya",
-        "brief": "Governor CPU adalah algoritma yang menyesuaikan frekuensi prosesor secara dinamis secara real time, secara langsung memengaruhi performa sistem dan konsumsi daya.",
-        "modal": {
-            "default_select_title": "Pilih Governor CPU Default",
-            "powersave_select_title": "Pilih Governor CPU Hemat Daya",
-            "performance_warning": "Mengatur governor ke \"performance\" akan menyebabkan panas berlebih dan baterai cepat habis. Apakah Anda yakin ingin melanjutkan??",
-            "performance_warning_confirm": "Saya mengerti, Terapkan",
-            "initial_warn": "Harap dicatat bahwa Encore Tweaks telah mengonfigurasi CPU Governor secara otomatis. Jangan mengubahnya secara manual kecuali Anda sudah berpengalaman.",
-            "initial_warn_checkbox": "Jangan munculkan pesan ini lagi"
-        }
     },
     "profiles": {
         "initializing": "Menginisialisasi",

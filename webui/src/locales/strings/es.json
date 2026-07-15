@@ -59,10 +59,6 @@
             "title": "Mitigación de Dispositivo",
             "description": "Mitiga problemas específicos del dispositivo en Encore Tweaks"
         },
-        "cpu_governor": {
-            "title": "Gobernador de CPU",
-            "description": "Personalizar el gobernador de la CPU por perfil"
-        },
         "log_level": {
             "title": "Nivel de Registro",
             "description": "Elige qué tan detallado debe ser el registro operativo de Encore Tweaks"
@@ -111,22 +107,6 @@
         "title": "Mitigación de Dispositivo",
         "toggle_title": "Habilitar Mitigación de Dispositivo",
         "brief": "La mitigación de dispositivo desactiva ajustes potencialmente incompatibles para dispositivos específicos. Mantén esta opción desactivada a menos que tengas problemas."
-    },
-    "cpu_governor": {
-        "title": "Gobernador de CPU",
-        "default_title": "Gobernador de CPU predeterminado",
-        "default_description": "Se aplica a los perfiles equilibrado y de rendimiento cuando el modo lite está activo",
-        "powersave_title": "Gobernador de CPU de ahorro de energía",
-        "powersave_description": "Se utiliza exclusivamente para el perfil de ahorro de energía",
-        "brief": "El gobernador de la CPU es un algoritmo que ajusta dinámicamente la frecuencia del procesador en tiempo real, afectando directamente el rendimiento del sistema y el consumo de energía.",
-        "modal": {
-            "default_select_title": "Seleccionar el gobernador de CPU predeterminado",
-            "powersave_select_title": "Seleccionar el gobernador de CPU de ahorro de energía",
-            "performance_warning": "Configurar el gobernador en 'performance' provocará sobrecalentamiento y un agotamiento rápido de la batería. ¿Estás seguro de que deseas continuar?",
-            "performance_warning_confirm": "Lo entiendo, Aplicar",
-            "initial_warn": "Ten en cuenta que Encore Tweaks ha configurado automáticamente el gobernador de CPU más óptimo. No se recomiendan cambios manuales a menos que seas un usuario avanzado.",
-            "initial_warn_checkbox": "No mostrar otra vez"
-        }
     },
     "profiles": {
         "initializing": "Inicializando",

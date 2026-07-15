@@ -60,10 +60,6 @@
             "title": "デバイスの緩和",
             "description": "Encore Tweaksにおけるデバイス固有の問題を軽減する"
         },
-        "cpu_governor": {
-            "title": "CPUガバナー",
-            "description": "プロファイルごとにCPUガバナーをカスタマイズ"
-        },
         "log_level": {
             "title": "ログレベル",
             "description": "Encore Tweaks の操作ログの詳細度を選択します"
@@ -109,22 +105,6 @@
         "title": "デバイスの緩和",
         "toggle_title": "デバイスの軽減を有効にする",
         "brief": "デバイス緩和機能は、特定のデバイスで互換性がない可能性のある調整を無効にします。問題が発生しない限り、無効にしておいてください。"
-    },
-    "cpu_governor": {
-        "title": "CPUガバナー",
-        "default_title": "デフォルトのCPUガバナー",
-        "default_description": "ライトモードがアクティブな場合、バランスおよびパフォーマンスプロファイルに適用されます",
-        "powersave_title": "省電力CPUガバナー",
-        "powersave_description": "省電力プロファイル専用",
-        "brief": "CPU ガバナーは、プロセッサの周波数をリアルタイムで動的に調整し、システムのパフォーマンスと電力消費に直接影響を与えるアルゴリズムです。",
-        "modal": {
-            "default_select_title": "デフォルトのCPUガバナーを選択",
-            "powersave_select_title": "省電力CPUガバナーを選択",
-            "performance_warning": "ガバナーを 'performance' に設定すると、発熱およびバッテリーの急激な消耗を招く恐れがあります。続行しますか？",
-            "performance_warning_confirm": "了解しました。適用する",
-            "initial_warn": "Encore TweaksはCPUガバナーを最適な値に自動設定します。上級ユーザーでない限り、手動での変更はお勧めしません。",
-            "initial_warn_checkbox": "今後表示しない"
-        }
     },
     "profiles": {
         "initializing": "初期化中",

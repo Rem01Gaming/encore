@@ -49,10 +49,6 @@
             "title": "Cihaz seviyesinde zarar azaltma",
             "description": "Encore Tweak spesifik cihaz hataları azalt"
         },
-        "cpu_governor": {
-            "title": "CPU Profili",
-            "description": "Kullanıma göre CPU profili yapılandırma"
-        },
         "log_level": {
             "title": "Günlük Seviyesi",
             "description": "Encore Tweaks log ayrıntı düzeyini seçin"
@@ -129,22 +125,6 @@
         "title": "Cihazı hafifleştir",
         "toggle_title": "Cihaz hafifletmeyi etkinleştir",
         "brief": "Cihaz hafifletme bazı cihazlardaki potansiyel ayarları devre dışı bırabakilir. Sorun yaşarsanız kapalı tutun."
-    },
-    "cpu_governor": {
-        "title": "CPU yönetimi",
-        "default_title": "Varsayılan işlemci yönetimi",
-        "default_description": "Lite modu aktifleşince dengelenmiş ve performans modları uygulanır",
-        "powersave_title": "Tasarruflu CPU yönetimi",
-        "powersave_description": "Sadece güç tasarrufu profilinde kullanılır",
-        "brief": "CPU yönetimi çekirdeğin anlık frekans algoritmasına göre değişir, sistemin performans ve güç yönetimi ile doğrudan ilişkilidir.",
-        "modal": {
-            "default_select_title": "Varsayılan CPU yönetimini seç",
-            "powersave_select_title": "Pil tasarrufu yönetimine geç",
-            "performance_warning": "\"performance\" moduna geçmek aşırı ısınmaya ve hızlı pil tüketimine neden olur. Devam etmek istiyor musunuz?",
-            "performance_warning_confirm": "Anlıyorum ve uygula",
-            "initial_warn": "CPU yönetiminin Encore Tweaks tarafından otomatik olarak yönetildiğini unutmayın. Eğer bilgili bir kullanıcı değilseniz bunun elle yapılandırılması tavsiye edilmez.",
-            "initial_warn_checkbox": "Bunu tekrar gösterme"
-        }
     },
     "disable_tweaks": {
         "title": "Özelleştirmeleri kapat",
