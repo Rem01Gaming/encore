@@ -1,7 +1,5 @@
-import { wrapInputStream, Intent, WebUI } from 'webuix'
 import { exec, toast } from 'kernelsu'
 import { getTranslation } from '@/helpers/Locales'
-import { moduleInterface, fileInterface, packageManagerInterface } from './WXInterfaces'
 
 /**
  * Check if running on KernelSU WebUI
@@ -23,17 +21,6 @@ export function isRunningOnWebUIX() {
  * Create WebUI shortcut
  */
 export function createShortcut() {
-  if (isRunningOnWebUIX()) {
-    if (moduleInterface.hasShortcut()) {
-      const has_shortcut = getTranslation('toast.has_shortcut')
-      toast(has_shortcut)
-      return
-    }
-
-    moduleInterface.createShortcut()
-    return
-  }
-
   if (typeof ksu.createShortcut === 'function') {
     ksu.createShortcut()
     return
@@ -54,16 +41,7 @@ export async function readFile(filePath) {
     throw new Error('Not running on KSU WebUI')
   }
 
-  if (fileInterface) {
-    if (!fileInterface.exists(filePath)) {
-      throw new Error(`File cannot be read: ${filePath}`)
-    }
-
-    return fileInterface.read(filePath).trim()
-  }
-
   const { errno, stdout, stderr } = await exec(`[ -f "${filePath}" ] && cat "${filePath}"`)
-
   if (errno != 0) {
     throw new Error(`File cannot be read: ${stderr}`)
   }
@@ -83,12 +61,8 @@ export async function writeFile(filePath, content) {
     throw new Error('Not running on KSU WebUI')
   }
 
-  if (fileInterface) {
-    fileInterface.write(filePath, content)
-  } else {
-    const escapedContent = content.replace(/'/g, "'\\''")
-    await exec(`echo '${escapedContent}' > "${filePath}"`)
-  }
+  const escapedContent = content.replace(/'/g, "'\\''")
+  await exec(`echo '${escapedContent}' > "${filePath}"`)
 }
 
 /**
@@ -102,12 +76,8 @@ export async function fileExists(filePath) {
     throw new Error('Not running on KSU WebUI')
   }
 
-  if (fileInterface) {
-    return fileInterface.exists(filePath)
-  } else {
-    const { errno } = await exec(`[ -f "${filePath}" ]`)
-    return errno === 0
-  }
+  const { errno } = await exec(`[ -f "${filePath}" ]`)
+  return errno === 0
 }
 
 /**
@@ -122,19 +92,12 @@ export async function openWebsite(link) {
   }
 
   setTimeout(() => {
-    if (isRunningOnWebUIX()) {
-      const webui = new WebUI()
-      const intent = new Intent(Intent.ACTION_VIEW)
-      intent.setData(link)
-      webui.startActivity(intent)
-    } else {
-      exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`).then(({ errno }) => {
-        if (errno !== 0) {
-          const failed_toast = getTranslation('toast.failed_open_extrenal_browser')
-          toast(failed_toast)
-        }
-      })
-    }
+    exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`).then(({ errno }) => {
+      if (errno !== 0) {
+        const failed_toast = getTranslation('toast.failed_open_extrenal_browser')
+        toast(failed_toast)
+      }
+    })
   }, 100)
 }
 
@@ -145,19 +108,6 @@ export async function openWebsite(link) {
 export async function launchApp(packageName) {
   if (!isKSUWebUI()) {
     throw new Error('Not running on KSU WebUI')
-  }
-
-  if (isRunningOnWebUIX()) {
-    try {
-      const intent = packageManagerInterface.getLaunchIntentForPackage(packageName)
-      if (intent) {
-        const webui = new WebUI()
-        webui.startActivity(intent)
-        return
-      }
-    } catch (e) {
-      console.error('Failed to launch app via WebUIX:', e)
-    }
   }
 
   await exec(`monkey -p ${packageName} -c android.intent.category.LAUNCHER 1`)
@@ -172,20 +122,9 @@ export async function openAppInfo(packageName) {
     throw new Error('Not running on KSU WebUI')
   }
 
-  if (isRunningOnWebUIX()) {
-    try {
-      const webui = new WebUI()
-      const intent = new Intent('android.settings.APPLICATION_DETAILS_SETTINGS')
-      intent.setData(`package:${packageName}`)
-      webui.startActivity(intent)
-    } catch (e) {
-      console.error('Failed to open app info via WebUIX:', e)
-    }
-  } else {
-    await exec(
-      `am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:${packageName}`,
-    )
-  }
+  await exec(
+    `am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:${packageName}`,
+  )
 }
 
 /**
@@ -199,7 +138,6 @@ export async function listApps() {
   } else if (isKSUWebUI()) {
     // WebUI X or other webui engine - use pm list packages -3 to get only 3rd party apps
     const { errno, stdout, stderr } = await exec('pm list packages -3')
-
     if (errno !== 0) {
       throw new Error(`Failed to list user packages: ${stderr}`)
     }
@@ -231,10 +169,6 @@ export async function getAppLabel(packageName) {
       }
 
       return result[0].appLabel || packageName
-    } else if (typeof packageManagerInterface?.getApplicationInfo !== 'undefined') {
-      // WebUI X API
-      const info = packageManagerInterface.getApplicationInfo(packageName, 0, 0)
-      return info.getLabel() || packageName
     } else {
       // No API available - return package name as fallback
       console.warn(`[getAppLabel] No API available, using package name for: ${packageName}`)
@@ -262,25 +196,6 @@ export async function getBatchAppLabel(packageNames) {
         packageName: info.packageName,
         appName: info.appLabel || info.packageName,
       }))
-    } else if (typeof packageManagerInterface?.getApplicationInfo !== 'undefined') {
-      // WebUI X API - process individually
-      const results = []
-      for (const packageName of packageNames) {
-        try {
-          const info = packageManagerInterface.getApplicationInfo(packageName, 0, 0)
-          results.push({
-            packageName,
-            appName: info.getLabel() || packageName,
-          })
-        } catch (error) {
-          console.warn(`[getBatchAppLabel] Failed for ${packageName}, using package name`)
-          results.push({
-            packageName,
-            appName: packageName,
-          })
-        }
-      }
-      return results
     } else {
       // No API available - return package names as app names
       console.warn('[getBatchAppLabel] No API available, using package names as app names')
@@ -310,28 +225,6 @@ export async function getAppIcon(packageName, size = 100) {
     if (typeof ksu !== 'undefined' && typeof ksu.listPackages !== 'undefined') {
       // Use ksu://icon/ URL scheme
       return `ksu://icon/${packageName}`
-    } else if (typeof packageManagerInterface?.getApplicationIcon !== 'undefined') {
-      // WebUI X API
-      try {
-        const stream = packageManagerInterface.getApplicationIcon(packageName, 0, 0)
-
-        if (!stream) {
-          throw new Error('Icon stream is null')
-        }
-
-        const wrappedStream = await wrapInputStream(stream)
-        const arrayBuffer = await wrappedStream.arrayBuffer()
-
-        if (!arrayBuffer || arrayBuffer.byteLength === 0) {
-          throw new Error('Icon data is empty')
-        }
-
-        const base64 = arrayBufferToBase64(arrayBuffer)
-        return 'data:image/png;base64,' + base64
-      } catch (error) {
-        console.error(`[getAppIcon] Failed to get icon for ${packageName}:`, error)
-        throw error
-      }
     } else {
       // No API available
       console.warn(`[getAppIcon] No API available for: ${packageName}`)
@@ -357,48 +250,6 @@ export async function getBatchAppIcons(packageNames, size = 100) {
         packageName,
         icon: `ksu://icon/${packageName}`,
       }))
-    } else if (typeof packageManagerInterface?.getApplicationIcon !== 'undefined') {
-      // WebUI X API - process individually
-      const results = []
-
-      for (const packageName of packageNames) {
-        try {
-          const stream = packageManagerInterface.getApplicationIcon(packageName, 0, 0)
-
-          if (!stream) {
-            results.push({
-              packageName,
-              icon: '',
-            })
-            continue
-          }
-
-          const wrappedStream = await wrapInputStream(stream)
-          const arrayBuffer = await wrappedStream.arrayBuffer()
-
-          if (!arrayBuffer || arrayBuffer.byteLength === 0) {
-            results.push({
-              packageName,
-              icon: '',
-            })
-            continue
-          }
-
-          const base64 = arrayBufferToBase64(arrayBuffer)
-          const iconDataUrl = 'data:image/png;base64,' + base64
-          results.push({
-            packageName,
-            icon: iconDataUrl,
-          })
-        } catch (error) {
-          console.error(`[getBatchAppIcons] Failed for ${packageName}:`, error)
-          results.push({
-            packageName,
-            icon: '',
-          })
-        }
-      }
-      return results
     } else {
       // No API available - return empty icons
       console.warn('[getBatchAppIcons] No API available, returning empty icons')
@@ -415,16 +266,4 @@ export async function getBatchAppIcons(packageNames, size = 100) {
       icon: '',
     }))
   }
-}
-
-/**
- * Convert array buffer to base64 string
- * @param {ArrayBuffer} buffer
- * @returns {string}
- */
-function arrayBufferToBase64(buffer) {
-  const uint8Array = new Uint8Array(buffer)
-  let binary = ''
-  uint8Array.forEach((byte) => (binary += String.fromCharCode(byte)))
-  return btoa(binary)
 }

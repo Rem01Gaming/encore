@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { WXEventHandler } from 'webuix'
 
 // Pages
 import Home from '@/views/Home.vue'
@@ -14,8 +13,6 @@ import LanguageSelection from '@/views/LanguageSelection.vue'
 import LogLevelSelection from '@/views/LogLevelSelection.vue'
 import CpuGovernor from '@/views/CpuGovernor.vue'
 import DeviceMitigation from '@/views/DeviceMitigation.vue'
-
-window.wx = new WXEventHandler()
 
 const routes = [
   {
@@ -85,21 +82,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   next()
-})
-
-// Handle back button event (WebUI X API)
-wx.on(window, 'back', () => {
-  const current = router.currentRoute.value.path || '/'
-
-  if (current === '/') {
-    webui.exit()
-    return
-  }
-
-  // Push route /somepage/detail -> /somepage
-  const segments = current.split('/').filter(Boolean)
-  const parentPath = segments.length > 1 ? '/' + segments.slice(0, -1).join('/') : '/'
-  router.push(parentPath)
 })
 
 export default router
