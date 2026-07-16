@@ -126,7 +126,7 @@
     "toast": {
         "reboot_to_apply": "Reboot your device to apply changes.",
         "has_shortcut": "Shortcut already exists.",
-        "shortcut_unavailable": "No API available for this feature, update manager to use this feature.",
+        "shortcut_unavailable": "No API available for this feature, update your manager to use this feature.",
         "failed_open_extrenal_browser": "Failed to open external browser."
     },
     "navigation": {
