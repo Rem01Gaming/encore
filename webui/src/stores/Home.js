@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { exec } from 'kernelsu'
-import { moduleInterface } from '@/helpers/WXInterfaces'
 import * as KernelSU from '@/helpers/KernelSU'
 
 const configPath = '/data/adb/.config/encore'
@@ -113,15 +112,8 @@ export const useHomeStore = defineStore('home', () => {
         throw new Error('Not running on KSU WebUI')
       }
 
-      let sdk
-      if (window.$encore) {
-        sdk = moduleInterface.getSdk()
-      } else {
-        const { stdout } = await exec('getprop ro.build.version.sdk')
-        sdk = stdout.trim()
-      }
-
-      androidSDK.value = sdk
+      const { stdout } = await exec('getprop ro.build.version.sdk')
+      androidSDK.value = stdout.trim()
     } catch (error) {
       androidSDK.value = 'unknown'
     }
