@@ -66,7 +66,7 @@
         },
         "disable_tweaks": {
             "title": "Özelleştirmeleri kapat",
-            "description": "Encore Tweaks'in ayarladığı tüm performans özelleştirmelerini kapat, sadece eklenti olarak kullanan kullanıcılar için yararlıdır."
+            "description": "Encore Tweaks tarafından ayarlanan tüm performans iyileştirmelerini devre dışı bırakın"
         }
     },
     "profiles": {
@@ -78,7 +78,7 @@
     "toast": {
         "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
         "has_shortcut": "Kısayol zaten var.",
-        "shortcut_unavailable": "Bu özellik için bir API bulunmamaktadır; bu özelliği kullanmak için WebUI X’i kullanın.",
+        "shortcut_unavailable": "Bu özellik için kullanılabilir bir API bulunmuyor. Bunu kullanabilmek için yöneticinizi güncelleyin.",
         "failed_open_extrenal_browser": "Harici tarayıcı açılırken hata.",
         "failed_save_log": "Günlük kayıt başarısız.",
         "success_save_log": "Log {path} konumuna başırıyla kaydedildi"
