@@ -2,7 +2,7 @@
     "toast": {
         "reboot_to_apply": "Reinicie o seu dispositivo para aplicar as mudanças.",
         "has_shortcut": "Atalho já existe.",
-        "shortcut_unavailable": "Não há API disponível para este recurso. Use a interface web X para utilizá-lo.",
+        "shortcut_unavailable": "Não há API disponível para este recurso. Atualize seu gerenciador para utilizá-lo.",
         "failed_open_extrenal_browser": "Não foi possível abrir o navegador externo.",
         "success_save_log": "Registros salvos com sucesso em {path}",
         "failed_save_log": "Falha ao salvar os registros."
@@ -71,6 +71,10 @@
         "create_shortcut": {
             "title": "Criar atalho",
             "description": "Crie um atalho na tela inicial para acesso rápido ao Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "Desativar ajustes",
+            "description": "Desative todos os ajustes de desempenho definidos pelo Encore Tweaks"
         }
     },
     "game_settings": {
@@ -121,5 +125,16 @@
         "cancel": "Cancelar",
         "warning": "Aviso",
         "ok": "OK"
+    },
+    "disable_tweaks": {
+        "title": "Desativar ajustes",
+        "toggle_title": "Desativar ajustes",
+        "brief": "Quando ativada, esta configuração desativa todas as otimizações de desempenho integradas do Encore Tweaks, permitindo que você utilize este módulo estritamente como um host para módulos Encore Addon."
+    },
+    "reboot_modal": {
+        "title": "Reinicialização necessária",
+        "description": "Esta alteração requer uma reinicialização para entrar em vigor. Deseja reiniciar agora?",
+        "reboot": "Reiniciar agora",
+        "later": "Faça isso mais tarde"
     }
 }
