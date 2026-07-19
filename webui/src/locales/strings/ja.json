@@ -2,7 +2,7 @@
     "toast": {
         "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
         "has_shortcut": "ショートカットは既に存在します。",
-        "shortcut_unavailable": "この機能には使用できる API がありません。この機能を使用するには、WebUI X を使用してください。",
+        "shortcut_unavailable": "この機能で使用できるAPIはありません。これを利用するには、マネージャーを更新してください。",
         "failed_open_extrenal_browser": "外部ブラウザを開けませんでした。",
         "success_save_log": "ログは {path} に正常に保存されました",
         "failed_save_log": "ログの保存に失敗しました。"
@@ -66,7 +66,7 @@
         },
         "disable_tweaks": {
             "title": "調整を無効にする",
-            "description": "Encore Tweaksによるすべてのパフォーマンス調整を無効にします。アドオンのみを使用するユーザーに便利です。"
+            "description": "Encore Tweaksで設定されたすべてのパフォーマンス調整を無効にする"
         }
     },
     "game_settings": {
