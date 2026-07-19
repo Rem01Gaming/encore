@@ -1,1 +1,8 @@
-{}
+{
+    "home_page": {
+        "status_card": {
+            "running": "Hoạt động tốt",
+            "stopped": "Ngừng hoạt động"
+        }
+    }
+}
