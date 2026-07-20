@@ -1,8 +1,8 @@
 {
     "home_page": {
         "status_card": {
-            "running": "Hoạt động tốt",
-            "stopped": "Ngừng hoạt động",
+            "running": "Hoạt động tốt ✨",
+            "stopped": "Ngừng hoạt động 💤",
             "error": "Lỗi ~",
             "daemonPID": "PID của daemon: {pid}",
             "daemon_inactive": "Dịch vụ không hoạt động",
@@ -36,7 +36,7 @@
         "section": {
             "preferences": "Tùy chọn",
             "system": "Hệ thống",
-            "others": "Người khác"
+            "others": "Khác"
         },
         "lite_mode": {
             "title": "Buộc sử dụng Chế độ Lite",
@@ -78,7 +78,7 @@
         "lite_mode_description": "Tối ưu hóa để kéo dài thời lượng pin thay vì đạt hiệu năng tối đa",
         "dnd_mode": "Vui lòng không làm phiền",
         "dnd_mode_description": "Chặn thông báo và cuộc gọi khi chơi game",
-        "launch_app": "Phóng",
+        "launch_app": "Khởi chạy",
         "app_info": "Thông tin ứng dụng"
     },
     "language_selection": {
