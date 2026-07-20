@@ -28,7 +28,7 @@
     "toast": {
         "reboot_to_apply": "重启设备来应用变更。",
         "has_shortcut": "快捷方式已存在。",
-        "shortcut_unavailable": "该功能没有可用的 API，请使用 WebUI X 来使用此功能。",
+        "shortcut_unavailable": "此功能没有可用的 API。请更新您的管理器以使用它。",
         "failed_open_extrenal_browser": "无法打开外部浏览器。",
         "failed_save_log": "日志保存失败。",
         "success_save_log": "日志成功保存到 {path}"
@@ -76,7 +76,7 @@
         },
         "disable_tweaks": {
             "title": "禁用 Tweaks",
-            "description": "禁用 Encore Tweaks 的性能优化，适用于只使用附加模块的用户。"
+            "description": "禁用 Encore Tweaks 的性能优化"
         }
     },
     "game_settings": {

@@ -1,0 +1,138 @@
+{
+    "home_page": {
+        "status_card": {
+            "running": "Hoạt động tốt",
+            "stopped": "Ngừng hoạt động",
+            "error": "Lỗi ~",
+            "daemonPID": "PID của daemon: {pid}",
+            "daemon_inactive": "Dịch vụ không hoạt động",
+            "loading_daemon": "Vui lòng chờ một chút…"
+        },
+        "info_card": {
+            "profile": "Hồ sơ hiện tại",
+            "kernel": "Nhân",
+            "chipset": "Chipset",
+            "androidSDK": "SDK Android"
+        },
+        "support_button": {
+            "title": "Ủng hộ tôi",
+            "description": "Encore Tweaks luôn và sẽ mãi miễn phí cho bạn cũng như tất cả mọi người. Tuy nhiên, bạn có thể hiện sự ủng hộ của mình bằng cách quyên góp."
+        },
+        "learn_encore": {
+            "title": "Tìm hiểu về Encore",
+            "description": "Tìm hiểu cách sử dụng Encore Tweaks và các tính năng của nó."
+        }
+    },
+    "games_page": {
+        "title": "Trò chơi của tôi",
+        "search_placeholder": "Tìm kiếm ứng dụng",
+        "no_apps_found": "Không tìm thấy ứng dụng nào",
+        "badges": {
+            "tweak_enabled": "Đã bật"
+        }
+    },
+    "settings_page": {
+        "title": "Cài đặt",
+        "section": {
+            "preferences": "Tùy chọn",
+            "system": "Hệ thống",
+            "others": "Người khác"
+        },
+        "lite_mode": {
+            "title": "Buộc sử dụng Chế độ Lite",
+            "description": "Bật Chế độ rút gọn theo mặc định cho tất cả các trò chơi"
+        },
+        "language": {
+            "title": "Ngôn ngữ"
+        },
+        "device_mitigation": {
+            "title": "Giảm thiểu thiết bị",
+            "description": "Giảm thiểu các vấn đề dành riêng cho thiết bị trên Encore Tweaks"
+        },
+        "log_level": {
+            "title": "Mức độ ghi nhật ký",
+            "description": "Chọn mức độ chi tiết cho nhật ký hoạt động của Encore Tweaks"
+        },
+        "save_log": {
+            "title": "Lưu nhật ký",
+            "description": "Xuất nhật ký hoạt động của Encore Tweaks",
+            "exporting": "Đang đóng gói nhật ký, vui lòng chờ…",
+            "success": "Đã lưu nhật ký thành công",
+            "failure": "Không thể lưu nhật ký"
+        },
+        "create_shortcut": {
+            "title": "Tạo lối tắt",
+            "description": "Tạo lối tắt trên màn hình chính để truy cập nhanh vào Encore Tweaks"
+        },
+        "disable_tweaks": {
+            "title": "Vô hiệu hóa các tinh chỉnh",
+            "description": "Vô hiệu hóa tất cả các tinh chỉnh hiệu năng do Encore Tweaks thiết lập"
+        }
+    },
+    "game_settings": {
+        "title": "Cài đặt trò chơi",
+        "application": "Ứng dụng",
+        "preferences": "Tùy chọn",
+        "enable_tweaks": "Bật các tinh chỉnh",
+        "lite_mode": "Chế độ rút gọn",
+        "lite_mode_description": "Tối ưu hóa để kéo dài thời lượng pin thay vì đạt hiệu năng tối đa",
+        "dnd_mode": "Vui lòng không làm phiền",
+        "dnd_mode_description": "Chặn thông báo và cuộc gọi khi chơi game",
+        "launch_app": "Phóng",
+        "app_info": "Thông tin ứng dụng"
+    },
+    "language_selection": {
+        "title": "Ngôn ngữ",
+        "follow_system": "Tuân theo hệ thống"
+    },
+    "log_level_selection": {
+        "title": "Mức độ ghi nhật ký"
+    },
+    "lite_mode": {
+        "title": "Chế độ rút gọn",
+        "toggle_title": "Buộc sử dụng chế độ rút gọn",
+        "brief": "Chế độ Lite giúp giảm tình trạng quá nhiệt và mức tiêu thụ điện năng khi chơi game bằng cách hạ xung nhịp của CPU và các linh kiện. Khi được kích hoạt, cài đặt này sẽ áp dụng cho tất cả các tựa game."
+    },
+    "disable_tweaks": {
+        "title": "Vô hiệu hóa các tinh chỉnh",
+        "toggle_title": "Vô hiệu hóa các tinh chỉnh",
+        "brief": "Khi được kích hoạt, cài đặt này sẽ tắt tất cả các tính năng tối ưu hóa hiệu năng tích hợp sẵn của Encore Tweaks, cho phép bạn sử dụng mô-đun này thuần túy như một nền tảng để chạy các mô-đun Encore Addon."
+    },
+    "device_mitigation": {
+        "title": "Giảm thiểu thiết bị",
+        "toggle_title": "Kích hoạt tính năng giảm nhẹ thiết bị",
+        "brief": "Tính năng giảm thiểu sự cố thiết bị sẽ vô hiệu hóa các tinh chỉnh có khả năng gây xung đột trên những thiết bị cụ thể. Hãy giữ nguyên trạng thái vô hiệu hóa trừ khi bạn gặp vấn đề."
+    },
+    "reboot_modal": {
+        "title": "Yêu cầu khởi động lại",
+        "description": "Thay đổi này cần khởi động lại để có hiệu lực. Bạn có muốn khởi động lại ngay bây giờ không?",
+        "reboot": "Khởi động lại ngay",
+        "later": "Để sau hãy làm"
+    },
+    "profiles": {
+        "initializing": "Đang khởi tạo",
+        "balanced": "Cân bằng",
+        "powersave": "Tiết kiệm năng lượng",
+        "performance": "Hiệu suất"
+    },
+    "toast": {
+        "reboot_to_apply": "Khởi động lại thiết bị của bạn để áp dụng các thay đổi.",
+        "has_shortcut": "Lối tắt đã tồn tại.",
+        "shortcut_unavailable": "Không có API nào cho tính năng này. Hãy cập nhật trình quản lý của bạn để sử dụng nó.",
+        "failed_open_extrenal_browser": "Không thể mở trình duyệt bên ngoài."
+    },
+    "navigation": {
+        "home": "Trang chủ",
+        "games": "Trò chơi",
+        "settings": "Cài đặt"
+    },
+    "common": {
+        "loading": "Đang tải",
+        "unknown": "Không xác định",
+        "enabled": "Đã bật",
+        "disabled": "Tàn tật",
+        "cancel": "Hủy bỏ",
+        "warning": "Cảnh báo",
+        "ok": "Đồng ý"
+    }
+}
