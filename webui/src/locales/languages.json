@@ -19,6 +19,10 @@
     "name": "Português (Brasil)",
     "dir": "ltr"
   },
+  "vi": {
+    "name": "Tiếng Việt",
+    "dir": "ltr"
+  },
   "ru": {
     "name": "Русский",
     "dir": "ltr"
