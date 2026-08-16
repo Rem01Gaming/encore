@@ -94,7 +94,7 @@ export async function openWebsite(link) {
   setTimeout(() => {
     exec(`/system/bin/am start -a android.intent.action.VIEW -d ${link}`).then(({ errno }) => {
       if (errno !== 0) {
-        const failed_toast = getTranslation('toast.failed_open_extrenal_browser')
+        const failed_toast = getTranslation('toast.failed_open_external_browser')
         toast(failed_toast)
       }
     })

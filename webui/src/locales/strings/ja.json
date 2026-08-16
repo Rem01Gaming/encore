@@ -3,7 +3,7 @@
         "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
         "has_shortcut": "ショートカットは既に存在します。",
         "shortcut_unavailable": "この機能で使用できるAPIはありません。これを利用するには、マネージャーを更新してください。",
-        "failed_open_extrenal_browser": "外部ブラウザを開けませんでした。",
+        "failed_open_external_browser": "外部ブラウザを開けませんでした。",
         "success_save_log": "ログは {path} に正常に保存されました",
         "failed_save_log": "ログの保存に失敗しました。"
     },

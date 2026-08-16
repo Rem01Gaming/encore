@@ -118,8 +118,7 @@
         "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini. Perbarui manajer Anda untuk menggunakannya.",
         "failed_open_external_browser": "Gagal membuka browser eksternal.",
         "success_save_log": "Log berhasil disimpan di {path}",
-        "failed_save_log": "Gagal menyimpan log.",
-        "failed_open_extrenal_browser": "Gagal membuka peramban eksternal."
+        "failed_save_log": "Gagal menyimpan log."
     },
     "navigation": {
         "home": "Beranda",

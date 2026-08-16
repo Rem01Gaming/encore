@@ -3,7 +3,7 @@
         "reboot_to_apply": "Reinicie o seu dispositivo para aplicar as mudanças.",
         "has_shortcut": "Atalho já existe.",
         "shortcut_unavailable": "Não há API disponível para este recurso. Atualize seu gerenciador para utilizá-lo.",
-        "failed_open_extrenal_browser": "Não foi possível abrir o navegador externo.",
+        "failed_open_external_browser": "Não foi possível abrir o navegador externo.",
         "success_save_log": "Registros salvos com sucesso em {path}",
         "failed_save_log": "Falha ao salvar os registros."
     },

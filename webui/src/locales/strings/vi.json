@@ -119,7 +119,7 @@
         "reboot_to_apply": "Khởi động lại thiết bị của bạn để áp dụng các thay đổi.",
         "has_shortcut": "Lối tắt đã tồn tại.",
         "shortcut_unavailable": "Không có API nào cho tính năng này. Hãy cập nhật trình quản lý của bạn để sử dụng nó.",
-        "failed_open_extrenal_browser": "Không thể mở trình duyệt bên ngoài."
+        "failed_open_external_browser": "Không thể mở trình duyệt bên ngoài."
     },
     "navigation": {
         "home": "Trang chủ",

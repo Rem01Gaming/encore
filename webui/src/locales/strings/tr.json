@@ -79,7 +79,7 @@
         "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
         "has_shortcut": "Kısayol zaten var.",
         "shortcut_unavailable": "Bu özellik için kullanılabilir bir API bulunmuyor. Bunu kullanabilmek için yöneticinizi güncelleyin.",
-        "failed_open_extrenal_browser": "Harici tarayıcı açılırken hata.",
+        "failed_open_external_browser": "Harici tarayıcı açılırken hata.",
         "failed_save_log": "Günlük kayıt başarısız.",
         "success_save_log": "Log {path} konumuna başırıyla kaydedildi"
     },
