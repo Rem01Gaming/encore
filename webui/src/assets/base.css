@@ -50,6 +50,10 @@ body,
     @apply rounded-t-sm rounded-b-2xl;
   }
 
+  .md3-list:first-child:last-child .md3-list-item {
+    @apply rounded-2xl;
+  }
+
   .md3-list:not(:first-child):not(:last-child) .md3-list-item {
     @apply rounded-sm;
   }

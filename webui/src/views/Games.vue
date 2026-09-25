@@ -22,7 +22,8 @@
       </div>
 
       <!-- List -->
-      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5" ref="scrollContainer">
+      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5" ref="scrollContainer"
+        @pointerdown.capture="captureScrollPosition" @focusin="restoreScrollPosition">
         <LoadingSpinner class="text-primary pt-8" v-if="gamesStore.isLoading" />
 
         <div v-else class="pb-4">
@@ -70,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onActivated, onDeactivated } from 'vue'
+import { ref, onMounted, onActivated, onDeactivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGamesStore } from '@/stores/Games'
 
@@ -87,15 +88,22 @@ const initialLoadComplete = ref(false)
 
 const scrollContainer = ref(null)
 const savedScrollTop = ref(0)
+const wasAtBottom = ref(false)
+const BOTTOM_THRESHOLD = 4
 
 onDeactivated(() => {
-  savedScrollTop.value = scrollContainer.value?.scrollTop || 0
+  const el = scrollContainer.value
+  if (!el) return
+  savedScrollTop.value = el.scrollTop
+  wasAtBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight <= BOTTOM_THRESHOLD
 })
 
 onActivated(() => {
-  if (savedScrollTop.value) {
-    scrollContainer.value?.scrollTo({ top: savedScrollTop.value })
-  }
+  nextTick(() => {
+    const el = scrollContainer.value
+    if (!el) return
+    el.scrollTop = wasAtBottom.value ? el.scrollHeight - el.clientHeight : savedScrollTop.value
+  })
 })
 
 onMounted(async () => {
@@ -114,6 +122,21 @@ const clearSearch = () => {
 
 const onAppClick = (app) => {
   router.push(`/games/${app.packageName}`)
+}
+
+const preFocusScrollTop = ref(0)
+
+const captureScrollPosition = () => {
+  if (scrollContainer.value) {
+    preFocusScrollTop.value = scrollContainer.value.scrollTop
+  }
+}
+
+const restoreScrollPosition = () => {
+  const el = scrollContainer.value
+  if (el && el.scrollTop !== preFocusScrollTop.value) {
+    el.scrollTop = preFocusScrollTop.value
+  }
 }
 
 const handleImageError = (e) => {
