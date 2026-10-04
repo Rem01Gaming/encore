@@ -45,6 +45,8 @@
 </template>
 
 <script setup>
+import { useId } from 'vue'
+
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -62,8 +64,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-let defaultId = 0
-const switchId = props.id || `toggle-switch-${++defaultId}`
+const switchId = props.id || useId()
 
 function handleChange(event) {
   const target = event.target
