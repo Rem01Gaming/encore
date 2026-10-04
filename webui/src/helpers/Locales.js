@@ -1,4 +1,13 @@
 import languages from '@/locales/languages.json'
+import enMessages from '@/locales/strings/en.json'
+
+const loaders = import.meta.glob(
+  ['@/locales/strings/*.json', '!@/locales/strings/en.json'],
+  { import: 'default' },
+)
+
+export const hasLocale = (locale) =>
+  locale === 'en' || `/src/locales/strings/${locale}.json` in loaders
 
 let i18nInstance = null
 
@@ -33,7 +42,7 @@ export async function getPreferredLanguage() {
   const savedLanguage = localStorage.getItem('preferred-language')
 
   if (savedLanguage && languages[savedLanguage]) {
-    const hasTranslationFile = await checkLanguageFile(savedLanguage)
+    const hasTranslationFile = hasLocale(savedLanguage)
     if (hasTranslationFile) {
       return { locale: savedLanguage, isUserPreference: true }
     }
@@ -41,7 +50,7 @@ export async function getPreferredLanguage() {
 
   // If no saved preference or file missing, detect from browser
   const detectedLocale = detectBrowserLocale()
-  const hasTranslationFile = await checkLanguageFile(detectedLocale)
+  const hasTranslationFile = hasLocale(detectedLocale)
 
   if (hasTranslationFile) {
     return { locale: detectedLocale, isUserPreference: false }
@@ -79,31 +88,21 @@ export function detectBrowserLocale() {
 }
 
 /**
- * Checks if a translation file exists for a given locale
- */
-export async function checkLanguageFile(locale) {
-  try {
-    await import(`@/locales/strings/${locale}.json`)
-    return true
-  } catch (error) {
-    console.warn(`Translation file not found for locale: ${locale}`, error)
-    return false
-  }
-}
-
-/**
  * Loads locale messages for a given locale
  */
 export async function loadLocaleMessages(locale) {
+  if (locale === 'en') {
+    return enMessages
+  }
+
   try {
-    const messages = await import(`@/locales/strings/${locale}.json`)
-    return messages.default
+    const loadMessages = loaders[`/src/locales/strings/${locale}.json`]
+    if (!loadMessages) {
+      throw new Error(`Translation file not found for locale: ${locale}`)
+    }
+    return await loadMessages()
   } catch (error) {
     console.warn(`Failed to load locale ${locale}, falling back to English`)
-    if (locale !== 'en') {
-      const enMessages = await import(`@/locales/strings/en.json`)
-      return enMessages.default
-    }
-    throw error
+    return enMessages
   }
 }

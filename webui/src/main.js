@@ -11,6 +11,8 @@ import { openWebsite } from '@/helpers/KernelSU'
 import { checkCompatibility } from '@/helpers/WebViewCompat'
 import { getPreferredLanguage, loadLocaleMessages, setI18n } from '@/helpers/Locales'
 
+import enMessages from '@/locales/strings/en.json'
+
 async function bootstrap() {
   // Eruda console for debugging
   if (import.meta.env.VITE_ENABLE_ERUDA === 'true') {
@@ -57,14 +59,6 @@ async function bootstrap() {
       openWebsite('https://play.google.com/store/apps/details?id=com.google.android.webview')
     })
     return
-  }
-
-  let enMessages = {}
-  try {
-    const enModule = await import('@/locales/strings/en.json')
-    enMessages = enModule.default
-  } catch (error) {
-    console.error('Failed to load English messages:', error)
   }
 
   i18n.global.setLocaleMessage('en', enMessages)

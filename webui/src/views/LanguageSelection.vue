@@ -55,7 +55,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLanguageStore } from '@/stores/Language'
-import { detectBrowserLocale, checkLanguageFile } from '@/helpers/Locales'
+import { detectBrowserLocale, hasLocale } from '@/helpers/Locales'
 
 import ArrowLeftIcon from '@/components/icons/ArrowLeft.vue'
 import RadioButton from '@/components/ui/RadioButton.vue'
@@ -84,15 +84,12 @@ const filteredAndSortedLanguages = computed(() => {
 onMounted(async () => {
   const allLanguages = languageStore.getAvailableLanguages()
 
-  const checkPromises = allLanguages.map(async (lang) => {
-    const hasFile = await checkLanguageFile(lang.code)
+  allLanguages.forEach((lang) => {
+    const hasFile = hasLocale(lang.code)
     if (!hasFile) {
       languagesWithMissingFiles.value.push(lang.code)
     }
-    return { code: lang.code, hasFile }
   })
-
-  await Promise.all(checkPromises)
 
   if (languageStore.userPreference === null) {
     selectedLanguage.value = 'system'

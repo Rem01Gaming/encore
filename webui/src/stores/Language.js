@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { i18n } from '@/i18n'
 import languages from '@/locales/languages.json'
-import { checkLanguageFile, loadLocaleMessages } from '@/helpers/Locales'
+import { hasLocale, loadLocaleMessages } from '@/helpers/Locales'
 
 export const useLanguageStore = defineStore('language', {
   state: () => ({
@@ -38,7 +38,7 @@ export const useLanguageStore = defineStore('language', {
           return false
         }
 
-        const hasFile = await checkLanguageFile(locale)
+        const hasFile = hasLocale(locale)
         if (!hasFile) {
           console.warn(`Translation file not found for locale: ${locale}`)
           return false
