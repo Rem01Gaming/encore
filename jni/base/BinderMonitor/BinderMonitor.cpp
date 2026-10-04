@@ -106,6 +106,15 @@ static BinderMonitorState gState;
 // Runtime transaction code resolver
 // =============================================================================
 
+void setup_android_runtime_env() {
+    setenv("ANDROID_ROOT", "/system", 0);
+    setenv("ANDROID_DATA", "/data", 0);
+    setenv("ANDROID_RUNTIME_ROOT", "/apex/com.android.runtime", 0);
+    setenv("ANDROID_ART_ROOT", "/apex/com.android.art", 0);
+    setenv("ANDROID_I18N_ROOT", "/apex/com.android.i18n", 0);
+    setenv("ANDROID_TZDATA_ROOT", "/apex/com.android.tzdata", 0);
+}
+
 static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath) {
     std::unordered_map<std::string, uint32_t> result;
     int stdinPipe[2], stdoutPipe[2];
@@ -123,6 +132,8 @@ static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath
     }
 
     if (child == 0) {
+        setup_android_runtime_env();
+
         dup2(stdinPipe[0], STDIN_FILENO);
         dup2(stdoutPipe[1], STDOUT_FILENO);
         dup2(stdoutPipe[1], STDERR_FILENO);
@@ -157,16 +168,6 @@ static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath
     int status;
     waitpid(child, &status, 0);
 
-    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-        LOGE_TAG("BinderMonitor", "Resolver subprocess exited with code {} (APK path: {})",
-                 WEXITSTATUS(status), apkPath);
-        return result;
-    }
-    if (WIFSIGNALED(status)) {
-        LOGE_TAG("BinderMonitor", "Resolver subprocess killed by signal {}", WTERMSIG(status));
-        return result;
-    }
-
     std::istringstream ss(output);
     std::string line;
     while (std::getline(ss, line)) {
@@ -182,6 +183,17 @@ static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath
             LOGW_TAG("BinderMonitor", "Failed to parse resolver output line: {}", line);
         }
     }
+
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+        LOGE_TAG("BinderMonitor", "Resolver subprocess exited with code {} (APK path: {})",
+                 WEXITSTATUS(status), apkPath);
+        return result;
+    }
+    if (WIFSIGNALED(status)) {
+        LOGE_TAG("BinderMonitor", "Resolver subprocess killed by signal {}", WTERMSIG(status));
+        return result;
+    }
+
     return result;
 }
 
