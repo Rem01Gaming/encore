@@ -65,7 +65,9 @@ watch(
 .page-open-leave-active,
 .page-close-enter-active,
 .page-close-leave-active {
-  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+  transition:
+    transform 150ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 150ms cubic-bezier(0.2, 0, 0, 1);
   position: absolute;
   width: 100%;
   top: var(--window-inset-top, 0px);
