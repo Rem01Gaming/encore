@@ -15,7 +15,6 @@ export const useHomeStore = defineStore('home', () => {
   const androidSDK = ref('')
   const daemonStatusRaw = ref('loading') // 'loading', 'running', 'stopped', 'error'
   const daemonError = ref('')
-  const logoImage = ref('/encore_sleeping.avif')
   const isInitialized = ref(false)
 
   let profileInterval = null
@@ -82,7 +81,6 @@ export const useHomeStore = defineStore('home', () => {
         daemonPidRaw.value = pid
         daemonStatusRaw.value = 'running'
         daemonError.value = ''
-        logoImage.value = '/encore_happy.avif'
         return
       }
 
@@ -97,13 +95,11 @@ export const useHomeStore = defineStore('home', () => {
     daemonStatusRaw.value = 'stopped'
     daemonPidRaw.value = ''
     daemonError.value = ''
-    logoImage.value = '/encore_sleeping.avif'
   }
 
   function setDaemonError(message) {
     daemonStatusRaw.value = 'error'
     daemonError.value = message
-    logoImage.value = '/encore_sleeping.avif'
   }
 
   async function getAndroidSDK() {
@@ -207,7 +203,6 @@ export const useHomeStore = defineStore('home', () => {
     androidSDK,
     daemonStatusRaw,
     daemonError,
-    logoImage,
     isInitialized,
 
     // Actions

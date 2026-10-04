@@ -43,7 +43,7 @@
                       class="text-xs text-on-surface-variant truncate mt-1">
                       {{ app.packageName }}
                     </p>
-                    <div v-if="app.isEnabled" class="flex items-center gap-1 mt-1">
+                    <div v-if="gamesStore.isAppEnabled(app.packageName)" class="flex items-center gap-1 mt-1">
                       <span class="inline-flex items-center bg-primary rounded-sm px-1.5 py-0.5">
                         <span class="text-[10px] text-on-primary font-semibold uppercase">{{
                           $t('games_page.badges.tweak_enabled')

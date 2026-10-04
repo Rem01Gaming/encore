@@ -82,11 +82,6 @@ export const useGamesStore = defineStore('games', () => {
 
     gamelistConfig.value = currentConfig
 
-    const appIndex = userApps.value.findIndex((a) => a.packageName === packageName)
-    if (appIndex !== -1) {
-      userApps.value[appIndex].isEnabled = !!config
-    }
-
     await saveGamelistConfig()
 
     return currentConfig[packageName] || null
@@ -158,7 +153,6 @@ export const useGamesStore = defineStore('games', () => {
                 packageName: info.packageName,
                 appName: info.appName,
                 icon: iconUrl,
-                isEnabled: isAppEnabled(info.packageName),
               }
             }),
           )
@@ -174,7 +168,6 @@ export const useGamesStore = defineStore('games', () => {
             packageName: pkg,
             appName: pkg,
             icon: '/fallback_app_icon.avif',
-            isEnabled: isAppEnabled(pkg),
           }))
 
           loaded.push(...fallbackApps)
@@ -189,7 +182,6 @@ export const useGamesStore = defineStore('games', () => {
           packageName,
           appName: packageName,
           icon: '/fallback_app_icon.avif',
-          isEnabled: isAppEnabled(packageName),
         }))
       } catch (finalError) {
         console.error('[loadUserApps] Failed completely:', finalError)
@@ -202,11 +194,6 @@ export const useGamesStore = defineStore('games', () => {
 
   async function refreshFromSettings() {
     await loadGamelistConfig()
-    const updatedApps = [...userApps.value]
-    updatedApps.forEach((app) => {
-      app.isEnabled = isAppEnabled(app.packageName)
-    })
-    userApps.value = updatedApps
   }
 
   async function initializeData() {

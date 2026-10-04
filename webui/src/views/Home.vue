@@ -17,7 +17,7 @@
           class="bg-secondary-container mb-4 p-4 rounded-xl flex items-center justify-between text-on-secondary-container"
         >
           <img
-            :src="homeStore.logoImage"
+            :src="logoImage"
             class="mx-2 w-22 h-22"
             alt="Encore Logo"
             rel="preload"
@@ -139,6 +139,10 @@ import AndroidIcon from '@/components/icons/Android.vue'
 
 const { t } = useI18n()
 const homeStore = useHomeStore()
+
+const logoImage = computed(() =>
+  homeStore.daemonStatusRaw === 'running' ? '/encore_happy.avif' : '/encore_sleeping.avif',
+)
 
 // Helper function to display values with proper i18n
 function displayValue(value) {
