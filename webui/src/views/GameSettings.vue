@@ -156,7 +156,6 @@ const appSettings = shallowRef({ isEnabled: false, lite_mode: false, enable_dnd:
 
 const currentApp = ref({})
 const originalSettings = ref({})
-const showMenu = ref(false)
 const isGlobalLiteModeEnabled = ref(false)
 
 const debouncedSave = createDebouncedSave(saveSettings, 500)
@@ -190,7 +189,6 @@ watch(
 
 onMounted(async () => {
   await loadGlobalConfig()
-  loadAppData()
 })
 
 onBeforeRouteLeave(async (to, from, next) => {
@@ -266,8 +264,7 @@ function loadAppSettings() {
   }
 }
 
-function toggleAppEnabled() {
-  const newValue = !appSettings.value.isEnabled
+function toggleAppEnabled(newValue) {
   appSettings.value = {
     isEnabled: newValue,
     lite_mode: newValue ? appSettings.value.lite_mode : false,
@@ -298,21 +295,24 @@ function toggleDndMode() {
 }
 
 function handleLaunchApp() {
-  showMenu.value = false
   if (currentApp.value && currentApp.value.packageName) {
     KernelSU.launchApp(currentApp.value.packageName)
   }
 }
 
 function handleOpenAppInfo() {
-  showMenu.value = false
   if (currentApp.value && currentApp.value.packageName) {
     KernelSU.openAppInfo(currentApp.value.packageName)
   }
 }
 
 async function saveSettings() {
-  if (JSON.stringify(appSettings.value) === JSON.stringify(originalSettings.value)) return
+  const settings = appSettings.value
+  const original = originalSettings.value
+  const settingsUnchanged =
+    Object.keys(settings).length === Object.keys(original).length &&
+    Object.keys(settings).every((key) => settings[key] === original[key])
+  if (settingsUnchanged) return
 
   const pkg = currentApp.value.packageName
   if (!pkg) return

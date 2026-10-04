@@ -84,8 +84,6 @@ import ChevronRightIcon from '@/components/icons/ChevronRight.vue'
 const router = useRouter()
 const gamesStore = useGamesStore()
 
-const initialLoadComplete = ref(false)
-
 const scrollContainer = ref(null)
 const savedScrollTop = ref(0)
 const wasAtBottom = ref(false)
@@ -110,9 +108,6 @@ onMounted(async () => {
   if (gamesStore.userApps.length === 0) {
     gamesStore.isLoading = true
     await gamesStore.initializeData()
-    initialLoadComplete.value = true
-  } else {
-    initialLoadComplete.value = true
   }
 })
 
