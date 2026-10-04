@@ -101,16 +101,24 @@ export async function openWebsite(link) {
   }, 100)
 }
 
+function assertValidPackageName(packageName) {
+  if (typeof packageName !== 'string' || !/^[A-Za-z][\w]*(\.\w+)+$/.test(packageName)) {
+    throw new Error('Invalid package name')
+  }
+}
+
 /**
  * Launch an application
  * @param {string} packageName
  */
 export async function launchApp(packageName) {
+  assertValidPackageName(packageName)
+
   if (!isKSUWebUI()) {
     throw new Error('Not running on KSU WebUI')
   }
 
-  await exec(`monkey -p ${packageName} -c android.intent.category.LAUNCHER 1`)
+  await exec(`monkey -p '${packageName}' -c android.intent.category.LAUNCHER 1`)
 }
 
 /**
@@ -122,8 +130,10 @@ export async function openAppInfo(packageName) {
     throw new Error('Not running on KSU WebUI')
   }
 
+  assertValidPackageName(packageName)
+
   await exec(
-    `am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:${packageName}`,
+    `am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d 'package:${packageName}'`,
   )
 }
 
