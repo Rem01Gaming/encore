@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { i18n } from '@/main'
+import { i18n } from '@/i18n'
 import languages from '@/locales/languages.json'
 import { checkLanguageFile, loadLocaleMessages } from '@/helpers/Locales'
 

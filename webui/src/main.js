@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { createI18n } from 'vue-i18n'
+import { i18n } from './i18n'
 import { useLanguageStore } from '@/stores/Language'
 import App from './App.vue'
 import router from './router'
@@ -10,8 +10,6 @@ import router from './router'
 import { openWebsite } from '@/helpers/KernelSU'
 import { checkCompatibility } from '@/helpers/WebViewCompat'
 import { getPreferredLanguage, loadLocaleMessages, setI18n } from '@/helpers/Locales'
-
-let i18n
 
 async function bootstrap() {
   // Eruda console for debugging
@@ -69,14 +67,7 @@ async function bootstrap() {
     console.error('Failed to load English messages:', error)
   }
 
-  i18n = createI18n({
-    legacy: false,
-    locale: 'en', // Will be overridden immediately
-    fallbackLocale: 'en',
-    messages: {
-      en: enMessages,
-    },
-  })
+  i18n.global.setLocaleMessage('en', enMessages)
 
   // Inject i18n instance
   setI18n(i18n)
@@ -115,6 +106,3 @@ async function bootstrap() {
 }
 
 bootstrap()
-
-// Export i18n for use in other modules
-export { i18n }
