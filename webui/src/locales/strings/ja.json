@@ -1,140 +1,140 @@
 {
-    "toast": {
-        "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
-        "has_shortcut": "ショートカットは既に存在します。",
-        "shortcut_unavailable": "この機能で使用できるAPIはありません。これを利用するには、マネージャーを更新してください。",
-        "failed_open_external_browser": "外部ブラウザを開けませんでした。",
-        "success_save_log": "ログは {path} に正常に保存されました",
-        "failed_save_log": "ログの保存に失敗しました。"
+  "toast": {
+    "reboot_to_apply": "変更を適用するにはデバイスを再起動してください。",
+    "has_shortcut": "ショートカットは既に存在します。",
+    "shortcut_unavailable": "この機能で使用できるAPIはありません。これを利用するには、マネージャーを更新してください。",
+    "failed_open_external_browser": "外部ブラウザを開けませんでした。",
+    "success_save_log": "ログは {path} に正常に保存されました",
+    "failed_save_log": "ログの保存に失敗しました。"
+  },
+  "home_page": {
+    "status_card": {
+      "daemon_inactive": "サービスが停止中",
+      "loading_daemon": "ちょっとお待ちください…",
+      "running": "稼働中 ✨",
+      "stopped": "停止中 💤",
+      "error": "エラー ~",
+      "daemonPID": "デーモン PID: {pid}"
     },
-    "home_page": {
-        "status_card": {
-            "daemon_inactive": "サービスが停止中",
-            "loading_daemon": "ちょっとお待ちください…",
-            "running": "稼働中 ✨",
-            "stopped": "停止中 💤",
-            "error": "エラー ~",
-            "daemonPID": "デーモン PID: {pid}"
-        },
-        "info_card": {
-            "profile": "プロファイル",
-            "chipset": "チップセット",
-            "kernel": "カーネル",
-            "androidSDK": "Android SDK"
-        },
-        "support_button": {
-            "title": "開発者を支援",
-            "description": "Encore Tweaksは、現在も、そしてこれからもずっと、あなたとすべての人にとって無料です。もしよろしければ、寄付を通じて開発を応援していただけると幸いです。"
-        },
-        "learn_encore": {
-            "title": "Encoreについて学ぶ",
-            "description": "Encore Tweaks の使い方と各機能について学びましょう。"
-        }
+    "info_card": {
+      "profile": "プロファイル",
+      "chipset": "チップセット",
+      "kernel": "カーネル",
+      "androidSDK": "Android SDK"
     },
-    "settings_page": {
-        "title": "設定",
-        "section": {
-            "system": "システム",
-            "preferences": "環境設定",
-            "others": "その他"
-        },
-        "language": {
-            "title": "言語"
-        },
-        "save_log": {
-            "title": "ログを保存",
-            "description": "Encore Tweaks 操作ログをエクスポート",
-            "exporting": "ログをパッケージ化しています。しばらくお待ちください…",
-            "success": "ログの保存に成功しました",
-            "failure": "ログの保存に失敗しました"
-        },
-        "create_shortcut": {
-            "title": "ショートカット作成",
-            "description": "Encore Tweaks に素早くアクセスするためのホーム画面ショートカットを作成します"
-        },
-        "lite_mode": {
-            "title": "ライトモードを強制",
-            "description": "すべてのゲームでライトモードをデフォルトで有効にする"
-        },
-        "device_mitigation": {
-            "title": "デバイスの緩和",
-            "description": "Encore Tweaksにおけるデバイス固有の問題を軽減する"
-        },
-        "log_level": {
-            "title": "ログレベル",
-            "description": "Encore Tweaks の操作ログの詳細度を選択します"
-        },
-        "disable_tweaks": {
-            "title": "調整を無効にする",
-            "description": "Encore Tweaksで設定されたすべてのパフォーマンス調整を無効にする"
-        }
+    "support_button": {
+      "title": "開発者を支援",
+      "description": "Encore Tweaksは、現在も、そしてこれからもずっと、あなたとすべての人にとって無料です。もしよろしければ、寄付を通じて開発を応援していただけると幸いです。"
     },
-    "game_settings": {
-        "title": "ゲーム設定",
-        "dnd_mode_description": "ゲーム中は通知と電話をブロック",
-        "app_info": "アプリ情報",
-        "application": "アプリ",
-        "preferences": "設定",
-        "enable_tweaks": "調整を有効にする",
-        "lite_mode": "ライトモード",
-        "lite_mode_description": "ピークパフォーマンスよりもバッテリー寿命を延ばすために最適化",
-        "dnd_mode": "集中モード",
-        "launch_app": "アプリを起動"
+    "learn_encore": {
+      "title": "Encoreについて学ぶ",
+      "description": "Encore Tweaks の使い方と各機能について学びましょう。"
+    }
+  },
+  "settings_page": {
+    "title": "設定",
+    "section": {
+      "system": "システム",
+      "preferences": "環境設定",
+      "others": "その他"
     },
-    "language_selection": {
-        "title": "言語",
-        "follow_system": "システム言語を使用"
+    "language": {
+      "title": "言語"
     },
-    "games_page": {
-        "badges": {
-            "tweak_enabled": "有効化済み"
-        },
-        "search_placeholder": "アプリ検索",
-        "no_apps_found": "アプリが見つかりませんでした",
-        "title": "マイゲーム"
+    "save_log": {
+      "title": "ログを保存",
+      "description": "Encore Tweaks 操作ログをエクスポート",
+      "exporting": "ログをパッケージ化しています。しばらくお待ちください…",
+      "success": "ログの保存に成功しました",
+      "failure": "ログの保存に失敗しました"
     },
-    "log_level_selection": {
-        "title": "ログレベル"
+    "create_shortcut": {
+      "title": "ショートカット作成",
+      "description": "Encore Tweaks に素早くアクセスするためのホーム画面ショートカットを作成します"
     },
     "lite_mode": {
-        "title": "ライトモード",
-        "toggle_title": "ライトモードを強制する",
-        "brief": "ライトモードは、CPUとコンポーネントの周波数を下げることで、ゲームプレイ中の過熱と消費電力を軽減します。この設定を有効にすると、すべてのゲームに適用されます。"
+      "title": "ライトモードを強制",
+      "description": "すべてのゲームでライトモードをデフォルトで有効にする"
     },
     "device_mitigation": {
-        "title": "デバイスの緩和",
-        "toggle_title": "デバイスの軽減を有効にする",
-        "brief": "デバイス緩和機能は、特定のデバイスで互換性がない可能性のある調整を無効にします。問題が発生しない限り、無効にしておいてください。"
+      "title": "デバイスの緩和",
+      "description": "Encore Tweaksにおけるデバイス固有の問題を軽減する"
     },
-    "profiles": {
-        "initializing": "初期化中",
-        "balanced": "バランス",
-        "powersave": "バッテリー節約",
-        "performance": "パフォーマンス"
-    },
-    "navigation": {
-        "home": "ホーム",
-        "games": "ゲーム",
-        "settings": "設定"
-    },
-    "common": {
-        "loading": "読み込み中",
-        "unknown": "不明",
-        "enabled": "有効",
-        "disabled": "無効",
-        "cancel": "キャンセル",
-        "warning": "警告",
-        "ok": "OK"
+    "log_level": {
+      "title": "ログレベル",
+      "description": "Encore Tweaks の操作ログの詳細度を選択します"
     },
     "disable_tweaks": {
-        "title": "調整を無効にする",
-        "toggle_title": "調整を無効にする",
-        "brief": "有効にすると、Encore Tweaksに組み込まれたパフォーマンス最適化をすべてオフにし、このモジュールをEncore Addonモジュール専用のホストとして使用できるようになります。"
-    },
-    "reboot_modal": {
-        "title": "再起動が必要",
-        "description": "変更を反映するには再起動が必要です。今すぐ再起動しますか？",
-        "reboot": "今すぐ再起動",
-        "later": "後で行う"
+      "title": "調整を無効にする",
+      "description": "Encore Tweaksで設定されたすべてのパフォーマンス調整を無効にする"
     }
+  },
+  "game_settings": {
+    "title": "ゲーム設定",
+    "dnd_mode_description": "ゲーム中は通知と電話をブロック",
+    "app_info": "アプリ情報",
+    "application": "アプリ",
+    "preferences": "設定",
+    "enable_tweaks": "調整を有効にする",
+    "lite_mode": "ライトモード",
+    "lite_mode_description": "ピークパフォーマンスよりもバッテリー寿命を延ばすために最適化",
+    "dnd_mode": "集中モード",
+    "launch_app": "アプリを起動"
+  },
+  "language_selection": {
+    "title": "言語",
+    "follow_system": "システム言語を使用"
+  },
+  "games_page": {
+    "badges": {
+      "tweak_enabled": "有効化済み"
+    },
+    "search_placeholder": "アプリ検索",
+    "no_apps_found": "アプリが見つかりませんでした",
+    "title": "マイゲーム"
+  },
+  "log_level_selection": {
+    "title": "ログレベル"
+  },
+  "lite_mode": {
+    "title": "ライトモード",
+    "toggle_title": "ライトモードを強制する",
+    "brief": "ライトモードは、CPUとコンポーネントの周波数を下げることで、ゲームプレイ中の過熱と消費電力を軽減します。この設定を有効にすると、すべてのゲームに適用されます。"
+  },
+  "device_mitigation": {
+    "title": "デバイスの緩和",
+    "toggle_title": "デバイスの軽減を有効にする",
+    "brief": "デバイス緩和機能は、特定のデバイスで互換性がない可能性のある調整を無効にします。問題が発生しない限り、無効にしておいてください。"
+  },
+  "profiles": {
+    "initializing": "初期化中",
+    "balanced": "バランス",
+    "powersave": "バッテリー節約",
+    "performance": "パフォーマンス"
+  },
+  "navigation": {
+    "home": "ホーム",
+    "games": "ゲーム",
+    "settings": "設定"
+  },
+  "common": {
+    "loading": "読み込み中",
+    "unknown": "不明",
+    "enabled": "有効",
+    "disabled": "無効",
+    "cancel": "キャンセル",
+    "warning": "警告",
+    "ok": "OK"
+  },
+  "disable_tweaks": {
+    "title": "調整を無効にする",
+    "toggle_title": "調整を無効にする",
+    "brief": "有効にすると、Encore Tweaksに組み込まれたパフォーマンス最適化をすべてオフにし、このモジュールをEncore Addonモジュール専用のホストとして使用できるようになります。"
+  },
+  "reboot_modal": {
+    "title": "再起動が必要",
+    "description": "変更を反映するには再起動が必要です。今すぐ再起動しますか？",
+    "reboot": "今すぐ再起動",
+    "later": "後で行う"
+  }
 }

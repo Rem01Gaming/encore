@@ -16,8 +16,17 @@
           </h1>
 
           <div class="aspect-3/2 rounded-3xl overflow-hidden -mx-1.5">
-            <video ref="videoElement" preload="auto" poster="/illustration/lite_mode_poster.avif"
-              class="w-full h-full object-cover" autoplay loop muted playsinline webkit-playsinline>
+            <video
+              ref="videoElement"
+              preload="auto"
+              poster="/illustration/lite_mode_poster.avif"
+              class="w-full h-full object-cover"
+              autoplay
+              loop
+              muted
+              playsinline
+              webkit-playsinline
+            >
               <source src="/illustration/lite_mode.webm" type="video/webm" />
             </video>
           </div>

@@ -1,140 +1,140 @@
 {
-    "toast": {
-        "reboot_to_apply": "Reinicie o seu dispositivo para aplicar as mudanças.",
-        "has_shortcut": "Atalho já existe.",
-        "shortcut_unavailable": "Não há API disponível para este recurso. Atualize seu gerenciador para utilizá-lo.",
-        "failed_open_external_browser": "Não foi possível abrir o navegador externo.",
-        "success_save_log": "Registros salvos com sucesso em {path}",
-        "failed_save_log": "Falha ao salvar os registros."
+  "toast": {
+    "reboot_to_apply": "Reinicie o seu dispositivo para aplicar as mudanças.",
+    "has_shortcut": "Atalho já existe.",
+    "shortcut_unavailable": "Não há API disponível para este recurso. Atualize seu gerenciador para utilizá-lo.",
+    "failed_open_external_browser": "Não foi possível abrir o navegador externo.",
+    "success_save_log": "Registros salvos com sucesso em {path}",
+    "failed_save_log": "Falha ao salvar os registros."
+  },
+  "home_page": {
+    "status_card": {
+      "running": "Funcionando ✨",
+      "stopped": "Parado 💤",
+      "daemon_inactive": "Serviço inativo",
+      "loading_daemon": "Só um momento, por favor…",
+      "error": "Erro ~",
+      "daemonPID": "Daemon PID: {pid}"
     },
-    "home_page": {
-        "status_card": {
-            "running": "Funcionando ✨",
-            "stopped": "Parado 💤",
-            "daemon_inactive": "Serviço inativo",
-            "loading_daemon": "Só um momento, por favor…",
-            "error": "Erro ~",
-            "daemonPID": "Daemon PID: {pid}"
-        },
-        "support_button": {
-            "description": "O Encore Tweaks é, e sempre será, gratuito para você e para todos. No entanto, você pode demonstrar seu apoio fazendo uma doação.",
-            "title": "Apoie-me"
-        },
-        "learn_encore": {
-            "title": "Aprenda Encore",
-            "description": "Aprenda a usar o Encore Tweaks e suas funcionalidades."
-        },
-        "info_card": {
-            "profile": "Perfil atual",
-            "kernel": "Kernel",
-            "chipset": "Chipset",
-            "androidSDK": "Android SDK"
-        }
+    "support_button": {
+      "description": "O Encore Tweaks é, e sempre será, gratuito para você e para todos. No entanto, você pode demonstrar seu apoio fazendo uma doação.",
+      "title": "Apoie-me"
     },
-    "games_page": {
-        "title": "Meus Jogos",
-        "search_placeholder": "Procurar aplicativos",
-        "no_apps_found": "Nenhum aplicativo encontrado",
-        "badges": {
-            "tweak_enabled": "Habilitado"
-        }
+    "learn_encore": {
+      "title": "Aprenda Encore",
+      "description": "Aprenda a usar o Encore Tweaks e suas funcionalidades."
     },
-    "settings_page": {
-        "title": "Configurações",
-        "section": {
-            "preferences": "Preferências",
-            "system": "Sistema",
-            "others": "Outros"
-        },
-        "lite_mode": {
-            "description": "Ative o Modo Lite por padrão para todos os jogos",
-            "title": "Impor Modo Lite"
-        },
-        "language": {
-            "title": "Idioma"
-        },
-        "device_mitigation": {
-            "title": "Mitigação de Dispositivos",
-            "description": "Corrija problemas específicos do dispositivo no Encore Tweaks"
-        },
-        "log_level": {
-            "title": "Nível de registro",
-            "description": "Escolha o nível de detalhamento do registro operacional do Encore Tweaks"
-        },
-        "save_log": {
-            "title": "Salvar Registros",
-            "description": "Exportar o registro operacional do Encore Tweaks",
-            "exporting": "Empacotando logs, aguarde…",
-            "success": "Log salvo com sucesso",
-            "failure": "Falha ao salvar o log"
-        },
-        "create_shortcut": {
-            "title": "Criar atalho",
-            "description": "Crie um atalho na tela inicial para acesso rápido ao Encore Tweaks"
-        },
-        "disable_tweaks": {
-            "title": "Desativar ajustes",
-            "description": "Desative todos os ajustes de desempenho definidos pelo Encore Tweaks"
-        }
-    },
-    "game_settings": {
-        "title": "Configurações dos Jogos",
-        "application": "Aplicativo",
-        "preferences": "Preferências",
-        "enable_tweaks": "Habilitar Tweaks",
-        "lite_mode": "Modo Lite",
-        "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo",
-        "dnd_mode": "Não incomodar",
-        "dnd_mode_description": "Bloqueie notificações e chamadas enquanto joga",
-        "launch_app": "Abrir",
-        "app_info": "Informações do aplicativo"
-    },
-    "language_selection": {
-        "title": "Idioma",
-        "follow_system": "Usar padrão do sistema"
-    },
-    "log_level_selection": {
-        "title": "Nível de registro"
+    "info_card": {
+      "profile": "Perfil atual",
+      "kernel": "Kernel",
+      "chipset": "Chipset",
+      "androidSDK": "Android SDK"
+    }
+  },
+  "games_page": {
+    "title": "Meus Jogos",
+    "search_placeholder": "Procurar aplicativos",
+    "no_apps_found": "Nenhum aplicativo encontrado",
+    "badges": {
+      "tweak_enabled": "Habilitado"
+    }
+  },
+  "settings_page": {
+    "title": "Configurações",
+    "section": {
+      "preferences": "Preferências",
+      "system": "Sistema",
+      "others": "Outros"
     },
     "lite_mode": {
-        "title": "Modo lite",
-        "toggle_title": "Impor o modo lite",
-        "brief": "O modo Lite reduz o superaquecimento e o consumo de energia durante o jogo, diminuindo as frequências da CPU e dos componentes. Essa configuração se aplica a todos os jogos quando ativada."
+      "description": "Ative o Modo Lite por padrão para todos os jogos",
+      "title": "Impor Modo Lite"
+    },
+    "language": {
+      "title": "Idioma"
     },
     "device_mitigation": {
-        "title": "Mitigação de Dispositivo",
-        "toggle_title": "Ativar mitigação de dispositivo",
-        "brief": "A mitigação de dispositivo desativa ajustes potencialmente incompatíveis para dispositivos específicos. Mantenha-a desativada, a menos que você tenha problemas."
+      "title": "Mitigação de Dispositivos",
+      "description": "Corrija problemas específicos do dispositivo no Encore Tweaks"
     },
-    "profiles": {
-        "initializing": "Inicializando",
-        "balanced": "Balanceado",
-        "powersave": "Economia de energia",
-        "performance": "Desempenho"
+    "log_level": {
+      "title": "Nível de registro",
+      "description": "Escolha o nível de detalhamento do registro operacional do Encore Tweaks"
     },
-    "navigation": {
-        "home": "Início",
-        "games": "Jogos",
-        "settings": "Configurações"
+    "save_log": {
+      "title": "Salvar Registros",
+      "description": "Exportar o registro operacional do Encore Tweaks",
+      "exporting": "Empacotando logs, aguarde…",
+      "success": "Log salvo com sucesso",
+      "failure": "Falha ao salvar o log"
     },
-    "common": {
-        "loading": "Carregando",
-        "unknown": "Desconhecido",
-        "enabled": "Ativado",
-        "disabled": "Desativado",
-        "cancel": "Cancelar",
-        "warning": "Aviso",
-        "ok": "OK"
+    "create_shortcut": {
+      "title": "Criar atalho",
+      "description": "Crie um atalho na tela inicial para acesso rápido ao Encore Tweaks"
     },
     "disable_tweaks": {
-        "title": "Desativar ajustes",
-        "toggle_title": "Desativar ajustes",
-        "brief": "Quando ativada, esta configuração desativa todas as otimizações de desempenho integradas do Encore Tweaks, permitindo que você utilize este módulo estritamente como um host para módulos Encore Addon."
-    },
-    "reboot_modal": {
-        "title": "Reinicialização necessária",
-        "description": "Esta alteração requer uma reinicialização para entrar em vigor. Deseja reiniciar agora?",
-        "reboot": "Reiniciar agora",
-        "later": "Faça isso mais tarde"
+      "title": "Desativar ajustes",
+      "description": "Desative todos os ajustes de desempenho definidos pelo Encore Tweaks"
     }
+  },
+  "game_settings": {
+    "title": "Configurações dos Jogos",
+    "application": "Aplicativo",
+    "preferences": "Preferências",
+    "enable_tweaks": "Habilitar Tweaks",
+    "lite_mode": "Modo Lite",
+    "lite_mode_description": "Priorize a duração da bateria em detrimento do desempenho máximo",
+    "dnd_mode": "Não incomodar",
+    "dnd_mode_description": "Bloqueie notificações e chamadas enquanto joga",
+    "launch_app": "Abrir",
+    "app_info": "Informações do aplicativo"
+  },
+  "language_selection": {
+    "title": "Idioma",
+    "follow_system": "Usar padrão do sistema"
+  },
+  "log_level_selection": {
+    "title": "Nível de registro"
+  },
+  "lite_mode": {
+    "title": "Modo lite",
+    "toggle_title": "Impor o modo lite",
+    "brief": "O modo Lite reduz o superaquecimento e o consumo de energia durante o jogo, diminuindo as frequências da CPU e dos componentes. Essa configuração se aplica a todos os jogos quando ativada."
+  },
+  "device_mitigation": {
+    "title": "Mitigação de Dispositivo",
+    "toggle_title": "Ativar mitigação de dispositivo",
+    "brief": "A mitigação de dispositivo desativa ajustes potencialmente incompatíveis para dispositivos específicos. Mantenha-a desativada, a menos que você tenha problemas."
+  },
+  "profiles": {
+    "initializing": "Inicializando",
+    "balanced": "Balanceado",
+    "powersave": "Economia de energia",
+    "performance": "Desempenho"
+  },
+  "navigation": {
+    "home": "Início",
+    "games": "Jogos",
+    "settings": "Configurações"
+  },
+  "common": {
+    "loading": "Carregando",
+    "unknown": "Desconhecido",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "cancel": "Cancelar",
+    "warning": "Aviso",
+    "ok": "OK"
+  },
+  "disable_tweaks": {
+    "title": "Desativar ajustes",
+    "toggle_title": "Desativar ajustes",
+    "brief": "Quando ativada, esta configuração desativa todas as otimizações de desempenho integradas do Encore Tweaks, permitindo que você utilize este módulo estritamente como um host para módulos Encore Addon."
+  },
+  "reboot_modal": {
+    "title": "Reinicialização necessária",
+    "description": "Esta alteração requer uma reinicialização para entrar em vigor. Deseja reiniciar agora?",
+    "reboot": "Reiniciar agora",
+    "later": "Faça isso mais tarde"
+  }
 }

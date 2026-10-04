@@ -26,7 +26,10 @@
                   {{ $t('disable_tweaks.toggle_title') }}
                 </h2>
               </div>
-              <ToggleSwitch v-model="isDisableTweaksEnabled" @update:modelValue="toggleDisableTweaks" />
+              <ToggleSwitch
+                v-model="isDisableTweaksEnabled"
+                @update:modelValue="toggleDisableTweaks"
+              />
             </div>
           </div>
 
@@ -38,23 +41,33 @@
       </div>
     </div>
 
-    <Modal :show="showRebootModal" :title="$t('reboot_modal.title')" @close="closeRebootModal"
-      :closeOnOutsideClick="false">
+    <Modal
+      :show="showRebootModal"
+      :title="$t('reboot_modal.title')"
+      @close="closeRebootModal"
+      :closeOnOutsideClick="false"
+    >
       <div class="px-4 pb-2">
         <div class="flex flex-col items-center gap-4 py-6">
           <RefreshIcon :size="48" class="text-primary" />
-          <p class="text-on-surface-variant text-sm text-center">{{ $t('reboot_modal.description') }}</p>
+          <p class="text-on-surface-variant text-sm text-center">
+            {{ $t('reboot_modal.description') }}
+          </p>
         </div>
       </div>
 
       <template #actions>
         <div class="flex gap-2">
-          <button @click="skipReboot"
-            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+          <button
+            @click="skipReboot"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors"
+          >
             {{ $t('reboot_modal.later') }}
           </button>
-          <button @click="rebootDevice"
-            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+          <button
+            @click="rebootDevice"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors"
+          >
             {{ $t('reboot_modal.reboot') }}
           </button>
         </div>

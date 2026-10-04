@@ -70,7 +70,6 @@ function handleKeydown(event) {
     container.value.click()
   }
 }
-
 </script>
 
 <style scoped>

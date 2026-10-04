@@ -1,140 +1,140 @@
 {
-    "home_page": {
-        "status_card": {
-            "running": "Çalışıyor ✨",
-            "stopped": "Durdu 💤",
-            "error": "Hata ~",
-            "daemonPID": "Servis PID: {pid}",
-            "daemon_inactive": "Servis devre dışı",
-            "loading_daemon": "Bir dakika lütfen…"
-        },
-        "info_card": {
-            "profile": "Mevcut Profil",
-            "kernel": "Çekirdek",
-            "chipset": "Çipset",
-            "androidSDK": "Android SDK"
-        },
-        "support_button": {
-            "title": "Beni Destekle",
-            "description": "Encore Tweaks, her zaman, sizin ve herkes için ücretsiz olmuştur ve öyle kalacaktır. Ancak bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
-        },
-        "learn_encore": {
-            "title": "Encore'u Öğren",
-            "description": "Encore Tweaks'i ve özelliklerini nasıl kullanıcağınızı öğrenin."
-        }
+  "home_page": {
+    "status_card": {
+      "running": "Çalışıyor ✨",
+      "stopped": "Durdu 💤",
+      "error": "Hata ~",
+      "daemonPID": "Servis PID: {pid}",
+      "daemon_inactive": "Servis devre dışı",
+      "loading_daemon": "Bir dakika lütfen…"
     },
-    "games_page": {
-        "title": "Oyunlarım",
-        "search_placeholder": "Uygulama ara",
-        "no_apps_found": "Uygulama bulunamadı",
-        "badges": {
-            "tweak_enabled": "Aktif"
-        }
+    "info_card": {
+      "profile": "Mevcut Profil",
+      "kernel": "Çekirdek",
+      "chipset": "Çipset",
+      "androidSDK": "Android SDK"
     },
-    "settings_page": {
-        "title": "Ayarlar",
-        "section": {
-            "preferences": "Tercihler",
-            "system": "Sistem",
-            "others": "Başka"
-        },
-        "lite_mode": {
-            "title": "Basit Moda Geç",
-            "description": "Tüm oyunlar için Lite Modunu Varsayılan Yap"
-        },
-        "language": {
-            "title": "Dil"
-        },
-        "device_mitigation": {
-            "title": "Cihaz seviyesinde zarar azaltma",
-            "description": "Encore Tweaks'e özgü cihaz hatalarını azaltır"
-        },
-        "log_level": {
-            "title": "Günlük Seviyesi",
-            "description": "Encore Tweaks log ayrıntı düzeyini seçin"
-        },
-        "save_log": {
-            "title": "Günlüğü Kaydet",
-            "description": "Encore Tweaks günlüğünü dışa aktar",
-            "exporting": "Günlükler paketleniyor, lütfen bekleyin…",
-            "success": "Günlük başarıyla kaydedildi",
-            "failure": "Günlük kaydedilemedi"
-        },
-        "create_shortcut": {
-            "title": "Kısayol Oluştur",
-            "description": "Hızlı erişim için Encore Tweaks'in kısayolunu ana ekrana ekleyin"
-        },
-        "disable_tweaks": {
-            "title": "Özelleştirmeleri kapat",
-            "description": "Encore Tweaks tarafından ayarlanan tüm performans iyileştirmelerini devre dışı bırakın"
-        }
+    "support_button": {
+      "title": "Beni Destekle",
+      "description": "Encore Tweaks, her zaman, sizin ve herkes için ücretsiz olmuştur ve öyle kalacaktır. Ancak bir bağış yaparak bana destek olduğunuzu gösterebilirsiniz."
     },
-    "profiles": {
-        "balanced": "Dengeli",
-        "powersave": "Güç tasarrufu",
-        "performance": "Performans",
-        "initializing": "Başlatılıyor"
-    },
-    "toast": {
-        "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
-        "has_shortcut": "Kısayol zaten var.",
-        "shortcut_unavailable": "Bu özellik için kullanılabilir bir API bulunmuyor. Bunu kullanabilmek için yöneticinizi güncelleyin.",
-        "failed_open_external_browser": "Harici tarayıcı açılırken hata.",
-        "failed_save_log": "Günlük kayıt başarısız.",
-        "success_save_log": "Log {path} konumuna başırıyla kaydedildi"
-    },
-    "navigation": {
-        "home": "Ev",
-        "games": "Oyunlar",
-        "settings": "Ayarlar"
-    },
-    "common": {
-        "loading": "Yükleniyor",
-        "unknown": "Bilinmeyen",
-        "enabled": "Aktif",
-        "disabled": "Devre dışı",
-        "cancel": "İptal",
-        "warning": "Uyarı",
-        "ok": "Tamam"
-    },
-    "game_settings": {
-        "title": "Oyun ayarları",
-        "application": "Uygulama",
-        "preferences": "Seçenekler",
-        "enable_tweaks": "İnce ayarları uygula",
-        "lite_mode": "Lite modu",
-        "lite_mode_description": "Uzun batarya ömrü için yüksek performansı optimize et",
-        "dnd_mode": "Rahatsız etme",
-        "dnd_mode_description": "Oyundayken bildirimleri ve aramaları engelle",
-        "launch_app": "Başlat",
-        "app_info": "Uygulama bilgileri"
-    },
-    "language_selection": {
-        "title": "Dil",
-        "follow_system": "Sistemi takip et"
-    },
-    "log_level_selection": {
-        "title": "Log seviyesi"
+    "learn_encore": {
+      "title": "Encore'u Öğren",
+      "description": "Encore Tweaks'i ve özelliklerini nasıl kullanıcağınızı öğrenin."
+    }
+  },
+  "games_page": {
+    "title": "Oyunlarım",
+    "search_placeholder": "Uygulama ara",
+    "no_apps_found": "Uygulama bulunamadı",
+    "badges": {
+      "tweak_enabled": "Aktif"
+    }
+  },
+  "settings_page": {
+    "title": "Ayarlar",
+    "section": {
+      "preferences": "Tercihler",
+      "system": "Sistem",
+      "others": "Başka"
     },
     "lite_mode": {
-        "title": "Lite modu",
-        "toggle_title": "Lite moduna zorla",
-        "brief": "Lite modu, oyun sırasında aşırı ısınmayı azaltır ve CPU kullanımını ve frekansını azaltır. Bu ayar aktif edildiğinde tüm oyunlara uygular."
+      "title": "Basit Moda Geç",
+      "description": "Tüm oyunlar için Lite Modunu Varsayılan Yap"
+    },
+    "language": {
+      "title": "Dil"
     },
     "device_mitigation": {
-        "title": "Cihazı hafifleştir",
-        "toggle_title": "Cihaz hafifletmeyi etkinleştir",
-        "brief": "Cihaz hafifletme bazı cihazlardaki potansiyel uyumsuz ince ayarları devre dışı bırakabilir. Sorun yaşarsanız kapalı tutun."
+      "title": "Cihaz seviyesinde zarar azaltma",
+      "description": "Encore Tweaks'e özgü cihaz hatalarını azaltır"
+    },
+    "log_level": {
+      "title": "Günlük Seviyesi",
+      "description": "Encore Tweaks log ayrıntı düzeyini seçin"
+    },
+    "save_log": {
+      "title": "Günlüğü Kaydet",
+      "description": "Encore Tweaks günlüğünü dışa aktar",
+      "exporting": "Günlükler paketleniyor, lütfen bekleyin…",
+      "success": "Günlük başarıyla kaydedildi",
+      "failure": "Günlük kaydedilemedi"
+    },
+    "create_shortcut": {
+      "title": "Kısayol Oluştur",
+      "description": "Hızlı erişim için Encore Tweaks'in kısayolunu ana ekrana ekleyin"
     },
     "disable_tweaks": {
-        "title": "Özelleştirmeleri kapat",
-        "toggle_title": "Özelleştirmeleri kapat",
-        "brief": "Etkinleştirildiğinde bu ayar, Encore Tweaks üzerindeki tüm yerleşik performans optimizasyonlarını kapatır ve bu modülü yalnızca Encore Addon modülleri için bir host olarak kullanmanıza olanak tanır."
-    },
-    "reboot_modal": {
-        "title": "Yeniden başlatılması gerekiyor",
-        "description": "Bu değişikliğin uygulanması için yeniden başlatılması gerekiyor, şimdi yeniden başlatılsın mı?",
-        "reboot": "Şimdi yeniden başlat",
-        "later": "Daha sonra yap"
+      "title": "Özelleştirmeleri kapat",
+      "description": "Encore Tweaks tarafından ayarlanan tüm performans iyileştirmelerini devre dışı bırakın"
     }
+  },
+  "profiles": {
+    "balanced": "Dengeli",
+    "powersave": "Güç tasarrufu",
+    "performance": "Performans",
+    "initializing": "Başlatılıyor"
+  },
+  "toast": {
+    "reboot_to_apply": "Değişikliği uygulamak için cihazınızı yeniden başlatın.",
+    "has_shortcut": "Kısayol zaten var.",
+    "shortcut_unavailable": "Bu özellik için kullanılabilir bir API bulunmuyor. Bunu kullanabilmek için yöneticinizi güncelleyin.",
+    "failed_open_external_browser": "Harici tarayıcı açılırken hata.",
+    "failed_save_log": "Günlük kayıt başarısız.",
+    "success_save_log": "Log {path} konumuna başırıyla kaydedildi"
+  },
+  "navigation": {
+    "home": "Ev",
+    "games": "Oyunlar",
+    "settings": "Ayarlar"
+  },
+  "common": {
+    "loading": "Yükleniyor",
+    "unknown": "Bilinmeyen",
+    "enabled": "Aktif",
+    "disabled": "Devre dışı",
+    "cancel": "İptal",
+    "warning": "Uyarı",
+    "ok": "Tamam"
+  },
+  "game_settings": {
+    "title": "Oyun ayarları",
+    "application": "Uygulama",
+    "preferences": "Seçenekler",
+    "enable_tweaks": "İnce ayarları uygula",
+    "lite_mode": "Lite modu",
+    "lite_mode_description": "Uzun batarya ömrü için yüksek performansı optimize et",
+    "dnd_mode": "Rahatsız etme",
+    "dnd_mode_description": "Oyundayken bildirimleri ve aramaları engelle",
+    "launch_app": "Başlat",
+    "app_info": "Uygulama bilgileri"
+  },
+  "language_selection": {
+    "title": "Dil",
+    "follow_system": "Sistemi takip et"
+  },
+  "log_level_selection": {
+    "title": "Log seviyesi"
+  },
+  "lite_mode": {
+    "title": "Lite modu",
+    "toggle_title": "Lite moduna zorla",
+    "brief": "Lite modu, oyun sırasında aşırı ısınmayı azaltır ve CPU kullanımını ve frekansını azaltır. Bu ayar aktif edildiğinde tüm oyunlara uygular."
+  },
+  "device_mitigation": {
+    "title": "Cihazı hafifleştir",
+    "toggle_title": "Cihaz hafifletmeyi etkinleştir",
+    "brief": "Cihaz hafifletme bazı cihazlardaki potansiyel uyumsuz ince ayarları devre dışı bırakabilir. Sorun yaşarsanız kapalı tutun."
+  },
+  "disable_tweaks": {
+    "title": "Özelleştirmeleri kapat",
+    "toggle_title": "Özelleştirmeleri kapat",
+    "brief": "Etkinleştirildiğinde bu ayar, Encore Tweaks üzerindeki tüm yerleşik performans optimizasyonlarını kapatır ve bu modülü yalnızca Encore Addon modülleri için bir host olarak kullanmanıza olanak tanır."
+  },
+  "reboot_modal": {
+    "title": "Yeniden başlatılması gerekiyor",
+    "description": "Bu değişikliğin uygulanması için yeniden başlatılması gerekiyor, şimdi yeniden başlatılsın mı?",
+    "reboot": "Şimdi yeniden başlat",
+    "later": "Daha sonra yap"
+  }
 }

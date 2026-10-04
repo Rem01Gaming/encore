@@ -16,7 +16,10 @@
           </h1>
 
           <div class="aspect-3/2 rounded-3xl overflow-hidden -mx-1.5">
-            <img src="/illustration/device_mitigation_poster.avif" class="w-full h-full object-cover" />
+            <img
+              src="/illustration/device_mitigation_poster.avif"
+              class="w-full h-full object-cover"
+            />
           </div>
 
           <div class="bg-primary-container rounded-3xl p-5 -mx-1.5">
@@ -26,7 +29,10 @@
                   {{ $t('device_mitigation.toggle_title') }}
                 </h2>
               </div>
-              <ToggleSwitch v-model="isDeviceMitigationEnabled" @update:modelValue="toggleDeviceMitigation" />
+              <ToggleSwitch
+                v-model="isDeviceMitigationEnabled"
+                @update:modelValue="toggleDeviceMitigation"
+              />
             </div>
           </div>
 

@@ -21,7 +21,9 @@
             <RippleComponent @click="openLiteModeView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <FeatherIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -35,8 +37,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -46,7 +53,9 @@
             <RippleComponent @click="openDisableTweaksView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <TuneIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -60,8 +69,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -71,7 +85,9 @@
             <RippleComponent @click="openLanguageView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <LanguageIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -85,8 +101,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -104,7 +125,9 @@
             <RippleComponent @click="openDeviceMitigationView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <BugIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -118,8 +141,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -153,7 +181,9 @@
             <RippleComponent @click="openLogLvlView" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <TextIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -167,8 +197,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -186,7 +221,9 @@
             <RippleComponent @click="openExportModal" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <ContentSaveIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -200,8 +237,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -211,7 +253,9 @@
             <RippleComponent @click="createShortcut" class="md3-list-item" tabindex="0">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0"
+                  >
                     <HomePlusIcon class="w-5 h-5 text-on-primary-container" />
                   </div>
 
@@ -225,8 +269,13 @@
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
@@ -235,34 +284,47 @@
       </div>
     </div>
 
-    <Modal :show="showExportModal" :title="$t('settings_page.save_log.title')" @close="closeExportModal"
-      :closeOnOutsideClick="false">
+    <Modal
+      :show="showExportModal"
+      :title="$t('settings_page.save_log.title')"
+      @close="closeExportModal"
+      :closeOnOutsideClick="false"
+    >
       <div class="px-4 pb-2">
         <div v-if="exportStatus === 'loading'" class="flex flex-col items-center gap-4 py-6">
           <LoadingSpinner :size="40" class="text-primary" />
-          <p class="text-on-surface-variant text-sm">{{ $t('settings_page.save_log.exporting') }}</p>
+          <p class="text-on-surface-variant text-sm">
+            {{ $t('settings_page.save_log.exporting') }}
+          </p>
         </div>
 
         <div v-else-if="exportStatus === 'success'" class="flex flex-col items-center gap-3 py-4">
           <CheckCircle :size="48" class="text-primary" />
-          <p class="text-on-surface font-medium text-center">{{ $t('settings_page.save_log.success') }}</p>
+          <p class="text-on-surface font-medium text-center">
+            {{ $t('settings_page.save_log.success') }}
+          </p>
           <p
-            class="text-on-surface-variant text-xs break-all text-center bg-surface-container-low px-4 py-3 rounded-xl w-full">
+            class="text-on-surface-variant text-xs break-all text-center bg-surface-container-low px-4 py-3 rounded-xl w-full"
+          >
             {{ exportPath }}
           </p>
         </div>
 
         <div v-else-if="exportStatus === 'error'" class="flex flex-col items-center gap-3 py-4">
           <ErrorIcon :size="48" class="text-error" />
-          <p class="text-on-surface font-medium text-center">{{ $t('settings_page.save_log.failure') }}</p>
+          <p class="text-on-surface font-medium text-center">
+            {{ $t('settings_page.save_log.failure') }}
+          </p>
           <p class="text-on-surface-variant text-sm text-center">{{ exportErrorMsg }}</p>
         </div>
       </div>
 
       <template #actions>
         <div v-if="exportStatus !== 'loading'" class="flex gap-2">
-          <button @click="closeExportModal"
-            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors">
+          <button
+            @click="closeExportModal"
+            class="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 rounded-full transition-colors"
+          >
             {{ exportStatus === 'success' ? 'Close' : $t('common.ok') }}
           </button>
         </div>

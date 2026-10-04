@@ -1,10 +1,9 @@
 import languages from '@/locales/languages.json'
 import enMessages from '@/locales/strings/en.json'
 
-const loaders = import.meta.glob(
-  ['@/locales/strings/*.json', '!@/locales/strings/en.json'],
-  { import: 'default' },
-)
+const loaders = import.meta.glob(['@/locales/strings/*.json', '!@/locales/strings/en.json'], {
+  import: 'default',
+})
 
 export const hasLocale = (locale) =>
   locale === 'en' || `/src/locales/strings/${locale}.json` in loaders

@@ -1,148 +1,148 @@
 {
-    "home_page": {
-        "title": "Encore Tweaks",
-        "status_card": {
-            "running": "Berfungsi ✨",
-            "stopped": "Terhenti 💤",
-            "error": "Error ~",
-            "daemonPID": "PID Daemon: {pid}",
-            "daemon_inactive": "Layanan tidak aktif",
-            "loading_daemon": "Sedang memuat…"
-        },
-        "info_card": {
-            "module": "Encore Tweaks",
-            "profile": "Profil Saat Ini",
-            "kernel": "Kernel",
-            "chipset": "Chipset",
-            "androidSDK": "Android SDK"
-        },
-        "support_button": {
-            "title": "Dukung Saya",
-            "description": "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi."
-        },
-        "learn_encore": {
-            "title": "Pelajari Encore",
-            "description": "Pelajari cara menggunakan Encore Tweaks dan fitur-fiturnya."
-        }
+  "home_page": {
+    "title": "Encore Tweaks",
+    "status_card": {
+      "running": "Berfungsi ✨",
+      "stopped": "Terhenti 💤",
+      "error": "Error ~",
+      "daemonPID": "PID Daemon: {pid}",
+      "daemon_inactive": "Layanan tidak aktif",
+      "loading_daemon": "Sedang memuat…"
     },
-    "games_page": {
-        "title": "Game Saya",
-        "search_placeholder": "Cari aplikasi",
-        "no_apps_found": "Tidak ada aplikasi yang ditemukan",
-        "badges": {
-            "tweak_enabled": "Aktif"
-        }
+    "info_card": {
+      "module": "Encore Tweaks",
+      "profile": "Profil Saat Ini",
+      "kernel": "Kernel",
+      "chipset": "Chipset",
+      "androidSDK": "Android SDK"
     },
-    "settings_page": {
-        "title": "Pengaturan",
-        "section": {
-            "preferences": "Preferensi",
-            "system": "Sistem",
-            "others": "Lainnya"
-        },
-        "lite_mode": {
-            "title": "Terapkan Mode Lite",
-            "description": "Aktifkan Mode Lite secara default untuk semua game"
-        },
-        "language": {
-            "title": "Bahasa"
-        },
-        "device_mitigation": {
-            "title": "Mitigasi Perangkat",
-            "description": "Atasi masalah spesifik perangkat di Encore Tweaks"
-        },
-        "log_level": {
-            "title": "Log Level",
-            "description": "Pilih seberapa detail log operasional Encore Tweaks"
-        },
-        "save_log": {
-            "title": "Simpan Log",
-            "description": "Ekspor log operasional Encore Tweaks",
-            "exporting": "Menyimpan log, tunggu sebentar ya…",
-            "success": "Log berhasil disimpan",
-            "failure": "Gagal menyimpan log"
-        },
-        "create_shortcut": {
-            "title": "Buat Pintasan",
-            "description": "Buat pintasan di layar utama untuk akses cepat ke Encore Tweaks"
-        },
-        "disable_tweaks": {
-            "title": "Matikan Tweak",
-            "description": "Nonaktifkan semua penyesuaian performa yang diatur oleh Encore Tweaks"
-        }
+    "support_button": {
+      "title": "Dukung Saya",
+      "description": "Encore Tweaks akan selalu gratis untuk semua orang. Namun Anda dapat menunjukkan kepedulian Anda dengan memberikan donasi."
     },
-    "game_settings": {
-        "title": "Pengaturan Game",
-        "application": "Aplikasi",
-        "preferences": "Preferensi",
-        "enable_tweaks": "Aktifkan Tweaks",
-        "lite_mode": "Mode Lite",
-        "lite_mode_description": "Optimalkan daya tahan baterai daripada performa maksimal",
-        "dnd_mode": "Jangan Ganggu",
-        "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game",
-        "launch_app": "Buka",
-        "app_info": "Info aplikasi"
-    },
-    "language_selection": {
-        "title": "Bahasa",
-        "follow_system": "Ikuti sistem"
-    },
-    "log_level_selection": {
-        "title": "Log Level",
-        "level_0": "Critical",
-        "level_1": "Error",
-        "level_2": "Warning",
-        "level_3": "Info",
-        "level_4": "Debug",
-        "level_5": "Trace"
+    "learn_encore": {
+      "title": "Pelajari Encore",
+      "description": "Pelajari cara menggunakan Encore Tweaks dan fitur-fiturnya."
+    }
+  },
+  "games_page": {
+    "title": "Game Saya",
+    "search_placeholder": "Cari aplikasi",
+    "no_apps_found": "Tidak ada aplikasi yang ditemukan",
+    "badges": {
+      "tweak_enabled": "Aktif"
+    }
+  },
+  "settings_page": {
+    "title": "Pengaturan",
+    "section": {
+      "preferences": "Preferensi",
+      "system": "Sistem",
+      "others": "Lainnya"
     },
     "lite_mode": {
-        "title": "Mode Lite",
-        "toggle_title": "Terapkan mode lite",
-        "brief": "Mode lite mengurangi panas berlebih dan konsumsi daya saat bermain game dengan menurunkan frekuensi CPU dan komponen. Pengaturan ini berlaku untuk semua game saat diaktifkan."
+      "title": "Terapkan Mode Lite",
+      "description": "Aktifkan Mode Lite secara default untuk semua game"
+    },
+    "language": {
+      "title": "Bahasa"
     },
     "device_mitigation": {
-        "title": "Mitigasi Perangkat",
-        "toggle_title": "Aktifkan mitigasi perangkat",
-        "brief": "Mitigasi perangkat menonaktifkan tweak yang berpotensi tidak kompatibel untuk perangkat tertentu. Jangan aktifkan kecuali Anda mengalami masalah."
+      "title": "Mitigasi Perangkat",
+      "description": "Atasi masalah spesifik perangkat di Encore Tweaks"
     },
-    "profiles": {
-        "initializing": "Menginisialisasi",
-        "balanced": "Seimbang",
-        "powersave": "Hemat Daya",
-        "performance": "Performa"
+    "log_level": {
+      "title": "Log Level",
+      "description": "Pilih seberapa detail log operasional Encore Tweaks"
     },
-    "toast": {
-        "reboot_to_apply": "Mulai ulang perangkat Anda untuk menerapkan perubahan.",
-        "has_shortcut": "Pintasan sudah ada.",
-        "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini. Perbarui manajer Anda untuk menggunakannya.",
-        "failed_open_external_browser": "Gagal membuka browser eksternal.",
-        "success_save_log": "Log berhasil disimpan di {path}",
-        "failed_save_log": "Gagal menyimpan log."
+    "save_log": {
+      "title": "Simpan Log",
+      "description": "Ekspor log operasional Encore Tweaks",
+      "exporting": "Menyimpan log, tunggu sebentar ya…",
+      "success": "Log berhasil disimpan",
+      "failure": "Gagal menyimpan log"
     },
-    "navigation": {
-        "home": "Beranda",
-        "games": "Game",
-        "settings": "Pengaturan"
-    },
-    "common": {
-        "loading": "Memuat",
-        "unknown": "Tidak diketahui",
-        "enabled": "Aktif",
-        "disabled": "Nonaktif",
-        "cancel": "Batal",
-        "warning": "Peringatan",
-        "ok": "Oke"
+    "create_shortcut": {
+      "title": "Buat Pintasan",
+      "description": "Buat pintasan di layar utama untuk akses cepat ke Encore Tweaks"
     },
     "disable_tweaks": {
-        "title": "Matikan Tweak",
-        "toggle_title": "Matikan Tweak",
-        "brief": "Saat diaktifkan, pengaturan ini akan menonaktifkan semua tweak performa bawaan pada Encore Tweaks, sehingga Anda dapat menggunakan modul ini murni sebagai host untuk modul Add-on."
-    },
-    "reboot_modal": {
-        "title": "Reboot Diperlukan",
-        "description": "Perubahan ini memerlukan reboot agar berlaku. Apakah Anda ingin melakukan reboot sekarang?",
-        "reboot": "Reboot Sekarang",
-        "later": "Nanti"
+      "title": "Matikan Tweak",
+      "description": "Nonaktifkan semua penyesuaian performa yang diatur oleh Encore Tweaks"
     }
+  },
+  "game_settings": {
+    "title": "Pengaturan Game",
+    "application": "Aplikasi",
+    "preferences": "Preferensi",
+    "enable_tweaks": "Aktifkan Tweaks",
+    "lite_mode": "Mode Lite",
+    "lite_mode_description": "Optimalkan daya tahan baterai daripada performa maksimal",
+    "dnd_mode": "Jangan Ganggu",
+    "dnd_mode_description": "Blokir notifikasi dan panggilan saat bermain game",
+    "launch_app": "Buka",
+    "app_info": "Info aplikasi"
+  },
+  "language_selection": {
+    "title": "Bahasa",
+    "follow_system": "Ikuti sistem"
+  },
+  "log_level_selection": {
+    "title": "Log Level",
+    "level_0": "Critical",
+    "level_1": "Error",
+    "level_2": "Warning",
+    "level_3": "Info",
+    "level_4": "Debug",
+    "level_5": "Trace"
+  },
+  "lite_mode": {
+    "title": "Mode Lite",
+    "toggle_title": "Terapkan mode lite",
+    "brief": "Mode lite mengurangi panas berlebih dan konsumsi daya saat bermain game dengan menurunkan frekuensi CPU dan komponen. Pengaturan ini berlaku untuk semua game saat diaktifkan."
+  },
+  "device_mitigation": {
+    "title": "Mitigasi Perangkat",
+    "toggle_title": "Aktifkan mitigasi perangkat",
+    "brief": "Mitigasi perangkat menonaktifkan tweak yang berpotensi tidak kompatibel untuk perangkat tertentu. Jangan aktifkan kecuali Anda mengalami masalah."
+  },
+  "profiles": {
+    "initializing": "Menginisialisasi",
+    "balanced": "Seimbang",
+    "powersave": "Hemat Daya",
+    "performance": "Performa"
+  },
+  "toast": {
+    "reboot_to_apply": "Mulai ulang perangkat Anda untuk menerapkan perubahan.",
+    "has_shortcut": "Pintasan sudah ada.",
+    "shortcut_unavailable": "Tidak ada API yang tersedia untuk fitur ini. Perbarui manajer Anda untuk menggunakannya.",
+    "failed_open_external_browser": "Gagal membuka browser eksternal.",
+    "success_save_log": "Log berhasil disimpan di {path}",
+    "failed_save_log": "Gagal menyimpan log."
+  },
+  "navigation": {
+    "home": "Beranda",
+    "games": "Game",
+    "settings": "Pengaturan"
+  },
+  "common": {
+    "loading": "Memuat",
+    "unknown": "Tidak diketahui",
+    "enabled": "Aktif",
+    "disabled": "Nonaktif",
+    "cancel": "Batal",
+    "warning": "Peringatan",
+    "ok": "Oke"
+  },
+  "disable_tweaks": {
+    "title": "Matikan Tweak",
+    "toggle_title": "Matikan Tweak",
+    "brief": "Saat diaktifkan, pengaturan ini akan menonaktifkan semua tweak performa bawaan pada Encore Tweaks, sehingga Anda dapat menggunakan modul ini murni sebagai host untuk modul Add-on."
+  },
+  "reboot_modal": {
+    "title": "Reboot Diperlukan",
+    "description": "Perubahan ini memerlukan reboot agar berlaku. Apakah Anda ingin melakukan reboot sekarang?",
+    "reboot": "Reboot Sekarang",
+    "later": "Nanti"
+  }
 }

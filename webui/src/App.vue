@@ -1,5 +1,8 @@
 <template>
-  <div id="app" class="copy-protected min-h-screen flex flex-col bg-background text-on-background overflow-hidden">
+  <div
+    id="app"
+    class="copy-protected min-h-screen flex flex-col bg-background text-on-background overflow-hidden"
+  >
     <main class="main-content flex-1 md:ml-20 overflow-hidden relative">
       <router-view v-slot="{ Component, route }">
         <transition :name="transitionName" @after-enter="onAfterEnter">

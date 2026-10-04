@@ -1,142 +1,142 @@
 {
-    "home_page": {
-        "status_card": {
-            "running": "运行中 ✨",
-            "stopped": "已停止 💤",
-            "error": "出错了~",
-            "daemonPID": "进程 PID: {pid}",
-            "daemon_inactive": "服务未启用",
-            "loading_daemon": "请稍候…"
-        },
-        "title": "Encore Tweaks",
-        "info_card": {
-            "module": "Encore Tweaks",
-            "profile": "当前配置",
-            "kernel": "内核",
-            "chipset": "芯片组",
-            "androidSDK": "Android SDK"
-        },
-        "support_button": {
-            "title": "支持开发",
-            "description": "Encore Tweaks 对所有人永远免费。如果你觉得好用，可以通过捐赠来表达你的支持。"
-        },
-        "learn_encore": {
-            "title": "了解 Encore",
-            "description": "了解如何使用 Encore Tweaks 及其功能。"
-        }
+  "home_page": {
+    "status_card": {
+      "running": "运行中 ✨",
+      "stopped": "已停止 💤",
+      "error": "出错了~",
+      "daemonPID": "进程 PID: {pid}",
+      "daemon_inactive": "服务未启用",
+      "loading_daemon": "请稍候…"
     },
-    "toast": {
-        "reboot_to_apply": "重启设备来应用变更。",
-        "has_shortcut": "快捷方式已存在。",
-        "shortcut_unavailable": "此功能没有可用的 API。请更新您的管理器以使用它。",
-        "failed_open_external_browser": "无法打开外部浏览器。",
-        "failed_save_log": "日志保存失败。",
-        "success_save_log": "日志成功保存到 {path}"
+    "title": "Encore Tweaks",
+    "info_card": {
+      "module": "Encore Tweaks",
+      "profile": "当前配置",
+      "kernel": "内核",
+      "chipset": "芯片组",
+      "androidSDK": "Android SDK"
     },
-    "games_page": {
-        "title": "我的游戏",
-        "search_placeholder": "搜索应用",
-        "no_apps_found": "未找到应用",
-        "badges": {
-            "tweak_enabled": "已启用"
-        }
+    "support_button": {
+      "title": "支持开发",
+      "description": "Encore Tweaks 对所有人永远免费。如果你觉得好用，可以通过捐赠来表达你的支持。"
     },
-    "settings_page": {
-        "title": "设置",
-        "section": {
-            "preferences": "偏好",
-            "system": "系统",
-            "others": "其他"
-        },
-        "lite_mode": {
-            "title": "强制轻量模式",
-            "description": "为所有游戏默认启用轻量模式"
-        },
-        "language": {
-            "title": "语言"
-        },
-        "device_mitigation": {
-            "title": "设备兼容模式",
-            "description": "缓解 Encore Tweaks 中设备特定的兼容问题"
-        },
-        "log_level": {
-            "title": "日志级别",
-            "description": "选择 Encore Tweaks 操作日志的详细程度"
-        },
-        "save_log": {
-            "title": "保存日志",
-            "description": "导出 Encore Tweaks 的操作日志",
-            "exporting": "正在打包日志，请稍候…",
-            "success": "日志保存成功",
-            "failure": "日志保存失败"
-        },
-        "create_shortcut": {
-            "title": "创建快捷方式",
-            "description": "在主屏幕创建一个快捷方式以快速访问 Encore Tweaks"
-        },
-        "disable_tweaks": {
-            "title": "禁用 Tweaks",
-            "description": "禁用 Encore Tweaks 的性能优化"
-        }
-    },
-    "game_settings": {
-        "title": "游戏设置",
-        "application": "应用程序",
-        "preferences": "偏好",
-        "enable_tweaks": "启用Tweaks",
-        "lite_mode": "轻量模式",
-        "lite_mode_description": "优先优化续航而不是性能",
-        "dnd_mode": "免打扰",
-        "dnd_mode_description": "在游戏时阻止通知和电话",
-        "launch_app": "启动",
-        "app_info": "应用信息"
-    },
-    "language_selection": {
-        "title": "语言",
-        "follow_system": "跟随系统"
-    },
-    "log_level_selection": {
-        "title": "日志级别"
+    "learn_encore": {
+      "title": "了解 Encore",
+      "description": "了解如何使用 Encore Tweaks 及其功能。"
+    }
+  },
+  "toast": {
+    "reboot_to_apply": "重启设备来应用变更。",
+    "has_shortcut": "快捷方式已存在。",
+    "shortcut_unavailable": "此功能没有可用的 API。请更新您的管理器以使用它。",
+    "failed_open_external_browser": "无法打开外部浏览器。",
+    "failed_save_log": "日志保存失败。",
+    "success_save_log": "日志成功保存到 {path}"
+  },
+  "games_page": {
+    "title": "我的游戏",
+    "search_placeholder": "搜索应用",
+    "no_apps_found": "未找到应用",
+    "badges": {
+      "tweak_enabled": "已启用"
+    }
+  },
+  "settings_page": {
+    "title": "设置",
+    "section": {
+      "preferences": "偏好",
+      "system": "系统",
+      "others": "其他"
     },
     "lite_mode": {
-        "title": "轻量模式",
-        "toggle_title": "强制轻量模式",
-        "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
+      "title": "强制轻量模式",
+      "description": "为所有游戏默认启用轻量模式"
+    },
+    "language": {
+      "title": "语言"
     },
     "device_mitigation": {
-        "title": "设备兼容模式",
-        "toggle_title": "开启设备兼容模式",
-        "brief": "设备兼容模式会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
+      "title": "设备兼容模式",
+      "description": "缓解 Encore Tweaks 中设备特定的兼容问题"
     },
-    "profiles": {
-        "initializing": "初始化中",
-        "balanced": "平衡模式",
-        "powersave": "省电模式",
-        "performance": "性能模式"
+    "log_level": {
+      "title": "日志级别",
+      "description": "选择 Encore Tweaks 操作日志的详细程度"
     },
-    "navigation": {
-        "home": "主页",
-        "games": "游戏",
-        "settings": "设置"
+    "save_log": {
+      "title": "保存日志",
+      "description": "导出 Encore Tweaks 的操作日志",
+      "exporting": "正在打包日志，请稍候…",
+      "success": "日志保存成功",
+      "failure": "日志保存失败"
     },
-    "common": {
-        "loading": "加载中",
-        "unknown": "未知",
-        "enabled": "已启用",
-        "disabled": "已禁用",
-        "cancel": "取消",
-        "warning": "警告",
-        "ok": "好"
+    "create_shortcut": {
+      "title": "创建快捷方式",
+      "description": "在主屏幕创建一个快捷方式以快速访问 Encore Tweaks"
     },
     "disable_tweaks": {
-        "title": "禁用 Tweaks",
-        "toggle_title": "禁用 Tweaks",
-        "brief": "启用后，该设置会关闭 Encore Tweaks 的所有内置性能优化，允许你将该模块严格用作 Encore 附加模块的宿主模块。"
-    },
-    "reboot_modal": {
-        "title": "需要重启",
-        "description": "此更改需要重启设备以生效。是否立即重启？",
-        "reboot": "立即重启",
-        "later": "稍后"
+      "title": "禁用 Tweaks",
+      "description": "禁用 Encore Tweaks 的性能优化"
     }
+  },
+  "game_settings": {
+    "title": "游戏设置",
+    "application": "应用程序",
+    "preferences": "偏好",
+    "enable_tweaks": "启用Tweaks",
+    "lite_mode": "轻量模式",
+    "lite_mode_description": "优先优化续航而不是性能",
+    "dnd_mode": "免打扰",
+    "dnd_mode_description": "在游戏时阻止通知和电话",
+    "launch_app": "启动",
+    "app_info": "应用信息"
+  },
+  "language_selection": {
+    "title": "语言",
+    "follow_system": "跟随系统"
+  },
+  "log_level_selection": {
+    "title": "日志级别"
+  },
+  "lite_mode": {
+    "title": "轻量模式",
+    "toggle_title": "强制轻量模式",
+    "brief": "轻量模式通过降低CPU和组件频率，减少游戏过程中的过热和功耗。此设置在启用时对所有游戏生效。"
+  },
+  "device_mitigation": {
+    "title": "设备兼容模式",
+    "toggle_title": "开启设备兼容模式",
+    "brief": "设备兼容模式会针对特定设备禁用可能导致冲突的优化项。除非遇到运行异常，否则建议保持关闭。"
+  },
+  "profiles": {
+    "initializing": "初始化中",
+    "balanced": "平衡模式",
+    "powersave": "省电模式",
+    "performance": "性能模式"
+  },
+  "navigation": {
+    "home": "主页",
+    "games": "游戏",
+    "settings": "设置"
+  },
+  "common": {
+    "loading": "加载中",
+    "unknown": "未知",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "cancel": "取消",
+    "warning": "警告",
+    "ok": "好"
+  },
+  "disable_tweaks": {
+    "title": "禁用 Tweaks",
+    "toggle_title": "禁用 Tweaks",
+    "brief": "启用后，该设置会关闭 Encore Tweaks 的所有内置性能优化，允许你将该模块严格用作 Encore 附加模块的宿主模块。"
+  },
+  "reboot_modal": {
+    "title": "需要重启",
+    "description": "此更改需要重启设备以生效。是否立即重启？",
+    "reboot": "立即重启",
+    "later": "稍后"
+  }
 }

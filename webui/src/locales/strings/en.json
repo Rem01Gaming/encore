@@ -1,146 +1,146 @@
 {
-    "home_page": {
-        "title": "Encore Tweaks",
-        "status_card": {
-            "running": "Working ✨",
-            "stopped": "Stopped 💤",
-            "error": "Error ~",
-            "daemonPID": "Daemon PID: {pid}",
-            "daemon_inactive": "Service inactive",
-            "loading_daemon": "One moment please…"
-        },
-        "info_card": {
-            "module": "Encore Tweaks",
-            "profile": "Current Profile",
-            "kernel": "Kernel",
-            "chipset": "Chipset",
-            "androidSDK": "Android SDK"
-        },
-        "support_button": {
-            "title": "Support Me",
-            "description": "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation."
-        },
-        "learn_encore": {
-            "title": "Learn Encore",
-            "description": "Learn how to use Encore Tweaks and its features."
-        }
+  "home_page": {
+    "title": "Encore Tweaks",
+    "status_card": {
+      "running": "Working ✨",
+      "stopped": "Stopped 💤",
+      "error": "Error ~",
+      "daemonPID": "Daemon PID: {pid}",
+      "daemon_inactive": "Service inactive",
+      "loading_daemon": "One moment please…"
     },
-    "games_page": {
-        "title": "My Games",
-        "search_placeholder": "Search apps",
-        "no_apps_found": "No apps found",
-        "badges": {
-            "tweak_enabled": "Enabled"
-        }
+    "info_card": {
+      "module": "Encore Tweaks",
+      "profile": "Current Profile",
+      "kernel": "Kernel",
+      "chipset": "Chipset",
+      "androidSDK": "Android SDK"
     },
-    "settings_page": {
-        "title": "Settings",
-        "section": {
-            "preferences": "Preferences",
-            "system": "System",
-            "others": "Others"
-        },
-        "lite_mode": {
-            "title": "Enforce Lite Mode",
-            "description": "Enable Lite Mode by default for all games"
-        },
-        "language": {
-            "title": "Language"
-        },
-        "device_mitigation": {
-            "title": "Device Mitigation",
-            "description": "Mitigate device specific issues on Encore Tweaks"
-        },
-        "log_level": {
-            "title": "Log Level",
-            "description": "Choose how detailed the Encore Tweaks operational log should be"
-        },
-        "save_log": {
-            "title": "Save Log",
-            "description": "Export Encore Tweaks operational log",
-            "exporting": "Packing logs, please wait…",
-            "success": "Log saved successfully",
-            "failure": "Failed to save log"
-        },
-        "create_shortcut": {
-            "title": "Create Shortcut",
-            "description": "Create a home screen shortcut for quick access to Encore Tweaks"
-        },
-        "disable_tweaks": {
-            "title": "Disable Tweaks",
-            "description": "Disable all performance tweaks set by Encore Tweaks"
-        }
+    "support_button": {
+      "title": "Support Me",
+      "description": "Encore Tweaks is, and always will be, free for you, and everyone. You can however show me that you care by making a donation."
     },
-    "game_settings": {
-        "title": "Game Settings",
-        "application": "Application",
-        "preferences": "Preferences",
-        "enable_tweaks": "Enable Tweaks",
-        "lite_mode": "Lite Mode",
-        "lite_mode_description": "Optimize for longer battery life over peak performance",
-        "dnd_mode": "Do Not Disturb",
-        "dnd_mode_description": "Block notifications and calls while gaming",
-        "launch_app": "Launch",
-        "app_info": "App info"
-    },
-    "language_selection": {
-        "title": "Language",
-        "follow_system": "Follow system"
-    },
-    "log_level_selection": {
-        "title": "Log Level",
-        "level_0": "Critical",
-        "level_1": "Error",
-        "level_2": "Warning",
-        "level_3": "Info",
-        "level_4": "Debug",
-        "level_5": "Trace"
+    "learn_encore": {
+      "title": "Learn Encore",
+      "description": "Learn how to use Encore Tweaks and its features."
+    }
+  },
+  "games_page": {
+    "title": "My Games",
+    "search_placeholder": "Search apps",
+    "no_apps_found": "No apps found",
+    "badges": {
+      "tweak_enabled": "Enabled"
+    }
+  },
+  "settings_page": {
+    "title": "Settings",
+    "section": {
+      "preferences": "Preferences",
+      "system": "System",
+      "others": "Others"
     },
     "lite_mode": {
-        "title": "Lite Mode",
-        "toggle_title": "Enforce lite mode",
-        "brief": "Lite mode reduces overheating and power consumption during gameplay by lowering CPU and component frequencies. This setting applies to all games when enabled."
+      "title": "Enforce Lite Mode",
+      "description": "Enable Lite Mode by default for all games"
     },
-    "disable_tweaks": {
-        "title": "Disable Tweaks",
-        "toggle_title": "Disable Tweaks",
-        "brief": "When enabled, this setting turns off all built-in performance optimizations on Encore Tweaks, allowing you to use this module strictly as a host for Encore Addon modules."
+    "language": {
+      "title": "Language"
     },
     "device_mitigation": {
-        "title": "Device Mitigation",
-        "toggle_title": "Enable device mitigation",
-        "brief": "Device mitigation disables potentially incompatible tweaks for specific devices. Keep it disabled unless you have problems."
+      "title": "Device Mitigation",
+      "description": "Mitigate device specific issues on Encore Tweaks"
     },
-    "reboot_modal": {
-        "title": "Reboot Required",
-        "description": "This change requires a reboot to take effect. Would you like to reboot now?",
-        "reboot": "Reboot Now",
-        "later": "Do It Later"
+    "log_level": {
+      "title": "Log Level",
+      "description": "Choose how detailed the Encore Tweaks operational log should be"
     },
-    "profiles": {
-        "initializing": "Initializing",
-        "balanced": "Balanced",
-        "powersave": "Powersave",
-        "performance": "Performance"
+    "save_log": {
+      "title": "Save Log",
+      "description": "Export Encore Tweaks operational log",
+      "exporting": "Packing logs, please wait…",
+      "success": "Log saved successfully",
+      "failure": "Failed to save log"
     },
-    "toast": {
-        "reboot_to_apply": "Reboot your device to apply changes.",
-        "has_shortcut": "Shortcut already exists.",
-        "shortcut_unavailable": "No API available for this feature. Update your manager to use it.",
-        "failed_open_external_browser": "Failed to open external browser."
+    "create_shortcut": {
+      "title": "Create Shortcut",
+      "description": "Create a home screen shortcut for quick access to Encore Tweaks"
     },
-    "navigation": {
-        "home": "Home",
-        "games": "Games",
-        "settings": "Settings"
-    },
-    "common": {
-        "loading": "Loading",
-        "unknown": "Unknown",
-        "enabled": "Enabled",
-        "disabled": "Disabled",
-        "cancel": "Cancel",
-        "warning": "Warning",
-        "ok": "Okay"
+    "disable_tweaks": {
+      "title": "Disable Tweaks",
+      "description": "Disable all performance tweaks set by Encore Tweaks"
     }
+  },
+  "game_settings": {
+    "title": "Game Settings",
+    "application": "Application",
+    "preferences": "Preferences",
+    "enable_tweaks": "Enable Tweaks",
+    "lite_mode": "Lite Mode",
+    "lite_mode_description": "Optimize for longer battery life over peak performance",
+    "dnd_mode": "Do Not Disturb",
+    "dnd_mode_description": "Block notifications and calls while gaming",
+    "launch_app": "Launch",
+    "app_info": "App info"
+  },
+  "language_selection": {
+    "title": "Language",
+    "follow_system": "Follow system"
+  },
+  "log_level_selection": {
+    "title": "Log Level",
+    "level_0": "Critical",
+    "level_1": "Error",
+    "level_2": "Warning",
+    "level_3": "Info",
+    "level_4": "Debug",
+    "level_5": "Trace"
+  },
+  "lite_mode": {
+    "title": "Lite Mode",
+    "toggle_title": "Enforce lite mode",
+    "brief": "Lite mode reduces overheating and power consumption during gameplay by lowering CPU and component frequencies. This setting applies to all games when enabled."
+  },
+  "disable_tweaks": {
+    "title": "Disable Tweaks",
+    "toggle_title": "Disable Tweaks",
+    "brief": "When enabled, this setting turns off all built-in performance optimizations on Encore Tweaks, allowing you to use this module strictly as a host for Encore Addon modules."
+  },
+  "device_mitigation": {
+    "title": "Device Mitigation",
+    "toggle_title": "Enable device mitigation",
+    "brief": "Device mitigation disables potentially incompatible tweaks for specific devices. Keep it disabled unless you have problems."
+  },
+  "reboot_modal": {
+    "title": "Reboot Required",
+    "description": "This change requires a reboot to take effect. Would you like to reboot now?",
+    "reboot": "Reboot Now",
+    "later": "Do It Later"
+  },
+  "profiles": {
+    "initializing": "Initializing",
+    "balanced": "Balanced",
+    "powersave": "Powersave",
+    "performance": "Performance"
+  },
+  "toast": {
+    "reboot_to_apply": "Reboot your device to apply changes.",
+    "has_shortcut": "Shortcut already exists.",
+    "shortcut_unavailable": "No API available for this feature. Update your manager to use it.",
+    "failed_open_external_browser": "Failed to open external browser."
+  },
+  "navigation": {
+    "home": "Home",
+    "games": "Games",
+    "settings": "Settings"
+  },
+  "common": {
+    "loading": "Loading",
+    "unknown": "Unknown",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "cancel": "Cancel",
+    "warning": "Warning",
+    "ok": "Okay"
+  }
 }

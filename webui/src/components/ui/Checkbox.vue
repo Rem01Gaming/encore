@@ -7,23 +7,21 @@
       :disabled="disabled"
       @change="$emit('update:modelValue', $event.target.checked)"
     />
-    
+
     <div
       class="absolute inset-0 rounded-full transition-colors duration-200"
       :class="[
-        modelValue 
-          ? 'peer-hover:bg-primary/10 peer-active:bg-primary/20' 
-          : 'peer-hover:bg-on-surface/10 peer-active:bg-on-surface/20'
+        modelValue
+          ? 'peer-hover:bg-primary/10 peer-active:bg-primary/20'
+          : 'peer-hover:bg-on-surface/10 peer-active:bg-on-surface/20',
       ]"
     ></div>
 
     <div
       class="relative w-4.5 h-4.5 rounded-xs border-2 transition-colors duration-200 flex items-center justify-center"
       :class="[
-        modelValue
-          ? 'border-primary bg-primary'
-          : 'border-on-surface-variant bg-transparent',
-        disabled ? 'opacity-38' : ''
+        modelValue ? 'border-primary bg-primary' : 'border-on-surface-variant bg-transparent',
+        disabled ? 'opacity-38' : '',
       ]"
     >
       <svg
@@ -46,15 +44,15 @@
 defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   disabled: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
-defineEmits(['update:modelValue']);
+defineEmits(['update:modelValue'])
 </script>
 
 <style scoped>

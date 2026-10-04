@@ -11,10 +11,17 @@
         <div class="bg-surface-container mb-4 p-3 rounded-full">
           <div class="flex items-center gap-3">
             <SearchIcon class="ml-2 text-on-surface-variant shrink-0" />
-            <input v-model="gamesStore.searchQuery" type="text" :placeholder="$t('games_page.search_placeholder')"
-              class="bg-transparent border-none outline-none text-on-surface placeholder-on-surface-variant w-full" />
-            <button v-if="gamesStore.searchQuery" @click="clearSearch"
-              class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer mr-3">
+            <input
+              v-model="gamesStore.searchQuery"
+              type="text"
+              :placeholder="$t('games_page.search_placeholder')"
+              class="bg-transparent border-none outline-none text-on-surface placeholder-on-surface-variant w-full"
+            />
+            <button
+              v-if="gamesStore.searchQuery"
+              @click="clearSearch"
+              class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer mr-3"
+            >
               <CloseIcon class="w-5 h-5" />
             </button>
           </div>
@@ -22,46 +29,70 @@
       </div>
 
       <!-- List -->
-      <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5" ref="scrollContainer"
-        @pointerdown.capture="captureScrollPosition" @focusin="restoreScrollPosition">
+      <div
+        class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll px-5"
+        ref="scrollContainer"
+        @pointerdown.capture="captureScrollPosition"
+        @focusin="restoreScrollPosition"
+      >
         <LoadingSpinner class="text-primary pt-8" v-if="gamesStore.isLoading" />
 
         <div v-else class="pb-4">
-          <div v-for="(app, index) in gamesStore.filteredApps" :key="app.packageName"
-            :class="['md3-list', { 'single-card-item': gamesStore.filteredApps.length === 1 }]">
+          <div
+            v-for="(app, index) in gamesStore.filteredApps"
+            :key="app.packageName"
+            :class="['md3-list', { 'single-card-item': gamesStore.filteredApps.length === 1 }]"
+          >
             <RippleComponent @click="onAppClick(app)" tabindex="0" class="md3-list-item">
               <div class="flex items-center justify-between px-5 py-4">
                 <div class="flex items-center gap-4 min-w-0 flex-1">
-                  <img :src="app.icon" loading="lazy" @error="handleImageError"
-                    class="w-12 h-12 rounded-full object-cover" :alt="app.appName" />
+                  <img
+                    :src="app.icon"
+                    loading="lazy"
+                    @error="handleImageError"
+                    class="w-12 h-12 rounded-full object-cover"
+                    :alt="app.appName"
+                  />
                   <div class="flex-1 min-w-0">
                     <h3 class="text-sm font-medium text-on-surface truncate">
                       {{ app.appName || app.packageName }}
                     </h3>
                     <!-- Only show package name if it's different from app name -->
-                    <p v-if="app.appName && app.appName !== app.packageName"
-                      class="text-xs text-on-surface-variant truncate mt-1">
+                    <p
+                      v-if="app.appName && app.appName !== app.packageName"
+                      class="text-xs text-on-surface-variant truncate mt-1"
+                    >
                       {{ app.packageName }}
                     </p>
-                    <div v-if="gamesStore.isAppEnabled(app.packageName)" class="flex items-center gap-1 mt-1">
+                    <div
+                      v-if="gamesStore.isAppEnabled(app.packageName)"
+                      class="flex items-center gap-1 mt-1"
+                    >
                       <span class="inline-flex items-center bg-primary rounded-sm px-1.5 py-0.5">
                         <span class="text-[10px] text-on-primary font-semibold uppercase">{{
                           $t('games_page.badges.tweak_enabled')
-                          }}</span>
+                        }}</span>
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3">
-                  <ChevronRightIcon class="text-on-surface-variant shrink-0 rtl:rotate-180" :size="22" />
+                <div
+                  class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center shrink-0 ms-3"
+                >
+                  <ChevronRightIcon
+                    class="text-on-surface-variant shrink-0 rtl:rotate-180"
+                    :size="22"
+                  />
                 </div>
               </div>
             </RippleComponent>
           </div>
 
-          <div v-if="gamesStore.filteredApps.length === 0 && !gamesStore.isLoading"
-            class="text-center py-8 text-on-surface-variant">
+          <div
+            v-if="gamesStore.filteredApps.length === 0 && !gamesStore.isLoading"
+            class="text-center py-8 text-on-surface-variant"
+          >
             <p>{{ $t('games_page.no_apps_found') }}</p>
           </div>
         </div>
