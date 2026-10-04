@@ -1,8 +1,5 @@
 /**
- * Wraps an async save function with debounce + flush semantics so callers
- * can trigger frequent updates (e.g. toggle changes) while only persisting
- * once things settle, and still force an immediate write when needed
- * (route leave, unmount, before a destructive action like reboot).
+ * Wraps an async save function with debounce.
  *
  * @param {() => Promise<any>} saveFn - function that performs the actual save
  * @param {number} [delay=500] - debounce delay in milliseconds
@@ -12,6 +9,14 @@ export function createDebouncedSave(saveFn, delay = 500) {
   let timeoutId = null
   let pendingPromise = null
 
+  function queueSave(errorMessage) {
+    pendingPromise = (pendingPromise ?? Promise.resolve())
+      .then(() => saveFn())
+      .catch((error) => {
+        console.error(errorMessage, error)
+      })
+  }
+
   function trigger() {
     if (timeoutId) {
       clearTimeout(timeoutId)
@@ -19,9 +24,7 @@ export function createDebouncedSave(saveFn, delay = 500) {
 
     timeoutId = setTimeout(() => {
       timeoutId = null
-      pendingPromise = Promise.resolve(saveFn()).catch((error) => {
-        console.error('Debounced save failed:', error)
-      })
+      queueSave('Debounced save failed:')
     }, delay)
   }
 
@@ -29,9 +32,7 @@ export function createDebouncedSave(saveFn, delay = 500) {
     if (timeoutId) {
       clearTimeout(timeoutId)
       timeoutId = null
-      pendingPromise = Promise.resolve(saveFn()).catch((error) => {
-        console.error('Debounced save flush failed:', error)
-      })
+      queueSave('Debounced save flush failed:')
     }
 
     if (pendingPromise) {
