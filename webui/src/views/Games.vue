@@ -102,8 +102,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onActivated, onDeactivated, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onActivated } from 'vue'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useGamesStore } from '@/stores/Games'
 
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
@@ -120,20 +120,21 @@ const savedScrollTop = ref(0)
 const wasAtBottom = ref(false)
 const BOTTOM_THRESHOLD = 4
 
-onDeactivated(() => {
+const saveScrollPosition = () => {
   const el = scrollContainer.value
   if (!el) return
   savedScrollTop.value = el.scrollTop
   wasAtBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight <= BOTTOM_THRESHOLD
-})
+}
 
-onActivated(() => {
-  nextTick(() => {
-    const el = scrollContainer.value
-    if (!el) return
-    el.scrollTop = wasAtBottom.value ? el.scrollHeight - el.clientHeight : savedScrollTop.value
-  })
-})
+const restoreSavedScrollPosition = () => {
+  const el = scrollContainer.value
+  if (!el) return
+  el.scrollTop = wasAtBottom.value ? el.scrollHeight - el.clientHeight : savedScrollTop.value
+}
+
+onBeforeRouteLeave(saveScrollPosition)
+onActivated(restoreSavedScrollPosition)
 
 onMounted(async () => {
   if (gamesStore.userApps.length === 0) {

@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
+    <div ref="scrollContainer" class="scrollbar-hidden pb-safe-nav flex-1 min-h-0 overflow-y-scroll">
       <div class="max-w-3xl mx-auto p-5 py-1">
         <div class="px-4 py-2 mb-1">
           <h2 class="text-sm font-medium text-on-surface-variant">
@@ -334,8 +334,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onActivated } from 'vue'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguageStore } from '@/stores/Language'
 
@@ -366,6 +366,18 @@ const showExportModal = ref(false)
 const exportStatus = ref('idle') // 'idle', 'loading', 'success', 'error'
 const exportPath = ref('')
 const exportErrorMsg = ref('')
+const scrollContainer = ref(null)
+const savedScrollTop = ref(0)
+
+onBeforeRouteLeave(() => {
+  if (scrollContainer.value) savedScrollTop.value = scrollContainer.value.scrollTop
+})
+
+const restoreScrollPosition = () => {
+  if (scrollContainer.value) scrollContainer.value.scrollTop = savedScrollTop.value
+}
+
+onActivated(restoreScrollPosition)
 
 // Computed property for current language display
 const currentLanguage = computed(() => {
