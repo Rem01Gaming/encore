@@ -1,4 +1,4 @@
-## Encore Tweaks 5.2.1
+## Encore Tweaks 5.2.2
 
 **Thanks for using Encore Tweaks!**
 
@@ -6,5 +6,7 @@ Your continued support keeps this project going. If you enjoy the improvements a
 
 ### Changelog
 
-- Fix addon modules doesn't working when disable tweaks is enabled
-- Fix DND mode did not reset after exiting the game
+- Fix binder resolver for Android version newer than A12
+- Fix binder resolver for jailbreak users
+- Various UI/UX optimization and translation update on WebUI
+- Other misc changes and optimizations
