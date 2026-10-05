@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-import { exec } from 'kernelsu'
 import * as KernelSU from '@/helpers/KernelSU'
 
 import { useHomeStore } from '@/stores/Home'
@@ -10,10 +9,7 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
   const config = ref(null)
 
   const homeStore = useHomeStore()
-  const currentProfile = computed(() => homeStore.currentProfileRaw)
-
   const preferences = computed(() => config.value?.preferences)
-  const cpuGovernor = computed(() => config.value?.cpu_governor)
 
   const isLiteModeEnabled = computed(() => config.value?.preferences?.enforce_lite_mode ?? false)
   const logLevel = computed(() => config.value?.preferences?.log_level ?? 3)
@@ -21,9 +17,6 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     () => config.value?.preferences?.use_device_mitigation ?? false,
   )
   const isDisableTweaksEnabled = computed(() => config.value?.preferences?.disable_tweaks ?? false)
-  const balanceGovernor = computed(() => config.value?.cpu_governor?.balance ?? 'schedutil')
-  const powersaveGovernor = computed(() => config.value?.cpu_governor?.powersave ?? 'schedutil')
-
   const isLoaded = computed(() => config.value !== null)
 
   const configPath = '/data/adb/.config/encore/config.json'
@@ -65,10 +58,6 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     if (!config.value.preferences) {
       config.value.preferences = {}
     }
-    if (!config.value.cpu_governor) {
-      config.value.cpu_governor = {}
-    }
-
     if (config.value.preferences.use_device_mitigation === undefined) {
       config.value.preferences.use_device_mitigation = false
     }
@@ -107,49 +96,6 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     config.value.preferences.disable_tweaks = enabled
   }
 
-  function setBalanceGovernor(governor) {
-    ensureConfigStructure()
-    config.value.cpu_governor.balance = governor
-
-    if (
-      currentProfile.value === 'balanced' ||
-      (currentProfile.value === 'performance' && isLiteModeEnabled.value)
-    ) {
-      exec(`/data/adb/modules/encore/system/bin/encore_utility change_cpu_gov ${governor}`).then(
-        ({ errno, stderr }) => {
-          if (errno !== 0) {
-            console.error('[setBalanceGovernor] Failed to change CPU governor:', stderr)
-          }
-        },
-      )
-    }
-  }
-
-  function setPowersaveGovernor(governor) {
-    ensureConfigStructure()
-    config.value.cpu_governor.powersave = governor
-
-    if (currentProfile.value === 'powersave') {
-      exec(`/data/adb/modules/encore/system/bin/encore_utility change_cpu_gov ${governor}`).then(
-        ({ errno, stderr }) => {
-          if (errno !== 0) {
-            console.error('[setPowersaveGovernor] Failed to change CPU governor:', stderr)
-          }
-        },
-      )
-    }
-  }
-
-  function setCpuGovernorProfile(profile, governor) {
-    if (profile === 'balance') {
-      setBalanceGovernor(governor)
-    } else if (profile === 'powersave') {
-      setPowersaveGovernor(governor)
-    } else {
-      throw new Error('Invalid CPU governor profile. Must be "balance" or "powersave"')
-    }
-  }
-
   function updateConfig(newConfig) {
     if (!config.value) {
       throw new Error('Config not loaded')
@@ -173,13 +119,10 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     config,
 
     preferences,
-    cpuGovernor,
     isLiteModeEnabled,
     logLevel,
     isDeviceMitigationEnabled,
     isDisableTweaksEnabled,
-    balanceGovernor,
-    powersaveGovernor,
     isLoaded,
 
     loadConfig,
@@ -188,9 +131,6 @@ export const useEncoreConfigStore = defineStore('encoreConfig', () => {
     setLogLevel,
     setDeviceMitigation,
     setDisableTweaks,
-    setBalanceGovernor,
-    setPowersaveGovernor,
-    setCpuGovernorProfile,
     updateConfig,
   }
 })
