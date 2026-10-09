@@ -281,17 +281,19 @@ mediatek_performance() {
 	apply "stop 1" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
+		apply 0 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
 
-	for path in /sys/devices/platform/*.dvfsrc; do
-		apply 0 "$path/helio-dvfsrc/dvfsrc_req_ddr_opp"
-	done
+		for path in /sys/devices/platform/*.dvfsrc; do
+			apply 0 "$path/helio-dvfsrc/dvfsrc_req_ddr_opp"
+		done
 
-	if [ $LITE_MODE -eq 0 ]; then
-		devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
-	else
-		devfreq_mid_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
-	fi
+		if [ $LITE_MODE -eq 0 ]; then
+			devfreq_max_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+		else
+			devfreq_mid_perf /sys/class/devfreq/mtk-dvfsrc-devfreq
+		fi
+	}
 
 	# Eara Thermal
 	apply 0 /sys/kernel/eara_thermal/enable
@@ -495,12 +497,14 @@ mediatek_normal() {
 	apply "stop 0" /proc/mtk_batoc_throttling/battery_oc_protect_stop
 
 	# DRAM Frequency
-	for path in /sys/devices/platform/*.dvfsrc; do
-		apply -1 "$path/helio-dvfsrc/dvfsrc_req_ddr_opp"
-	done
+	[ -z "$ENCORE_DISABLE_DDR_TWEAK" ] && {
+		for path in /sys/devices/platform/*.dvfsrc; do
+			apply -1 "$path/helio-dvfsrc/dvfsrc_req_ddr_opp"
+		done
 
-	write -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
-	devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
+		write -1 /sys/kernel/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+		devfreq_unlock /sys/class/devfreq/mtk-dvfsrc-devfreq
+	}
 
 	# Eara Thermal
 	apply 1 /sys/kernel/eara_thermal/enable
