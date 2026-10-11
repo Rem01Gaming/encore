@@ -16,6 +16,8 @@
 
 #include "EncoreUtility.hpp"
 
+#include <regex>
+
 #include <ModuleProperty.hpp>
 #include <ShellUtility.hpp>
 
@@ -127,4 +129,49 @@ void toast(const char *message) {
     if (rc != 0) [[unlikely]] {
         LOGE("Failed to show toast with status: {}", rc);
     }
+}
+
+ResumedState parse_resumed_activities(FILE *stream, const std::string &package) {
+    // e.g. "topResumedActivity=ActivityRecord{1a2b3c u0 com.example.game/.MainActivity t42}"
+    static const std::regex record_re(" u[0-9]+ ([A-Za-z0-9_.]+)/");
+
+    bool seen_other_app = false;
+    char *line = nullptr;
+    size_t cap = 0;
+
+    while (getline(&line, &cap, stream) != -1) {
+        if (!strstr(line, "ResumedActivity")) continue;
+
+        std::cmatch match;
+        if (!std::regex_search(line, match, record_re)) continue;
+
+        const std::string pkg = match[1].str();
+        if (pkg == package) {
+            free(line);
+            return ResumedState::Resumed;
+        }
+
+        if (pkg != "com.android.systemui" && pkg != "android") {
+            seen_other_app = true;
+        }
+    }
+
+    free(line);
+    return seen_other_app ? ResumedState::NotResumed : ResumedState::Unknown;
+}
+
+ResumedState query_package_resumed(const std::string &package) {
+    if (package.empty()) return ResumedState::Unknown;
+
+    FILE *pipe = popen("dumpsys activity activities 2>/dev/null", "r");
+    if (!pipe) {
+        LOGE("popen(dumpsys) failed: {}", strerror(errno));
+        return ResumedState::Unknown;
+    }
+
+    ResumedState state = parse_resumed_activities(pipe, package);
+
+    // A dumpsys that died halfway gives a partial dump, don't trust it
+    if (pclose(pipe) != 0) return ResumedState::Unknown;
+    return state;
 }

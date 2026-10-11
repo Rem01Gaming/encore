@@ -49,6 +49,35 @@
 void notify(const char *message);
 
 /**
+ * @brief Whether a package currently has the resumed (on-screen) activity.
+ */
+enum class ResumedState {
+    Resumed,    ///< The package has a resumed activity.
+    NotResumed, ///< Another app is resumed and the package isn't.
+    Unknown,    ///< Can't tell (dumpsys failed, output format unknown, lock screen...).
+};
+
+/**
+ * @brief Parses the output of `dumpsys activity activities` looking at the
+ *        "*ResumedActivity" lines.
+ *
+ * Only reports NotResumed when a different *app* is resumed. System UI and the
+ * "android" package (lock screen, shade) do not count, so a lock screen drawn over
+ * the game never looks like "the user left the game".
+ *
+ * @param stream The dumpsys output.
+ * @param package The package name to look for.
+ */
+ResumedState parse_resumed_activities(FILE *stream, const std::string &package);
+
+/**
+ * @brief Runs dumpsys and tells whether the package is on screen right now.
+ * @note Takes a few hundred milliseconds, don't call it in a hot path.
+ *       Returns Unknown on any failure so callers can keep their old behaviour.
+ */
+ResumedState query_package_resumed(const std::string &package);
+
+/**
  * @brief Shows a toast message (best effort).
  *
  * Android has no shell command for toast, so this relies on the helper app

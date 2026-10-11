@@ -15,6 +15,7 @@
  */
 
 #include <atomic>
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -54,6 +55,13 @@ struct DaemonState {
     pid_t active_game_pid = 0;
     uid_t active_game_uid = 0;
     pid_t last_applied_pid = 0;
+
+    // Is the game really on screen? The process observer only tells us about
+    // events, not about the current state, and we deliberately ignore its
+    // "background" events (some devices send stale ones). So this flag is
+    // cleared by verifying against the activity manager, see schedule_foreground_recheck().
+    bool game_foreground = false;
+    uint64_t fg_generation = 0; // bumped on every foreground event, cancels stale rechecks
 
     bool screen_awake = true;
     bool battery_saver_state = false;
@@ -120,6 +128,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
         state.active_game_pid = 0;
         state.active_game_uid = 0;
         state.last_applied_pid = 0;
+        state.game_foreground = false;
         return false;
     }
 
@@ -130,6 +139,7 @@ static void clear_dnd_if_needed(DaemonState &state) {
         state.active_game_pid = 0;
         state.active_game_uid = 0;
         state.last_applied_pid = 0;
+        state.game_foreground = false;
         return false;
     }
 
@@ -155,7 +165,7 @@ static void evaluate_and_apply_profile(DaemonState &state) {
         state.prev_dnd_state = (BinderMonitor::get().getZenMode() != 0);
     }
 
-    if (state.active_game_pid != 0 && state.screen_awake) {
+    if (state.active_game_pid != 0 && state.game_foreground && state.screen_awake) {
         // Only skip if we are already in performance mode AND it's for the exact same game PID
         if (state.cur_mode == PERFORMANCE_PROFILE && state.last_applied_pid == state.active_game_pid) return;
         if (apply_game_profile(state)) {
@@ -182,6 +192,59 @@ static void evaluate_and_apply_profile(DaemonState &state) {
     LOGI("Applying balance profile");
     apply_balance_profile();
     clear_dnd_if_needed(state);
+}
+
+// ---------------------------------------------------------------------------
+// Foreground verification
+// ---------------------------------------------------------------------------
+
+// A game process can stay alive in the background for a long time after the user left it.
+// Without a check, a screen on/off or a Battery Saver toggle would bring performance profile
+// back while the user is looking at something else. After a foreground event (or screen on)
+// we ask the activity manager who is really on screen and only drop the game when another
+// app clearly is. Unknown answers change nothing.
+static void schedule_foreground_recheck(DaemonState &state, std::chrono::milliseconds delay) {
+    if (state.active_game_pid == 0) return;
+
+    const pid_t pid = state.active_game_pid;
+    const std::string pkg = state.active_package;
+    const uint64_t generation = ++state.fg_generation;
+
+    std::thread([pid, pkg, generation, delay]() {
+        std::this_thread::sleep_for(delay);
+
+        {
+            // A newer event already superseded this check, skip the expensive dumpsys
+            std::lock_guard<std::mutex> lk(g_state_mtx);
+            if (g_state.fg_generation != generation) return;
+        }
+
+        const ResumedState resumed = query_package_resumed(pkg);
+        if (resumed == ResumedState::Unknown) return;
+
+        std::lock_guard<std::mutex> lk(g_state_mtx);
+        if (g_state.active_game_pid != pid || g_state.fg_generation != generation) return;
+
+        const bool now_foreground = (resumed == ResumedState::Resumed);
+        if (g_state.game_foreground == now_foreground) return;
+
+        g_state.game_foreground = now_foreground;
+        LOGI("{} (PID: {}) is {} the foreground", pkg, pid, now_foreground ? "back in" : "no longer in");
+        evaluate_and_apply_profile(g_state);
+    }).detach();
+}
+
+// Synchronous variant for callbacks that are about to re-evaluate the profile (screen on,
+// Battery Saver toggle): drop the game first when another app is clearly on screen, so
+// performance profile doesn't flash for a moment before the delayed recheck fixes it.
+static void demote_game_if_backgrounded(DaemonState &state) {
+    if (state.active_game_pid == 0 || !state.game_foreground) return;
+
+    if (query_package_resumed(state.active_package) == ResumedState::NotResumed) {
+        LOGI("{} (PID: {}) is alive but not on screen", state.active_package, state.active_game_pid);
+        state.game_foreground = false;
+        ++state.fg_generation;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -212,10 +275,13 @@ static void encore_main_daemon() {
         std::lock_guard<std::mutex> lk(g_state_mtx);
         LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
 
-        // Ignore background events to prevent clearing DND or game state.
-        // We can't rely on foreground info from some devices as it can be stale.
-        // DND will remain active as long as the game process is alive.
+        // Background events can be stale on some devices, so they never end the game
+        // session by themselves. DND stays active as long as the game process is alive.
+        // We only use them as a hint to double-check who is on screen.
         if (!foreground) {
+            if (g_state.active_game_pid == pid && g_state.game_foreground) {
+                schedule_foreground_recheck(g_state, std::chrono::milliseconds(1500));
+            }
             return;
         }
 
@@ -228,8 +294,17 @@ static void encore_main_daemon() {
             g_state.active_package = pkg;
             g_state.active_game_pid = pid;
             g_state.active_game_uid = uid;
+            g_state.game_foreground = true;
             LOGI("Game {} came to foreground (PID: {})", pkg, pid);
             evaluate_and_apply_profile(g_state);
+            // Make sure it really is on screen, foreground events can be spurious
+            schedule_foreground_recheck(g_state, std::chrono::milliseconds(2000));
+        } else if (!g_state.game_foreground) {
+            // Same game, coming back from background
+            g_state.game_foreground = true;
+            LOGI("Game {} is back in the foreground (PID: {})", pkg, pid);
+            evaluate_and_apply_profile(g_state);
+            schedule_foreground_recheck(g_state, std::chrono::milliseconds(2000));
         }
     };
 
@@ -243,6 +318,8 @@ static void encore_main_daemon() {
             g_state.active_package.clear();
             g_state.active_game_pid = 0;
             g_state.last_applied_pid = 0;
+            g_state.game_foreground = false;
+            ++g_state.fg_generation;
             evaluate_and_apply_profile(g_state);
         }
     };
@@ -253,13 +330,20 @@ static void encore_main_daemon() {
         std::lock_guard<std::mutex> lk(g_state_mtx);
         LOGT("DisplayStateCallback: isInteractive={}", isInteractive);
         g_state.screen_awake = isInteractive;
+        if (isInteractive) demote_game_if_backgrounded(g_state);
         evaluate_and_apply_profile(g_state);
+
+        // Give the user time to get past the lock screen, then check what they landed on
+        if (isInteractive && g_state.active_game_pid != 0) {
+            schedule_foreground_recheck(g_state, std::chrono::milliseconds(3000));
+        }
     });
 
     binder.setPowerSaveCallback([](bool isPowerSave) {
         std::lock_guard<std::mutex> lk(g_state_mtx);
         LOGT("PowerSaveCallback: isPowerSave={}", isPowerSave);
         g_state.battery_saver_state = isPowerSave;
+        demote_game_if_backgrounded(g_state);
         evaluate_and_apply_profile(g_state);
     });
 
