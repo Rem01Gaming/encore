@@ -128,7 +128,7 @@ recognize_soc() {
 
 generate_gamelist() {
   extract "$ZIPFILE" 'gamelist.txt' "$MODULE_CONFIG"
-  "$MODPATH/system/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
+  "$MODPATH/bin/encored" setup_gamelist "$MODULE_CONFIG/gamelist.txt"
   exit_code=$?
 
   rm -f "$MODULE_CONFIG/gamelist.txt"
@@ -153,8 +153,8 @@ extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"
 extract "$ZIPFILE" 'cleanup.sh' "$MODPATH"
 extract "$ZIPFILE" 'binder_resolver.apk' "$MODPATH"
-extract "$ZIPFILE" 'system/bin/encore_profiler' "$MODPATH"
-extract "$ZIPFILE" 'system/bin/encore_utility' "$MODPATH"
+extract "$ZIPFILE" 'bin/encore_profiler' "$MODPATH"
+extract "$ZIPFILE" 'bin/encore_utility' "$MODPATH"
 cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
 
 # Target architecture
@@ -166,7 +166,7 @@ esac
 
 # Extract executables
 extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
-cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/system/bin"
+cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/bin"
 rm -rf "$TMPDIR/libs"
 
 # Skip mountify
@@ -179,7 +179,7 @@ if [ "$KSU" = "true" ] || [ "$APATCH" = "true" ]; then
 
 	# symlink ourselves on $PATH
 	manager_paths="/data/adb/ap/bin /data/adb/ksu/bin"
-	BIN_PATH="/data/adb/modules/encore/system/bin"
+	BIN_PATH="/data/adb/modules/encore/bin"
 	for dir in $manager_paths; do
 		[ -d "$dir" ] && {
 			ui_print "- Creating symlink in $dir"
@@ -194,7 +194,7 @@ fi
 ui_print "- Extracting webroot"
 unzip -o "$ZIPFILE" "webroot/*" -d "$MODPATH" -x "*.sha256" >&2
 
-# Mitigate root detection
+# Mitigate root detection for old versions, DO NOT REMOVE!
 [ -d /data/encore ] && rm -rf /data/encore
 [ -f /data/local/tmp/encore_logo.png ] && rm -f /data/local/tmp/encore_logo.png
 
@@ -207,14 +207,14 @@ rm -rf "$MODULE_CONFIG/config"
 
 # Permission settings
 ui_print "- Permission setup"
-set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
+set_perm_recursive "$MODPATH/bin" 0 0 0755 0755
 
 # Gamelist setup
 if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then
   ui_print "- Initializing Gamelist JSON..."
   generate_gamelist
 else
-  "$MODPATH/system/bin/encored" check_gamelist
+  "$MODPATH/bin/encored" check_gamelist
   [ $? -gt 0 ] && {
     ui_print "! Gamelist JSON is malformed, regenerating..."
     generate_gamelist

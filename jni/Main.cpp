@@ -213,7 +213,7 @@ static void encore_main_daemon() {
         LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
 
         // Ignore background events to prevent clearing DND or game state.
-        // We can't rely on foreground info from some devices as it can be stale.
+        // We can't rely on foreground info on some devices as it can be stale.
         // DND will remain active as long as the game process is alive.
         if (!foreground) {
             return;

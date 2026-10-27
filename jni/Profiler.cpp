@@ -26,6 +26,7 @@
 #include "EncoreConfigStore.hpp"
 
 #include <EncoreUtility.hpp>
+#include <ShellUtility.hpp>
 
 void set_profiler_env_vars() {
     // Get preferences from config store
@@ -77,7 +78,7 @@ void run_perfcommon(void) {
 
     set_profiler_env_vars();
 
-    if (system("encore_profiler perfcommon")) {
+    if (systemv("%s/bin/encore_profiler perfcommon", MODPATH)) {
         LOGE("Unable to execute profiler changes to perfcommon");
     }
 }
@@ -95,13 +96,13 @@ void apply_performance_profile(bool lite_mode, std::string game_pkg, pid_t game_
 
     if (lite_mode) {
         LOGD("Lite mode is enabled");
-        if (system("encore_profiler performance_lite") != 0) {
+        if (systemv("%s/bin/encore_profiler performance_lite", MODPATH) != 0) {
             LOGE("Unable to execute profiler changes to performance_lite");
         }
         return;
     }
 
-    if (system("encore_profiler performance") != 0) {
+    if (systemv("%s/bin/encore_profiler performance", MODPATH) != 0) {
         LOGE("Unable to execute profiler changes to performance");
     }
 }
@@ -117,7 +118,7 @@ void apply_balance_profile() {
 
     set_profiler_env_vars();
 
-    if (system("encore_profiler balance") != 0) {
+    if (systemv("%s/bin/encore_profiler balance", MODPATH) != 0) {
         LOGE("Unable to execute profiler changes to balance");
     }
 }
@@ -133,7 +134,7 @@ void apply_powersave_profile() {
 
     set_profiler_env_vars();
 
-    if (system("encore_profiler powersave") != 0) {
+    if (systemv("%s/bin/encore_profiler powersave", MODPATH) != 0) {
         LOGE("Unable to execute profiler changes to powersave");
     }
 }

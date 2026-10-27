@@ -83,4 +83,4 @@ if [ -f "$ENABLE_PPM" ]; then
 fi
 
 # Start Encore Daemon
-encored daemon
+"$MODDIR/bin/encored" daemon
