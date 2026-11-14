@@ -18,6 +18,7 @@
 #include "BinderNDK.hpp"
 #include "Encore.hpp"
 #include "EncoreLog.hpp"
+#include <ShellUtility.hpp>
 
 #include <cstring>
 #include <sstream>
@@ -90,6 +91,7 @@ struct BinderMonitorState {
 
     bool displayLastState = false;
     bool powerSaveLastState = false;
+    bool isMiui = false;
 
     std::thread powerSavePollThread;
     std::atomic<bool> stopPowerSavePolling{false};
@@ -321,6 +323,24 @@ static bool queryIsInteractive() {
     return transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsInteractive), "android.os.IPowerManager", 0) != 0;
 }
 
+static bool queryIsPowerSaveMode() {
+    if (!gState.isMiui) {
+        // This will return false everytime on MIUI/HOS
+        return transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsPowerSaveMode), "android.os.IPowerManager", 0) != 0;
+    }
+
+    // Thanks Ximi for this fuckery
+    PipeResult result = popen_direct({"/system/bin/settings", "get", "system", "POWER_SAVE_MODE_OPEN"});
+    if (!result.stream) {
+        LOGW_TAG("BinderMonitor", "Failed to read MIUI battery saver setting");
+        return false;
+    }
+
+    char value[32] = {};
+    if (!fgets(value, sizeof(value), result.stream)) return false;
+    return value[0] == '1' && (value[1] == '\0' || value[1] == '\n' || value[1] == '\r');
+}
+
 // =============================================================================
 // Binder onTransact callbacks
 // =============================================================================
@@ -387,7 +407,7 @@ displayCallback_transact(AIBinder *, uint32_t code, const AParcel *, AParcel *) 
 
 static void pollPowerSave() {
     while (!gState.stopPowerSavePolling) {
-        bool current = transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsPowerSaveMode), "android.os.IPowerManager", 0) != 0;
+        bool current = queryIsPowerSaveMode();
         if (current != gState.powerSaveLastState) {
             gState.powerSaveLastState = current;
             if (gState.powerSaveCallback) {
@@ -415,6 +435,9 @@ BinderMonitor::~BinderMonitor() {
 }
 
 bool BinderMonitor::initialize() {
+    gState.isMiui = access("/data/data/com.miui.system", F_OK) == 0;
+    LOGI_TAG("BinderMonitor", "MIUI device detected: {}", gState.isMiui);
+
     // Initialize fallbacks
     for (const auto &[code, q] : kResolverQueries) {
         gState.txCodes[code] = q.fallback;
@@ -427,7 +450,8 @@ bool BinderMonitor::initialize() {
         if (it != codes.end()) {
             gState.txCodes[code] = it->second;
         }
-        if (q.isRequired && gState.txCodes[code] == 0) {
+        if (q.isRequired && gState.txCodes[code] == 0 &&
+            !(gState.isMiui && code == TxCode::IsPowerSaveMode)) {
             LOGE_TAG("BinderMonitor", "Failed to resolve required transaction code: {}", q.query);
             return false;
         }
@@ -545,7 +569,7 @@ bool BinderMonitor::initialize() {
     }
 
     // Initialize Power Save state and start polling thread
-    gState.powerSaveLastState = transactReadInt32(gState.powerBinder, gState.getCode(TxCode::IsPowerSaveMode), "android.os.IPowerManager", 0) != 0;
+    gState.powerSaveLastState = queryIsPowerSaveMode();
     if (gState.powerSaveCallback) {
         gState.powerSaveCallback(gState.powerSaveLastState);
     }
