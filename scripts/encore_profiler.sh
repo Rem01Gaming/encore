@@ -297,6 +297,9 @@ mediatek_performance() {
 
 	# Eara Thermal
 	apply 0 /sys/kernel/eara_thermal/enable
+
+	# Disable anisotropic filtering
+	write "-1 anisotropic_disable 1" /sys/kernel/ged/gpu_tuner/custom_hint_set
 }
 
 snapdragon_performance() {
@@ -508,6 +511,9 @@ mediatek_normal() {
 
 	# Eara Thermal
 	apply 1 /sys/kernel/eara_thermal/enable
+
+	# Reset anisotropic filtering
+	write "-1 anisotropic_disable 0" /sys/kernel/ged/gpu_tuner/custom_hint_set
 }
 
 snapdragon_normal() {
