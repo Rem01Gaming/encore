@@ -1,0 +1,10 @@
+[versions]
+#noinspection GradleDependency,AndroidGradlePluginVersion
+androidvmtools = "c1da5dd"
+gradle = "9.3.2"
+sununsafewrapper = "v1.0.2"
+
+[libraries]
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+io-github-vova7878-androidvmtools = { module = "com.github.aerath-stuff:AndroidVMTools", version.ref = "androidvmtools" }
+io-github-vova7878-sununsafewrapper = { module = "io.github.vova7878:SunUnsafeWrapper", version.ref = "sununsafewrapper" }

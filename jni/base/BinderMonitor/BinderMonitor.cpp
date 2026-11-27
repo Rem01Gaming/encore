@@ -21,11 +21,13 @@
 #include <ShellUtility.hpp>
 
 #include <cstring>
-#include <sstream>
+#include <cerrno>
+#include <cstddef>
 #include <string>
 #include <unordered_map>
 #include <unistd.h>
-#include <sys/wait.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <thread>
 #include <atomic>
 #include <chrono>
@@ -108,94 +110,93 @@ static BinderMonitorState gState;
 // Runtime transaction code resolver
 // =============================================================================
 
-void setup_android_runtime_env() {
-    setenv("ANDROID_ROOT", "/system", 0);
-    setenv("ANDROID_DATA", "/data", 0);
-    setenv("ANDROID_RUNTIME_ROOT", "/apex/com.android.runtime", 0);
-    setenv("ANDROID_ART_ROOT", "/apex/com.android.art", 0);
-    setenv("ANDROID_I18N_ROOT", "/apex/com.android.i18n", 0);
-    setenv("ANDROID_TZDATA_ROOT", "/apex/com.android.tzdata", 0);
+static constexpr char kResolverSocketName[] = "encore_binder_resolver";
+
+static bool sendResolverRequest(int socketFd, const std::string &request) {
+    size_t sent = 0;
+    while (sent < request.size()) {
+        ssize_t result = send(socketFd, request.data() + sent, request.size() - sent, MSG_NOSIGNAL);
+        if (result < 0 && errno == EINTR) continue;
+        if (result <= 0) return false;
+        sent += static_cast<size_t>(result);
+    }
+    return true;
 }
 
-static std::unordered_map<std::string, uint32_t> runResolver(const char *apkPath) {
+static bool readResolverReply(int socketFd, std::string *reply) {
+    reply->clear();
+    char character;
+    while (true) {
+        ssize_t received = recv(socketFd, &character, sizeof(character), 0);
+        if (received < 0 && errno == EINTR) continue;
+        if (received <= 0) return false;
+        if (character == '\n') return true;
+        reply->push_back(character);
+    }
+}
+
+static std::unordered_map<std::string, uint32_t> runResolver() {
     std::unordered_map<std::string, uint32_t> result;
-    int stdinPipe[2], stdoutPipe[2];
-    if (pipe(stdinPipe) != 0 || pipe(stdoutPipe) != 0) {
-        LOGE_TAG("BinderMonitor", "Failed to create pipes for resolver subprocess");
+
+    sockaddr_un address{};
+    address.sun_family = AF_UNIX;
+    address.sun_path[0] = '\0';
+    std::memcpy(address.sun_path + 1, kResolverSocketName, sizeof(kResolverSocketName) - 1);
+    const socklen_t addressLength = static_cast<socklen_t>(
+            offsetof(sockaddr_un, sun_path) + 1 + sizeof(kResolverSocketName) - 1);
+
+    int socketFd = -1;
+    int connectError = 0;
+    for (int attempt = 0; attempt < 20; ++attempt) {
+        socketFd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
+        if (socketFd < 0) {
+            connectError = errno;
+            break;
+        }
+        if (connect(socketFd, reinterpret_cast<sockaddr *>(&address), addressLength) == 0) {
+            break;
+        }
+        connectError = errno;
+        close(socketFd);
+        socketFd = -1;
+        if (connectError != ENOENT && connectError != ECONNREFUSED && connectError != EINTR) break;
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    }
+    if (socketFd < 0) {
+        LOGE_TAG("BinderMonitor", "Failed to connect to Zygisk resolver: {}", strerror(connectError));
         return result;
     }
 
-    pid_t child = fork();
-    if (child < 0) {
-        LOGE_TAG("BinderMonitor", "fork() failed for resolver subprocess");
-        close(stdinPipe[0]); close(stdinPipe[1]);
-        close(stdoutPipe[0]); close(stdoutPipe[1]);
-        return result;
-    }
+    for (const auto &[code, query] : kResolverQueries) {
+        const std::string request = std::string(query.query) + "\n";
+        if (!sendResolverRequest(socketFd, request)) {
+            LOGE_TAG("BinderMonitor", "Failed to send resolver query: {}", query.query);
+            break;
+        }
 
-    if (child == 0) {
-        setup_android_runtime_env();
-
-        dup2(stdinPipe[0], STDIN_FILENO);
-        dup2(stdoutPipe[1], STDOUT_FILENO);
-        dup2(stdoutPipe[1], STDERR_FILENO);
-        close(stdinPipe[0]); close(stdinPipe[1]);
-        close(stdoutPipe[0]); close(stdoutPipe[1]);
-
-        std::string cp = std::string("-Djava.class.path=") + apkPath;
-        execl("/system/bin/app_process", "app_process",
-              cp.c_str(), "/",
-              "com.rem01gaming.binderresolver.MainKt",
-              nullptr);
-        _exit(1);
-    }
-
-    close(stdinPipe[0]);
-    close(stdoutPipe[1]);
-
-    for (const auto &[code, q] : kResolverQueries) {
-        write(stdinPipe[1], q.query, strlen(q.query));
-        write(stdinPipe[1], "\n", 1);
-    }
-    close(stdinPipe[1]);
-
-    std::string output;
-    char buf[512];
-    ssize_t n;
-    while ((n = read(stdoutPipe[0], buf, sizeof(buf))) > 0) {
-        output.append(buf, static_cast<size_t>(n));
-    }
-    close(stdoutPipe[0]);
-
-    int status;
-    waitpid(child, &status, 0);
-
-    std::istringstream ss(output);
-    std::string line;
-    while (std::getline(ss, line)) {
-        if (line.rfind("ERROR:", 0) == 0) {
-            LOGW_TAG("BinderMonitor", "Resolver: {}", line);
+        std::string reply;
+        if (!readResolverReply(socketFd, &reply)) {
+            LOGE_TAG("BinderMonitor", "Failed to read resolver reply: {}", query.query);
+            break;
+        }
+        if (reply.rfind("ERROR ", 0) == 0) {
+            LOGW_TAG("BinderMonitor", "Resolver failed for {}: {}", query.query, reply);
             continue;
         }
-        auto sp = line.rfind(' ');
-        if (sp == std::string::npos) continue;
+
         try {
-            result[line.substr(0, sp)] = static_cast<uint32_t>(std::stoul(line.substr(sp + 1)));
+            size_t parsed = 0;
+            unsigned long value = std::stoul(reply, &parsed);
+            if (parsed != reply.size() || value > UINT32_MAX) {
+                throw std::out_of_range("invalid transaction code");
+            }
+            result[query.query] = static_cast<uint32_t>(value);
         } catch (...) {
-            LOGW_TAG("BinderMonitor", "Failed to parse resolver output line: {}", line);
+            LOGW_TAG("BinderMonitor", "Invalid resolver reply for {}: {}", query.query, reply);
         }
     }
 
-    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-        LOGE_TAG("BinderMonitor", "Resolver subprocess exited with code {} (APK path: {})",
-                 WEXITSTATUS(status), apkPath);
-        return result;
-    }
-    if (WIFSIGNALED(status)) {
-        LOGE_TAG("BinderMonitor", "Resolver subprocess killed by signal {}", WTERMSIG(status));
-        return result;
-    }
-
+    close(socketFd);
     return result;
 }
 
@@ -444,7 +445,7 @@ bool BinderMonitor::initialize() {
     }
 
     LOGI_TAG("BinderMonitor", "Resolving transaction codes...");
-    auto codes = runResolver(MODPATH "/binder_resolver.apk");
+    auto codes = runResolver();
     for (const auto &[code, q] : kResolverQueries) {
         auto it = codes.find(q.query);
         if (it != codes.end()) {

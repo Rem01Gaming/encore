@@ -1,0 +1,29 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        mavenLocal()
+        maven { url = "https://jitpack.io" }
+        maven { url = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public" }
+        maven { url = "https://maven.aliyun.com/repository/public" }
+    }
+}
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+        maven { url = "https://jitpack.io" }
+        maven { url = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public" }
+        maven { url = "https://maven.aliyun.com/repository/public" }
+    }
+}
+
+rootProject.name = "zygote"
+include ":app"

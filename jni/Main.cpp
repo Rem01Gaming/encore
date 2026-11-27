@@ -15,8 +15,11 @@
  */
 
 #include <atomic>
+#include <cerrno>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -25,6 +28,8 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #include "DeviceMitigationStore.hpp"
 #include "EncoreConfigStore.hpp"
@@ -110,6 +115,41 @@ static void clear_dnd_if_needed(DaemonState &state) {
         set_do_not_disturb(state.prev_dnd_state);
         state.game_requested_dnd = false;
     }
+}
+
+static void show_boost_toast(const std::string &package_name) {
+    constexpr char socket_name[] = "encore_toast_bridge";
+    int socket_fd = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC | SOCK_NONBLOCK, 0);
+    if (socket_fd < 0) {
+        LOGW("Failed to create toast socket: {}", strerror(errno));
+        return;
+    }
+
+    sockaddr_un address{};
+    address.sun_family = AF_UNIX;
+    address.sun_path[0] = '\0';
+    std::memcpy(address.sun_path + 1, socket_name, sizeof(socket_name) - 1);
+    const socklen_t address_length = static_cast<socklen_t>(
+            offsetof(sockaddr_un, sun_path) + 1 + sizeof(socket_name) - 1);
+
+    if (connect(socket_fd, reinterpret_cast<sockaddr *>(&address), address_length) != 0) {
+        LOGW("Failed to connect to toast bridge: {}", strerror(errno));
+        close(socket_fd);
+        return;
+    }
+
+    const std::string command = "TOAST::SHORT::Boosting " + package_name + "\n";
+    size_t sent = 0;
+    while (sent < command.size()) {
+        ssize_t result = send(socket_fd, command.data() + sent, command.size() - sent, MSG_NOSIGNAL);
+        if (result < 0 && errno == EINTR) continue;
+        if (result <= 0) {
+            LOGW("Failed to send toast command: {}", strerror(errno));
+            break;
+        }
+        sent += static_cast<size_t>(result);
+    }
+    close(socket_fd);
 }
 
 [[nodiscard]] static bool apply_game_profile(DaemonState &state) {
@@ -209,27 +249,38 @@ static void encore_main_daemon() {
     ProcessObserverCallbacks pocbs;
 
     pocbs.onForegroundActivitiesChanged = [&binder](int32_t pid, int32_t uid, bool foreground) {
-        std::lock_guard<std::mutex> lk(g_state_mtx);
-        LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
+        std::string boosted_package;
 
-        // Ignore background events to prevent clearing DND or game state.
-        // We can't rely on foreground info on some devices as it can be stale.
-        // DND will remain active as long as the game process is alive.
-        if (!foreground) {
-            return;
+        {
+            std::lock_guard<std::mutex> lk(g_state_mtx);
+            LOGT("onForegroundActivitiesChanged: pid={}, uid={}, foreground={}", pid, uid, foreground);
+
+            // Ignore background events to prevent clearing DND or game state.
+            // We can't rely on foreground info on some devices as it can be stale.
+            // DND will remain active as long as the game process is alive.
+            if (!foreground) {
+                return;
+            }
+
+            std::string pkg = remove_null_char(binder.getPackageNameForUid(uid));
+            bool is_game = !pkg.empty() && game_registry.is_game_registered(pkg);
+            if (!is_game) return;
+
+            if (g_state.active_game_pid != pid) {
+                // Switching to a new game (or starting a game)
+                g_state.active_package = pkg;
+                g_state.active_game_pid = pid;
+                g_state.active_game_uid = uid;
+                LOGI("Game {} came to foreground (PID: {})", pkg, pid);
+                evaluate_and_apply_profile(g_state);
+                if (g_state.cur_mode == PERFORMANCE_PROFILE && g_state.last_applied_pid == pid) {
+                    boosted_package = pkg;
+                }
+            }
         }
 
-        std::string pkg = remove_null_char(binder.getPackageNameForUid(uid));
-        bool is_game = !pkg.empty() && game_registry.is_game_registered(pkg);
-        if (!is_game) return;
-
-        if (g_state.active_game_pid != pid) {
-            // Switching to a new game (or starting a game)
-            g_state.active_package = pkg;
-            g_state.active_game_pid = pid;
-            g_state.active_game_uid = uid;
-            LOGI("Game {} came to foreground (PID: {})", pkg, pid);
-            evaluate_and_apply_profile(g_state);
+        if (!boosted_package.empty()) {
+            show_boost_toast(boosted_package);
         }
     };
 

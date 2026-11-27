@@ -152,7 +152,6 @@ extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'action.sh' "$MODPATH"
 extract "$ZIPFILE" 'cleanup.sh' "$MODPATH"
-extract "$ZIPFILE" 'binder_resolver.apk' "$MODPATH"
 extract "$ZIPFILE" 'bin/encore_profiler' "$MODPATH"
 extract "$ZIPFILE" 'bin/encore_utility' "$MODPATH"
 cp "$MODPATH/module.prop" "$MODPATH/module.prop.orig"
@@ -168,6 +167,8 @@ esac
 extract "$ZIPFILE" "libs/$ARCH_TMP/encored" "$TMPDIR"
 cp "$TMPDIR"/libs/"$ARCH_TMP"/* "$MODPATH/bin"
 rm -rf "$TMPDIR/libs"
+
+extract "$ZIPFILE" "zygisk/$ARCH_TMP.so" "$MODPATH"
 
 # Skip mountify
 touch "$MODPATH/skip_mountify"
@@ -208,6 +209,7 @@ rm -rf "$MODULE_CONFIG/config"
 # Permission settings
 ui_print "- Permission setup"
 set_perm_recursive "$MODPATH/bin" 0 0 0755 0755
+set_perm_recursive "$MODPATH/zygisk" 0 0 0755 0644
 
 # Gamelist setup
 if [ ! -f "$MODULE_CONFIG/gamelist.json" ]; then

@@ -22,12 +22,19 @@ sed -i "s/versionCode=.*/versionCode=$version_code/" module/module.prop
 
 # Copy module files
 cp -r ./libs module
+
+if [ ! -f ./zygote/out/zygisk/arm64-v8a.so ] || [ ! -f ./zygote/out/zygisk/armeabi-v7a.so ]; then
+	echo "Zygisk libraries are missing. Build the zygote project before packaging." >&2
+	exit 1
+fi
+mkdir -p module/zygisk
+cp ./zygote/out/zygisk/*.so module/zygisk/
+
 cp -r ./scripts/* module/bin
 cp gamelist.txt module
 cp LICENSE module
 cp NOTICE.md module
 
-find ./prebuilt -mindepth 1 -maxdepth 1 ! -name "README.md" -exec cp -r {} ./module \;
 find ./config -mindepth 1 -maxdepth 1 ! -name "README.md" -exec cp -r {} ./module/config \;
 
 # Download banner image

@@ -11,6 +11,7 @@ on:
       - '.github/scripts/**'
       - 'java/**'
       - 'jni/**'
+      - 'zygote/**'
       - 'scripts/**'
       - 'module/**'
       - 'webui/**'
@@ -32,10 +33,20 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      - name: Android SDK Setup
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android SDK Platform
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
       - name: NDK Setup
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r30
+
+      - name: Build Zygisk Module
+        working-directory: zygote
+        run: ./gradlew build
 
       - name: Bun Setup
         uses: oven-sh/setup-bun@v2

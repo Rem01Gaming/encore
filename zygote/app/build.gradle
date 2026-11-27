@@ -1,0 +1,306 @@
+plugins {
+    id 'com.android.library'
+}
+
+def androidHome = System.getenv('ANDROID_HOME') ?: System.getenv('ANDROID_SDK_ROOT')
+if (androidHome == null) {
+    def localProps = file("${rootDir}/local.properties")
+    if (localProps.exists()) {
+        def props = new Properties()
+        localProps.withInputStream { props.load(it) }
+        androidHome = props.getProperty('sdk.dir')
+    }
+}
+
+def resolveD8 = {
+    if (androidHome == null) return null
+    def buildToolsDir = file("${androidHome}/build-tools")
+    if (!buildToolsDir.exists()) return null
+    def versions = buildToolsDir.listFiles()?.findAll { it.isDirectory() }?.sort { it.name } ?: []
+    def latest = versions.reverse().find { file("${it}/d8").exists() || file("${it}/d8.bat").exists() }
+    if (latest == null) return null
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    return isWindows ? "${latest}/d8.bat" : "${latest}/d8"
+}
+
+android {
+    namespace = 'com.rem01gaming.encore'
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 29
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags "-fexceptions -std=c++23 -Wpedantic -Wall -Wextra -Werror -Wformat -Wuninitialized"
+                arguments "-DANDROID_STL=c++_static", "-DDEX_BLOB_DIR=${layout.buildDirectory.dir("dexBlob").get().asFile.absolutePath}"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.io.github.vova7878.androidvmtools)
+    implementation(libs.io.github.vova7878.sununsafewrapper)
+}
+
+abstract class D8DexTask extends DefaultTask {
+    @InputFiles
+    abstract ConfigurableFileCollection getClassesDirs()
+
+    @InputFiles
+    abstract ConfigurableFileCollection getDependencyClasspath()
+
+    @Input
+    abstract Property<String> getD8Path()
+
+    @Input
+    abstract Property<String> getAndroidJarPath()
+
+    @Input
+    abstract Property<Integer> getMinSdk()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDexDir()
+
+    @OutputDirectory
+    abstract DirectoryProperty getDependencyExtractDir()
+
+    @Inject
+    abstract ExecOperations getExecOperations()
+
+    @Inject
+    abstract org.gradle.api.file.FileSystemOperations getFileSystemOperations()
+
+    @Inject
+    abstract org.gradle.api.file.ArchiveOperations getArchiveOperations()
+
+    @TaskAction
+    def run() {
+        def androidJar = new File(androidJarPath.get())
+        if (!androidJar.exists()) {
+            throw new GradleException("Android platform library not found: ${androidJar}")
+        }
+
+        def d8 = d8Path.get()
+        def minApi = minSdk.get().toString()
+
+        def classFiles = []
+        classesDirs.files.each { dir ->
+            if (dir.exists()) {
+                if (dir.isDirectory()) {
+                    dir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+                        if (f.name.endsWith('.class')) {
+                            classFiles << f.absolutePath
+                        }
+                    }
+                } else if (dir.name.endsWith('.class')) {
+                    classFiles << dir.absolutePath
+                }
+            }
+        }
+
+        if (classFiles.isEmpty()) {
+            throw new GradleException("No .class files found in classes directories.")
+        }
+
+        def depDir = dependencyExtractDir.get().asFile
+        fileSystemOperations.delete { delete(depDir) }
+        depDir.mkdirs()
+
+        def dependencyInputs = []
+        dependencyClasspath.files.each { artifact ->
+            if (artifact.name.endsWith('.jar')) {
+                dependencyInputs << artifact.absolutePath
+            } else if (artifact.name.endsWith('.aar')) {
+                def aarName = artifact.name.replaceAll('[^A-Za-z0-9_.-]', '_')
+                def uniqueSuffix = artifact.absolutePath.hashCode()
+                def aarDir = new File(depDir, "${aarName}_${uniqueSuffix}")
+                aarDir.mkdirs()
+
+                fileSystemOperations.copy {
+                    from archiveOperations.zipTree(artifact)
+                    include 'classes.jar'
+                    include 'libs/*.jar'
+                    into aarDir
+                }
+
+                def classesJar = new File(aarDir, 'classes.jar')
+                if (classesJar.exists()) {
+                    dependencyInputs << classesJar.absolutePath
+                    println "D8 dependency: ${classesJar}"
+                }
+
+                def libsDir = new File(aarDir, 'libs')
+                if (libsDir.exists()) {
+                    libsDir.eachFileMatch(~/.*\.jar$/) { jarFile ->
+                        dependencyInputs << jarFile.absolutePath
+                        println "D8 dependency (AAR lib): ${jarFile}"
+                    }
+                }
+            }
+        }
+
+        println "D8 project classes: ${classFiles.size()}"
+        println "D8 dependency inputs: ${dependencyInputs.size()}"
+
+        def outDir = outputDexDir.get().asFile
+        fileSystemOperations.delete { delete(outDir) }
+        outDir.mkdirs()
+
+        def cmd = [
+                d8,
+                '--lib',
+                androidJar.absolutePath,
+                '--min-api',
+                minApi,
+                '--output',
+                outDir.absolutePath
+        ] + classFiles + dependencyInputs
+
+        execOperations.exec {
+            commandLine = cmd
+        }
+
+        println "classes.dex written to: ${outDir}/classes.dex"
+    }
+}
+
+abstract class DexToBlobTask extends DefaultTask {
+    @InputFile
+    abstract RegularFileProperty getDexFile()
+
+    @InputFile
+    abstract RegularFileProperty getScriptFile()
+
+    @OutputFile
+    abstract RegularFileProperty getBlobFile()
+
+    @Inject
+    abstract ExecOperations getExecOperations()
+
+    @TaskAction
+    def run() {
+        def dex = dexFile.get().asFile
+        def script = scriptFile.get().asFile
+        def blob = blobFile.get().asFile
+        blob.parentFile.mkdirs()
+
+        execOperations.exec {
+            commandLine = ['python3', script.absolutePath, dex.absolutePath, blob.absolutePath]
+        }
+
+        println "dex_blob.hpp written to: ${blob}"
+    }
+}
+
+abstract class ExtractOutputsTask extends DefaultTask {
+    @InputFiles
+    abstract ConfigurableFileCollection getNativeLibs()
+
+    @InputFiles
+    abstract ConfigurableFileCollection getDexFiles()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDir()
+
+    @Inject
+    abstract org.gradle.api.file.FileSystemOperations getFileSystemOperations()
+
+    @TaskAction
+    def run() {
+        def outDir = outputDir.get().asFile
+        outDir.mkdirs()
+
+        nativeLibs.files.each { lib ->
+            if (lib.exists()) {
+                def abi = lib.parentFile.name
+                def zygiskDir = new File(outDir, 'zygisk')
+                zygiskDir.mkdirs()
+                fileSystemOperations.copy {
+                    from lib
+                    into zygiskDir
+                    rename { "${abi}.so" }
+                }
+                println "Extracted ${lib.name} to: ${zygiskDir}/${abi}.so"
+            }
+        }
+
+        dexFiles.files.each { dex ->
+            if (dex.exists()) {
+                fileSystemOperations.copy {
+                    from dex
+                    into outDir
+                }
+                println "Extracted classes.dex to: ${outDir}/${dex.name}"
+            }
+        }
+    }
+}
+
+def d8DexTask = tasks.register('d8Dex', D8DexTask) {
+    group = 'build'
+    description = 'Compiles Java class files and dependencies into an Android classes.dex using d8'
+    dependsOn 'compileReleaseJavaWithJavac'
+
+    def resolvedSdk = androidHome
+    def resolvedD8Path = resolveD8()
+    if (resolvedSdk == null || resolvedD8Path == null) {
+        throw new GradleException("Android SDK or d8 tool not found. Check ANDROID_HOME or local.properties.")
+    }
+
+    d8Path.set(resolvedD8Path)
+    androidJarPath.set("${resolvedSdk}/platforms/android-${android.compileSdk}/android.jar")
+    minSdk.set(android.defaultConfig.minSdk)
+    classesDirs.from(tasks.named('compileReleaseJavaWithJavac').map { it.outputs.files })
+    dependencyClasspath.from(configurations.releaseRuntimeClasspath)
+    outputDexDir.set(layout.buildDirectory.dir("dex"))
+    dependencyExtractDir.set(layout.buildDirectory.dir("d8DependencyClasses"))
+}
+
+def dexToBlobTask = tasks.register('dexToBlob', DexToBlobTask) {
+    group = 'build'
+    description = 'Converts classes.dex into a C++ byte array header (dex_blob.hpp) without touching the original dex'
+
+    dexFile.set(d8DexTask.flatMap { it.outputDexDir.file("classes.dex") })
+    scriptFile.set(layout.projectDirectory.file("scripts/dex_to_blob.py"))
+    blobFile.set(layout.buildDirectory.file("dexBlob/dex_blob.hpp"))
+}
+
+def extractOutputsTask = tasks.register('extractOutputs', ExtractOutputsTask) {
+    group = 'build'
+    description = 'Extracts built native library encore.so and classes.dex directly into the zygote/out/ directory'
+
+    nativeLibs.from(
+            layout.buildDirectory.file("intermediates/stripped_native_libs/release/stripReleaseDebugSymbols/out/lib/arm64-v8a/libencorezygisk.so"),
+            layout.buildDirectory.file("intermediates/stripped_native_libs/release/stripReleaseDebugSymbols/out/lib/armeabi-v7a/libencorezygisk.so")
+    )
+    dexFiles.from(d8DexTask.flatMap { it.outputDexDir.file("classes.dex") })
+    outputDir.set(layout.projectDirectory.dir("../out"))
+}
+
+tasks.named('build') {
+    dependsOn d8DexTask, dexToBlobTask
+    finalizedBy extractOutputsTask
+}
+
+tasks.configureEach { task ->
+    if (task.name.startsWith("configureCMake") || task.name.startsWith("buildCMake") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild")) {
+        task.dependsOn dexToBlobTask
+    }
+}
+
