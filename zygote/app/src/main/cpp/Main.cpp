@@ -56,7 +56,7 @@ static bool loadDexAndCall(JNIEnv *env, const char *className, const char *metho
         return true;
     } catch (const std::exception &e) {
         if (env->ExceptionCheck()) env->ExceptionClear();
-        LOGE("%s", e.what());
+        LOGE("[EncoreTweaks] %s", e.what());
         return false;
     }
 }
@@ -65,7 +65,7 @@ static bool loadDexAndCall(JNIEnv *env, const char *className, const char *metho
 // Zygisk lifecycle
 // =============================================================================
 
-class EncoreZygisk : public zygisk::ModuleBase {
+class EncoreTweaks : public zygisk::ModuleBase {
 private:
     zygisk::Api *api = nullptr;
     JNIEnv *env = nullptr;
@@ -75,6 +75,14 @@ public:
     void onLoad(zygisk::Api *api, JNIEnv *env) override {
         this->api = api;
         this->env = env;
+    }
+
+    void postServerSpecialize(const zygisk::ServerSpecializeArgs *args) override {
+        (void) args;
+
+        if (!loadDexAndCall(env, "com.rem01gaming.encore.BinderResolver", "start", "()V", false)) {
+            LOGE("[EncoreTweaks] failed to start BinderResolver");
+        }
     }
 
     void preAppSpecialize(zygisk::AppSpecializeArgs *args) override {
@@ -89,10 +97,6 @@ public:
         if (!isSystemUi) {
             api->setOption(zygisk::Option::DLCLOSE_MODULE_LIBRARY);
         }
-
-        if (!loadDexAndCall(env, "com.rem01gaming.encore.BinderResolver", "start", "()V", false)) {
-            LOGE("failed to start BinderResolver");
-        }
     }
 
     void postAppSpecialize(const zygisk::AppSpecializeArgs *args) override {
@@ -105,10 +109,10 @@ public:
 
         if (!loadDexAndCall(env, "com.rem01gaming.encore.ToastBridge", "install",
                     "(Ljava/lang/ClassLoader;)V", true)) {
-            LOGE("failed to install dex in SystemUI");
+            LOGE("[EncoreTweaks] failed to install dex in SystemUI");
             api->setOption(zygisk::Option::DLCLOSE_MODULE_LIBRARY);
         }
     }
 };
 
-REGISTER_ZYGISK_MODULE(EncoreZygisk)
+REGISTER_ZYGISK_MODULE(EncoreTweaks)
